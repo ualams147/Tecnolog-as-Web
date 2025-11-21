@@ -1,3 +1,4 @@
+/* ===== RESET GENERAL ===== */
 * {
     margin: 0;
     padding: 0;
@@ -21,8 +22,13 @@ body {
     padding: 0 40px;
 }
 
-/* ============ CABECERA ============ */
+/* ============================================================
+   ========================== CABECERA =========================
+   ============================================================ */
+
 .cabecera {
+    position: relative;
+    width: 100%;
     background: white;
     padding: 30px 0;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -31,64 +37,115 @@ body {
     z-index: 1000;
 }
 
-.cabecera .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 40px;
-}
+    .cabecera .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+    }
+
+/* ======================= LOGO (adaptado) ======================= */
 
 .logo-main {
     flex-shrink: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
-.logo-main img {
-    height: 60px;
-    width: auto;
+    .logo-main img {
+        height: 60px;
+        width: auto;
+    }
+
+/* === LOGO TEXT AÑADIDO === */
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    margin-left: 12px;
+    margin-top: 4px;
+    line-height: 1.1;
 }
+
+    .logo-text span {
+        font-size: 14px;
+        font-weight: 400;
+        color: #2b2b2b;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .logo-text strong {
+        font-size: 18px;
+        font-weight: 700;
+        color: #000000;
+        text-align: center;
+        width: 100%;
+        font-family: 'Poppins', sans-serif;
+    }
+/* ========================================= */
+
+/* ======================= NAV BAR ======================= */
 
 .nav-bar {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 140px;
     flex: 1;
-    justify-content: center;
-}
-
-.nav-bar a {
-    font-family: 'Poppins', sans-serif;
     font-weight: 500;
     font-size: 18px;
     color: #2b2b2b;
-    text-decoration: none;
-    transition: color 0.3s ease;
+    white-space: nowrap;
 }
 
-.nav-bar a:hover {
-    color: #293661;
-}
+    .nav-bar a {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 500;
+        font-size: 18px;
+        color: #2b2b2b;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+        .nav-bar a:hover {
+            color: #293661;
+        }
+
+/* ======================= SIGN IN ======================= */
 
 .sign-in {
     background: #293661;
     border-radius: 40px;
     padding: 12px 24px;
     flex-shrink: 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.sign-in a {
-    font-family: 'Source Sans Pro', sans-serif;
-    font-weight: 700;
-    font-size: 18px;
-    color: white;
-    text-decoration: none;
-    white-space: nowrap;
-}
+    .sign-in:hover {
+        background-color: #1f2849;
+        transform: translateY(-2px);
+    }
+
+    .sign-in:active {
+        transform: translateY(0);
+    }
+
+    .sign-in a {
+        font-family: 'Source Sans Pro', sans-serif;
+        font-weight: 700;
+        font-size: 18px;
+        color: white;
+        text-decoration: none;
+        white-space: nowrap;
+    }
 
 /* ============ PORTADA ============ */
+
 .portada {
     position: relative;
     width: 100%;
-    height: 605px;
+    height: 610px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -101,23 +158,19 @@ body {
     z-index: 1;
 }
 
-.portada-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-}
+    .portada-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
 
 .portada-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient( to bottom, rgba(255,255,255,1) 14%, /* blanco solo arriba */
-    rgba(255,255,255,0) 55% /* se desvanece rápido */
-    );
+    background: linear-gradient( to bottom, rgba(255,255,255,1) 14%, rgba(255,255,255,0) 55% );
     z-index: 2;
 }
-
-
 
 .portada-title {
     position: absolute;
@@ -141,6 +194,7 @@ body {
 }
 
 /* ============ NUESTROS PRODUCTOS ============ */
+
 .nuestros-productos {
     width: 100%;
     padding: 60px 0;
@@ -157,14 +211,13 @@ body {
     text-align: center;
 }
 
-.productos-container h2 {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 48px;
-    line-height: 1.2;
-    color: white;
-    margin-bottom: 50px;
-}
+    .productos-container h2 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 48px;
+        color: white;
+        margin-bottom: 50px;
+    }
 
 .productos-grid {
     display: grid;
@@ -181,16 +234,17 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.producto-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 12px rgba(0,0,0,0.15);
-}
+    .producto-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+    }
 
-.producto-card img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-}
+    .producto-card img {
+        display: block;
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+    }
 
 .ver-mas-btn {
     background: transparent;
@@ -205,12 +259,13 @@ body {
     transition: all 0.3s ease;
 }
 
-.ver-mas-btn:hover {
-    background: white;
-    color: #a0d2ac;
-}
+    .ver-mas-btn:hover {
+        background: white;
+        color: #a0d2ac;
+    }
 
 /* ============ UBICACIÓN ============ */
+
 .ubicacion {
     width: 100%;
     padding: 60px 0;
@@ -232,16 +287,16 @@ body {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
     font-size: 48px;
-    line-height: 1.2;
     color: #2b2b2b;
     margin-bottom: 40px;
 }
 
-.direccion-box {
+.direccion-box a {
     display: flex;
-    align-items: flex-start;
-    gap: 15px;
-    margin-bottom: 30px;
+    align-items: center;
+    gap: 20px;
+    text-decoration: none;
+    color: inherit;
 }
 
 .location-icon {
@@ -254,38 +309,38 @@ body {
     justify-content: center;
 }
 
-.location-icon svg {
-    width: 24px;
-    height: 24px;
-    color: #FEF7FF;
-}
+    .location-icon svg {
+        width: 24px;
+        height: 24px;
+        color: #FEF7FF;
+    }
 
 .direccion-link {
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
     font-size: 18px;
-    line-height: 1.4;
     color: #2b2b2b;
     text-decoration: none;
     transition: color 0.3s ease;
+    margin-top: 10px;
 }
 
-.direccion-link:hover {
-    color: #293661;
-}
+    .direccion-link:hover {
+        color: #293661;
+    }
 
 .contacto-info {
     margin-bottom: 25px;
 }
 
-.contacto-info p {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 1.5;
-    color: #2b2b2b;
-    margin-bottom: 15px;
-}
+    .contacto-info p {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        font-size: 18px;
+        color: #2b2b2b;
+        margin-bottom: 15px;
+        margin-top: 20px;
+    }
 
 .telefono-btn {
     display: inline-block;
@@ -299,51 +354,52 @@ body {
     padding: 12px 28px;
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-top: 20px;
+    margin-left: 140px;
 }
 
-.telefono-btn:hover {
-    background: #293661;
-    color: white;
-    border-color: #293661;
-}
+    .telefono-btn:hover {
+        background: #293661;
+        color: white;
+        border-color: #293661;
+    }
 
 .mapa-container {
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
-.mapa-container a {
-    display: block;
-}
+    .mapa-container a {
+        display: block;
+    }
 
-.mapa-container img {
-    width: 100%;
-    height: 350px;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
+    .mapa-container img {
+        width: 100%;
+        height: 350px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
 
-.mapa-container a:hover img {
-    transform: scale(1.05);
-}
+    .mapa-container a:hover img {
+        transform: scale(1.05);
+    }
 
 /* ============ PREGUNTAS FRECUENTES ============ */
+
 .preguntas-frecuentes {
     width: 100%;
     padding: 60px 0;
     margin-bottom: 80px;
 }
 
-.preguntas-frecuentes h2 {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 48px;
-    line-height: 1.2;
-    text-align: center;
-    color: black;
-    margin-bottom: 50px;
-}
+    .preguntas-frecuentes h2 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 48px;
+        text-align: center;
+        color: black;
+        margin-bottom: 50px;
+    }
 
 .faq-content {
     background: #f4f4f4;
@@ -361,21 +417,27 @@ body {
     gap: 20px;
 }
 
-.faq-images img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 8px;
-}
+    .faq-images img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
 
 .faq-img-1 {
-    grid-column: span 2;
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+}
+
+.faq-img-2 {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
 }
 
 .faq-questions {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    text-align: center;
 }
 
 .faq-item {
@@ -393,18 +455,17 @@ body {
     transition: background 0.3s ease;
 }
 
-.faq-question:hover {
-    background: rgba(255,255,255,0.1);
-}
+    .faq-question:hover {
+        background: rgba(255,255,255,0.1);
+    }
 
-.faq-question span {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 18px;
-    line-height: 1.4;
-    color: black;
-    flex: 1;
-}
+    .faq-question span {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 18px;
+        color: black;
+        flex: 1;
+    }
 
 .arrow-icon {
     width: 30px;
@@ -413,8 +474,29 @@ body {
     flex-shrink: 0;
     margin-left: 15px;
 }
+/* Ocultar respuestas por defecto */
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 30px;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+/* Respuesta visible */
+.faq-item.active .faq-answer {
+    max-height: 200px; /* suficiente para 2–3 líneas, ajustable */
+    padding: 15px 30px;
+}
+
+/* Rotar flecha */
+.faq-item.active .arrow-icon {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+}
+
 
 /* ============ FOOTER ============ */
+
 .footer {
     background: #293661;
     color: white;
@@ -430,13 +512,15 @@ body {
 
 .footer-logo-section {
     display: flex;
-    flex-direction: column;
-    gap: 30px;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px; /* separación entre logo e icono */
 }
 
+
 .logo-footer img {
-    width: 120px;
-    height: 120px;
+    width: 200px;
+    height: 200px;
     object-fit: contain;
 }
 
@@ -456,14 +540,14 @@ body {
     transition: background 0.3s ease;
 }
 
-.instagram-link:hover {
-    background: rgba(255,255,255,0.2);
-}
+    .instagram-link:hover {
+        background: rgba(255,255,255,0.2);
+    }
 
-.instagram-link svg {
-    width: 24px;
-    height: 24px;
-}
+    .instagram-link svg {
+        width: 24px;
+        height: 24px;
+    }
 
 .footer-links {
     display: grid;
@@ -483,22 +567,22 @@ body {
     list-style: none;
 }
 
-.enlaces-rapidos ul li {
-    margin-bottom: 12px;
-}
+    .enlaces-rapidos ul li {
+        margin-bottom: 12px;
+    }
 
-.enlaces-rapidos ul li a {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    color: white;
-    text-decoration: none;
-    transition: opacity 0.3s ease;
-}
+        .enlaces-rapidos ul li a {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
 
-.enlaces-rapidos ul li a:hover {
-    opacity: 0.8;
-}
+            .enlaces-rapidos ul li a:hover {
+                opacity: 0.8;
+            }
 
 .contacto-footer {
     display: flex;
@@ -512,27 +596,26 @@ body {
     gap: 12px;
 }
 
-.contacto-item svg {
-    width: 20px;
-    height: 20px;
-    color: white;
-    flex-shrink: 0;
-    margin-top: 2px;
-}
+    .contacto-item svg {
+        width: 20px;
+        height: 20px;
+        color: white;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
 
-.contacto-item a {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 1.5;
-    color: white;
-    text-decoration: none;
-    transition: opacity 0.3s ease;
-}
+    .contacto-item a {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        color: white;
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+    }
 
-.contacto-item a:hover {
-    opacity: 0.8;
-}
+        .contacto-item a:hover {
+            opacity: 0.8;
+        }
 
 .footer-bottom {
     padding-top: 30px;
@@ -547,30 +630,31 @@ body {
     flex-wrap: wrap;
 }
 
-.politica-legal a {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-    font-size: 14px;
-    color: white;
-    text-decoration: none;
-    transition: opacity 0.3s ease;
-}
+    .politica-legal a {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        color: white;
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+    }
 
-.politica-legal a:hover {
-    opacity: 0.8;
-}
+        .politica-legal a:hover {
+            opacity: 0.8;
+        }
 
-.politica-legal span {
-    font-size: 14px;
-    opacity: 0.5;
-}
+    .politica-legal span {
+        font-size: 14px;
+        opacity: 0.5;
+    }
 
 /* ============ RESPONSIVE ============ */
+
 @media (max-width: 1200px) {
     .portada-title {
         font-size: 44px;
     }
-    
+
     .productos-container h2,
     .texto-ubicacion h2,
     .preguntas-frecuentes h2 {
@@ -583,20 +667,20 @@ body {
         flex-wrap: wrap;
         justify-content: center;
     }
-    
+
     .nav-bar {
         order: 3;
         width: 100%;
         justify-content: center;
         margin-top: 20px;
     }
-    
+
     .ubicacion-content,
     .faq-content,
     .footer-content {
         grid-template-columns: 1fr;
     }
-    
+
     .footer-links {
         grid-template-columns: 1fr;
         gap: 40px;
@@ -607,39 +691,39 @@ body {
     .container {
         padding: 0 20px;
     }
-    
+
     .portada {
         height: 400px;
     }
-    
+
     .portada-title {
         font-size: 32px;
     }
-    
+
     .nav-bar {
         gap: 20px;
         font-size: 14px;
     }
-    
+
     .productos-container h2,
     .texto-ubicacion h2,
     .preguntas-frecuentes h2 {
         font-size: 32px;
     }
-    
+
     .productos-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .ubicacion-content,
     .faq-content {
         padding: 30px;
     }
-    
+
     .faq-images {
         grid-template-columns: 1fr;
     }
-    
+
     .faq-img-1 {
         grid-column: span 1;
     }
@@ -649,21 +733,21 @@ body {
     .portada-title {
         font-size: 24px;
     }
-    
+
     .nav-bar {
         flex-direction: column;
         gap: 15px;
     }
-    
+
     .productos-container,
     .ubicacion-content,
     .faq-content {
         padding: 20px;
     }
-    
-    .productos-container h2,
-    .texto-ubicacion h2,
-    .preguntas-frecuentes h2 {
-        font-size: 28px;
-    }
+
+        .productos-container h2,
+        .texto-ubicacion h2,
+        .preguntas-frecuentes h2 {
+            font-size: 28px;
+        }
 }
