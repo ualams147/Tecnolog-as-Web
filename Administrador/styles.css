@@ -11,12 +11,11 @@ body {
 }
 
 .inicio-administrador {
-    .inicio-administrador {
     display: flex;
     flex-direction: column;
     min-height: 100vh; /* hace que ocupe toda la altura de la pantalla */
 }
-}
+
 
 /* Cabecera */
 .cabecera {
@@ -338,7 +337,6 @@ body {
 }
 
 
-/* ==== FOOTER ==== */
 /* ============ FOOTER ============ */
 
 .footer {
