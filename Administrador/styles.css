@@ -1,0 +1,427 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: white;
+    overflow-x: hidden;
+}
+
+.inicio {
+    position: relative;
+    width: 100%;
+    min-height: 2132px;
+    background: white;
+}
+
+/* Cabecera */
+.cabecera {
+    position: relative;
+    width: 100%;
+    height: 164px;
+}
+
+.logo-container {
+    position: absolute;
+    left: 8.33%;
+    margin-left: 60px;
+    top: 67px;
+    width: 159px;
+    height: 97px;
+}
+
+.logo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.nav-bar {
+    position: absolute;
+    left: 41.67%;
+    margin-left: 32px;
+    top: 107px;
+    width: 612px;
+    display: flex;
+    gap: 0;
+    font-weight: 500;
+    font-size: 20px;
+    color: #2b2b2b;
+    box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+}
+
+.nav-bar a {
+    text-decoration: none;
+    color: #2b2b2b;
+}
+
+.nav-bar a:nth-child(1) {
+    position: absolute;
+    left: 0;
+    top: -3px;
+}
+
+.nav-bar a:nth-child(2) {
+    position: absolute;
+    left: 250px;
+    top: -3px;
+}
+
+.nav-bar a:nth-child(3) {
+    position: absolute;
+    left: 530px;
+    top: -3px;
+}
+
+/* Contenedor principal centrado */
+.titulo-section {
+    position: relative;
+    width: 100%;
+    max-width: 1468px; /* si quieres mantener límite */
+    height: 386px;
+    margin: 20px auto; /* centra horizontalmente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Degradado centrado */
+.degradado {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1468px;
+    height: 260px;
+    background: linear-gradient(180deg, #ffffff 0%, #e4e4e4 26.923%, rgba(153,153,153,0) 100%);
+    opacity: 0.9;
+    z-index: 1;
+}
+
+/* Recuadro centrado */
+.recuadro-fondo {
+    position: absolute;
+    top: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1468px;
+    height: 341px;
+    background: #293661;
+    border-radius: 13px;
+    border: 1px solid black;
+    box-shadow: 0px 4px 4px inset rgba(0,0,0,0.25);
+}
+
+/* Título centrado */
+.titulo-principal {
+    position: absolute;
+    top: 95px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%; /* flexible */
+    max-width: 1348px;
+    font-weight: 600;
+    font-size: 65.34px;
+    line-height: 82px;
+    text-align: center;
+    color: white;
+    z-index: 2;
+}
+
+
+/* Filtros */
+.filtro-fecha,
+.filtro-cliente,
+.filtro-producto {
+    position: absolute;
+    z-index: 3;
+}
+
+.filtro-fecha {
+    left: 85px;
+    top: 239px;
+}
+
+.filtro-cliente {
+    left: 33.33%;
+    margin-left: 45px;
+    top: 239px;
+}
+
+.filtro-producto {
+    left: 66.67%;
+    margin-left: 5px;
+    top: 239px;
+}
+
+.filtro-box {
+    position: relative;
+    width: 401px;
+    height: 50px;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filtro-text {
+    font-weight: 700;
+    font-size: 20px;
+    color: #293661;
+    text-align: center;
+}
+
+.icon-calendar {
+    position: absolute;
+    left: 20%;      /* posición horizontal */
+    margin-left: 30px;  /* margen extra */
+}
+
+.icon-user {
+    position: absolute;
+    left: 20%;
+    margin-left: 30px;
+}
+
+.icon-list {
+    position: absolute;
+    left: 20%;
+    margin-left: 30px;
+   
+}
+
+/* Tamaños iconos */
+.icon-calendar,
+.icon-user,
+.icon-list {
+    width: 25px;
+    height: 30px;
+}
+.icon-calendar svg,
+.icon-user svg,
+.icon-list svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Diagrama */
+.diagrama-section {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 630px;
+    width: 1063px;
+}
+
+/* Contenedor de la gráfica */
+.grafica-container {
+    position: relative;
+    width: 100%;
+    height: 375px;
+    background: #f4f4f4;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 42px 112px;
+}
+
+/* Imagen de la gráfica */
+.grafica-image {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 42px;
+    width: 519px;
+    height: 257px;
+    object-fit: cover;
+}
+
+/* Texto debajo de la gráfica (subido) */
+.grafica-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20px; /* Ajustado para subirlo */
+    width: 519px;
+    font-weight: 600;
+    font-size: 25px;
+    text-align: center;
+    color: black;
+}
+
+
+/* Contenedor principal centrado */
+.cards-grid {
+    position: absolute;
+    left: 50%;
+    top: 1180px; /* ajusta según necesites */
+    transform: translateX(-50%);
+    
+    display: grid;
+    grid-template-columns: repeat(2, 288px); /* 2 columnas */
+    grid-template-rows: repeat(2, 182px);    /* 2 filas */
+    gap: 80px; /* espacio entre filas y columnas */
+    
+    justify-content: center; /* centra la cuadrícula horizontalmente */
+    align-content: center;   /* centra la cuadrícula verticalmente si el contenedor es más alto */
+}
+
+
+/* Tarjetas */
+.card {
+    width: 288px;
+    height: 182px;
+    background: #a0d2ac;
+    border-radius: 20px;
+    border: 2px solid #a0d2ac;
+    box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    text-align: center;
+}
+
+/* Iconos dentro de la tarjeta */
+.card-icon {
+    width: auto;
+    height: 70px;
+    max-width: 115px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+/* Títulos */
+.card h3 {
+    font-weight: 700;
+    font-size: 22px;
+    color: black;
+    margin: 0;
+}
+
+
+/* Footer */
+.footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 1862px;
+    height: 270px;
+    background: #293661;
+    overflow: hidden;
+}
+
+.footer-logo {
+    position: absolute;
+    left: 57px;
+    top: 40px;
+    width: 156px;
+    height: 156px;
+}
+
+.footer-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.footer-redes {
+    position: absolute;
+    left: 227px;
+    top: 104px;
+}
+
+.instagram-icon {
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+.footer-politica {
+    position: absolute;
+    left: 33px;
+    top: 232px;
+    display: flex;
+    gap: 33px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: white;
+}
+
+.footer-politica p {
+    cursor: pointer;
+}
+
+.footer-contacto {
+    position: absolute;
+    left: 909px;
+    top: 43px;
+    color: white;
+}
+
+.footer-contacto h4 {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    margin-bottom: 20px;
+}
+
+.contacto-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.contacto-icon {
+    width: 27px;
+    height: 27px;
+    object-fit: cover;
+}
+
+.contacto-item a,
+.contacto-item p {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: white;
+    text-decoration: none;
+    margin: 0;
+}
+
+.contacto-item a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1400px) {
+    .cards-grid {
+        gap: 100px 150px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .nav-bar {
+        left: 35%;
+        width: 500px;
+    }
+    
+    .cards-grid {
+        gap: 80px 100px;
+    }
+    
+    .footer-contacto {
+        left: 750px;
+    }
+}
