@@ -13,10 +13,9 @@ body {
     flex-direction: column;
 }
 
-.CrearProductosAdmin {
+.ModificarDatosClientes {
     position: relative;
     width: 100%;
-    min-height: 1824px;
     background: white;
 }
 
@@ -172,17 +171,15 @@ body {
 
 /* Recuadro centrado */
 .recuadro-fondo {
-    width: min(1314px, 95%);
+    display: flex;
+    justify-content: center;   /* centra horizontalmente */
+    align-items: center;       /* centra verticalmente si hay espacio */
     background: #f4f4f4;
     border-radius: 12px;
     padding: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
     box-sizing: border-box;
-    min-height: 600px; /* ajusta según el contenido */
-    position: relative;
-    z-index: 2;
+    width: min(800px, 95%);
+    margin: 0 auto;             /* centra el recuadro en la página */
 }
 
 
@@ -240,10 +237,9 @@ body {
 /* Contenido en dos columnas */
 .contenido-cuerpo {
   display: flex;
-  gap: 40px;
+  justify-content: center;     /* centra horizontalmente */
+  align-items: center;         /* centra verticalmente si hay espacio */
   width: 100%;
-  justify-content: space-between;
-  align-items: flex-start;
 }
 
 .campo-precio {
@@ -266,103 +262,64 @@ body {
   color: #2b2b2b;
 }
 
-
-/* Columna izquierda: imagen */
-.imagen-producto {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  flex: 1;
+/* Formulario en dos columnas: label | input */
+.formulario-cliente {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 12px 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    color: #293661;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;           /* limita el ancho del formulario */
 }
 
-.cuadro-imagen {
-  width: 100%;
-  max-width: 400px;
-  height: 500px;
-  background: white;
-  border-radius: 4px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+/* Etiquetas en la primera columna */
+.formulario-cliente label {
+  font-weight: 600;
+  margin: 0;                        /* sin margen inferior para que no empuje */
 }
 
-.boton-cambiar-imagen {
-  width: 80%;
-  max-width: 300px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 13px 21px;
-  border-radius: 40px;
-  border: 2px solid #293661;
-  background: transparent;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  cursor: pointer;
+/* Campos en la segunda columna */
+.formulario-cliente input,
+.formulario-cliente textarea,
+.formulario-cliente select {
+  width: 100%; /* ← ocupa solo su columna */
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #fff;
+  color: #293661;
+  box-sizing: border-box;
 }
 
-.boton-cambiar-imagen p {
-  font-size: 18px;
-  color: #2b2b2b;
-  margin: 0;
-}
 
-/* Columna derecha: formulario */
-.formulario-producto {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  font-family: 'Poppins', sans-serif;
-}
 
-.formulario-producto label {
-  font-weight: 500;
-}
-
-.formulario-producto input,
-.formulario-producto textarea,
-.formulario-producto select {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-}
 
 /* Botones de acción */
-.boton-salir {
-    position: absolute;
-    left: 50%;               /* lo colocamos en el centro */
-    transform: translateX(-110%); /* lo desplazamos hacia la izquierda */
-    top: 1403px;             /* misma altura que el otro */
-    width: 298px;
-    height: 72px;
-    background: rgba(41, 54, 97, 0.9);
-    border: 2px solid rgba(41, 54, 97, 0.6);
-    border-radius: 20px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    cursor: pointer;
-    z-index: 5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.acciones-formulario {
+  display: flex;              /* coloca los hijos en fila */
+  justify-content: center;    /* centra horizontalmente */
+  align-items: center;        /* centra verticalmente */
+  gap: 40px;                  /* separación entre botones */
+  margin: 40px 0;             /* espacio arriba y abajo */
 }
 
+.boton-salir,
 .boton-crear {
-    position: absolute;
-    left: 50%;               /* centrado */
-    transform: translateX(10%); /* lo desplazamos un poco a la derecha */
-    top: 1403px;             /* misma altura que el otro */
-    width: 298px;
-    height: 72px;
-    background: #293661;
-    border: 2px solid rgba(41, 54, 97, 0.6);
-    border-radius: 20px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    cursor: pointer;
-    z-index: 5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 298px;               /* tamaño fijo */
+  height: 72px;
+  background: #293661;
+  border: 2px solid rgba(41, 54, 97, 0.6);
+  border-radius: 20px;
+  box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+  cursor: pointer;
+  display: flex;              /* importante: flex para centrar el texto */
+  align-items: center;
+  justify-content: center;
 }
 
 
@@ -383,6 +340,7 @@ body {
     color: white;
     margin: 0;
 }
+
 
 /* ============ FOOTER ============ */
 .footer {
