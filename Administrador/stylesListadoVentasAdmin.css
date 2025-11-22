@@ -10,7 +10,7 @@ body {
     overflow-x: hidden;
 }
 
-.ListadoClientesAdmin {
+.ListadoVentasAdmin {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -322,7 +322,7 @@ body {
     text-align: left;
 }
 
-.cliente {
+.venta {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -335,19 +335,18 @@ body {
   position: relative;
 }
 
-.cliente-info {
+.venta-info {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px 30px;
   font-size: 16px;
   color: #2b2b2b;
-  margin-left: 40px; /* ← añade este margen para separar de la cruz */
+  margin-left: 40px;
 }
 
-
-.boton-editar-pequeno {
-  width: 100px;
+.boton-detalles {
+  width: 120px;
   height: 40px;
   background: white;
   border: 2px solid #293661;
@@ -361,17 +360,17 @@ body {
   margin-left: 20px;
 }
 
-.boton-editar-pequeno:hover {
+.boton-detalles:hover {
   background: #293661;
 }
 
-.boton-editar-pequeno p {
+.boton-detalles p {
   font-size: 16px;
   font-weight: 500;
   color: #2b2b2b;
 }
 
-.boton-editar-pequeno:hover p {
+.boton-detalles:hover p {
   color: white;
 }
 
@@ -389,6 +388,7 @@ body {
   cursor: pointer;
   box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
 }
+
 
 
 /* ============ FOOTER ============ */

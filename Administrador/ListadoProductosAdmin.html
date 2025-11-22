@@ -47,7 +47,7 @@
         <!-- Botones superiores: Menú y Añadir Producto Nuevo -->
         <div class="botones-superiores">
             <button id="toggle-menu" class="boton-menu-lateral">Menú</button>
-            <button class="boton-anadir-nuevo"><p>Añadir producto</p></button>
+            <a href="CrearProductoAdmin.html" class="boton-anadir-nuevo"><p>+  Añadir producto</p></a>
         </div>
 
         <!-- Menú lateral y Listado de productos en un mismo contenedor -->
@@ -65,48 +65,49 @@
                 <div class="producto">
                     <button class="boton-eliminar">✖</button>
                     <div class="producto-info">
-                    <p><strong>Nombre:</strong> Ventana1</p>
-                    <p><strong>Categoría:</strong> Ventanas</p>
-                    <p><strong>Descripción:</strong> Ventana de aluminio con doble cristal</p>
-                    <p><strong>Precio:</strong> 250€</p>
+                        <p><strong>Nombre:</strong> Ventana1</p>
+                        <p><strong>Categoría:</strong> Ventanas</p>
+                        <p><strong>Descripción:</strong> Ventana de aluminio con doble cristal</p>
+                        <p><strong>Precio:</strong> 250€</p>
                     </div>
-                    <div class="boton-editar-pequeno"><p>Editar</p></div>
+                    <a href="ModificarProductoAdmin.html" class="boton-editar-pequeno"><p>Editar</p></a>
                 </div>
 
                 <!-- Producto 2 -->
                 <div class="producto">
                     <button class="boton-eliminar">✖</button>
                     <div class="producto-info">
-                    <p><strong>Nombre:</strong> Puerta1</p>
-                    <p><strong>Categoría:</strong> Puertas</p>
-                    <p><strong>Descripción:</strong> Puerta metálica reforzada</p>
-                    <p><strong>Precio:</strong> 320€</p>
+                        <p><strong>Nombre:</strong> Puerta1</p>
+                        <p><strong>Categoría:</strong> Puertas</p>
+                        <p><strong>Descripción:</strong> Puerta metálica reforzada</p>
+                        <p><strong>Precio:</strong> 320€</p>
                     </div>
-                    <div class="boton-editar-pequeno"><p>Editar</p></div>
+                    <a href="ModificarProductoAdmin.html" class="boton-editar-pequeno"><p>Editar</p></a>
                 </div>
 
                 <!-- Producto 3 -->
                 <div class="producto">
                     <button class="boton-eliminar">✖</button>
                     <div class="producto-info">
-                    <p><strong>Nombre:</strong> Barandilla1</p>
-                    <p><strong>Categoría:</strong> Barandillas</p>
-                    <p><strong>Descripción:</strong> Barandilla de acero inoxidable</p>
-                    <p><strong>Precio:</strong> 180€</p>
+                        <p><strong>Nombre:</strong> Barandilla1</p>
+                        <p><strong>Categoría:</strong> Barandillas</p>
+                        <p><strong>Descripción:</strong> Barandilla de acero inoxidable</p>
+                        <p><strong>Precio:</strong> 180€</p>
                     </div>
-                    <div class="boton-editar-pequeno"><p>Editar</p></div>
+                    <a href="ModificarProductoAdmin.html" class="boton-editar-pequeno"><p>Editar</p></a>
+
                 </div>
 
                 <!-- Producto 4 -->
                 <div class="producto">
                     <button class="boton-eliminar">✖</button>
                     <div class="producto-info">
-                    <p><strong>Nombre:</strong> Estructura1</p>
-                    <p><strong>Categoría:</strong> Otras</p>
-                    <p><strong>Descripción:</strong> Estructura metálica para soporte</p>
-                    <p><strong>Precio:</strong> 400€</p>
+                        <p><strong>Nombre:</strong> Estructura1</p>
+                        <p><strong>Categoría:</strong> Otras</p>
+                        <p><strong>Descripción:</strong> Estructura metálica para soporte</p>
+                        <p><strong>Precio:</strong> 400€</p>
                     </div>
-                    <div class="boton-editar-pequeno"><p>Editar</p></div>
+                    <a href="ModificarProductoAdmin.html" class="boton-editar-pequeno"><p>Editar</p></a>
                 </div>
             </div>
 
@@ -169,10 +170,10 @@
         </footer>
     </div> 
     <script>
-document.getElementById('toggle-menu').onclick = function() {
-    var menu = document.getElementById('menu-lateral');
-    menu.classList.toggle('oculto');
-};
-</script>
+        document.getElementById('toggle-menu').onclick = function() {
+            var menu = document.getElementById('menu-lateral');
+            menu.classList.toggle('oculto');
+        };
+    </script>
 </body>
 </html>
