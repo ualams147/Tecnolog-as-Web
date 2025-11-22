@@ -11,7 +11,6 @@
 </head>
 <body>
     <div class="ListadoProductosAdmin">
-
         <!-- Cabecera -->
         <header class="cabecera">
             <div class="logo-main">
@@ -40,18 +39,20 @@
                 <span class="filtro-text">Puertas</span>
                 <span class="filtro-text">Ventanas</span>
                 <span class="filtro-text">Barandillas</span>
-                <span class="filtro-text">Otras Estructuras</span>
+                <span class="filtro-text">Otras</span>
             </div>
         </div>
+        
 
-        <!-- Botón Añadir Producto Nuevo -->
-        <div class="boton-anadir-nuevo">
-            <p>+  Añadir Producto Nuevo</p>
+        <!-- Botones superiores: Menú y Añadir Producto Nuevo -->
+        <div class="botones-superiores">
+            <button id="toggle-menu" class="boton-menu-lateral">Menú</button>
+            <button class="boton-anadir-nuevo"><p>Añadir producto</p></button>
         </div>
 
         <!-- Menú lateral y Listado de productos en un mismo contenedor -->
         <div class="productos-layout">
-            <div class="crear-producto">
+            <div class="crear-producto" id="menu-lateral">
                 <p class="menu-item">Productos</p>
                 <p class="menu-item">Crear Producto</p>
                 <p class="menu-item">Listado de clientes</p>
@@ -154,5 +155,11 @@
             </div>
         </footer>
     </div> 
+    <script>
+document.getElementById('toggle-menu').onclick = function() {
+    var menu = document.getElementById('menu-lateral');
+    menu.classList.toggle('oculto');
+};
+</script>
 </body>
 </html>

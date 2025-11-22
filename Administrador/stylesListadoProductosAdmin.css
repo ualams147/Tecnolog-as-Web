@@ -590,3 +590,38 @@ body {
     color: #fff;
 }
 
+.oculto {
+    display: none !important;
+}
+
+.boton-menu-lateral {
+    position: absolute;
+    top: 725px;    /* ajusta la altura vertical aquí */
+    left: 250px;   /* ajusta la posición horizontal aquí */
+    background: #a0d2ac;
+    color: #293661;
+    font-weight: 700;
+    font-size: 15px;
+    border-radius: 16px;
+    padding: 7px 18px;
+    box-shadow: 0px 2px 8px rgba(41,54,97,0.08);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    z-index: 1;
+}
+.boton-menu-lateral:hover {
+    background: #7fb88e;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+.botones-superiores {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px; /* separación entre botones */
+    margin: 70px auto 0 auto;
+}
+
