@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listados Clientes Admin - Metalful</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="stylesListadoClientesAdmin.css">
+</head>
+<body>
+    <div class="ListadoClientesAdmin">
+        <!-- Cabecera -->
+        <header class="cabecera">
+            <div class="logo-main">
+                <img src="../imagenes/logo.png" alt="Logo Metalful">
+                <div class="logo-text">
+                    <span> Metalisteria</span>
+                    <strong>FULSÁN</strong>
+                </div>
+            </div>
+            <nav class="nav-bar">
+                <a href="ListadoVentasAdmin.html">Ventas</a>
+                <a href="ListadoProductosAdmin.html">Productos</a>
+                <a href="ListadoClientesAdmin.html" class="activo">Clientes</a>
+            </nav>
+        </header>
+
+        <!-- Título -->
+        <!-- Título con filtros dentro -->
+        <div class="titulo-section">
+        <div class="degradado"></div>
+        <div class="recuadro-fondo"></div>
+        <h1 class="titulo-principal">Listado Clientes</h1>
+
+        <!-- Filtros dentro del recuadro azul -->
+        <div class="filtros-en-titulo">
+            <!-- Filtro Fecha -->
+            <div class="filtro-item">
+            <label for="fecha">
+                <span class="icon">
+                <svg width="20" height="20" viewBox="0 0 40 40" fill="none">
+                    <path d="M33.3333 6.66675H6.66667C4.82572 6.66675 3.33334 8.15913 3.33334 10.0001V36.6667C3.33334 38.5077 4.82572 40.0001 6.66667 40.0001H33.3333C35.1743 40.0001 36.6667 38.5077 36.6667 36.6667V10.0001C36.6667 8.15913 35.1743 6.66675 33.3333 6.66675Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M26.6667 3.33325V9.99992" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M13.3333 3.33325V9.99992" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M3.33334 16.6667H36.6667" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                </span>
+                Fecha
+            </label>
+            <input type="date" id="fecha" name="fecha" />
+            <select id="rango-fecha" name="rango-fecha">
+                <option value="">Tipo de rango</option>
+                <option value="dia">Día</option>
+                <option value="semana">Semana</option>
+                <option value="mes">Mes</option>
+            </select>
+            </div>
+
+            <!-- Filtro Cliente -->
+            <div class="filtro-item">
+            <label for="cliente">
+                <span class="icon">
+                <svg width="20" height="20" viewBox="0 0 40 40" fill="none">
+                    <path d="M33.3333 35V31.6667C33.3333 29.8986 32.631 28.2029 31.3807 26.9526C30.1305 25.7024 28.4348 25 26.6667 25H13.3333C11.5652 25 9.86953 25.7024 8.61929 26.9526C7.36905 28.2029 6.66667 29.8986 6.66667 31.6667V35" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M20 18.3333C23.6819 18.3333 26.6667 15.3486 26.6667 11.6667C26.6667 7.98477 23.6819 5 20 5C16.3181 5 13.3333 7.98477 13.3333 11.6667C13.3333 15.3486 16.3181 18.3333 20 18.3333Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                </span>
+                Cliente
+            </label>
+            <select id="cliente" name="cliente">
+                <option value="">Selecciona un cliente</option>
+                <option value="cliente1">Cliente 1</option>
+                <option value="cliente2">Cliente 2</option>
+            </select>
+            </div>
+
+            <!-- Filtro Producto -->
+            <div class="filtro-item">
+            <label for="producto">
+                <span class="icon">
+                <svg width="20" height="20" viewBox="0 0 45 45" fill="none">
+                    <path d="M37.5 15H15M37.5 22.5H15M37.5 30H15M7.5 15H7.51875M7.5 22.5H7.51875M7.5 30H7.51875" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                </span>
+                Producto
+            </label>
+            <select id="producto" name="producto">
+                <option value="">Selecciona un producto</option>
+                <option value="ventanas">Ventanas</option>
+                <option value="puertas">Puertas</option>
+            </select>
+            </div>
+        </div>
+        </div>
+
+
+        <!-- Botones superiores -->
+        <div class="botones-superiores">
+            <button id="toggle-menu" class="boton-menu-lateral">Menú</button>
+        </div>
+
+        <!-- Menú lateral y listado -->
+        <div class="productos-layout">
+            <div class="crear-producto" id="menu-lateral">
+                <a href="ListadoProductosAdmin.html" class="menu-item">Productos</a>
+                <a href="CrearProductoAdmin.html" class="menu-item">Crear Producto</a>
+                <a href="ListadoClientesAdmin.html" class="menu-item">Listado de clientes</a>
+                <a href="ListadoVentasAdmin.html" class="menu-item">Listado de ventas</a>
+            </div>
+
+            <div class="cuadro-fondo">
+                <p class="header-tabla">Información clientes</p>
+
+                <!-- Cliente 1 -->
+                <div class="cliente">
+                    <button class="boton-eliminar">✖</button>
+                    <div class="cliente-info">
+                    <p><strong>Nombre:</strong> Ana</p>
+                    <p><strong>Apellidos:</strong> García López</p>
+                    <p><strong>Correo:</strong> ana@example.com</p>
+                    <p><strong>DNI:</strong> 12345678A</p>
+                    <p><strong>Teléfono:</strong> 600123456</p>
+                    <p><strong>Domicilio:</strong> C/ Real, 12</p>
+                    </div>
+                    <div class="boton-editar-pequeno"><p>Editar</p></div>
+                </div>
+
+                <!-- Cliente 2 -->
+                <div class="cliente">
+                    <button class="boton-eliminar">✖</button>
+                    <div class="cliente-info">
+                    <p><strong>Nombre:</strong> Luis</p>
+                    <p><strong>Apellidos:</strong> Martínez Ruiz</p>
+                    <p><strong>Correo:</strong> luis@example.com</p>
+                    <p><strong>DNI:</strong> 87654321B</p>
+                    <p><strong>Teléfono:</strong> 611987654</p>
+                    <p><strong>Domicilio:</strong> Av. Andalucía, 45</p>
+                    </div>
+                    <div class="boton-editar-pequeno"><p>Editar</p></div>
+                </div>
+
+                <!-- Cliente 3 -->
+                <div class="cliente">
+                    <button class="boton-eliminar">✖</button>
+                    <div class="cliente-info">
+                    <p><strong>Nombre:</strong> Carmen</p>
+                    <p><strong>Apellidos:</strong> Torres Sánchez</p>
+                    <p><strong>Correo:</strong> carmen@example.com</p>
+                    <p><strong>DNI:</strong> 11223344C</p>
+                    <p><strong>Teléfono:</strong> 622334455</p>
+                    <p><strong>Domicilio:</strong> C/ Granada, 8</p>
+                    </div>
+                    <div class="boton-editar-pequeno"><p>Editar</p></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-logo-section">
+                        <div class="logo-footer">
+                            <img src="../imagenes/footer.png" alt="Logo Metalful">
+                        </div>
+                        <div class="redes">
+                            <a href="https://www.instagram.com/metalfulsansl/" target="_blank" class="instagram-link">
+                                <svg viewBox="0 0 24 24" fill="white">
+                                    <path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-links">
+                        <div class="contacto-footer">
+                            <h3>Contacto</h3>
+                            <div class="contacto-item">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                </svg>
+                                <a href="https://maps.google.com" target="_blank">Extrarradio Cortijo la Purisima, Granada</a>
+                            </div>
+
+                            <div class="contacto-item">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                                </svg>
+                                <a href="tel:652921960">652 921 960</a>
+                            </div>
+
+                            <div class="contacto-item">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                </svg>
+                                <a href="mailto:metalfulsan@gmail.com">metalfulsan@gmail.com</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    <div class="politica-legal">
+                        <a href="#">Aviso Legal</a>
+                        <span>•</span>
+                        <a href="#">Política de Privacidad</a>
+                        <span>•</span>
+                        <a href="#">Cookies</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div> 
+    <script>
+        document.getElementById('toggle-menu').onclick = function() {
+            var menu = document.getElementById('menu-lateral');
+            menu.classList.toggle('oculto');
+        };
+    </script>
+</body>
+</html>

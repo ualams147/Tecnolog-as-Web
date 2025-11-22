@@ -160,82 +160,75 @@ body {
 }
 
 
-/* Filtros */
-.filtro-fecha,
-.filtro-cliente,
-.filtro-producto {
+/* ====== FILTROS EN EL RECUADRO DEL TÍTULO ====== */
+.filtros-en-titulo {
     position: absolute;
+    bottom: 40px;              /* coloca los filtros dentro del recuadro */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 40px;                 /* separación entre filtros */
     z-index: 3;
+    flex-wrap: wrap;           /* permite que se adapten en pantallas pequeñas */
 }
 
-.filtro-fecha {
-    left: 85px;
-    top: 239px;
+.filtro-item {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    color: white;
 }
 
-.filtro-cliente {
-    left: 33.33%;
-    margin-left: 45px;
-    top: 239px;
+.filtro-item label {
+    display: flex;
+    align-items: center;
+    gap: 8px;                  /* espacio entre icono y texto */
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: white;
 }
 
-.filtro-producto {
-    left: 66.67%;
-    margin-left: 5px;
-    top: 239px;
-}
-
-.filtro-box {
-    position: relative;
-    width: 401px;
-    height: 50px;
-    background: white;
-    border-radius: 4px;
-    box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+.filtro-item .icon {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.filtro-text {
-    font-weight: 700;
-    font-size: 20px;
+.filtro-item input[type="date"],
+.filtro-item select {
+    padding: 8px 12px;
+    border: 2px solid white;
+    border-radius: 6px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    background-color: white;
     color: #293661;
-    text-align: center;
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+    cursor: pointer;
+    margin-bottom: 10px;
+    min-width: 180px;          /* ancho mínimo para que se vean bien */
 }
 
-.icon-calendar {
-    position: absolute;
-    left: 20%;      /* posición horizontal */
-    margin-left: 30px;  /* margen extra */
+/* Hover para los selectores */
+.filtro-item input[type="date"]:hover,
+.filtro-item select:hover {
+    border-color: #a0d2ac;
+    box-shadow: 0px 2px 8px rgba(41,54,97,0.2);
 }
 
-.icon-user {
-    position: absolute;
-    left: 20%;
-    margin-left: 30px;
-}
-
-.icon-list {
-    position: absolute;
-    left: 20%;
-    margin-left: 30px;
-   
-}
-
-/* Tamaños iconos */
-.icon-calendar,
-.icon-user,
-.icon-list {
-    width: 25px;
-    height: 30px;
-}
-.icon-calendar svg,
-.icon-user svg,
-.icon-list svg {
-    width: 100%;
-    height: 100%;
-    display: block;
+/* Responsive: filtros en columna en móviles */
+@media (max-width: 768px) {
+    .filtros-en-titulo {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        bottom: 20px;
+    }
+    .filtro-item input[type="date"],
+    .filtro-item select {
+        min-width: 220px;
+    }
 }
 
 /* Diagrama */
