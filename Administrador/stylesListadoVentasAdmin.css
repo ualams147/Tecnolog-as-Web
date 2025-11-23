@@ -188,14 +188,15 @@ body {
 /* ====== FILTROS EN EL RECUADRO DEL TÍTULO ====== */
 .filtros-en-titulo {
     position: absolute;
-    bottom: 40px;              /* coloca los filtros dentro del recuadro */
+    top: 240px; /* ← ahora sí quedan bien colocados */
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 40px;                 /* separación entre filtros */
+    gap: 40px;
     z-index: 3;
-    flex-wrap: wrap;           /* permite que se adapten en pantallas pequeñas */
+    flex-wrap: wrap;
 }
+
 
 .filtro-item {
     display: flex;
@@ -646,4 +647,3 @@ body {
     gap: 30px; /* separación entre botones */
     margin: 70px auto 0 auto;
 }
-
