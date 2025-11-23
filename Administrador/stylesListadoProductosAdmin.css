@@ -10,9 +10,8 @@ body {
     overflow-x: hidden;
 }
 
-.ListadoClientesAdmin {
-    display: flex;
-    flex-direction: column;
+.ListadoProductosAdmin {
+    width: 100%;
     min-height: 100vh;
 }
 
@@ -20,111 +19,92 @@ body {
 .cabecera {
     position: relative;
     width: 100%;
-    height: 164px;
-    display: flex;
-    align-items: center;  /* ← alinea verticalmente */
-    padding-left: 30px;  /* ← espacio desde el borde izquierdo */
+    background: white;
+    padding: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
+    .cabecera
+    .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+    }
 
-/* LOGO + TEXTO */
+/* ======================= LOGO (adaptado) ======================= */
+
 .logo-main {
+    flex-shrink: 0;
+    position: relative;
+    top:15px;
+    left:40px;
     display: flex;
     align-items: center;
-    margin-left: 200px; /* ← Mueve izquierda/derecha */
-    margin-top: 60px;   /* ← Mueve arriba/abajo si lo necesitas */
 }
 
-.logo-main img {
-    height: 60px;
-    width: auto;
-}
+    .logo-main img {
+        height: 60px;
+        width: auto;
+    }
 
-
-/* Texto del logo */
+/* === LOGO TEXT AÑADIDO === */
 .logo-text {
     display: flex;
     flex-direction: column;
-    margin-left: 15px; /* ← separación entre imagen y texto */
+    margin-left: 12px;
+    margin-top: 4px;
     line-height: 1.1;
 }
 
-.logo-text span {
-    font-size: 14px;
-    font-weight: 400;
-    color: #2b2b2b;
-    font-family: 'Poppins', sans-serif;
-}
+    .logo-text span {
+        font-size: 14px;
+        font-weight: 400;
+        color: #2b2b2b;
+        font-family: 'Poppins', sans-serif;
+    }
 
-.logo-text strong {
-    font-size: 18px;
-    font-weight: 700;
-    color: #000000;
-    text-align: center;
-    width: 100%;
-    font-family: 'Poppins', sans-serif;
-}
+    .logo-text strong {
+        font-size: 18px;
+        font-weight: 700;
+        color: #000000;
+        text-align: center;
+        width: 100%;
+        font-family: 'Poppins', sans-serif;
+    }
+/* ========================================= */
 
+/* ======================= NAV BAR ======================= */
 
 .nav-bar {
-    position: absolute;
-    left: 41.67%;
-    margin-left: 32px;
-    top: 107px;
-    width: 612px;
     display: flex;
-    gap: 0;
+    position: relative;
+    top:0px;
+    left:40px;
+    justify-content: center;
+    gap: 140px;
+    flex: 1;
     font-weight: 500;
-    font-size: 20px;
+    font-size: 18px;
     color: #2b2b2b;
-    box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+    white-space: nowrap;
 }
 
-.nav-bar a {
-    text-decoration: none;
-    color: #2b2b2b;
-    font-size: 20px;
-    font-weight: 500;
-    background: none;
-    border-radius: 0;
-    padding: 10px 24px;
-    transition: font-size 0.2s, text-decoration 0.2s;
-    box-shadow: none;
-    margin: 0 8px;
-    display: inline-block;
-}
+    .nav-bar a {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 500;
+        font-size: 18px;
+        color: #2b2b2b;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
 
-.nav-bar a:hover {
-    text-decoration: underline;
-    font-size: 22px;
-    background: none;
-    color: #2b2b2b;
-    transform: none;
-}
-
-.nav-bar a.activo {
-    text-decoration: underline;
-    font-size: 22px;
-    font-weight: 700;
-}
-
-.nav-bar a:nth-child(1) {
-    position: absolute;
-    left: 0;
-    top: -3px;
-}
-
-.nav-bar a:nth-child(2) {
-    position: absolute;
-    left: 250px;
-    top: -3px;
-}
-
-.nav-bar a:nth-child(3) {
-    position: absolute;
-    left: 530px;
-    top: -3px;
-}
+        .nav-bar a:hover {
+            color: #293661;
+        }
 
 
 /* ====== TÍTULO SECTION ====== */
