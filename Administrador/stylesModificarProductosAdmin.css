@@ -314,61 +314,47 @@ body {
   font-size: 1rem;
 }
 
-/* Botones de acción */
-.boton-salir {
-    position: absolute;
-    left: 50%;               /* lo colocamos en el centro */
-    transform: translateX(-110%); /* lo desplazamos hacia la izquierda */
-    top: 1403px;             /* misma altura que el otro */
+.botones-finales {
+    display: flex;
+    justify-content: center;
+    gap: 40px;       /* separación entre botones */
+    margin: 60px auto; /* espacio respecto al contenido */
+}
+
+.boton-salir p,
+.boton-crear p {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 24px;
+    text-align: center;
+    color: white;
+    margin: 0;
+}
+
+.boton-salir,
+.boton-crear {
     width: 298px;
     height: 72px;
-    background: rgba(41, 54, 97, 0.9);
-    border: 2px solid rgba(41, 54, 97, 0.6);
     border-radius: 20px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
     cursor: pointer;
-    z-index: 5;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+
+.boton-salir {
+    background: rgba(41, 54, 97, 0.9);
+    border: 2px solid rgba(41, 54, 97, 0.6);
 }
 
 .boton-crear {
-    position: absolute;
-    left: 50%;               /* centrado */
-    transform: translateX(10%); /* lo desplazamos un poco a la derecha */
-    top: 1403px;             /* misma altura que el otro */
-    width: 298px;
-    height: 72px;
     background: #293661;
     border: 2px solid rgba(41, 54, 97, 0.6);
-    border-radius: 20px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    cursor: pointer;
-    z-index: 5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
-
-.boton-salir p {
-    font-weight: 400;
-    font-size: 22px;
-    line-height: 24px;
-    text-align: center;
-    color: white;
-    margin: 0;
-}
-
-.boton-crear p {
-    font-weight: 400;
-    font-size: 22px;
-    line-height: 24px;
-    text-align: center;
-    color: white;
-    margin: 0;
-}
 
 /* ============ FOOTER ============ */
 .footer {

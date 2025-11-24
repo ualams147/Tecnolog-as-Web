@@ -136,7 +136,7 @@ body {
     height: 270px;
     background: linear-gradient(180deg, #ffffff 0%, #e4e4e4 26.923%, rgba(153,153,153,0) 100%);
     opacity: 0.9;
-    z-index: 3; /* 🔼 súbelo para que quede encima */
+    z-index: 3;
     transform: none;
 }
 
@@ -283,17 +283,15 @@ body {
   box-sizing: border-box;
 }
 
-
-
-
 /* Botones de acción */
-.acciones-formulario {
+.botones-finales {
   display: flex;              /* coloca los hijos en fila */
   justify-content: center;    /* centra horizontalmente */
   align-items: center;        /* centra verticalmente */
   gap: 40px;                  /* separación entre botones */
   margin: 40px 0;             /* espacio arriba y abajo */
 }
+
 
 .boton-salir,
 .boton-crear {
@@ -318,6 +316,7 @@ body {
     color: white;
     margin: 0;
 }
+
 
 .boton-crear p {
     font-weight: 400;
