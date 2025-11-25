@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="stylesListadoProductosAdmin.css">
 </head>
 <body>
-    <div class="ListadoProductosAdmin">
+    <div class="listadoProductos-administrador">
         <!-- Cabecera -->
         <header class="cabecera">
             <div class="container">
@@ -19,7 +19,7 @@
                         <img src="../imagenes/logo.png" alt="Logo Metalful">
                         <div class="logo-text">
                             <span> Metalisteria</span>
-                            <strong>FULSÁN</strong>
+                            <strong>Fulsan</strong>
                         </div>
                     </a>
                 </div>
@@ -49,11 +49,20 @@
         </div>
         
 
-        <!-- Botones superiores: Menú y Añadir Producto Nuevo -->
+        <!-- Boton Añadir Producto Nuevo -->
         <div class="botones-superiores">
-            <button id="toggle-menu" class="boton-menu-lateral">Menú</button>
-            <a href="CrearProductoAdmin.html" class="boton-anadir-nuevo"><p>+  Añadir producto</p></a>
+            <!-- Botón añadir producto -->
+            <a href="CrearProductoAdmin.html" class="boton-anadir-nuevo">
+                <p>+ Añadir producto</p>
+            </a>
         </div>
+
+        <!-- Botón flotante fuera del menú -->
+        <button id="toggle-menu" class="boton-menu-lateral flotante">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" viewBox="0 0 24 24">
+            <path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        </button>
 
         <!-- Menú lateral y Listado de productos en un mismo contenedor -->
         <div class="productos-layout">
@@ -164,11 +173,11 @@
 
                 <div class="footer-bottom">
                     <div class="politica-legal">
-                        <a href="#">Aviso Legal</a>
+                        <a href="#aviso-legal">Aviso Legal</a>
                         <span>•</span>
-                        <a href="#">Política de Privacidad</a>
+                        <a href="#privacidad">Política de Privacidad</a>
                         <span>•</span>
-                        <a href="#">Cookies</a>
+                        <a href="#cookies">Política de Cookies</a>
                     </div>
                 </div>
             </div>

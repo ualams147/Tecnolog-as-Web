@@ -10,9 +10,15 @@ body {
     overflow-x: hidden;
 }
 
-.ListadoProductosAdmin {
+.listadoProductos-administrador {
     width: 100%;
     min-height: 100vh;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
 }
 
 /* Cabecera */
@@ -20,7 +26,7 @@ body {
     position: relative;
     width: 100%;
     background: white;
-    padding: 40px 0;
+    padding: 30px 0;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     position: sticky;
     top: 0;
@@ -57,6 +63,13 @@ body {
     line-height: 1.1;
 }
 
+.logo-main a {
+  text-decoration: none; /* quita el subrayado */
+  color: inherit;        /* mantiene el color original del texto */
+  display: flex;         /* mantiene la disposición de imagen + texto */
+  align-items: center;
+}
+
     .logo-text span {
         font-size: 14px;
         font-weight: 400;
@@ -78,8 +91,8 @@ body {
 
 .nav-bar {
     display: flex;
-    justify-content: center;   /* o flex-start / flex-end según lo que quieras */
     align-items: center;
+    justify-content: center;
     gap: 140px;
     flex: 1;
     font-weight: 500;
@@ -97,20 +110,11 @@ body {
         transition: color 0.3s ease;
     }
 
-    .nav-bar a:hover {
-        text-decoration: underline;
-        font-size: 20px;
-        background: none;
-        color: #2b2b2b;
-        transform: none;
-    }
-
-    .nav-bar a.activo {
-        text-decoration: underline;
-        font-size: 20px;
-        font-weight: 700;
-    }
-
+        .nav-bar a:hover {
+            font-size: 20px;
+            color: #293661;
+            text-shadow: 0 0 4px #aab6e8; 
+        }
     
 
 /* ====== TÍTULO SECTION ====== */
@@ -204,6 +208,7 @@ body {
     background: white;
     border: 3px solid rgba(41, 54, 97, 0.71);
     border-radius: 40px;
+    text-decoration: none;   /* quita el subrayado */
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.25);
     display: flex;
     align-items: center;
@@ -322,6 +327,7 @@ body {
   background: white;
   border: 2px solid #293661;
   border-radius: 20px;
+  text-decoration: none;   /* quita el subrayado */
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
@@ -360,197 +366,6 @@ body {
   box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
 }
 
-
-/* ============ FOOTER ============ */
-.footer {
-    margin-top: auto;
-    background: #293661;
-    color: white;
-    padding: 60px 0 30px;
-    width: 100%;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 80px;
-    margin-bottom: 40px;
-}
-
-.footer-logo-section {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 20px;
-}
-
-.logo-footer img {
-    width: 200px;
-    height: 200px;
-    object-fit: contain;
-}
-
-.redes {
-    display: flex;
-    gap: 20px;
-}
-
-.instagram-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 50%;
-    transition: background 0.3s ease;
-}
-
-.instagram-link:hover {
-    background: rgba(255,255,255,0.2);
-}
-
-.instagram-link svg {
-    width: 24px;
-    height: 24px;
-}
-
-.footer-links {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 60px;
-}
-
-.contacto-footer h3 {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 20px;
-    margin-bottom: 20px;
-}
-
-.contacto-footer {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.contacto-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-}
-
-.contacto-item svg {
-    width: 20px;
-    height: 20px;
-    color: white;
-    flex-shrink: 0;
-    margin-top: 2px;
-}
-
-.contacto-item a {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    color: white;
-    text-decoration: none;
-    transition: opacity 0.3s ease;
-}
-
-.contacto-item a:hover {
-    opacity: 0.8;
-}
-
-.footer-bottom {
-    padding-top: 30px;
-    border-top: 1px solid rgba(255,255,255,0.2);
-}
-
-.politica-legal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.politica-legal a {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-    font-size: 14px;
-    color: white;
-    text-decoration: none;
-    transition: opacity 0.3s ease;
-}
-
-.politica-legal a:hover {
-    opacity: 0.8;
-}
-
-.politica-legal span {
-    font-size: 14px;
-    opacity: 0.5;
-}
-
-/* ============ RESPONSIVE ============ */
-
-@media (max-width: 1200px) {
-    .titulo-principal {
-        font-size: 44px;
-    }
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: 40px;
-    }
-    .footer-links {
-        grid-template-columns: 1fr;
-        gap: 40px;
-    }
-}
-
-@media (max-width: 992px) {
-    .cabecera {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    .nav-bar {
-        order: 3;
-        width: 100%;
-        justify-content: center;
-        margin-top: 20px;
-    }
-}
-
-@media (max-width: 768px) {
-    .titulo-principal {
-        font-size: 32px;
-    }
-    .nav-bar {
-        gap: 20px;
-        font-size: 14px;
-    }
-    .productos-layout {
-        flex-direction: column;
-        gap: 20px;
-    }
-    .cuadro-fondo {
-        padding: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .titulo-principal {
-        font-size: 24px;
-    }
-    .nav-bar {
-        flex-direction: column;
-        gap: 15px;
-    }
-    .cuadro-fondo {
-        padding: 10px;
-    }
-}
-
 .filtro-productos {
     width: 100%;
     display: flex;
@@ -586,28 +401,41 @@ body {
     display: none !important;
 }
 
+/* Botón del menú lateral (estilo general) */
+/* Botón dentro del menú lateral */
+
+#menu-lateral {
+  position: relative; /* clave para que el botón se coloque dentro */
+}
+
 .boton-menu-lateral {
-    position: absolute;
-    top: 725px;    /* ajusta la altura vertical aquí */
-    left: 250px;   /* ajusta la posición horizontal aquí */
-    background: #a0d2ac;
-    color: #293661;
-    font-weight: 700;
-    font-size: 15px;
-    border-radius: 16px;
-    padding: 7px 18px;
-    box-shadow: 0px 2px 8px rgba(41,54,97,0.08);
-    border: none;
-    outline: none;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s, transform 0.2s;
-    z-index: 1;
+  position: absolute;   /* se coloca dentro del menú lateral */
+  top: 770px;            /* distancia desde arriba */
+  left: 170px;           /* distancia desde la izquierda */
+  background-color: #293661;     /* azul oscuro */
+  border: none;
+  padding: 14px 18px;            /* tamaño generoso */
+  border-radius: 12px;           /* esquinas redondeadas */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* sombra suave */
+  transition: background 0.3s ease, transform 0.2s ease;
+  z-index: 10; /* por encima de los items del menú */
 }
+
+.boton-menu-lateral svg {
+  width: 12px;
+  height: 12px;
+}
+
 .boton-menu-lateral:hover {
-    background: #7fb88e;
-    color: #fff;
-    transform: scale(1.05);
+  background-color: #1f274d;
+  transform: scale(1.05);
 }
+
+
 
 .botones-superiores {
     display: flex;
@@ -616,4 +444,239 @@ body {
     gap: 30px; /* separación entre botones */
     margin: 70px auto 0 auto;
 }
+
+/* ============ FOOTER ============ */
+.footer {
+    background: #293661;
+    color: white;
+    padding: 60px 0 30px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    margin-bottom: 40px;
+}
+
+.footer-logo-section {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px; /* separación entre logo e icono */
+}
+
+
+.logo-footer img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+}
+
+.redes {
+    display: flex;
+    gap: 20px;
+}
+
+.instagram-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+    .instagram-link:hover {
+        background: rgba(255,255,255,0.2);
+    }
+
+    .instagram-link svg {
+        width: 24px;
+        height: 24px;
+    }
+
+.footer-links {
+    display: block
+}
+
+
+.contacto-footer h3 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.contacto-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contacto-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+    .contacto-item svg {
+        width: 20px;
+        height: 20px;
+        color: white;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    .contacto-item a {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        color: white;
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+    }
+
+        .contacto-item a:hover {
+            opacity: 0.8;
+        }
+
+.footer-bottom {
+    padding-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.politica-legal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+    .politica-legal a {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        color: white;
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+    }
+
+        .politica-legal a:hover {
+            opacity: 0.8;
+        }
+
+    .politica-legal span {
+        font-size: 14px;
+        opacity: 0.5;
+    }
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width: 1200px) {
+    .portada-title {
+        font-size: 44px;
+    }
+
+    .productos-container h2,
+    .texto-ubicacion h2,
+    .preguntas-frecuentes h2 {
+        font-size: 40px;
+    }
+}
+
+@media (max-width: 992px) {
+    .cabecera .container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .nav-bar {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .ubicacion-content,
+    .faq-content,
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-links {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 20px;
+    }
+
+    .portada {
+        height: 400px;
+    }
+
+    .portada-title {
+        font-size: 32px;
+    }
+
+    .nav-bar {
+        gap: 20px;
+        font-size: 14px;
+    }
+
+    .productos-container h2,
+    .texto-ubicacion h2,
+    .preguntas-frecuentes h2 {
+        font-size: 32px;
+    }
+
+    .productos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ubicacion-content,
+    .faq-content {
+        padding: 30px;
+    }
+
+    .faq-images {
+        grid-template-columns: 1fr;
+    }
+
+    .faq-img-1 {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .portada-title {
+        font-size: 24px;
+    }
+
+    .nav-bar {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .productos-container,
+    .ubicacion-content,
+    .faq-content {
+        padding: 20px;
+    }
+
+        .productos-container h2,
+        .texto-ubicacion h2,
+        .preguntas-frecuentes h2 {
+            font-size: 28px;
+        }
+}
+
+
 
