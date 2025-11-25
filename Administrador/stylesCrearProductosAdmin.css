@@ -148,7 +148,7 @@ body {
     transform: translateX(-50%);
     width: 100%;
     max-width: 1468px;
-    height: 341px;
+    height: 280px;
     background: #293661;
     border-radius: 13px;
     border: 1px solid black;
@@ -320,7 +320,7 @@ body {
     position: absolute;
     left: 50%;               /* lo colocamos en el centro */
     transform: translateX(-110%); /* lo desplazamos hacia la izquierda */
-    top: 1403px;             /* misma altura que el otro */
+    top: 1300px;             /* misma altura que el otro */
     width: 298px;
     height: 72px;
     background: rgba(41, 54, 97, 0.9);
@@ -338,7 +338,7 @@ body {
     position: absolute;
     left: 50%;               /* centrado */
     transform: translateX(10%); /* lo desplazamos un poco a la derecha */
-    top: 1403px;             /* misma altura que el otro */
+    top: 1300px;             /* misma altura que el otro */
     width: 298px;
     height: 72px;
     background: #293661;
@@ -373,18 +373,19 @@ body {
 
 /* ============ FOOTER ============ */
 .footer {
-    margin-top: auto;
+    margin-top: 0px;
     background: #293661;
     color: white;
-    padding: 60px 0 30px;
+    padding: 40px 0 30px;
     width: 100%;
+    position: relative;
 }
 
 .footer-content {
     display: grid;
     grid-template-columns: 1fr 2fr;
     gap: 80px;
-    margin-bottom: 40px;
+    margin-bottom: 100px;
 }
 
 .footer-logo-section {
