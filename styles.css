@@ -493,18 +493,23 @@ body {
     overflow: hidden;
     padding: 0 30px;
     transition: max-height 0.3s ease, padding 0.3s ease;
+    background: #cfead6;
 }
 
 /* Respuesta visible */
 .faq-item.active .faq-answer {
     max-height: 200px;
     padding: 15px 30px;
+    background: #cfead6; /* cambia al color que quieras */
+    color: #111; /* opcional: color del texto */
+    border-radius: 0 0 12px 12px;
 }
 
 /* Rotar flecha */
 .faq-item.active .arrow-icon {
     transform: rotate(180deg);
     transition: transform 0.3s ease;
+
 }
 
 
