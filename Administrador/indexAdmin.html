@@ -18,7 +18,7 @@
                     <img src="../imagenes/logo.png" alt="Logo Metalful">
                     <div class="logo-text">
                         <span> Metalisteria</span>
-                        <strong>FULSÁN</strong>
+                        <strong>Fulsan</strong>
                     </div>
                 </div>
                 
@@ -52,12 +52,6 @@
                     Fecha
                 </label>
                 <input type="date" id="fecha" name="fecha" />
-                <select id="rango-fecha" name="rango-fecha">
-                    <option value="">Tipo de rango</option>
-                    <option value="dia">Día</option>
-                    <option value="semana">Semana</option>
-                    <option value="mes">Mes</option>
-                </select>
                 </div>
 
                 <!-- Filtro Cliente -->
@@ -72,7 +66,7 @@
                     Cliente
                 </label>
                 <select id="cliente" name="cliente">
-                    <option value="">Selecciona un cliente</option>
+                    <option value="">Todos los clientes</option>
                     <option value="cliente1">Cliente 1</option>
                     <option value="cliente2">Cliente 2</option>
                 </select>
@@ -89,7 +83,7 @@
                     Producto
                 </label>
                 <select id="producto" name="producto">
-                    <option value="">Selecciona un producto</option>
+                    <option value="">Todos los productos</option>
                     <option value="ventanas">Ventanas</option>
                     <option value="puertas">Puertas</option>
                 </select>
@@ -108,32 +102,30 @@
         <!-- Opciones -->
         <div class="cards-grid">
             <!-- Productos -->
-            <div class="card">
-                <img src="../imagenes/4.png" 
-                alt="Productos" class="card-icon">
+            <a href="ListadoProductosAdmin.html" class="card">
+                <img src="../imagenes/4.png" alt="Productos" class="card-icon">
                 <h3>Productos</h3>
-            </div>
+            </a>
 
             <!-- Crear Producto -->
-            <div class="card">
-                <img src="../imagenes/2.png" 
-                alt="Crear Producto" class="card-icon">
+            <a href="CrearProductoAdmin.html" class="card">
+                <img src="../imagenes/2.png" alt="Crear Producto" class="card-icon">
                 <h3>Crear Producto</h3>
-            </div>
+            </a>
+
             <!-- Clientes -->
-            <div class="card">
-                <img src="../imagenes/3.png" 
-                alt="Clientes" class="card-icon">
+            <a href="ListadoClientesAdmin.html" class="card">
+                <img src="../imagenes/3.png" alt="Clientes" class="card-icon">
                 <h3>Clientes</h3>
-            </div>
+            </a>
 
             <!-- Ventas -->
-            <div class="card">
-              <img src="../imagenes/5.png" 
-              alt="Ventas" class="card-icon">
-              <h3>Ventas</h3>
-            </div>
+            <a href="ListadoVentasAdmin.html" class="card">
+                <img src="../imagenes/5.png" alt="Ventas" class="card-icon">
+                <h3>Ventas</h3>
+            </a>
         </div>
+
 
 
         <!-- Footer -->
