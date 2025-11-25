@@ -108,7 +108,9 @@ body {
     }
 
         .nav-bar a:hover {
+            font-size: 20px;
             color: #293661;
+            text-shadow: 0 0 4px #aab6e8; /* azul muy claro y suave */
         }
 
 /* ======================= SIGN IN ======================= */
@@ -384,21 +386,24 @@ body {
         transform: scale(1.05);
     }
 
+
+
 /* ============ PREGUNTAS FRECUENTES ============ */
 
 .preguntas-frecuentes {
     width: 100%;
     padding: 60px 0;
     margin-bottom: 80px;
+    align-items: start;
 }
 
     .preguntas-frecuentes h2 {
         font-family: 'Poppins', sans-serif;
         font-weight: 600;
         font-size: 48px;
-        text-align: center;
+        text-align: right;
         color: black;
-        margin-bottom: 50px;
+        grid-column: 2;
     }
 
 .faq-content {
@@ -409,18 +414,25 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 60px;
+    overflow: visible; /* permite que la parte elevada sea visible */
 }
 
 .faq-images {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 0px;
+    align-items: start;
+    transform: translateY(-80px); /* eleva visualmente */
+    margin-bottom: -100px; /* compensa el espacio que deja la elevación */
+    margin-top: -50px;
+    will-change: transform;
 }
 
     .faq-images img {
         width: 100%;
         height: 200px;
         object-fit: cover;
+        display: block;
     }
 
 .faq-img-1 {
@@ -429,8 +441,7 @@ body {
 }
 
 .faq-img-2 {
-    grid-column: 2 / 3;
-    grid-row: 2 / 3;
+   margin-top: 220px;   
 }
 
 .faq-questions {
@@ -438,6 +449,7 @@ body {
     flex-direction: column;
     gap: 20px;
     text-align: center;
+    grid-column: 2;
 }
 
 .faq-item {
@@ -474,6 +486,7 @@ body {
     flex-shrink: 0;
     margin-left: 15px;
 }
+
 /* Ocultar respuestas por defecto */
 .faq-answer {
     max-height: 0;
@@ -484,7 +497,7 @@ body {
 
 /* Respuesta visible */
 .faq-item.active .faq-answer {
-    max-height: 200px; /* suficiente para 2–3 líneas, ajustable */
+    max-height: 200px;
     padding: 15px 30px;
 }
 
@@ -584,39 +597,40 @@ body {
                 opacity: 0.8;
             }
 
-.contacto-footer {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.contacto-footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.contacto-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-}
-
-    .contacto-item svg {
-        width: 20px;
-        height: 20px;
-        color: white;
-        flex-shrink: 0;
-        margin-top: 2px;
+    .contacto-footer ul li {
+        margin-bottom: 12px; /* igual que enlaces rápidos */
+        display: flex;
+        align-items: center;
+        gap: 12px; /* separación entre icono y texto */
     }
 
-    .contacto-item a {
-        font-family: 'Poppins', sans-serif;
-        font-weight: 400;
-        font-size: 16px;
-        color: white;
-        text-decoration: none;
-        transition: opacity 0.3s ease;
-    }
-
-        .contacto-item a:hover {
-            opacity: 0.8;
+        .contacto-footer ul li svg {
+            width: 20px;
+            height: 20px;
+            fill: white; /* fuerza el color visible */
+            flex-shrink: 0;
         }
 
+        .contacto-footer ul li a {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+            .contacto-footer ul li a:hover {
+                opacity: 0.8;
+            }
+
+    
 .footer-bottom {
     padding-top: 30px;
     border-top: 1px solid rgba(255,255,255,0.2);
