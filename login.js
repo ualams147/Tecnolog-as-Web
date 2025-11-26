@@ -3,12 +3,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
-            e.preventDefault(); // Evitamos que el formulario se envíe al servidor real
+            e.preventDefault(); // Evita que se recargue la página de golpe
 
-            // 1. Guardamos en la memoria del navegador que el usuario entró
+            // 1. GUARDAMOS LA SESIÓN con la clave exacta
             localStorage.setItem('usuarioLogueado', 'true');
 
-            // 2. Redirigimos a la página de inicio
+            // 2. Redirigimos al inicio
             window.location.href = 'index.html';
         });
     }

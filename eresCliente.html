@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Compra - Metalistería Fulsan</title>
+    <title>¿Eres Cliente? - Metalistería Fulsan</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="carrito.css">
+    <link rel="stylesheet" href="eresCliente.css">
 </head>
 <body>
-    <div class="visitante-carrito">
+    <div class="visitante-cliente">
         
         <header class="cabecera">
             <div class="container">
@@ -27,7 +27,7 @@
                 <nav class="nav-bar">
                     <a href="conocenos.html">Conócenos</a>
                     <a href="productos.html">Productos</a>
-                    <a href="carrito.html" class="activo">Carrito</a>
+                    <a href="carrito.html">Carrito</a>
                     <a href="IniciarSesion.html" id="link-login">Iniciar Sesión</a>
                 </nav>
 
@@ -37,86 +37,26 @@
             </div>
         </header>
 
-        <main class="carrito-section">
-            <h1 class="carrito-title">Mi Compra</h1>
-
-            <div class="carrito-container">
+        <main class="cliente-section">
+            
+            <div class="cliente-card">
                 
-                <div class="carrito-items">
-                    
-                    <article class="item-card">
-                        <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?q=80&w=400&auto=format&fit=crop" 
-                             alt="Puerta de 1 hoja" 
-                             class="item-image-placeholder" 
-                             style="object-fit: cover; height: 200px;">
-                        
-                        <div class="item-details">
-                            <div class="item-info">
-                                <p class="item-label">Nombre Producto:</p>
-                                <p class="item-value">Puerta de 1 hoja</p>
-                                
-                                <p class="item-label">Precio:</p>
-                                <p class="item-value">250€</p>
-                            </div>
+                <h1 class="cliente-title">Inicia sesión o crea una cuenta para continuar</h1>
 
-                            <div class="item-actions">
-                                <div class="qty-selector">
-                                    <button class="qty-btn btn-menos">-</button>
-                                    <span class="qty-text">0</span>
-                                    <button class="qty-btn btn-mas">+</button>
-                                </div>
-
-                                <button class="btn-eliminar" aria-label="Eliminar producto">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                        <path d="M17 6h5v2h-2v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8H2V6h5V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v3zm1 2H6v12h12V8zm-9 3h2v6H9v-6zm4 0h2v6h-2v-6zM9 4v2h6V4H9z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="item-card">
-                        <img src="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?q=80&w=400&auto=format&fit=crop" 
-                             alt="Ventana Corredera" 
-                             class="item-image-placeholder" 
-                             style="object-fit: cover; height: 200px;">
-                        
-                        <div class="item-details">
-                            <div class="item-info">
-                                <p class="item-label">Nombre Producto:</p>
-                                <p class="item-value">Ventana Corredera</p>
-                                
-                                <p class="item-label">Precio:</p>
-                                <p class="item-value">300€</p>
-                            </div>
-
-                            <div class="item-actions">
-                                <div class="qty-selector">
-                                    <button class="qty-btn btn-menos">-</button>
-                                    <span class="qty-text">0</span>
-                                    <button class="qty-btn btn-mas">+</button>
-                                </div>
-
-                                <button class="btn-eliminar" aria-label="Eliminar producto">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                        <path d="M17 6h5v2h-2v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8H2V6h5V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v3zm1 2H6v12h12V8zm-9 3h2v6H9v-6zm4 0h2v6h-2v-6zM9 4v2h6V4H9z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-
+                <div class="buttons-row">
+                    <a href="datosEnvio.html" class="btn-big-action">Iniciar Sesión</a>
+                    <a href="datosEnvio.html" class="btn-big-action">Registro</a>
                 </div>
 
-                <div class="carrito-summary">
-                    <h2 class="total-text">Precio Total: <span class="total-amount">550€</span></h2>
-                    
-                    <a href="eresCliente.html" class="btn-comprar" style="text-align:center; text-decoration:none; display:block;">
-                        Comprar
-                    </a>
-                </div>
+                <a href="carrito.html" class="btn-back-pill">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                    Volver atrás
+                </a>
 
             </div>
+
         </main>
 
         <footer class="footer">
@@ -164,18 +104,16 @@
                 </div>
                 <div class="footer-bottom">
                     <div class="politica-legal">
-                        <a href="#aviso-legal">Aviso Legal</a>
+                        <a href="aviso-legal.html">Aviso Legal</a>
                         <span>•</span>
-                        <a href="#privacidad">Política de Privacidad</a>
+                        <a href="privacidad.html">Política de Privacidad</a>
                         <span>•</span>
-                        <a href="#cookies">Política de Cookies</a>
+                        <a href="cookies.html">Política de Cookies</a>
                     </div>
                 </div>
             </div>
         </footer>
     </div>
-
-    <script src="carrito.js"></script>
     <script src="auth.js"></script>
 </body>
 </html>
