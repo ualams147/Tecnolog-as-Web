@@ -367,7 +367,7 @@ body {
 }
 
 .boton-salir p,
-.boton-crear p {
+.boton-modificar p {
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
     font-size: 22px;
@@ -377,8 +377,20 @@ body {
     margin: 0;
 }
 
+.boton-salir a,
+.boton-modificar a {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 24px;
+    text-align: center;
+    color: white;
+    margin: 0;
+    text-decoration: none; /* quita el subrayado típico de los enlaces */
+}
+
 .boton-salir,
-.boton-crear {
+.boton-modificar {
     width: 298px;
     height: 72px;
     border-radius: 20px;
@@ -395,7 +407,7 @@ body {
     border: 2px solid rgba(41, 54, 97, 0.6);
 }
 
-.boton-crear {
+.boton-modificar {
     background: #293661;
     border: 2px solid rgba(41, 54, 97, 0.6);
 }
