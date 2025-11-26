@@ -82,6 +82,13 @@ body {
         width: 100%;
         font-family: 'Poppins', sans-serif;
     }
+
+    .logo-link {
+        display: flex;              /* mantiene logo + texto juntos */
+        align-items: center;
+        text-decoration: none;      /* quita el subrayado */
+        color: inherit;             /* mantiene el color del texto */
+    }
 /* ========================================= */
 
 /* ======================= NAV BAR ======================= */
