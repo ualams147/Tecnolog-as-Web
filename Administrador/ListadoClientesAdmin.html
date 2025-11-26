@@ -19,7 +19,7 @@
                         <img src="../imagenes/logo.png" alt="Logo Metalful">
                         <div class="logo-text">
                             <span> Metalisteria</span>
-                            <strong>FULSÁN</strong>
+                            <strong>Fulsan</strong>
                         </div>
                     </a>
                 </div>
@@ -29,6 +29,11 @@
                     <a href="ListadoProductosAdmin.html">Productos</a>
                     <a href="ListadoClientesAdmin.html" class="activo">Clientes</a>
                 </nav>
+
+                <div class="log-out">
+                    <a href="#logout">Cerrar Sesión</a>
+                </div>
+
             </div>
         </header>
     
@@ -54,12 +59,6 @@
                 Fecha
             </label>
             <input type="date" id="fecha" name="fecha" />
-            <select id="rango-fecha" name="rango-fecha">
-                <option value="">Tipo de rango</option>
-                <option value="dia">Día</option>
-                <option value="semana">Semana</option>
-                <option value="mes">Mes</option>
-            </select>
             </div>
 
             <!-- Filtro Cliente -->
@@ -101,17 +100,11 @@
 
 
         <!-- Botones superiores -->
-        <div class="botones-superiores">
-            <button id="toggle-menu" class="boton-menu-lateral">
-                <svg class="icono-menu" viewBox="0 0 28 28">
-                    <rect x="3" y="5" width="22" height="18" rx="3" stroke="currentColor" stroke-width="2"/>
-                    <rect x="6" y="8" width="5" height="12" rx="1" fill="currentColor"/>
-                    <rect x="14" y="8" width="8" height="2" rx="1" fill="currentColor"/>
-                    <rect x="14" y="13" width="8" height="2" rx="1" fill="currentColor"/>
-                    <rect x="14" y="18" width="8" height="2" rx="1" fill="currentColor"/>
-                </svg>
-            </button>
-        </div>
+        <button id="toggle-menu" class="boton-menu-lateral flotante">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" viewBox="0 0 24 24">
+                <path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </button>
 
 
 
@@ -222,7 +215,7 @@
                         <span>•</span>
                         <a href="#">Política de Privacidad</a>
                         <span>•</span>
-                        <a href="#">Cookies</a>
+                        <a href="#">Pokítica de Cookies</a>
                     </div>
                 </div>
             </div>

@@ -29,6 +29,11 @@
                     <a href="ListadoProductosAdmin.html" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
                     <a href="ListadoClientesAdmin.html">Clientes</a>
                 </nav>
+
+                <div class="log-out">
+                    <a href="#logout">Cerrar Sesión</a>
+                </div>
+
             </div>
         </header>
 
@@ -59,18 +64,18 @@
 
         <!-- Botón flotante fuera del menú -->
         <button id="toggle-menu" class="boton-menu-lateral flotante">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" viewBox="0 0 24 24">
-            <path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" viewBox="0 0 24 24">
+                <path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            </svg>
         </button>
 
         <!-- Menú lateral y Listado de productos en un mismo contenedor -->
         <div class="productos-layout">
             <div class="crear-producto" id="menu-lateral">
-                <p class="menu-item">Productos</p>
-                <p class="menu-item">Crear Producto</p>
-                <p class="menu-item">Listado de clientes</p>
-                <p class="menu-item">Listado de ventas</p>
+                <a href="ListadoProductosAdmin.html" class="menu-item">Productos</a>
+                <a href="CrearProductoAdmin.html" class="menu-item">Crear Producto</a>
+                <a href="ListadoClientesAdmin.html" class="menu-item">Listado de clientes</a>
+                <a href="ListadoVentasAdmin.html" class="menu-item">Listado de ventas</a>
             </div>
             <div class="cuadro-fondo">
                 <p class="header-tabla">Catálogo de Productos</p>
