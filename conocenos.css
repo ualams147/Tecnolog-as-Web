@@ -120,6 +120,13 @@ body {
             text-shadow: 0 0 4px #aab6e8; /* azul muy claro y suave */
         }
 
+        /* Estilo para la página actual */
+        .nav-bar a.activo {
+            color: #293661;           /* El azul corporativo */
+            font-weight: bold;         /* Letra un poco más gruesa */
+            border-bottom: 2px solid #293661; /* El subrayado (grosor y color) */      
+        }
+
 /* ======================= SIGN IN ======================= */
 
 .sign-in {
@@ -148,6 +155,8 @@ body {
         text-decoration: none;
         white-space: nowrap;
     }
+
+    /*Nuestra empresa*/
 
 .nuestra-empresa {
   background: #a0d2ac;
