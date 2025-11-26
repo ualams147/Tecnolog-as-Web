@@ -20,12 +20,18 @@ body {
     background: white;
 }
 
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
 /* Cabecera */
 .cabecera {
     position: relative;
     width: 100%;
     background: white;
-    padding: 40px 0;
+    padding: 30px 0;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     position: sticky;
     top: 0;
@@ -62,6 +68,13 @@ body {
     line-height: 1.1;
 }
 
+.logo-main a {
+  text-decoration: none; /* quita el subrayado */
+  color: inherit;        /* mantiene el color original del texto */
+  display: flex;         /* mantiene la disposición de imagen + texto */
+  align-items: center;
+}
+
     .logo-text span {
         font-size: 14px;
         font-weight: 400;
@@ -83,8 +96,8 @@ body {
 
 .nav-bar {
     display: flex;
-    justify-content: center;   /* o flex-start / flex-end según lo que quieras */
     align-items: center;
+    justify-content: center;
     gap: 140px;
     flex: 1;
     font-weight: 500;
@@ -102,20 +115,11 @@ body {
         transition: color 0.3s ease;
     }
 
-    .nav-bar a:hover {
-        text-decoration: underline;
-        font-size: 20px;
-        background: none;
-        color: #2b2b2b;
-        transform: none;
-    }
-
-    .nav-bar a.activo {
-        text-decoration: underline;
-        font-size: 20px;
-        font-weight: 700;
-    }
-
+        .nav-bar a:hover {
+            font-size: 20px;
+            color: #293661;
+            text-shadow: 0 0 4px #aab6e8; 
+        }
 
 /* ====== TÍTULO SECTION ====== */
 .titulo-section {
@@ -315,87 +319,79 @@ body {
   font-size: 1rem;
 }
 
+#detalles {
+  width: 100%;        /* ocupa todo el ancho disponible */
+  height: 80px;       /* más alto que los otros */
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+
 /* Botones de acción */
-.boton-salir {
-    position: absolute;
-    left: 50%;               /* lo colocamos en el centro */
-    transform: translateX(-110%); /* lo desplazamos hacia la izquierda */
-    top: 1300px;             /* misma altura que el otro */
+.botones-finales {
+    display: flex;
+    justify-content: center;
+    gap: 40px;       /* separación entre botones */
+    margin: 60px auto; /* espacio respecto al contenido */
+}
+
+.boton-salir p,
+.boton-crear p {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 24px;
+    text-align: center;
+    color: white;
+    margin: 0;
+}
+
+.boton-salir,
+.boton-crear {
     width: 298px;
     height: 72px;
-    background: rgba(41, 54, 97, 0.9);
-    border: 2px solid rgba(41, 54, 97, 0.6);
     border-radius: 20px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
     cursor: pointer;
-    z-index: 5;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+}
+
+
+.boton-salir {
+    background: rgba(41, 54, 97, 0.9);
+    border: 2px solid rgba(41, 54, 97, 0.6);
 }
 
 .boton-crear {
-    position: absolute;
-    left: 50%;               /* centrado */
-    transform: translateX(10%); /* lo desplazamos un poco a la derecha */
-    top: 1300px;             /* misma altura que el otro */
-    width: 298px;
-    height: 72px;
     background: #293661;
     border: 2px solid rgba(41, 54, 97, 0.6);
-    border-radius: 20px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    cursor: pointer;
-    z-index: 5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-}
-
-
-.boton-salir p {
-    font-weight: 400;
-    font-size: 22px;
-    line-height: 24px;
-    text-align: center;
-    color: white;
-    margin: 0;
-}
-
-.boton-crear p {
-    font-weight: 400;
-    font-size: 22px;
-    line-height: 24px;
-    text-align: center;
-    color: white;
-    margin: 0;
 }
 
 /* ============ FOOTER ============ */
 .footer {
-    margin-top: 0px;
     background: #293661;
     color: white;
-    padding: 40px 0 30px;
-    width: 100%;
-    position: relative;
+    padding: 60px 0 30px;
 }
 
 .footer-content {
     display: grid;
     grid-template-columns: 1fr 2fr;
     gap: 80px;
-    margin-bottom: 100px;
+    margin-bottom: 40px;
 }
 
 .footer-logo-section {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 20px;
+    gap: 20px; /* separación entre logo e icono */
 }
+
 
 .logo-footer img {
     width: 200px;
@@ -419,20 +415,19 @@ body {
     transition: background 0.3s ease;
 }
 
-.instagram-link:hover {
-    background: rgba(255,255,255,0.2);
-}
+    .instagram-link:hover {
+        background: rgba(255,255,255,0.2);
+    }
 
-.instagram-link svg {
-    width: 24px;
-    height: 24px;
-}
+    .instagram-link svg {
+        width: 24px;
+        height: 24px;
+    }
 
 .footer-links {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 60px;
+    display: block
 }
+
 
 .contacto-footer h3 {
     font-family: 'Poppins', sans-serif;
@@ -453,26 +448,26 @@ body {
     gap: 12px;
 }
 
-.contacto-item svg {
-    width: 20px;
-    height: 20px;
-    color: white;
-    flex-shrink: 0;
-    margin-top: 2px;
-}
+    .contacto-item svg {
+        width: 20px;
+        height: 20px;
+        color: white;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
 
-.contacto-item a {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    color: white;
-    text-decoration: none;
-    transition: opacity 0.3s ease;
-}
+    .contacto-item a {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        color: white;
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+    }
 
-.contacto-item a:hover {
-    opacity: 0.8;
-}
+        .contacto-item a:hover {
+            opacity: 0.8;
+        }
 
 .footer-bottom {
     padding-top: 30px;
@@ -487,79 +482,124 @@ body {
     flex-wrap: wrap;
 }
 
-.politica-legal a {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-    font-size: 14px;
-    color: white;
-    text-decoration: none;
-    transition: opacity 0.3s ease;
-}
+    .politica-legal a {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        color: white;
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+    }
 
-.politica-legal a:hover {
-    opacity: 0.8;
-}
+        .politica-legal a:hover {
+            opacity: 0.8;
+        }
 
-.politica-legal span {
-    font-size: 14px;
-    opacity: 0.5;
-}
+    .politica-legal span {
+        font-size: 14px;
+        opacity: 0.5;
+    }
 
 /* ============ RESPONSIVE ============ */
 
 @media (max-width: 1200px) {
-    .titulo-principal {
+    .portada-title {
         font-size: 44px;
     }
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: 40px;
-    }
-    .footer-links {
-        grid-template-columns: 1fr;
-        gap: 40px;
+
+    .productos-container h2,
+    .texto-ubicacion h2,
+    .preguntas-frecuentes h2 {
+        font-size: 40px;
     }
 }
 
 @media (max-width: 992px) {
-    .cabecera {
+    .cabecera .container {
         flex-wrap: wrap;
         justify-content: center;
     }
+
     .nav-bar {
         order: 3;
         width: 100%;
         justify-content: center;
         margin-top: 20px;
     }
+
+    .ubicacion-content,
+    .faq-content,
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-links {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
 }
 
 @media (max-width: 768px) {
-    .titulo-principal {
+    .container {
+        padding: 0 20px;
+    }
+
+    .portada {
+        height: 400px;
+    }
+
+    .portada-title {
         font-size: 32px;
     }
+
     .nav-bar {
         gap: 20px;
         font-size: 14px;
     }
-    .productos-layout {
-        flex-direction: column;
-        gap: 20px;
+
+    .productos-container h2,
+    .texto-ubicacion h2,
+    .preguntas-frecuentes h2 {
+        font-size: 32px;
     }
-    .cuadro-fondo {
-        padding: 20px;
+
+    .productos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ubicacion-content,
+    .faq-content {
+        padding: 30px;
+    }
+
+    .faq-images {
+        grid-template-columns: 1fr;
+    }
+
+    .faq-img-1 {
+        grid-column: span 1;
     }
 }
 
 @media (max-width: 480px) {
-    .titulo-principal {
+    .portada-title {
         font-size: 24px;
     }
+
     .nav-bar {
         flex-direction: column;
         gap: 15px;
     }
-    .cuadro-fondo {
-        padding: 10px;
+
+    .productos-container,
+    .ubicacion-content,
+    .faq-content {
+        padding: 20px;
     }
+
+        .productos-container h2,
+        .texto-ubicacion h2,
+        .preguntas-frecuentes h2 {
+            font-size: 28px;
+        }
 }
