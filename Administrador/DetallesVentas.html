@@ -9,159 +9,155 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="stylesDetallesVentas.css">
 </head>
-<body>
-    <div class="detalles-venta" data-name="Detalles Venta">
-        <!-- Footer -->
-        <div class="footer" data-name="Footer">
-            <!-- Redes sociales -->
-            <a class="redes" data-name="redes" href="https://www.instagram.com/metalfulsansl/">
-                <div class="mdi-instagram" data-name="mdi:instagram">
-                    <svg class="svg-full" fill="none" preserveAspectRatio="none" viewBox="0 0 24 24">
-                        <g id="mdi:instagram">
-                            <path d="M8.38 0H17.62C21.14 0 24 2.86 24 6.38V15.62C24 17.3121 23.3278 18.9349 22.1313 20.1313C20.9349 21.3278 19.3121 22 17.62 22H8.38C4.86 22 2 19.14 2 15.62V6.38C2 4.68792 2.67218 3.06514 3.86866 1.86866C5.06514 0.672177 6.68792 0 8.38 0ZM8.16 2.2C7.10974 2.2 6.1025 2.61721 5.35986 3.35986C4.61721 4.1025 4.2 5.10974 4.2 6.16V15.84C4.2 18.029 5.971 19.8 8.16 19.8H17.84C18.8903 19.8 19.8975 19.3828 20.6401 18.6401C21.3828 17.8975 21.8 16.8903 21.8 15.84V6.16C21.8 3.971 20.029 2.2 17.84 2.2H8.16ZM18.775 3.85C19.1397 3.85 19.4894 3.99487 19.7473 4.25273C20.0051 4.51059 20.15 4.86033 20.15 5.225C20.15 5.58967 20.0051 5.93941 19.7473 6.19727C19.4894 6.45513 19.1397 6.6 18.775 6.6C18.4103 6.6 18.0606 6.45513 17.8027 6.19727C17.5449 5.93941 17.4 5.58967 17.4 5.225C17.4 4.86033 17.5449 4.51059 17.8027 4.25273C18.0606 3.99487 18.4103 3.85 18.775 3.85ZM13 5.5C14.4587 5.5 15.8576 6.07946 16.8891 7.11091C17.9205 8.14236 18.5 9.54131 18.5 11C18.5 12.4587 17.9205 13.8576 16.8891 14.8891C15.8576 15.9205 14.4587 16.5 13 16.5C11.5413 16.5 10.1424 15.9205 9.11091 14.8891C8.07946 13.8576 7.5 12.4587 7.5 11C7.5 9.54131 8.07946 8.14236 9.11091 7.11091C10.1424 6.07946 11.5413 5.5 13 5.5ZM13 7.7C12.1248 7.7 11.2854 8.04768 10.6665 8.66655C10.0477 9.28542 9.7 10.1248 9.7 11C9.7 11.8752 10.0477 12.7146 10.6665 13.3335C11.2854 13.9523 12.1248 14.3 13 14.3C13.8752 14.3 14.7146 13.9523 15.3335 13.3335C15.9523 12.7146 16.3 11.8752 16.3 11C16.3 10.1248 15.9523 9.28542 15.3335 8.66655C14.7146 8.04768 13.8752 7.7 13 7.7Z" fill="white" id="Vector" />
-                        </g>
-                    </svg>
-                </div>
+<!-- Header -->
+    <header class="cabecera">
+        <div class="container header-content">
+            <div class="logo-main">
+                <a href="indexAdmin.html" style="display:flex; align-items:center; gap:12px;">
+                    <img src="../imagenes/logo.png" alt="Logo Metalful" onerror="this.src='https://via.placeholder.com/50'">
+                    <div class="logo-text">
+                        <span>Metalisteria</span>
+                        <strong>Fulsan</strong>
+                    </div>
+                </a>
+            </div>
+
+            <nav class="nav-bar">
+                <a href="ListadoVentasAdmin.html" class="active">Ventas</a>
+                <a href="ListadoProductosAdmin.html">Productos</a>
+                <a href="ListadoClientesAdmin.html">Clientes</a>
+            </nav>
+
+            <div class="log-out">
+                <a href="#logout" class="btn-logout">Cerrar Sesión</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-content">
+            <a href="ListadoVentasAdmin.html" class="back-arrow">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
             </a>
-
-            <!-- Política Legal -->
-            <div class="politica-legal" data-name="Politica legal">
-                <p class="aviso-legal">Aviso Legal</p>
-                <p class="politica-privacidad">Política de Privacidad</p>
-                <p class="politica-cookies">Política de Cookies</p>
-            </div>
-
-            <!-- Contacto -->
-            <div class="contacto" data-name="Contacto">
-                <div class="telefono-icon" data-name="telefono">
-                    <img alt="" class="icon-img" src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/f987bbcd-b204-4034-8f80-4cd378710d2e" />
-                </div>
-                <a class="ubicacion-icon" data-name="ubicacion" href="https://www.google.com/maps/place//data=!4m2!3m1!1s0xd71fd00684554b1:0xef4e70ab821a7762?sa=X&ved=1t:8290&ictx=111">
-                    <img alt="" class="icon-img" src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/eaab0b16-95d5-223d-3a91-24dac3ee5959" />
-                </a>
-                <p class="contacto-titulo">Contacto</p>
-                <a class="contacto-direccion" href="https://www.google.com/maps/place//data=!4m2!3m1!1s0xd71fd00684554b1:0xef4e70ab821a7762?sa=X&ved=1t:8290&ictx=111">
-                    <p class="direccion-texto">Extrarradio Cortijo la Purisima, 2P, 18004 Granada</p>
-                </a>
-                <p class="contacto-telefono">652 921 960</p>
-                <p class="contacto-email">metalfulsan@gmail.com</p>
-                <div class="correo-icon" data-name="correo">
-                    <img alt="" class="icon-img" src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/eb3c9ac5-6e7f-43cc-8ef4-f1af7045d5dc" />
-                </div>
-            </div>
-
-            <!-- Logo -->
-            <div class="footer-logo" data-name="logo">
-                <img alt="" class="logo-img" src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/0ce8ef16-c96b-2e87-675a-a526582bf043" />
-            </div>
+            <h1 class="page-title">Detalles Venta</h1>
         </div>
-
-        <!-- Recuadro Fondo -->
-        <div class="recuadro-fondo-principal" data-name="Recuadro Fondo">
-            <div class="recuadro-border"></div>
-            <div class="recuadro-shadow"></div>
-        </div>
-
-        <!-- Cuerpo -->
-        <div class="cuerpo" data-name="Cuerpo">
-            <!-- Recuadro Fondo -->
-            <div class="recuadro-fondo" data-name="Recuadro fondo">
-                <p class="importe-label">Importe:</p>
-            </div>
-
-            <!-- Datos -->
-            <div class="datos" data-name="Dtaos">
-                <!-- Cuadro detalles -->
-                <div class="cuadro-detalles" data-name="Cuadro detalles"></div>
-
-                <!-- Recuadro Producto 2 -->
-                <div class="recuadro-producto-2" data-name="Recuadro Producto 2">
-                    <div class="producto-info">
-                        <p class="producto-line">Nombre Producto:</p>
-                        <p class="producto-line">&nbsp;</p>
-                        <p class="producto-line">Precio:</p>
-                        <p class="producto-line">&nbsp;</p>
-                        <p class="producto-line-last">Unidades:</p>
-                    </div>
-                </div>
-
-                <!-- Recuadro Producto 1 -->
-                <div class="recuadro-producto-1" data-name="Recuadro Producto 1">
-                    <div class="producto-info">
-                        <p class="producto-line">Nombre Producto:</p>
-                        <p class="producto-line">&nbsp;</p>
-                        <p class="producto-line">Precio:</p>
-                        <p class="producto-line">&nbsp;</p>
-                        <p class="producto-line-last">Unidades:</p>
-                    </div>
-                </div>
-
-                <!-- Cuadro nombre cliente -->
-                <div class="cuadro-nombre-cliente" data-name="Cuadro nombre cliente"></div>
-
-                <!-- Etiquetas -->
-                <div class="etiquetas-cliente">
-                    <p class="etiqueta-line">Cliente: </p>
-                    <p class="etiqueta-line">&nbsp;</p>
-                    <p class="etiqueta-line">&nbsp;</p>
-                    <p class="etiqueta-line">&nbsp;</p>
-                    <p class="etiqueta-line-last">Productos del pedido:</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Botón Salir -->
-        <button class="boton-salir" data-name="Botón aplicar cambios">
-            <div class="boton-border"></div>
-            <div class="boton-frame">
-                <p class="boton-texto-salir">Salir</p>
-            </div>
-        </button>
-
-        <!-- Botón Ir al perfil del cliente -->
-        <div class="boton-perfil" data-name="Botón aplicar cambios">
-            <div class="boton-border"></div>
-            <div class="boton-frame-perfil">
-                <p class="boton-texto-perfil">Ir al perfil del cliente</p>
-            </div>
-        </div>
-
-        <!-- Degradado -->
-        <div class="degradado" data-name="Degradado"></div>
-
-        <!-- Título -->
-        <p class="titulo-principal">Detalles Venta</p>
-
-        <!-- Cabecera -->
-        <div class="cabecera" data-name="Cabecera">
-            <!-- Nav Bar -->
-            <div class="nav-bar" data-name="Nav Bar">
-                <p class="nav-item-1">Ventas</p>
-                <p class="nav-item-2">Productos</p>
-                <p class="nav-item-3">Clientes</p>
-            </div>
-
-            <!-- Group -->
-            <div class="group">
-                <div class="image-63" data-name="image 63">
-                    <div class="image-container">
-                        <img alt="" class="image-63-img" src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/f200dbcb-1208-92da-f1c3-25a200002591" />
-                    </div>
-                </div>
-                <div class="image-64" data-name="image 64">
-                    <div class="image-container">
-                        <img alt="" class="image-64-img" src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/f200dbcb-1208-92da-f1c3-25a200002591" />
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Chevron Backward -->
-        <a href="ListadoVentasAdmin.html" class="chevron-backward" style="text-decoration: none;">
-    <svg width="60" height="50" viewBox="0 0 70 59" fill="none">
-        <path d="M36.9091 2.64062L7.16113 29.2906L36.9091 55.9406M8.65113 29.2906H70.0001" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-</a>
     </div>
+
+    <!-- Main Content -->
+    <div class="container main-container">
+        <!-- Tarjeta Principal Blanca -->
+        <div class="details-card">
+            
+            <!-- Fila Cliente -->
+            <div class="client-row">
+                <span class="label-text">Cliente:</span>
+                <input type="text" class="input-display" readonly value=""> <!-- Valor vacío como en mockup -->
+            </div>
+
+            <!-- Sección Productos -->
+            <div class="products-section">
+                <span class="label-text">Productos del pedido:</span>
+                
+                <!-- Caja contenedora de tarjetas azules -->
+                <div class="products-list-box">
+                    
+                    <!-- Tarjeta Azul 1 -->
+                    <div class="product-item-card">
+                        <div class="product-info-line">
+                            <span class="product-info-label">Nombre Producto:</span>
+                            <span class="product-info-value"></span>
+                        </div>
+                        <div class="product-info-line">
+                            <span class="product-info-label">Precio:</span>
+                            <span class="product-info-value"></span>
+                        </div>
+                        <div class="product-info-line">
+                            <span class="product-info-label">Unidades:</span>
+                            <span class="product-info-value"></span>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta Azul 2 -->
+                    <div class="product-item-card">
+                        <div class="product-info-line">
+                            <span class="product-info-label">Nombre Producto:</span>
+                            <span class="product-info-value"></span>
+                        </div>
+                        <div class="product-info-line">
+                            <span class="product-info-label">Precio:</span>
+                            <span class="product-info-value"></span>
+                        </div>
+                        <div class="product-info-line">
+                            <span class="product-info-label">Unidades:</span>
+                            <span class="product-info-value"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Importe -->
+            <div class="total-row">
+                <span class="total-label">Importe:</span>
+            </div>
+
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="action-buttons">
+            <button class="btn-action btn-salir" onclick="window.location.href='ListadoVentasAdmin.html'">Salir</button>
+            <button class="btn-action btn-perfil">Ir al perfil del cliente</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <img src="../imagenes/footer.png" alt="Logo Metalful" onerror="this.src='https://via.placeholder.com/100/ffffff/000000?text=Logo'">
+                    </div>
+                    <a href="https://instagram.com" target="_blank" class="social-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="footer-contact">
+                    <h3>Contacto</h3>
+                    <div class="contact-list">
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            <span>Extrarradio Cortijo la Purisima, 2P, 18004 Granada</span>
+                        </div>
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                            <span>652 921 960</span>
+                        </div>
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                            <span>metalfulsan@gmail.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <a href="#">Aviso Legal</a>
+                <span>•</span>
+                <a href="#">Política de Privacidad</a>
+                <span>•</span>
+                <a href="#">Política de Cookies</a>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>
