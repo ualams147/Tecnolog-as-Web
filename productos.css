@@ -344,6 +344,7 @@ body {
     background: white;
 }
 
+/* === BOTÓN AÑADIR AL CARRITO (CORREGIDO) === */
 .btn-detalles {
     background: white;
     border: 2px solid #293661; 
@@ -355,6 +356,12 @@ body {
     cursor: pointer;
     transition: all 0.3s;
     width: 100%;
+    
+    /* NUEVO: Para centrar y quitar subrayado de enlace */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none; 
 }
 
 .btn-detalles:hover { 
@@ -362,22 +369,12 @@ body {
     color: white; 
 }
 
-/* === BOTÓN "VER MÁS" === */
 .ver-mas-container { text-align: center; margin-bottom: 80px; }
-
 .btn-ver-mas {
-    background: white; 
-    border: 2px solid #999; 
-    color: #555;
-    padding: 12px 50px; 
-    border-radius: 50px; 
-    font-weight: 600;
-    cursor: pointer; 
-    transition: all 0.3s; 
-    font-size: 16px;
+    background: white; border: 2px solid #999; color: #555;
+    padding: 12px 50px; border-radius: 50px; font-weight: 600;
+    cursor: pointer; transition: all 0.3s; font-size: 16px;
 }
-
-/* CAMBIO: Hover Azul y letras blancas */
 .btn-ver-mas:hover { 
     background-color: #293661;
     color: white;
