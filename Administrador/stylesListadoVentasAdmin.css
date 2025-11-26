@@ -208,13 +208,13 @@ body {
 /* ====== FILTROS EN EL RECUADRO DEL TÍTULO ====== */
 .filtros-en-titulo {
     position: absolute;
-    top: 240px; /* ← ahora sí quedan bien colocados */
+    bottom: 40px;              /* coloca los filtros dentro del recuadro */
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 40px;
+    gap: 40px;                 /* separación entre filtros */
     z-index: 3;
-    flex-wrap: wrap;
+    flex-wrap: wrap;           /* permite que se adapten en pantallas pequeñas */
 }
 
 

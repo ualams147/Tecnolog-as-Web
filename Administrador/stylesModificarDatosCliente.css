@@ -8,15 +8,20 @@ body {
     font-family: 'Poppins', sans-serif;
     background: white;
     overflow-x: hidden;
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
 .ModificarDatosClientes {
-    position: relative;
-    width: 100%;
-    background: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
 }
 
 /* Cabecera */
@@ -24,7 +29,7 @@ body {
     position: relative;
     width: 100%;
     background: white;
-    padding: 40px 0;
+    padding: 30px 0;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     position: sticky;
     top: 0;
@@ -61,6 +66,13 @@ body {
     line-height: 1.1;
 }
 
+.logo-main a {
+  text-decoration: none; /* quita el subrayado */
+  color: inherit;        /* mantiene el color original del texto */
+  display: flex;         /* mantiene la disposición de imagen + texto */
+  align-items: center;
+}
+
     .logo-text span {
         font-size: 14px;
         font-weight: 400;
@@ -82,8 +94,8 @@ body {
 
 .nav-bar {
     display: flex;
-    justify-content: center;   /* o flex-start / flex-end según lo que quieras */
     align-items: center;
+    justify-content: center;
     gap: 140px;
     flex: 1;
     font-weight: 500;
@@ -101,19 +113,41 @@ body {
         transition: color 0.3s ease;
     }
 
-    .nav-bar a:hover {
-        text-decoration: underline;
-        font-size: 20px;
-        background: none;
-        color: #2b2b2b;
-        transform: none;
+        .nav-bar a:hover {
+            font-size: 20px;
+            color: #293661;
+            text-shadow: 0 0 4px #aab6e8; 
+        }
+    
+/* ======================= LOG OUT ======================= */
+
+.log-out {
+    background: #293661;
+    border-radius: 40px;
+    padding: 12px 24px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+    .log-out:hover {
+        background-color: #1f2849;
+        transform: translateY(-2px);
     }
 
-    .nav-bar a.activo {
-        text-decoration: underline;
-        font-size: 20px;
-        font-weight: 700;
+    .log-out:active {
+        transform: translateY(0);
     }
+
+    .log-out a {
+        font-family: 'Source Sans Pro', sans-serif;
+        font-weight: 700;
+        font-size: 18px;
+        color: white;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
 
 
 /* ====== TÍTULO SECTION ====== */
@@ -285,46 +319,56 @@ body {
 
 /* Botones de acción */
 .botones-finales {
-  display: flex;              /* coloca los hijos en fila */
-  justify-content: center;    /* centra horizontalmente */
-  align-items: center;        /* centra verticalmente */
-  gap: 40px;                  /* separación entre botones */
-  margin: 40px 0;             /* espacio arriba y abajo */
+    display: flex;
+    justify-content: center;
+    gap: 40px;       /* separación entre botones */
+    margin: 60px auto; /* espacio respecto al contenido */
 }
 
+.boton-salir p,
+.boton-modificar p {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 24px;
+    text-align: center;
+    color: white;
+    margin: 0;
+}
 
 .boton-salir,
-.boton-crear {
-  width: 298px;               /* tamaño fijo */
-  height: 72px;
-  background: #293661;
-  border: 2px solid rgba(41, 54, 97, 0.6);
-  border-radius: 20px;
-  box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
-  cursor: pointer;
-  display: flex;              /* importante: flex para centrar el texto */
-  align-items: center;
-  justify-content: center;
+.boton-modificar {
+    width: 298px;
+    height: 72px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 
-.boton-salir p {
+.boton-salir {
+    background: rgba(41, 54, 97, 0.9);
+    border: 2px solid rgba(41, 54, 97, 0.6);
+}
+
+.boton-modificar {
+    background: #293661;
+    border: 2px solid rgba(41, 54, 97, 0.6);
+}
+
+.boton-salir a,
+.boton-modificar a {
+    font-family: 'Poppins', sans-serif;
     font-weight: 400;
     font-size: 22px;
     line-height: 24px;
     text-align: center;
     color: white;
     margin: 0;
-}
-
-
-.boton-crear p {
-    font-weight: 400;
-    font-size: 22px;
-    line-height: 24px;
-    text-align: center;
-    color: white;
-    margin: 0;
+    text-decoration: none; /* quita el subrayado típico de los enlaces */
 }
 
 

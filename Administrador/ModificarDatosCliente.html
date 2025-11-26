@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="ModificarDatosClientes">
-         <!-- Cabecera -->
+        <!-- Cabecera -->
         <header class="cabecera">
             <div class="container">
                 <div class="logo-main">
@@ -19,7 +19,7 @@
                         <img src="../imagenes/logo.png" alt="Logo Metalful">
                         <div class="logo-text">
                             <span> Metalisteria</span>
-                            <strong>FULSÁN</strong>
+                            <strong>Fulsan</strong>
                         </div>
                     </a>
                 </div>
@@ -27,8 +27,13 @@
                 <nav class="nav-bar">
                     <a href="ListadoVentasAdmin.html">Ventas</a>
                     <a href="ListadoProductosAdmin.html">Productos</a>
-                    <a href="ListadoClientesAdmin.html" class="activo">Clientes</a>
+                    <a href="ListadoClientesAdmin.html" style="font-weight:bold; border-bottom: 2px solid currentColor;">Clientes</a> 
                 </nav>
+
+                <div class="log-out">
+                    <a href="#logout">Cerrar Sesión</a>
+                </div>
+
             </div>
         </header>
 
@@ -73,14 +78,13 @@
         </div>
 
         <!-- Botones de acción -->
-        <div class="acciones-formulario">
-            <button class="boton-salir">
-                <p>Salir sin guardar cambios</p>
-            </button>
-
-            <button class="boton-crear">
-                <p>Guardar cambios</p>
-            </button>
+        <div class="botones-finales">
+            <div class="boton-salir">
+                <a href="ListadoClientesAdmin.html">Salir</a>
+            </div>
+            <div class="boton-modificar">
+                <a href="#">Modificar cliente</a>
+            </div>
         </div>
 
     </div>
