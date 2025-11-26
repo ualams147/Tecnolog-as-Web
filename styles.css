@@ -152,20 +152,22 @@ body {
 /* ============ PORTADA ============ */
 
 .portada {
-    position: relative;
     width: 100%;
-    height: 690px;
+    aspect-ratio: 16 / 7;  /* Ajusta a la proporción que quieras */
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    position: relative;
 }
 
 .portada-image {
-    position: absolute;
-    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;   /* Rellena el espacio sin deformarse */
     z-index: 1;
 }
+
 
     .portada-image img {
         width: 100%;
