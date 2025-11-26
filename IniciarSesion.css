@@ -161,90 +161,110 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 2rem 5%;
-    flex: 1; /* Esto hace que ocupe todo el espacio disponible */
-}
-
-.main-title {
-    font-weight: 600;
-    font-size: 50px;
-    line-height: 1.2;
-    text-align: center;
-    color: #2b2b2b;
-    margin: 40px 0;
+    
+    /* CAMBIO IMPORTANTE: flex-start para que empiece arriba, no en el centro */
+    justify-content: flex-start; 
+    
+    /* CAMBIO: Mismo padding que en registro (60px arriba) */
+    padding: 60px 20px; 
+    
+    flex: 1; 
 }
 
 .login-card {
     background-color: #f4f4f4;
     border-radius: 12px;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 900px;
-    padding: 60px 40px;
+    padding: 50px 60px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    
+    /* CAMBIO: Quitamos margin-top extra para que se pegue al padding de 60px */
+    margin-top: 0; 
     margin-bottom: 60px;
+}
+
+.login-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    color: black;
+    margin-bottom: 40px;
+    text-align: center;
 }
 
 .login-form {
     width: 100%;
-    max-width: 600px;
+    max-width: 750px;
     display: flex;
     flex-direction: column;
     gap: 30px;
 }
 
-.form-group {
+/* === GRID DEL FORMULARIO === */
+.form-row {
     display: grid;
-    /* CAMBIO AQUÍ: De 120px a 170px para que quepa la palabra entera */
-    grid-template-columns: 170px 1fr; 
+    grid-template-columns: 160px 1fr; 
     align-items: center;
-    gap: 20px;
+    gap: 15px; 
 }
 
-.form-label {
-    font-weight: 600;
-    font-size: 24px;
+.label-icon {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    font-size: 18px;
     color: black;
     white-space: nowrap;
 }
 
+.label-icon svg {
+    width: 28px;
+    height: 28px;
+    fill: #2b2b2b;
+    flex-shrink: 0;
+}
+
 .form-input {
     background-color: white;
-    border: none;
+    border: 1px solid #ddd;
     border-radius: 4px;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    height: 50px;
-    padding: 0 1rem;
+    height: 45px;
+    padding: 0 15px;
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
     width: 100%;
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.05); 
 }
 
 .form-input:focus {
     outline: 2px solid #293661;
+    border-color: #293661;
 }
 
-.btn-login {
+.btn-login-submit {
     background-color: #293661;
     color: white;
     font-family: 'Poppins', sans-serif;
-    font-size: 24px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 500;
     padding: 15px 40px;
-    border: 2px solid rgba(41, 54, 97, 0.6);
-    border-radius: 20px;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.3s;
+    margin-top: 30px;
     width: 100%;
     max-width: 300px;
     align-self: center;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
+    transition: background 0.3s;
 }
 
-.btn-login:hover {
+.btn-login-submit:hover {
     background-color: #1f2a4d;
 }
 
@@ -252,29 +272,31 @@ body {
     font-size: 18px;
     text-align: center;
     color: black;
-    margin-top: 10px;
+    margin-top: 15px;
+}
+
+.register-text a {
+    text-decoration: none;
+    color: inherit;
 }
 
 .register-text em {
     font-style: italic;
     cursor: pointer;
     color: #293661;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .register-text em:hover {
     text-decoration: underline;
 }
 
-/* ============================================================
-   ========================== FOOTER ==========================
-   ============================================================ */
-
+/* ========================== FOOTER ========================== */
 .footer {
     background: #293661;
     color: white;
     padding: 60px 0 30px;
-    margin-top: auto; /* Empuja el footer al fondo */
+    margin-top: auto;
 }
 
 .footer-content {
@@ -336,8 +358,13 @@ body {
     margin-bottom: 20px;
 }
 
-.enlaces-rapidos ul { list-style: none; }
-.enlaces-rapidos ul li { margin-bottom: 12px; }
+.enlaces-rapidos ul {
+    list-style: none;
+}
+
+.enlaces-rapidos ul li {
+    margin-bottom: 12px;
+}
 
 .enlaces-rapidos ul li a {
     font-family: 'Poppins', sans-serif;
@@ -350,7 +377,9 @@ body {
 
 .enlaces-rapidos ul li a:hover { opacity: 0.8; }
 
-.contacto-footer ul { list-style: none; }
+.contacto-footer ul {
+    list-style: none;
+}
 
 .contacto-footer ul li {
     margin-bottom: 12px;
@@ -402,94 +431,49 @@ body {
 .politica-legal span { font-size: 14px; opacity: 0.5; }
 
 
-/* ============================================================
-   ==================== RESPONSIVE DESIGN =====================
-   ============================================================ */
+/* ========================== RESPONSIVE ========================== */
 
 /* Tablets (max-width: 1024px) */
 @media (max-width: 1024px) {
-    .nav-bar {
-        gap: 30px;
-        font-size: 16px;
-    }
+    .nav-bar { gap: 30px; font-size: 16px; }
+    
+    .login-card { padding: 40px 30px; }
+    
+    .form-row { grid-template-columns: 200px 1fr; }
+    .label-icon { font-size: 16px; }
 
-    .form-group {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-
-    .form-label { text-align: left; }
-
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: 40px;
-        text-align: center;
-    }
-
-    .footer-logo-section, .footer-links {
-        justify-content: center;
-    }
-
-    .footer-links {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 40px;
-    }
-
+    .footer-content { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+    .footer-logo-section, .footer-links { justify-content: center; }
+    .footer-links { display: flex; flex-direction: column; align-items: center; gap: 40px; }
     .contacto-footer ul li { justify-content: center; }
 }
 
 /* Móviles (max-width: 768px) */
 @media (max-width: 768px) {
-    .container { padding: 0 20px; }
-
-    /* Cabecera Responsive */
-    .cabecera .container {
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .nav-bar {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        gap: 15px;
-        padding: 10px 0;
-        margin-top: 0;
-        border-top: 1px solid #eee;
-        border-bottom: 1px solid #eee;
-    }
-
+    .cabecera .container { flex-direction: column; gap: 20px; }
+    .nav-bar { display: flex; flex-direction: column; width: 100%; gap: 15px; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
     .sign-in { width: 100%; text-align: center; }
 
-    /* Login Form Responsive */
-    .login-card {
-        padding: 30px 20px;
+    /* FORMULARIO RESPONSIVE */
+    .login-card { padding: 30px 20px; }
+    
+    .form-row { 
+        grid-template-columns: 1fr; 
+        gap: 8px; 
     }
 
-    .main-title { font-size: 36px; margin: 30px 0; }
-
-    .btn-login { font-size: 20px; width: 100%; }
+    .label-icon {
+        justify-content: flex-start;
+        padding-left: 0; 
+        font-size: 16px;
+    }
+    
+    .btn-login-submit { width: 100%; max-width: 100%; }
 
     /* Footer Responsive */
-    .footer-content {
-        display: flex;
-        flex-direction: column;
-        gap: 40px;
-    }
-
-    .logo-footer img {
-        margin: 0 auto;
-        display: block;
-    }
-
+    .footer-content { display: flex; flex-direction: column; gap: 40px; }
+    .logo-footer img { margin: 0 auto; display: block; }
     .redes { justify-content: center; margin-top: 20px; }
-    
-    .politica-legal {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
+    .politica-legal { flex-direction: column; gap: 10px; }
     .politica-legal span { display: none; }
 }

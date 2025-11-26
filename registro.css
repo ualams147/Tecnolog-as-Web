@@ -25,7 +25,6 @@ body {
 }
 
 /* ========================== CABECERA ========================== */
-/* (Estilos reutilizados para coherencia) */
 .cabecera {
     width: 100%;
     background: white;
@@ -116,15 +115,15 @@ body {
     align-items: center;
     padding: 60px 20px;
     flex: 1;
-    background-color: white; /* El fondo general es blanco */
+    background-color: white; 
 }
 
 .registro-card {
-    background-color: #f4f4f4; /* El gris claro de la imagen */
+    background-color: #f4f4f4;
     border-radius: 12px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 900px; /* Ancho máximo similar a la imagen */
+    max-width: 900px; 
     padding: 50px 60px;
     display: flex;
     flex-direction: column;
@@ -144,15 +143,12 @@ body {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Espacio vertical entre filas */
+    gap: 20px; 
 }
 
 /* === GRID DEL FORMULARIO === */
 .form-row {
     display: grid;
-    /* COLUMNA 1: 340px para que quepa "Confirmación Correo electrónico"
-       COLUMNA 2: 1fr (ocupa el resto)
-    */
     grid-template-columns: 340px 1fr; 
     align-items: center;
     gap: 20px;
@@ -162,25 +158,17 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-weight: 700; /* Texto en negrita como la imagen */
+    font-weight: 700; 
     font-size: 18px;
     color: black;
-    white-space: nowrap; /* Evita que el texto se parta */
+    white-space: nowrap; 
 }
 
 .label-icon svg {
     width: 28px;
     height: 28px;
-    fill: #2b2b2b; /* Color de los iconos */
+    fill: #2b2b2b;
     flex-shrink: 0;
-}
-
-.text-label {
-    font-weight: 700;
-    font-size: 18px;
-    color: black;
-    /* Para alinear el texto DNI aunque no tenga icono, le damos padding izquierdo */
-    padding-left: 40px; 
 }
 
 .form-input {
@@ -192,13 +180,23 @@ body {
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
     width: 100%;
-    /* Sombra suave interna o externa como en la imagen */
     box-shadow: 0px 2px 4px rgba(0,0,0,0.05); 
 }
 
 .form-input:focus {
     outline: 2px solid #293661;
     border-color: #293661;
+}
+
+/* === NUEVO: Agrupar inputs en la misma fila === */
+.input-group {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+}
+
+.input-group input {
+    width: 100%; /* Se reparten el espacio */
 }
 
 .btn-register-submit {
@@ -214,7 +212,7 @@ body {
     margin-top: 30px;
     width: 100%;
     max-width: 300px;
-    align-self: center; /* Centra el botón horizontalmente */
+    align-self: center;
     box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
     transition: background 0.3s;
 }
@@ -223,8 +221,31 @@ body {
     background-color: #1f2a4d;
 }
 
+/* === TEXTO "YA TIENES CUENTA" === */
+.register-text {
+    font-size: 18px;
+    text-align: center;
+    color: black;
+    margin-top: 15px;
+}
+
+.register-text a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.register-text em {
+    font-style: italic;
+    cursor: pointer;
+    color: #293661;
+    font-weight: 700;
+}
+
+.register-text em:hover {
+    text-decoration: underline;
+}
+
 /* ========================== FOOTER ========================== */
-/* (Estilos reutilizados para coherencia) */
 .footer {
     background: #293661;
     color: white;
@@ -294,7 +315,6 @@ body {
     
     .registro-card { padding: 40px 30px; }
     
-    /* En tablet reducimos un poco el ancho de la etiqueta */
     .form-row { grid-template-columns: 280px 1fr; }
     .label-icon { font-size: 16px; }
 
@@ -313,16 +333,21 @@ body {
     /* FORMULARIO RESPONSIVE */
     .registro-card { padding: 30px 20px; }
     
-    /* En móvil, cambiamos el grid a 1 sola columna: Etiqueta arriba, Input abajo */
     .form-row { 
         grid-template-columns: 1fr; 
-        gap: 8px; /* Menos espacio entre label e input */
+        gap: 8px; 
     }
 
-    .label-icon, .text-label {
+    .label-icon {
         justify-content: flex-start;
-        padding-left: 0; /* Quitamos padding extra en móvil */
+        padding-left: 0; 
         font-size: 16px;
+    }
+    
+    /* En móvil, los grupos de inputs se apilan */
+    .input-group {
+        flex-direction: column;
+        gap: 10px;
     }
     
     .btn-register-submit { width: 100%; max-width: 100%; }
