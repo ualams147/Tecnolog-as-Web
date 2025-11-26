@@ -355,36 +355,45 @@ body {
     display: none !important;
 }
 
+/* Botón del menú lateral */
 #menu-lateral {
-  position: relative; /* clave para que el botón se coloque dentro */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
+#menu-lateral.oculto {
+  display: none;
+}
+
+
 .boton-menu-lateral {
-  position: absolute;   /* se coloca dentro del menú lateral */
-  top: 595px;            /* distancia desde arriba */
-  left: 170px;           /* distancia desde la izquierda */
-  background-color: #293661;     /* azul oscuro */
+  background-color: #293661;
   border: none;
-  padding: 14px 18px;            /* tamaño generoso */
-  border-radius: 12px;           /* esquinas redondeadas */
+  padding: 14px 18px;
+  border-radius: 12px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* sombra suave */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   transition: background 0.3s ease, transform 0.2s ease;
-  z-index: 10; /* por encima de los items del menú */
+  width: 60px; /* tamaño fijo opcional */
+  height: 60px;
+  margin-left: 0px; /* alineado a la izquierda */
 }
 
 .boton-menu-lateral svg {
-  width: 12px;
-  height: 12px;
+  width: 32px;
+  height: 32px;
 }
 
 .boton-menu-lateral:hover {
   background-color: #1f274d;
   transform: scale(1.05);
 }
+
 
 .cuadro-fondo {
     flex: 1;

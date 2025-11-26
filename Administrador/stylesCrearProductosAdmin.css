@@ -242,7 +242,7 @@ body {
 /* Cuerpo centrado */
 .cuerpo {
   position: relative;
-  margin-top: 40px; /* espacio entre el título y el cuerpo */
+  margin-top: -150px; /* espacio entre el título y el cuerpo */
   width: 100%;
   display: flex;
   justify-content: center;

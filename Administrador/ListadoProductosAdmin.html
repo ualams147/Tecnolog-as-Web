@@ -62,21 +62,22 @@
             </a>
         </div>
 
-        <!-- Botón flotante fuera del menú -->
-        <button id="toggle-menu" class="boton-menu-lateral flotante">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" viewBox="0 0 24 24">
-                <path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-        </button>
-
         <!-- Menú lateral y Listado de productos en un mismo contenedor -->
         <div class="productos-layout">
+            <button class="boton-menu-lateral">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" viewBox="0 0 24 24">
+                    <path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            
+            
             <div class="crear-producto" id="menu-lateral">
                 <a href="ListadoProductosAdmin.html" class="menu-item">Productos</a>
                 <a href="CrearProductoAdmin.html" class="menu-item">Crear Producto</a>
                 <a href="ListadoClientesAdmin.html" class="menu-item">Listado de clientes</a>
                 <a href="ListadoVentasAdmin.html" class="menu-item">Listado de ventas</a>
             </div>
+            
             <div class="cuadro-fondo">
                 <p class="header-tabla">Catálogo de Productos</p>
 
@@ -189,10 +190,15 @@
         </footer>
     </div> 
     <script>
-        document.getElementById('toggle-menu').onclick = function() {
-            var menu = document.getElementById('menu-lateral');
-            menu.classList.toggle('oculto');
-        };
+        document.addEventListener("DOMContentLoaded", function () {
+            const botonMenu = document.querySelector(".boton-menu-lateral");
+            const menuLateral = document.getElementById("menu-lateral");
+
+            botonMenu.addEventListener("click", function () {
+            menuLateral.classList.toggle("oculto");
+            });
+        });
     </script>
+
 </body>
 </html>
