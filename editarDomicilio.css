@@ -1,0 +1,298 @@
+/* ===== RESET GENERAL ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: white;
+    overflow-x: hidden;
+}
+
+.visitante-domicilio-edit {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+    width: 100%;
+}
+
+/* ========================== CABECERA ========================== */
+.cabecera {
+    position: relative;
+    width: 100%;
+    background: white;
+    padding: 30px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.cabecera .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.logo-main { flex-shrink: 0; position: relative; display: flex; align-items: center; }
+.logo-main img { height: 60px; width: auto; }
+.logo-text { display: flex; flex-direction: column; margin-left: 12px; margin-top: 4px; line-height: 1.1; }
+.logo-text span { font-size: 14px; font-weight: 400; color: #2b2b2b; }
+.logo-text strong { font-size: 18px; font-weight: 700; color: #000000; width: 100%; text-align: center; }
+.logo-link { display: flex; align-items: center; text-decoration: none; color: inherit; }
+
+.nav-bar { display: flex; align-items: center; justify-content: center; gap: 140px; flex: 1; font-weight: 500; font-size: 18px; color: #2b2b2b; white-space: nowrap; }
+.nav-bar a { text-decoration: none; color: #2b2b2b; transition: color 0.3s; }
+.nav-bar a:hover { color: #293661; text-shadow: 0 0 4px #aab6e8; font-size: 20px; }
+
+.sign-in { background: #293661; border-radius: 40px; padding: 12px 24px; flex-shrink: 0; cursor: pointer; transition: background-color 0.3s ease; }
+.sign-in:hover { background-color: #1f2849; transform: translateY(-2px); }
+.sign-in a { font-family: 'Source Sans Pro', sans-serif; font-weight: 700; font-size: 18px; color: white; text-decoration: none; }
+
+/* ========================== HERO & FONDO ========================== */
+.address-hero {
+    background: linear-gradient(180deg, #FFFFFF 0%, #dfe4f1 10%, #293661 25%, #293661 100%);
+    padding: 60px 0 320px 0; 
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.address-hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 350px; 
+    background: linear-gradient(180deg, #ffffff 0%, #e4e4e4 26.923%, rgba(153,153,153,0) 100%);
+    opacity: 0.9;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    z-index: 2;
+}
+
+.btn-back {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    color: white;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.btn-back:hover { opacity: 1; }
+
+.address-title-main {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 55px;
+    color: white;
+    text-shadow: 0px 4px 4px rgba(0,0,0,0.25); 
+    text-align: center;
+}
+
+/* ========================== CUERPO PRINCIPAL ========================== */
+.address-main {
+    margin-top: -250px; 
+    position: relative;
+    z-index: 10;
+    padding-bottom: 80px;
+    display: flex;
+    justify-content: center;
+}
+
+.address-card-container {
+    background-color: #f4f4f4;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    width: 100%;
+    max-width: 900px;
+    padding: 50px 60px;
+}
+
+.section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #293661;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+}
+
+/* --- FORMULARIO AZUL (CONTENEDOR) --- */
+.blue-form-container {
+    background-color: #293661; 
+    padding: 40px;
+    border-radius: 10px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+/* CLAVE: ALINEACIÓN RECTA Y SIMÉTRICA */
+.blue-form-row {
+    display: grid;
+    /* Reducimos el ancho de etiqueta para acercar el input. 150px es suficiente para la etiqueta más larga. */
+    grid-template-columns: 150px 1fr; 
+    align-items: center;
+    /* Reducimos el hueco entre el texto y el input */
+    gap: 10px; 
+}
+
+.blue-form-row label {
+    font-weight: 700;
+    font-size: 16px;
+    white-space: nowrap;
+    /* CLAVE: Alineamos la etiqueta a la derecha para pegarla al input */
+    justify-self: flex-end; 
+}
+
+/* Contenedor Flex para los inputs divididos (Nº/Piso, CP/Localidad) */
+.blue-group {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+}
+
+/* Estilo de Input */
+.blue-input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 4px; 
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    color: #333;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Sombra para que se vea bien en el fondo azul */
+}
+
+.blue-input:focus { outline: 2px solid #a0d2ac; }
+
+/* CLAVE: Hace que los inputs dentro de .blue-group se repartan el 50/50 */
+.blue-group .blue-input {
+    flex: 1; 
+}
+
+
+/* --- BOTONES DE ACCIÓN --- */
+.page-actions {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+}
+
+.btn-round-white {
+    background-color: white;
+    border: 2px solid #293661;
+    color: #293661;
+    
+    padding: 12px 40px;
+    border-radius: 50px; 
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    min-width: 200px;
+    text-align: center;
+}
+
+.btn-round-white:hover {
+    background-color: #293661;
+    color: white;
+}
+
+
+/* ========================== FOOTER ========================== */
+.footer { background: #293661; color: white; padding: 60px 0 30px; margin-top: auto; }
+.footer-content { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; margin-bottom: 40px; }
+.footer-logo-section { display: flex; gap: 20px; align-items: center; }
+.logo-footer img { width: 200px; height: 200px; object-fit: contain; }
+.redes { display: flex; gap: 20px; }
+.instagram-link { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; transition: background 0.3s ease; }
+.instagram-link:hover { background: rgba(255,255,255,0.2); }
+.instagram-link svg { width: 24px; height: 24px; }
+.footer-links { display: grid; grid-template-columns: 1fr 2fr; gap: 60px; }
+.enlaces-rapidos h3, .contacto-footer h3 { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 20px; margin-bottom: 20px; }
+.enlaces-rapidos ul, .contacto-footer ul { list-style: none; }
+.enlaces-rapidos ul li, .contacto-footer ul li { margin-bottom: 12px; }
+.enlaces-rapidos ul li a, .contacto-footer ul li a { font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 16px; color: white; text-decoration: none; transition: opacity 0.3s ease; }
+.enlaces-rapidos ul li a:hover, .contacto-footer ul li a:hover { opacity: 0.8; }
+.contacto-footer ul li { display: flex; align-items: center; gap: 12px; }
+.contacto-footer ul li svg { width: 20px; height: 20px; fill: white; flex-shrink: 0; }
+.footer-bottom { padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.2); }
+.politica-legal { display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
+.politica-legal a { font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; color: white; text-decoration: none; transition: opacity 0.3s ease; }
+.politica-legal span { font-size: 14px; opacity: 0.5; }
+
+/* ========================== RESPONSIVE ========================== */
+@media (max-width: 1024px) {
+    .nav-bar { gap: 30px; font-size: 16px; }
+    .footer-content { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+    .footer-logo-section, .footer-links { justify-content: center; }
+    .footer-links { display: flex; flex-direction: column; align-items: center; gap: 40px; }
+    .contacto-footer ul li { justify-content: center; }
+    
+    /* En tablet reducimos la columna de etiquetas */
+    .blue-form-row { grid-template-columns: 150px 1fr; }
+}
+
+@media (max-width: 768px) {
+    .cabecera .container { flex-direction: column; gap: 20px; }
+    .nav-bar { display: flex; flex-direction: column; width: 100%; gap: 15px; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+    .sign-in { width: 100%; text-align: center; }
+
+    .address-card-container { padding: 30px 20px; }
+    
+    /* Formulario Responsive: 1 Columna */
+    .blue-form-row { 
+        grid-template-columns: 1fr; 
+        gap: 5px;
+        justify-content: flex-start;
+    }
+    
+    .blue-form-row label { 
+        margin-bottom: 5px; 
+        text-align: left; /* Etiqueta arriba a la izquierda */
+    }
+    
+    /* Los inputs divididos se apilan y ocupan el 100% */
+    .blue-group { flex-direction: column; align-items: flex-start; gap: 10px; width: 100%; }
+    .blue-group .blue-input { flex: none; width: 100%; }
+
+    .page-actions { flex-direction: column; gap: 20px; }
+    .btn-round-white { width: 100%; }
+
+    .footer-content { display: flex; flex-direction: column; gap: 40px; }
+    .logo-footer img { margin: 0 auto; display: block; }
+    .redes { justify-content: center; margin-top: 20px; }
+    .politica-legal { flex-direction: column; gap: 10px; }
+    .politica-legal span { display: none; }
+}

@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // CAMBIO 1: Enlace de la izquierda
         if (linkLogin) {
             linkLogin.textContent = 'Mi Perfil';
-            linkLogin.href = '#'; 
+            linkLogin.href = 'perfil.html'; 
         }
 
         // CAMBIO 2: Botón de la derecha
