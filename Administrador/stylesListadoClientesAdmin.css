@@ -721,5 +721,89 @@ body {
         .preguntas-frecuentes h2 {
             font-size: 28px;
         }
+    
 }
+/* === CORRECCIÓN PARA QUE NO SE MUEVA NADA === */
+
+/* El form actúa ahora como el contenedor del input */
+.filtro-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    
+    /* Copiamos las dimensiones exactas de tu CSS original */
+    width: 200px;
+    min-width: 210px; /* Para mantener consistencia con tu diseño previo */
+    margin-bottom: 10px; /* El margen que antes tenía el input */
+    
+    /* Reseteamos estilos por defecto del form */
+    margin-top: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+}
+
+/* Los inputs ahora se adaptan al wrapper */
+.filtro-wrapper input,
+.filtro-wrapper select {
+    width: 100% !important; /* Fuerza a llenar el wrapper */
+    min-width: 100% !important;
+    margin-bottom: 0 !important; /* Quitamos el margen porque ya lo tiene el wrapper */
+    padding-right: 30px; /* Espacio para la X */
+    
+    /* Mantenemos tus estilos visuales */
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+    border: 2px solid white;
+    box-sizing: border-box; /* Asegura que el padding no aumente el tamaño */
+}
+
+/* Evitar borde rojo en validación */
+.filtro-wrapper input:invalid,
+.filtro-wrapper select:invalid {
+    outline: none;
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+    border: 2px solid white;
+}
+
+/* Botón X */
+.btn-borrar {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #293661;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 5px;
+    z-index: 10;
+    display: none; /* Oculto por defecto */
+}
+
+.btn-borrar:hover {
+    color: #e74c3c;
+}
+
+/* Mostrar X solo cuando hay selección */
+.filtro-wrapper input:valid ~ .btn-borrar,
+.filtro-wrapper select:valid ~ .btn-borrar {
+    display: block;
+}
+
+/* Ajuste fecha Chrome */
+.filtro-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
+    margin-right: 25px;
+    cursor: pointer;
+}
+
+/* Corrección Responsive (tal como tenías en tu CSS original) */
+@media (max-width: 768px) {
+    .filtro-wrapper {
+        min-width: 220px; /* Respetamos tu media query original */
+    }
+}
+
 

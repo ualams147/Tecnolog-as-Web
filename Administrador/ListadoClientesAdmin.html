@@ -45,63 +45,57 @@
 
         <!-- Filtros dentro del recuadro azul -->
         <div class="filtros-en-titulo">
-            <!-- Filtro Fecha -->
-            <div class="filtro-item">
-            <label for="fecha">
-                <span class="icon">
-                <svg width="20" height="20" viewBox="0 0 40 40" fill="none">
-                    <path d="M33.3333 6.66675H6.66667C4.82572 6.66675 3.33334 8.15913 3.33334 10.0001V36.6667C3.33334 38.5077 4.82572 40.0001 6.66667 40.0001H33.3333C35.1743 40.0001 36.6667 38.5077 36.6667 36.6667V10.0001C36.6667 8.15913 35.1743 6.66675 33.3333 6.66675Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M26.6667 3.33325V9.99992" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M13.3333 3.33325V9.99992" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M3.33334 16.6667H36.6667" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                </span>
-                Fecha
-            </label>
-            <input type="date" id="fecha" name="fecha" />
-            </div>
+    
+    <div class="filtro-item">
+        <label for="fecha">
+            <span class="icon">
+                <svg width="20" height="20" viewBox="0 0 40 40" fill="none"><path d="M33.3333 6.66675H6.66667C4.82572 6.66675 3.33334 8.15913 3.33334 10.0001V36.6667C3.33334 38.5077 4.82572 40.0001 6.66667 40.0001H33.3333C35.1743 40.0001 36.6667 38.5077 36.6667 36.6667V10.0001C36.6667 8.15913 35.1743 6.66675 33.3333 6.66675Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M26.6667 3.33325V9.99992" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.3333 3.33325V9.99992" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.33334 16.6667H36.6667" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            Fecha
+        </label>
+        
+        <form class="filtro-wrapper">
+            <input type="date" id="fecha" name="fecha" required>
+            <button type="reset" class="btn-borrar">&times;</button>
+        </form>
+    </div>
 
-            <!-- Filtro Cliente -->
-            <div class="filtro-item">
-            <label for="cliente">
-                <span class="icon">
-                <svg width="20" height="20" viewBox="0 0 40 40" fill="none">
-                    <path d="M33.3333 35V31.6667C33.3333 29.8986 32.631 28.2029 31.3807 26.9526C30.1305 25.7024 28.4348 25 26.6667 25H13.3333C11.5652 25 9.86953 25.7024 8.61929 26.9526C7.36905 28.2029 6.66667 29.8986 6.66667 31.6667V35" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M20 18.3333C23.6819 18.3333 26.6667 15.3486 26.6667 11.6667C26.6667 7.98477 23.6819 5 20 5C16.3181 5 13.3333 7.98477 13.3333 11.6667C13.3333 15.3486 16.3181 18.3333 20 18.3333Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                </span>
-                Cliente
-            </label>
-            <select id="cliente" name="cliente">
-                <option value="">Todos los clientes</option>
+    <div class="filtro-item">
+        <label for="cliente">
+            <span class="icon">
+                <svg width="20" height="20" viewBox="0 0 40 40" fill="none"><path d="M33.3333 35V31.6667C33.3333 29.8986 32.631 28.2029 31.3807 26.9526C30.1305 25.7024 28.4348 25 26.6667 25H13.3333C11.5652 25 9.86953 25.7024 8.61929 26.9526C7.36905 28.2029 6.66667 29.8986 6.66667 31.6667V35" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 18.3333C23.6819 18.3333 26.6667 15.3486 26.6667 11.6667C26.6667 7.98477 23.6819 5 20 5C16.3181 5 13.3333 7.98477 13.3333 11.6667C13.3333 15.3486 16.3181 18.3333 20 18.3333Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            Cliente
+        </label>
+        <form class="filtro-wrapper">
+            <select id="cliente" name="cliente" required>
+                <option value="" selected>Todos los clientes</option>
                 <option value="cliente1">Cliente 1</option>
                 <option value="cliente2">Cliente 2</option>
             </select>
-            </div>
+            <button type="reset" class="btn-borrar">&times;</button>
+        </form>
+    </div>
 
-            <!-- Filtro Producto -->
-            <div class="filtro-item">
-            <label for="producto">
-                <span class="icon">
-                <svg width="20" height="20" viewBox="0 0 45 45" fill="none">
-                    <path d="M37.5 15H15M37.5 22.5H15M37.5 30H15M7.5 15H7.51875M7.5 22.5H7.51875M7.5 30H7.51875" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                </span>
-                Producto
-            </label>
-            <select id="producto" name="producto">
-                <option value="">Todos los productos</option>
+    <div class="filtro-item">
+        <label for="producto">
+            <span class="icon">
+                <svg width="20" height="20" viewBox="0 0 45 45" fill="none"><path d="M37.5 15H15M37.5 22.5H15M37.5 30H15M7.5 15H7.51875M7.5 22.5H7.51875M7.5 30H7.51875" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            Producto
+        </label>
+        <form class="filtro-wrapper">
+            <select id="producto" name="producto" required>
+                <option value="" selected>Todos los productos</option>
                 <option value="ventanas">Ventanas</option>
                 <option value="puertas">Puertas</option>
             </select>
-            </div>
+            <button type="reset" class="btn-borrar">&times;</button>
+        </form>
+    </div>
+
+</div>
         </div>
-        </div>
-
-
-       
-
-
 
         <!-- Menú lateral y listado -->
         <div class="productos-layout">
