@@ -405,8 +405,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: transform 0.2s ease;
         }
 
+        .boton-salir:hover,
+        .boton-usuario:hover {
+            transform: translateY(-5px);
+        }
 
         .boton-salir {
             background: rgba(41, 54, 97, 0.9);

@@ -417,9 +417,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: transform 0.2s ease;
         }
 
-
+        .boton-salir:hover,
+        .boton-crear:hover {
+            transform: translateY(-5px);
+        }
+        
         .boton-salir {
             background: rgba(41, 54, 97, 0.9);
             border: 2px solid rgba(41, 54, 97, 0.6);

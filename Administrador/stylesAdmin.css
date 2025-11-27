@@ -355,6 +355,12 @@ body {
     justify-content: center;
     padding: 14px;
     text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+    transform: translateY(-5px); /* Mueve la tarjeta hacia arriba */
+    box-shadow: 0px 10px 20px rgba(0,0,0,0.15); /* Sombra más suave y lejana */
+    cursor: pointer; /* Cambia el cursor a manita */
 }
 
 /* Iconos dentro de la tarjeta */
