@@ -167,6 +167,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        margin-top: 110px;
     }
 
     .degradado { 
@@ -226,21 +227,28 @@
         z-index: 2;
     }
 
-        .flecha-volver {
-            position: absolute;
-            top: 60px;          /* ajusta según la altura que quieras */
-            left: 40px;         /* separación desde el borde izquierdo */
-            font-size: 40px;    /* tamaño de la flecha */
-            color: white;       /* color de la flecha */
+       .flecha-circular {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: whitesmoke;   /* círculo negro */
+            color: #293661;              /* flecha blanca */
+            font-size: 30px;           /* tamaño de flecha */
             text-decoration: none;
-            z-index: 4;         /* encima del recuadro azul */
-            transition: transform 0.2s ease;
+            position: absolute;
+            top: 60px;
+            left: 40px;
+            z-index: 4;
+            transition: transform 0.2s ease, background-color 0.3s ease;
         }
 
-        .flecha-volver:hover {
-            transform: scale(1.2); /* efecto al pasar el ratón */
+        .flecha-circular:hover {
+            transform: scale(1.1);
+            background-color: white; /* tono más oscuro al pasar el ratón */
         }
-
         .page-title {
             color: var(--white);
             font-size: 48px;
@@ -283,7 +291,7 @@
         .label-text {
             font-weight: 700;
             font-size: 18px;
-            color: #000;
+            color: #293661;
             min-width: 150px; /* Alineación */
         }
         .input-display {
@@ -352,7 +360,7 @@
         .total-label {
             font-weight: 700;
             font-size: 20px;
-            color: #000;
+            color:#293661;
         }
 
         /* ================= BOTONES ================= */
