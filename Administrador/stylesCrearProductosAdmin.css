@@ -25,11 +25,17 @@
             --gray-border: #e0e0e0;
         }
 
+        .CrearProductosAdmin {
+            position: relative;
+            width: 100%;
+            min-height: 1824px;
+            background: white;
+        }
+
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 40px;
-            width: 100%;
         }
 
         /* ================= CABECERA ================= */
@@ -157,53 +163,102 @@
     }
 
 
-        /* ================= HERO SECTION (CORREGIDO: Blanco a Azul) ================= */
-        .hero-section {
-            /* Degradado desde blanco puro (#FFFFFF) hasta el azul corporativo (#293661) */
-            background: linear-gradient(180deg, #FFFFFF 0%, #293661 33%);
-            height: 350px;
-            width: 100%;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding-top: 60px;
-        }
+/* ====== TÍTULO SECTION ====== */
+.titulo-section {
+    position: relative;
+    width: 100%;
+    max-width: 1468px; /* si quieres mantener límite */
+    height: 386px;
+    margin: 20px auto; /* centra horizontalmente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 110px;
+}
 
-        .hero-content {
-            position: relative;
-            width: 100%;
-            max-width: 1400px;
-            padding: 0 40px;
-            text-align: center;
-        }
+.degradado { 
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 270px;
+    background: linear-gradient(180deg, #ffffff 0%, #e4e4e4 26.923%, rgba(153,153,153,0) 100%);
+    opacity: 0.9;
+    z-index: 3; /* 🔼 súbelo para que quede encima */
+    transform: none;
+}
 
-        .back-arrow {
-            position: absolute;
-            left: 40px;
-            top: 10px;
-            font-size: 32px;
-            color: var(--white); /* Azul para que se vea sobre la parte blanca */
-            transition: transform 0.2s;
-        }
-        .back-arrow:hover {
-            transform: scale(1.1);
-        }
+.recuadro-fondo-titulo {
+    position: absolute;
+    top: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1468px;
+    height: 341px;
+    background: #293661;
+    border-radius: 13px;
+    border: 1px solid black;
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    z-index: 2; /* 🔽 mantenlo debajo */
+}
 
-        .page-title {
-            color: var(--white); /* Blanco para que contraste cuando el degradado se vuelve azul */
-            font-size: 48px;
-            font-weight: 600;
-            margin: 0;
-            /* Sombra ligera para asegurar legibilidad en la zona de transición */
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1); 
-        }
 
-        /* Ajuste específico para el texto del título si el fondo superior es muy blanco */
-        /* Si quieres que el título sea azul en la parte blanca, descomenta esto:
-        .page-title { color: var(--primary-blue); text-shadow: none; } 
-        Pero en tu imagen parece blanco sobre el fondo azul oscuro. 
-        Voy a dejarlo blanco con sombra porque el degradado baja a azul rápido. */
+/* Recuadro centrado */
+.recuadro-fondo {
+    width: min(1314px, 95%);
+    background: #f4f4f4;
+    border-radius: 12px;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    box-sizing: border-box;
+    min-height: 600px; /* ajusta según el contenido */
+    position: relative;
+    z-index: 2;
+}
+
+
+/* Título centrado */
+.titulo-principal {
+    position: absolute;
+    top: 95px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%; /* flexible */
+    max-width: 1348px;
+    font-weight: 600;
+    font-size: 65.34px;
+    line-height: 82px;
+    text-align: center;
+    color: white;
+    z-index: 2;
+}
+
+.flecha-circular {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: whitesmoke;   /* círculo negro */
+  color: #293661;              /* flecha blanca */
+  font-size: 30px;           /* tamaño de flecha */
+  text-decoration: none;
+  position: absolute;
+  top: 60px;
+  left: 40px;
+  z-index: 4;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.flecha-circular:hover {
+  transform: scale(1.1);
+  background-color: white; /* tono más oscuro al pasar el ratón */
+}
+
         
         /* ================= MAIN CARD ================= */
         .main-container {
@@ -245,20 +300,27 @@
             border-radius: 8px;
         }
 
-        .btn-set-image {
+        .boton-cambiar-imagen {
             width: 80%;
-            padding: 12px;
-            border: 2px solid var(--primary-blue);
+            max-width: 300px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 13px 21px;
+            border-radius: 40px;
+            border: 2px solid #293661;
             background: transparent;
-            border-radius: 30px;
-            color: var(--text-dark);
-            font-weight: 500;
-            font-size: 16px;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
             cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
         }
-        .btn-set-image:hover {
+
+        .boton-cambiar-imagen p {
+            font-size: 18px;
+            color: #2b2b2b;
+            margin: 0;
+        }
+        .boton-cambiar-imagen:hover {
             background: #f0f4ff;
         }
 
@@ -380,235 +442,235 @@
             text-decoration: none; /* quita el subrayado típico de los enlaces */
         }
 
-        /* ============ FOOTER ============ */
-        .footer {
-            background: #293661;
-            color: white;
-            padding: 60px 0 30px;
+/* ============ FOOTER ============ */
+.footer {
+    background: #293661;
+    color: white;
+    padding: 60px 0 30px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    margin-bottom: 40px;
+}
+
+.footer-logo-section {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px; /* separación entre logo e icono */
+}
+
+
+.logo-footer img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+}
+
+.redes {
+    display: flex;
+    gap: 20px;
+}
+
+.instagram-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+    .instagram-link:hover {
+        background: rgba(255,255,255,0.2);
+    }
+
+    .instagram-link svg {
+        width: 24px;
+        height: 24px;
+    }
+
+.footer-links {
+    display: block
+}
+
+
+.contacto-footer h3 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.contacto-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contacto-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+    .contacto-item svg {
+        width: 20px;
+        height: 20px;
+        color: white;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    .contacto-item a {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        color: white;
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+    }
+
+        .contacto-item a:hover {
+            opacity: 0.8;
         }
 
-        .footer-content {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 80px;
-            margin-bottom: 40px;
+.footer-bottom {
+    padding-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.politica-legal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+    .politica-legal a {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        color: white;
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+    }
+
+        .politica-legal a:hover {
+            opacity: 0.8;
         }
 
-        .footer-logo-section {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 20px; /* separación entre logo e icono */
+    .politica-legal span {
+        font-size: 14px;
+        opacity: 0.5;
+    }
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width: 1200px) {
+    .portada-title {
+        font-size: 44px;
+    }
+
+    .productos-container h2,
+    .texto-ubicacion h2,
+    .preguntas-frecuentes h2 {
+        font-size: 40px;
+    }
+}
+
+@media (max-width: 992px) {
+    .cabecera .container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .nav-bar {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .ubicacion-content,
+    .faq-content,
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-links {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 20px;
+    }
+
+    .portada {
+        height: 400px;
+    }
+
+    .portada-title {
+        font-size: 32px;
+    }
+
+    .nav-bar {
+        gap: 20px;
+        font-size: 14px;
+    }
+
+    .productos-container h2,
+    .texto-ubicacion h2,
+    .preguntas-frecuentes h2 {
+        font-size: 32px;
+    }
+
+    .productos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ubicacion-content,
+    .faq-content {
+        padding: 30px;
+    }
+
+    .faq-images {
+        grid-template-columns: 1fr;
+    }
+
+    .faq-img-1 {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .portada-title {
+        font-size: 24px;
+    }
+
+    .nav-bar {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .productos-container,
+    .ubicacion-content,
+    .faq-content {
+        padding: 20px;
+    }
+
+        .productos-container h2,
+        .texto-ubicacion h2,
+        .preguntas-frecuentes h2 {
+            font-size: 28px;
         }
-
-
-        .logo-footer img {
-            width: 200px;
-            height: 200px;
-            object-fit: contain;
-        }
-
-        .redes {
-            display: flex;
-            gap: 20px;
-        }
-
-        .instagram-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            transition: background 0.3s ease;
-        }
-
-            .instagram-link:hover {
-                background: rgba(255,255,255,0.2);
-            }
-
-            .instagram-link svg {
-                width: 24px;
-                height: 24px;
-            }
-
-        .footer-links {
-            display: block
-        }
-
-
-        .contacto-footer h3 {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
-
-        .contacto-footer {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .contacto-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-
-            .contacto-item svg {
-                width: 20px;
-                height: 20px;
-                color: white;
-                flex-shrink: 0;
-                margin-top: 2px;
-            }
-
-            .contacto-item a {
-                font-family: 'Poppins', sans-serif;
-                font-weight: 400;
-                font-size: 16px;
-                color: white;
-                text-decoration: none;
-                transition: opacity 0.3s ease;
-            }
-
-                .contacto-item a:hover {
-                    opacity: 0.8;
-                }
-
-        .footer-bottom {
-            padding-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .politica-legal {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-            .politica-legal a {
-                font-family: 'Poppins', sans-serif;
-                font-weight: 400;
-                font-size: 14px;
-                color: white;
-                text-decoration: none;
-                transition: opacity 0.3s ease;
-            }
-
-                .politica-legal a:hover {
-                    opacity: 0.8;
-                }
-
-            .politica-legal span {
-                font-size: 14px;
-                opacity: 0.5;
-            }
-
-        /* ============ RESPONSIVE ============ */
-
-        @media (max-width: 1200px) {
-            .portada-title {
-                font-size: 44px;
-            }
-
-            .productos-container h2,
-            .texto-ubicacion h2,
-            .preguntas-frecuentes h2 {
-                font-size: 40px;
-            }
-        }
-
-        @media (max-width: 992px) {
-            .cabecera .container {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .nav-bar {
-                order: 3;
-                width: 100%;
-                justify-content: center;
-                margin-top: 20px;
-            }
-
-            .ubicacion-content,
-            .faq-content,
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-links {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 20px;
-            }
-
-            .portada {
-                height: 400px;
-            }
-
-            .portada-title {
-                font-size: 32px;
-            }
-
-            .nav-bar {
-                gap: 20px;
-                font-size: 14px;
-            }
-
-            .productos-container h2,
-            .texto-ubicacion h2,
-            .preguntas-frecuentes h2 {
-                font-size: 32px;
-            }
-
-            .productos-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .ubicacion-content,
-            .faq-content {
-                padding: 30px;
-            }
-
-            .faq-images {
-                grid-template-columns: 1fr;
-            }
-
-            .faq-img-1 {
-                grid-column: span 1;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .portada-title {
-                font-size: 24px;
-            }
-
-            .nav-bar {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .productos-container,
-            .ubicacion-content,
-            .faq-content {
-                padding: 20px;
-            }
-
-                .productos-container h2,
-                .texto-ubicacion h2,
-                .preguntas-frecuentes h2 {
-                    font-size: 28px;
-                }
 }
