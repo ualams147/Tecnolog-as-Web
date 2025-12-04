@@ -1,0 +1,701 @@
+/* ===== RESET GENERAL ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: white;
+    overflow-x: hidden;
+}
+
+.inicio-visitante {
+    width: 100%;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+/* ============================================================
+   ========================== CABECERA =========================
+   ============================================================ */
+
+.cabecera {
+    position: relative;
+    width: 100%;
+    background: white;
+    padding: 30px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+    .cabecera .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+    }
+
+/* ======================= LOGO (adaptado) ======================= */
+
+.logo-main {
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+    .logo-main img {
+        height: 60px;
+        width: auto;
+    }
+
+/* === LOGO TEXT AÑADIDO === */
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    margin-left: 12px;
+    margin-top: 4px;
+    line-height: 1.1;
+}
+
+    .logo-text span {
+        font-size: 14px;
+        font-weight: 400;
+        color: #2b2b2b;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .logo-text strong {
+        font-size: 18px;
+        font-weight: 700;
+        color: #000000;
+        text-align: center;
+        width: 100%;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .logo-link {
+        display: flex;              /* mantiene logo + texto juntos */
+        align-items: center;
+        text-decoration: none;      /* quita el subrayado */
+        color: inherit;             /* mantiene el color del texto */
+    }
+/* ========================================= */
+
+/* ======================= NAV BAR ======================= */
+
+.nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 140px;
+    flex: 1;
+    font-weight: 500;
+    font-size: 18px;
+    color: #2b2b2b;
+    white-space: nowrap;
+}
+
+    .nav-bar a {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 500;
+        font-size: 18px;
+        color: #2b2b2b;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+        .nav-bar a:hover {
+            font-size: 20px;
+            color: #293661;
+            text-shadow: 0 0 4px #aab6e8; /* azul muy claro y suave */
+        }
+
+        /* Estilo para la página actual */
+        .nav-bar a.activo {
+            color: #293661;           /* El azul corporativo */
+            font-weight: bold;         /* Letra un poco más gruesa */
+            border-bottom: 2px solid #293661; /* El subrayado (grosor y color) */      
+        }
+
+/* ======================= SIGN IN ======================= */
+
+.sign-in {
+    background: #293661;
+    border-radius: 40px;
+    padding: 12px 24px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+    .sign-in:hover {
+        background-color: #1f2849;
+        transform: translateY(-2px);
+    }
+
+    .sign-in:active {
+        transform: translateY(0);
+    }
+
+    .sign-in a {
+        font-family: 'Source Sans Pro', sans-serif;
+        font-weight: 700;
+        font-size: 18px;
+        color: white;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    /*Nuestra empresa*/
+
+.nuestra-empresa {
+  background: #a0d2ac;
+  border-radius: 13px;
+  padding: 60px 60px;
+  margin: 80px auto;
+  max-width: 1200px;
+}
+
+.nuestra-empresa .title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 48px;
+  line-height: 1.2;
+  text-align: left;
+  color: white;
+  margin-bottom: 30px;
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+
+.text-content {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.text-content p {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.8;
+  text-align: justify;
+  color: black;
+}
+
+.foto-taller {
+  width: 100%;
+  height: 100%;
+  border-radius: 0px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.foto-taller img {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  object-fit: cover;
+  display: block;
+  border-radius: 0px;
+}
+
+/* Nosotros */
+.nosotros {
+    background: #f4f4f4;
+    border-radius: 12px;
+    padding: 60px 40px;
+    margin: 60px auto;
+    max-width: 1280px;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.image-container {
+    width: 100%;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+}
+
+.text-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.text-container .heading {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 50px;
+    line-height: 1.2;
+    color: #2b2b2b;
+    margin-bottom: 10px;
+}
+
+.text-container .intro {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.4;
+    text-align: justify;
+    color: #2b2b2b;
+}
+
+.text-container .description {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.4;
+    text-align: justify;
+    color: #2b2b2b;
+}
+
+/* Materiales */
+.materiales {
+    background: #293661;
+    border: 1px solid black;
+    border-radius: 13px;
+    padding: 60px 40px;
+    margin: 60px auto;
+    max-width: 1200px;
+}
+
+.materiales-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+}
+
+.material-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.material-image {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.material-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.material-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.8;
+    text-align: center;
+    color: white;
+}
+
+/* ============ FOOTER ============ */
+
+.footer {
+    background: #293661;
+    color: white;
+    padding: 60px 0 30px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    margin-bottom: 40px;
+}
+
+.footer-logo-section {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px; /* separación entre logo e icono */
+}
+
+
+.logo-footer img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+}
+
+.redes {
+    display: flex;
+    gap: 20px;
+}
+
+.instagram-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+    .instagram-link:hover {
+        background: rgba(255,255,255,0.2);
+    }
+
+    .instagram-link svg {
+        width: 24px;
+        height: 24px;
+    }
+
+.footer-links {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 60px;
+}
+
+.enlaces-rapidos h3,
+.contacto-footer h3 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.enlaces-rapidos ul {
+    list-style: none;
+}
+
+    .enlaces-rapidos ul li {
+        margin-bottom: 12px;
+    }
+
+        .enlaces-rapidos ul li a {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+            .enlaces-rapidos ul li a:hover {
+                opacity: 0.8;
+            }
+
+.contacto-footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+    .contacto-footer ul li {
+        margin-bottom: 12px; /* igual que enlaces rápidos */
+        display: flex;
+        align-items: center;
+        gap: 12px; /* separación entre icono y texto */
+    }
+
+        .contacto-footer ul li svg {
+            width: 20px;
+            height: 20px;
+            fill: white; /* fuerza el color visible */
+            flex-shrink: 0;
+        }
+
+        .contacto-footer ul li a {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+            .contacto-footer ul li a:hover {
+                opacity: 0.8;
+            }
+
+    
+.footer-bottom {
+    padding-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.politica-legal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+    .politica-legal a {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        color: white;
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+    }
+
+        .politica-legal a:hover {
+            opacity: 0.8;
+        }
+
+    .politica-legal span {
+        font-size: 14px;
+        opacity: 0.5;
+    }
+
+/* Responsive Design */
+
+/* Tablets */
+@media (max-width: 1024px) {
+    .cabecera .container {
+        flex-wrap: wrap;
+    }
+
+    .nav-bar {
+        order: 3;
+        width: 100%;
+        justify-content: space-around;
+        margin-top: 15px;
+        gap: 20px;
+    }
+
+    .content-wrapper,
+    .content-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .materiales-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+
+    .contacto {
+        grid-column: 1 / -1;
+    }
+}
+
+He revisado tu código y el problema principal es que las "media queries" (las reglas para móviles) estaban incompletas y, en algunos casos (como en la barra de navegación), ocultaban el menú sin ofrecer una alternativa.
+
+Aquí tienes el bloque de CSS corregido y optimizado para reemplazar toda la sección de "Responsive Design" al final de tu archivo conocenos.css.
+
+¿Qué he arreglado?
+Menú de Navegación: Ya no desaparece en móviles. Ahora se apila verticalmente para que sea accesible sin necesidad de JavaScript (menú hamburguesa).
+
+Grids (Cuadrículas): Las secciones "Nuestra Empresa" y "Nosotros" ahora pasan a 1 sola columna en tablets y móviles para que las imágenes y el texto se vean grandes y legibles.
+
+Materiales: Pasa de 4 columnas a 2 en tablet y 1 (o 2 ajustadas) en móvil para evitar que los iconos se vean diminutos.
+
+Footer: Se reorganiza verticalmente para que los enlaces y el contacto no queden aplastados.
+
+Márgenes y Rellenos (Padding): Reduje los espacios exagerados (60px o 80px) a medidas más manejables en pantallas pequeñas (20px o 30px).
+
+Copia y pega esto al final de tu archivo conocenos.css, reemplazando lo que tenías a partir del comentario /* Responsive Design */:
+
+CSS
+
+/* ============================================================
+   ==================== RESPONSIVE DESIGN =====================
+   ============================================================ */
+
+/* --- TABLETS Y LAPTOS PEQUEÑAS (max-width: 1024px) --- */
+@media (max-width: 1024px) {
+    
+    /* Ajuste Cabecera */
+    .nav-bar {
+        gap: 30px; /* Reducimos el hueco gigante de 140px */
+        font-size: 16px;
+    }
+
+    /* Secciones Principales a 1 columna */
+    .content-wrapper,
+    .content-grid {
+        grid-template-columns: 1fr; /* Pone imagen arriba y texto abajo (o viceversa) */
+        gap: 40px;
+        text-align: center;
+    }
+
+    .text-content p, 
+    .text-container .intro, 
+    .text-container .description {
+        text-align: justify; /* Mantiene justificado el texto pero en bloque completo */
+    }
+
+    /* Ajuste Materiales */
+    .materiales-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en lugar de 4 */
+        gap: 30px;
+    }
+
+    /* Footer */
+    .footer-content {
+        grid-template-columns: 1fr; /* Footer en una sola columna */
+        gap: 40px;
+        text-align: center;
+    }
+
+    .footer-logo-section,
+    .footer-links {
+        justify-content: center;
+    }
+    
+    .footer-links {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+    }
+    
+    .contacto-footer ul li {
+        justify-content: center; /* Centra los iconos y texto del footer */
+    }
+}
+
+/* --- MÓVILES (max-width: 768px) --- */
+@media (max-width: 768px) {
+    
+    /* Cabecera en Columna */
+    .cabecera .container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .logo-main {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Hacemos visible el menú pero en columna */
+    .nav-bar {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 15px;
+        padding: 10px 0;
+        margin-top: 0;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+    }
+
+    .sign-in {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Ajustes generales de espaciado */
+    .container {
+        padding: 0 20px;
+    }
+
+    .nuestra-empresa,
+    .nosotros,
+    .materiales {
+        padding: 40px 20px; /* Menos relleno interno */
+        margin: 40px auto; /* Menos margen externo */
+    }
+
+    /* Tipografía más pequeña para títulos */
+    .nuestra-empresa .title,
+    .text-container .heading {
+        font-size: 32px;
+        text-align: center;
+    }
+
+    /* Imágenes */
+    .foto-taller img, 
+    .image-container img {
+        width: 100%;
+        height: auto;
+        max-height: 300px; /* Evita que la imagen sea demasiado alta en móvil */
+    }
+    
+    /* Footer */
+    .footer-content {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+    }
+    
+    .logo-footer img {
+        margin: 0 auto;
+        display: block;
+    }
+    
+    .redes {
+        justify-content: center;
+        margin-top: 20px;
+    }
+    
+    .politica-legal {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .politica-legal span {
+        display: none; /* Oculta los puntos separadores en móvil */
+    }
+}
+
+/* --- MÓVILES PEQUEÑOS (max-width: 480px) --- */
+@media (max-width: 480px) {
+    
+    /* Materiales a 1 columna o 2 pequeñas */
+    .materiales-grid {
+        grid-template-columns: 1fr; /* Una sola columna para que se vea bien la foto */
+        gap: 20px;
+    }
+
+    .nuestra-empresa .title,
+    .text-container .heading {
+        font-size: 26px; /* Títulos más pequeños */
+    }
+
+    .text-content p,
+    .text-container p {
+        font-size: 16px; /* Texto base legible pero no gigante */
+    }
+
+    /* Ajuste fino del logo */
+    .logo-text span { font-size: 12px; }
+    .logo-text strong { font-size: 16px; }
+}

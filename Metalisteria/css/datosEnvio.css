@@ -1,0 +1,333 @@
+/* ===== RESET GENERAL ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: white;
+    overflow-x: hidden;
+}
+
+.visitante-envio {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+    width: 100%;
+}
+
+/* ========================== CABECERA ========================== */
+.cabecera {
+    position: relative;
+    width: 100%;
+    background: white;
+    padding: 30px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.cabecera .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.logo-main { flex-shrink: 0; position: relative; display: flex; align-items: center; }
+.logo-main img { height: 60px; width: auto; }
+.logo-text { display: flex; flex-direction: column; margin-left: 12px; margin-top: 4px; line-height: 1.1; }
+.logo-text span { font-size: 14px; font-weight: 400; color: #2b2b2b; }
+.logo-text strong { font-size: 18px; font-weight: 700; color: #000000; width: 100%; text-align: center; }
+.logo-link { display: flex; align-items: center; text-decoration: none; color: inherit; }
+
+.nav-bar { display: flex; align-items: center; justify-content: center; gap: 140px; flex: 1; font-weight: 500; font-size: 18px; color: #2b2b2b; white-space: nowrap; }
+.nav-bar a { text-decoration: none; color: #2b2b2b; transition: color 0.3s; }
+.nav-bar a:hover { color: #293661; text-shadow: 0 0 4px #aab6e8; font-size: 20px; }
+.nav-bar a.activo { color: #293661; font-weight: 700; border-bottom: 3px solid #293661; padding-bottom: 5px; }
+
+.sign-in { background: #293661; border-radius: 40px; padding: 12px 24px; flex-shrink: 0; cursor: pointer; transition: background-color 0.3s ease; }
+.sign-in:hover { background-color: #1f2849; transform: translateY(-2px); }
+.sign-in a { font-family: 'Source Sans Pro', sans-serif; font-weight: 700; font-size: 18px; color: white; text-decoration: none; }
+
+
+/* ========================== BARRA DE PASOS ========================== */
+.steps-section {
+    padding: 40px 0;
+    margin-bottom: 20px;
+}
+
+.steps-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.step-number {
+    font-size: 28px;
+    font-weight: 400;
+    color: #2b2b2b;
+}
+
+.step.active .step-number {
+    font-weight: 700; 
+    font-size: 32px;
+}
+
+.step-label {
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.step.active .step-label {
+    font-weight: 600;
+    color: black;
+}
+
+.step-line {
+    height: 2px;
+    width: 100px;
+    background-color: #999;
+    margin-top: -25px; 
+}
+
+
+/* ========================== FORMULARIO DE ENVÍO ========================== */
+
+.envio-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 80px;
+    flex: 1;
+}
+
+.envio-card {
+    background-color: #f4f4f4; 
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    width: 100%;
+    max-width: 950px;
+    padding: 50px 80px; /* Padding generoso */
+}
+
+.page-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    color: #2b2b2b;
+    margin: 0 0 40px 0;
+    text-align: center;
+}
+
+.envio-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Grid para las filas: Etiqueta grande (izq) + Input (der) */
+.form-row {
+    display: grid;
+    grid-template-columns: 260px 1fr; /* 260px para que quepa "Código Postal / Localidad:" */
+    align-items: center;
+    gap: 20px;
+}
+
+.form-row label {
+    font-weight: 800; /* Muy negrita como en la foto */
+    font-size: 18px;
+    color: black;
+    text-align: left;
+}
+
+.form-row input, 
+.form-row textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 6px; /* Bordes suaves */
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.form-row input:focus,
+.form-row textarea:focus {
+    outline: 2px solid #293661;
+}
+
+/* Para los campos agrupados (Nº/Piso y CP/Localidad) */
+.input-group {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+}
+
+.input-small { flex: 1; } /* Ocupa menos */
+.input-large { flex: 2; } /* Ocupa más */
+
+/* Textarea */
+.notes-row {
+    align-items: flex-start; /* Etiqueta arriba */
+    margin-top: 10px;
+}
+
+.notes-row textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+/* === BOTONES DE ACCIÓN (SIMÉTRICOS) === */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px;
+}
+
+/* Clase base para ambos botones */
+.btn-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    
+    width: 250px; /* Ancho fijo idéntico para simetría */
+    padding: 12px 0;
+    
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    
+    border-radius: 50px; /* Píldora */
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* 1. Botón VOLVER (Outline inicial) */
+.btn-back {
+    background-color: transparent;
+    color: #333;
+    border: 2px solid #999; /* Borde gris inicial */
+}
+
+.btn-back svg { width: 20px; height: 20px; }
+
+/* Hover: Se vuelve AZUL con letras BLANCAS */
+.btn-back:hover {
+    background-color: #293661;
+    border-color: #293661;
+    color: white;
+}
+
+/* 2. Botón CONTINUAR (Sólido inicial) */
+.btn-next {
+    background-color: #293661;
+    color: white;
+    border: 2px solid #293661;
+}
+
+/* Hover: Efecto leve de elevación o cambio de tono */
+.btn-next:hover {
+    background-color: #1f2849;
+    border-color: #1f2849;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+
+/* ========================== FOOTER ========================== */
+.footer { background: #293661; color: white; padding: 60px 0 30px; margin-top: auto; }
+.footer-content { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; margin-bottom: 40px; }
+.footer-logo-section { display: flex; gap: 20px; align-items: center; }
+.logo-footer img { width: 200px; height: 200px; object-fit: contain; }
+.redes { display: flex; gap: 20px; }
+.instagram-link { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; transition: background 0.3s ease; }
+.instagram-link:hover { background: rgba(255,255,255,0.2); }
+.instagram-link svg { width: 24px; height: 24px; }
+.footer-links { display: grid; grid-template-columns: 1fr 2fr; gap: 60px; }
+.enlaces-rapidos h3, .contacto-footer h3 { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 20px; margin-bottom: 20px; }
+.enlaces-rapidos ul, .contacto-footer ul { list-style: none; }
+.enlaces-rapidos ul li, .contacto-footer ul li { margin-bottom: 12px; }
+.enlaces-rapidos ul li a, .contacto-footer ul li a { font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 16px; color: white; text-decoration: none; transition: opacity 0.3s ease; }
+.enlaces-rapidos ul li a:hover, .contacto-footer ul li a:hover { opacity: 0.8; }
+.contacto-footer ul li { display: flex; align-items: center; gap: 12px; }
+.contacto-footer ul li svg { width: 20px; height: 20px; fill: white; flex-shrink: 0; }
+.footer-bottom { padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.2); }
+.politica-legal { display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
+.politica-legal a { font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; color: white; text-decoration: none; transition: opacity 0.3s ease; }
+.politica-legal span { font-size: 14px; opacity: 0.5; }
+
+
+/* ========================== RESPONSIVE ========================== */
+@media (max-width: 1024px) {
+    .nav-bar { gap: 30px; font-size: 16px; }
+    .footer-content { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+    .footer-logo-section, .footer-links { justify-content: center; }
+    .footer-links { display: flex; flex-direction: column; align-items: center; gap: 40px; }
+    .contacto-footer ul li { justify-content: center; }
+    
+    .envio-card { padding: 50px 40px; }
+    /* En tablet reducimos un poco la columna de etiquetas */
+    .form-row { grid-template-columns: 200px 1fr; }
+}
+
+@media (max-width: 768px) {
+    .cabecera .container { flex-direction: column; gap: 20px; }
+    .nav-bar { display: flex; flex-direction: column; width: 100%; gap: 15px; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+    .sign-in { width: 100%; text-align: center; }
+
+    /* Pasos Responsive */
+    .steps-container { gap: 10px; }
+    .step-line { width: 20px; }
+    .step-number { font-size: 20px; }
+    .step.active .step-number { font-size: 24px; }
+    .step-label { font-size: 12px; }
+
+    /* Formulario Responsive */
+    .envio-card { padding: 30px 20px; }
+    
+    /* Pasamos a 1 columna en móvil */
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    /* Ajuste para grupos de inputs en móvil */
+    .input-group { flex-direction: column; }
+    
+    .form-actions { 
+        flex-direction: column-reverse; 
+        gap: 20px; 
+    }
+    .btn-action { width: 100%; }
+
+    /* Footer Responsive */
+    .footer-content { display: flex; flex-direction: column; gap: 40px; }
+    .logo-footer img { margin: 0 auto; display: block; }
+    .redes { justify-content: center; margin-top: 20px; }
+    .politica-legal { flex-direction: column; gap: 10px; }
+    .politica-legal span { display: none; }
+}

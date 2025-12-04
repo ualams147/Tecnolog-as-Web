@@ -1,0 +1,479 @@
+/* ===== RESET GENERAL ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: white;
+    overflow-x: hidden;
+}
+
+/* Configuración Sticky Footer */
+.visitante-login {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+/* ============================================================
+   ========================== CABECERA =========================
+   ============================================================ */
+
+.cabecera {
+    position: relative;
+    width: 100%;
+    background: white;
+    padding: 30px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+    .cabecera .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+    }
+
+/* ======================= LOGO ======================= */
+
+.logo-main {
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+    .logo-main img {
+        height: 60px;
+        width: auto;
+    }
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    margin-left: 12px;
+    margin-top: 4px;
+    line-height: 1.1;
+}
+
+    .logo-text span {
+        font-size: 14px;
+        font-weight: 400;
+        color: #2b2b2b;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .logo-text strong {
+        font-size: 18px;
+        font-weight: 700;
+        color: #000000;
+        text-align: center;
+        width: 100%;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .logo-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+    }
+
+/* ======================= NAV BAR ======================= */
+
+.nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 140px;
+    flex: 1;
+    font-weight: 500;
+    font-size: 18px;
+    color: #2b2b2b;
+    white-space: nowrap;
+}
+
+    .nav-bar a {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 500;
+        font-size: 18px;
+        color: #2b2b2b;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .nav-bar a:hover {
+        font-size: 20px;
+        color: #293661;
+        text-shadow: 0 0 4px #aab6e8;
+    }
+
+    /* Enlace activo */
+    .nav-bar a.activo {
+        color: #293661;
+        font-weight: 700;
+        border-bottom: 3px solid #293661;
+        padding-bottom: 5px;
+    }
+
+/* ======================= SIGN IN ======================= */
+
+.sign-in {
+    background: #293661;
+    border-radius: 40px;
+    padding: 12px 24px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+    .sign-in:hover {
+        background-color: #1f2849;
+        transform: translateY(-2px);
+    }
+
+    .sign-in a {
+        font-family: 'Source Sans Pro', sans-serif;
+        font-weight: 700;
+        font-size: 18px;
+        color: white;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+/* ============================================================
+   ======================= LOGIN SECTION ======================
+   ============================================================ */
+
+.login-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    /* CAMBIO IMPORTANTE: flex-start para que empiece arriba, no en el centro */
+    justify-content: flex-start; 
+    
+    /* CAMBIO: Mismo padding que en registro (60px arriba) */
+    padding: 60px 20px; 
+    
+    flex: 1; 
+}
+
+.login-card {
+    background-color: #f4f4f4;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 900px;
+    padding: 50px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    /* CAMBIO: Quitamos margin-top extra para que se pegue al padding de 60px */
+    margin-top: 0; 
+    margin-bottom: 60px;
+}
+
+.login-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    color: black;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.login-form {
+    width: 100%;
+    max-width: 750px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* === GRID DEL FORMULARIO === */
+.form-row {
+    display: grid;
+    grid-template-columns: 160px 1fr; 
+    align-items: center;
+    gap: 15px; 
+}
+
+.label-icon {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    font-size: 18px;
+    color: black;
+    white-space: nowrap;
+}
+
+.label-icon svg {
+    width: 28px;
+    height: 28px;
+    fill: #2b2b2b;
+    flex-shrink: 0;
+}
+
+.form-input {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    height: 45px;
+    padding: 0 15px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    width: 100%;
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.05); 
+}
+
+.form-input:focus {
+    outline: 2px solid #293661;
+    border-color: #293661;
+}
+
+.btn-login-submit {
+    background-color: #293661;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    padding: 15px 40px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 30px;
+    width: 100%;
+    max-width: 300px;
+    align-self: center;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
+    transition: background 0.3s;
+}
+
+.btn-login-submit:hover {
+    background-color: #1f2a4d;
+}
+
+.register-text {
+    font-size: 18px;
+    text-align: center;
+    color: black;
+    margin-top: 15px;
+}
+
+.register-text a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.register-text em {
+    font-style: italic;
+    cursor: pointer;
+    color: #293661;
+    font-weight: 700;
+}
+
+.register-text em:hover {
+    text-decoration: underline;
+}
+
+/* ========================== FOOTER ========================== */
+.footer {
+    background: #293661;
+    color: white;
+    padding: 60px 0 30px;
+    margin-top: auto;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    margin-bottom: 40px;
+}
+
+.footer-logo-section {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px; 
+}
+
+.logo-footer img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+}
+
+.redes {
+    display: flex;
+    gap: 20px;
+}
+
+.instagram-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+.instagram-link:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.instagram-link svg {
+    width: 24px;
+    height: 24px;
+}
+
+.footer-links {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 60px;
+}
+
+.enlaces-rapidos h3,
+.contacto-footer h3 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.enlaces-rapidos ul {
+    list-style: none;
+}
+
+.enlaces-rapidos ul li {
+    margin-bottom: 12px;
+}
+
+.enlaces-rapidos ul li a {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.enlaces-rapidos ul li a:hover { opacity: 0.8; }
+
+.contacto-footer ul {
+    list-style: none;
+}
+
+.contacto-footer ul li {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.contacto-footer ul li svg {
+    width: 20px;
+    height: 20px;
+    fill: white;
+    flex-shrink: 0;
+}
+
+.contacto-footer ul li a {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.contacto-footer ul li a:hover { opacity: 0.8; }
+
+.footer-bottom {
+    padding-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.politica-legal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.politica-legal a {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.politica-legal span { font-size: 14px; opacity: 0.5; }
+
+
+/* ========================== RESPONSIVE ========================== */
+
+/* Tablets (max-width: 1024px) */
+@media (max-width: 1024px) {
+    .nav-bar { gap: 30px; font-size: 16px; }
+    
+    .login-card { padding: 40px 30px; }
+    
+    .form-row { grid-template-columns: 200px 1fr; }
+    .label-icon { font-size: 16px; }
+
+    .footer-content { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+    .footer-logo-section, .footer-links { justify-content: center; }
+    .footer-links { display: flex; flex-direction: column; align-items: center; gap: 40px; }
+    .contacto-footer ul li { justify-content: center; }
+}
+
+/* Móviles (max-width: 768px) */
+@media (max-width: 768px) {
+    .cabecera .container { flex-direction: column; gap: 20px; }
+    .nav-bar { display: flex; flex-direction: column; width: 100%; gap: 15px; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+    .sign-in { width: 100%; text-align: center; }
+
+    /* FORMULARIO RESPONSIVE */
+    .login-card { padding: 30px 20px; }
+    
+    .form-row { 
+        grid-template-columns: 1fr; 
+        gap: 8px; 
+    }
+
+    .label-icon {
+        justify-content: flex-start;
+        padding-left: 0; 
+        font-size: 16px;
+    }
+    
+    .btn-login-submit { width: 100%; max-width: 100%; }
+
+    /* Footer Responsive */
+    .footer-content { display: flex; flex-direction: column; gap: 40px; }
+    .logo-footer img { margin: 0 auto; display: block; }
+    .redes { justify-content: center; margin-top: 20px; }
+    .politica-legal { flex-direction: column; gap: 10px; }
+    .politica-legal span { display: none; }
+}
