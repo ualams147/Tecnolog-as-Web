@@ -76,7 +76,7 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
         <div class="titulo-section">
             <div class="degradado"></div>
             <div class="recuadro-fondo-titulo"></div> 
-            <a href="ListadoVentasAdmin.php" class="flecha-volver">&#8592;</a><a href="ListadoVentasAdmin.php" class="flecha-circular">&#8678;</a>
+             <a href="ListadoVentasAdmin.php" class="flecha-circular">&#8592;</a>
             <!-- Mostramos el ID de la venta formateado -->
             <h1 class="titulo-principal">Venta #<?php echo str_pad($venta['id'], 4, '0', STR_PAD_LEFT); ?></h1>
         </div>

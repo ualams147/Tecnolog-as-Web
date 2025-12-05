@@ -191,20 +191,25 @@ a { text-decoration: none; color: inherit; }
 }
 
 .flecha-circular {
-    display: inline-flex;
-    align-items: center; justify-content: center;
-    width: 60px; height: 60px;
-    border-radius: 50%;
-    background-color: whitesmoke;
-    color: #293661;
-    font-size: 30px;
-    position: absolute;
-    top: 60px; left: 40px;
-    z-index: 4;
-    transition: transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;   
+  color: white;              /* flecha blanca */
+  font-size: 30px;           /* tamaño de flecha */
+  text-decoration: none;
+  position: absolute;
+  top: 60px;
+  left: 40px;
+  z-index: 4;
+  transition: transform 0.2s ease, background-color 0.3s ease;
 }
-.flecha-circular:hover { transform: scale(1.1); background-color: white; }
-.flecha-volver { display: none; } /* Ocultamos la flecha simple si usamos la circular */
+
+.flecha-circular:hover {
+  transform: scale(1.5); 
+}
 
 
 /* ======================= MAIN CONTENT (Estilo Tarjeta Blanca) ======================= */

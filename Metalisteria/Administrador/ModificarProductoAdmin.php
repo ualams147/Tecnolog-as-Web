@@ -106,7 +106,7 @@ if (!$producto) {
             <div class="degradado"></div>
             <div class="recuadro-fondo-titulo"></div> 
             <!-- Flecha para volver (apunta a admin.php o tu listado) -->
-            <a href="admin.php" class="flecha-circular">&#8592;</a>
+            <a href="ListadoProductosAdmin.php" class="flecha-circular">&#8592;</a>
             
             <!-- Mostramos la Referencia o el ID real -->
             <h1 class="titulo-principal"><?php echo $producto['referencia']; ?></h1>

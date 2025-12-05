@@ -464,7 +464,7 @@ body {
   border: 2px solid #a0d2ac;
   box-shadow: 0px 2px 8px rgba(41,54,97,0.08);
   cursor: pointer;
-  transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease; 
+  transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease; /* 👈 añadimos transform */
   text-align: center;
 }
 
@@ -479,9 +479,8 @@ body {
 .titulo-section .filtro-productos .filtro-text:hover {
   background: #a0d2ac;
   color: #fff;
-  transform: scale(1.1); 
+  transform: scale(1.1); /* 👈 se agranda un 10% */
 }
-
 
 
 

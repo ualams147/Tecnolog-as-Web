@@ -200,7 +200,7 @@
     border-radius: 13px;
     border: 1px solid black;
     box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
-    z-index: 2; /* 🔽 mantenlo debajo */
+    z-index: 2; 
 }
 
 
@@ -242,9 +242,8 @@
   justify-content: center;
   width: 60px;
   height: 60px;
-  border-radius: 50%;
-  background-color: whitesmoke;   /* círculo negro */
-  color: #293661;              /* flecha blanca */
+  border-radius: 50%;   
+  color: white;              /* flecha blanca */
   font-size: 30px;           /* tamaño de flecha */
   text-decoration: none;
   position: absolute;
@@ -255,8 +254,7 @@
 }
 
 .flecha-circular:hover {
-  transform: scale(1.1);
-  background-color: white; /* tono más oscuro al pasar el ratón */
+  transform: scale(1.5); 
 }
 
         
