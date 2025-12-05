@@ -35,21 +35,6 @@ $total_productos = count($productos);
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="stylesListadoProductosAdmin.css">
-    <style>
-        /* Estilos necesarios para la interactividad */
-        .filtro-text { cursor: pointer; user-select: none; }
-        .filtro-text.activo { 
-            background: #293661; 
-            color: white; 
-            border: 2px solid #a0d2ac;
-            transform: scale(1.05);
-        }
-        .titulo-principal { cursor: pointer; }
-        #mensaje-no-resultados { display: none; text-align: center; padding: 40px; color: #666; width: 100%; }
-        
-        /* Ocultar elementos por defecto para el script */
-        .item-producto { display: none; }
-    </style>
 </head>
 <body>
     <div class="listadoProductos-administrador">
