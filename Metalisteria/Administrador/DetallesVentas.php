@@ -1,9 +1,9 @@
 <?php
-include 'conexion.php';
+include '../conexion.php';
 
 // 1. VERIFICAR ID DE VENTA
 if (!isset($_GET['id'])) {
-    header("Location: ListadoVentasAdmin.php");
+    header("Location: ../Administrador/ListadoVentasAdmin.php");
     exit;
 }
 
@@ -42,7 +42,7 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="stylesDetallesVentas.css">
+    <link rel="stylesheet" href="../css/stylesDetallesVentas.css">
 </head>
 <body>
     <div class="DetallesVentas">
@@ -50,7 +50,7 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
         <header class="cabecera">
                 <div class="container">
                     <div class="logo-main">
-                        <a href="indexAdmin.php" class="logo-main">
+                        <a href="../Administrador/indexAdmin.php" class="logo-main">
                             <img src="../imagenes/logo.png" alt="Logo Metalful">
                             <div class="logo-text">
                                 <span> Metalisteria</span>
@@ -60,9 +60,9 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     
                     <nav class="nav-bar">
-                        <a href="ListadoVentasAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Ventas</a>
-                        <a href="ListadoProductosAdmin.php" >Productos</a>
-                        <a href="ListadoClientesAdmin.php">Clientes</a>
+                        <a href="../Administrador/ListadoVentasAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Ventas</a>
+                        <a href="../Administrador/ListadoProductosAdmin.php" >Productos</a>
+                        <a href="../Administrador/ListadoClientesAdmin.php">Clientes</a>
                     </nav>
 
                     <div class="log-out">
@@ -76,7 +76,7 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
         <div class="titulo-section">
             <div class="degradado"></div>
             <div class="recuadro-fondo-titulo"></div> 
-             <a href="ListadoVentasAdmin.php" class="flecha-circular">&#8592;</a>
+             <a href="../Administrador/ListadoVentasAdmin.php" class="flecha-circular">&#8592;</a>
             <!-- Mostramos el ID de la venta formateado -->
             <h1 class="titulo-principal">Venta #<?php echo str_pad($venta['id'], 4, '0', STR_PAD_LEFT); ?></h1>
         </div>
@@ -135,11 +135,11 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
             <!-- Botones de acción -->
             <div class="botones-finales">
                 <div class="boton-salir">
-                    <a href="ListadoVentasAdmin.php">Volver al listado</a>
+                    <a href="../Administrador/ListadoVentasAdmin.php">Volver al listado</a>
                 </div>
                 <div class="boton-usuario">
                     <!-- Enlace dinámico al perfil del cliente -->
-                    <a href="ModificarDatosCliente.php?id=<?php echo $venta['id_cliente']; ?>">Ir al usuario</a>
+                    <a href="../Administrador/ModificarDatosCliente.php?id=<?php echo $venta['id_cliente']; ?>">Ir al usuario</a>
                 </div>
             </div>
         </div>

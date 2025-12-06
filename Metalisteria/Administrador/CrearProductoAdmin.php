@@ -1,5 +1,5 @@
 <?php
-include 'conexion.php';
+include '../conexion.php';
 
 // 1. PROCESAR EL FORMULARIO
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$referencia, $nombre, $descripcion, $precio, $color, $medidas, $ruta_imagen, $id_material, $id_categoria, $stock]);
         
         // Redirigir al listado (admin.php) si todo sale bien
-        header("Location: ListadoProductosAdmin.php");
+        header("Location: ../Administrador/ListadoProductosAdmin.php");
         exit;
         
     } catch(PDOException $e) {
@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../Administrador/stylesCrearProductosAdmin.css">
+    <link rel="stylesheet" href="../css/stylesCrearProductosAdmin.css">
 </head>
 <body>
     <div class="CrearProductoAdmin">
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <header class="cabecera">
             <div class="container">
                 <div class="logo-main">
-                    <a href="indexAdmin.php" class="logo-main">
+                    <a href="../Administrador/indexAdmin.php" class="logo-main">
                         <img src="../imagenes/logo.png" alt="Logo Metalful">
                         <div class="logo-text">
                             <span> Metalisteria</span>
@@ -78,9 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 
                 <nav class="nav-bar">
-                    <a href="ListadoVentasAdmin.php">Ventas</a>
-                    <a href="ListadoProductosAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
-                    <a href="ListadoClientesAdmin.php">Clientes</a>
+                    <a href="../Administrador/ListadoVentasAdmin.php">Ventas</a>
+                    <a href="../Administrador/ListadoProductosAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
+                    <a href="../Administrador/ListadoClientesAdmin.php">Clientes</a>
                 </nav>
 
                 <div class="log-out">
@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="titulo-section">
             <div class="degradado"></div>
             <div class="recuadro-fondo-titulo"></div> 
-            <a href="ListadoProductosAdmin.php" class="flecha-circular">&#8592;</a>
+            <a href="../Administrador/ListadoProductosAdmin.php" class="flecha-circular">&#8592;</a>
             <h1 class="titulo-principal">Nuevo Producto</h1>
         </div>
 
@@ -164,16 +164,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </select>
                     </div>
 
-                    <!-- NUEVO: CAMPO DE STOCK -->
-                    <div class="form-group">
-                        <label class="form-label" for="stock">Stock:</label>
-                        <input type="number" id="stock" name="stock" class="form-input" placeholder="Cantidad en stock" min="0">
-                    </div>
-
                     <!-- Botones de acción -->
                     <div class="botones-finales">
                         <div class="boton-salir">
-                            <a href="ListadoProductosAdmin.php">Salir</a>
+                            <a href="../Administrador/ListadoProductosAdmin.php">Salir</a>
                         </div>
                         
                         <button type="submit" class="boton-crear" style="border: 2px solid rgba(41, 54, 97, 0.6); font-family: inherit;">

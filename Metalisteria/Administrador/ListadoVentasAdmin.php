@@ -1,5 +1,5 @@
 <?php
-include 'conexion.php';
+include '../conexion.php';
 
 // --- 1. LÓGICA DE BORRADO ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_eliminar'])) {
@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_eliminar'])) {
         // Al borrar la venta, se borran los detalles por el ON DELETE CASCADE
         $stmt = $conn->prepare("DELETE FROM ventas WHERE id = ?");
         $stmt->execute([$idBorrar]);
-        header("Location: ListadoVentasAdmin.php");
+        header("Location: ../Administrador/ListadoVentasAdmin.php");
         exit;
     } catch(PDOException $e) {
         // Error silencioso
@@ -69,7 +69,7 @@ $total_registros = count($ventas);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="stylesListadoVentasAdmin.css">
+    <link rel="stylesheet" href="../css/stylesListadoVentasAdmin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
@@ -105,7 +105,7 @@ $total_registros = count($ventas);
         <header class="cabecera">
             <div class="container">
                 <div class="logo-main">
-                    <a href="indexAdmin.php" class="logo-main">
+                    <a href="../Administrador/indexAdmin.php" class="logo-main">
                         <img src="../imagenes/logo.png" alt="Logo Metalful">
                         <div class="logo-text">
                             <span> Metalisteria</span>
@@ -115,9 +115,9 @@ $total_registros = count($ventas);
                 </div>
                 
                 <nav class="nav-bar">
-                    <a href="ListadoVentasAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Ventas</a> 
-                    <a href="ListadoProductosAdmin.php">Productos</a>
-                    <a href="ListadoClientesAdmin.php">Clientes</a>
+                    <a href="../Administrador/ListadoVentasAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Ventas</a> 
+                    <a href="../Administrador/ListadoProductosAdmin.php">Productos</a>
+                    <a href="../Administrador/ListadoClientesAdmin.php">Clientes</a>
                 </nav>
 
                 <div class="log-out">
@@ -185,10 +185,10 @@ $total_registros = count($ventas);
             </button>
 
             <div class="crear-producto" id="menu-lateral">
-                <a href="ListadoProductosAdmin.php" class="menu-item">Productos</a>
-                <a href="CrearProductoAdmin.php" class="menu-item">Crear Producto</a>
-                <a href="ListadoClientesAdmin.php" class="menu-item">Listado de clientes</a>
-                <a href="ListadoVentasAdmin.php" class="menu-item">Listado de ventas</a>
+                <a href="../Administrador/ListadoProductosAdmin.php" class="menu-item">Productos</a>
+                <a href="../Administrador/CrearProductoAdmin.php" class="menu-item">Crear Producto</a>
+                <a href="../Administrador/ListadoClientesAdmin.php" class="menu-item">Listado de clientes</a>
+                <a href="../Administrador/ListadoVentasAdmin.php" class="menu-item">Listado de ventas</a>
             </div>
 
             <div class="cuadro-fondo">
@@ -228,7 +228,7 @@ $total_registros = count($ventas);
                                 </div>
                                 
                                 <!-- Enlace a detalles -->
-                                <a href="DetallesVentas.php?id=<?php echo $venta['id']; ?>" class="boton-detalles">
+                                <a href="../Administrador/DetallesVentas.php?id=<?php echo $venta['id']; ?>" class="boton-detalles">
                                     <p>Ver detalles</p>
                                 </a>
                             </div>
@@ -363,7 +363,7 @@ $total_registros = count($ventas);
         }
 
         function borrarTodo() {
-            window.location.href = 'ListadoVentasAdmin.php';
+            window.location.href = '../Administrador/ListadoVentasAdmin.php';
         }
     </script>
 </body>

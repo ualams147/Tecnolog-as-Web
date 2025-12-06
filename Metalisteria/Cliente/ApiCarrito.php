@@ -3,6 +3,7 @@ session_start();
 include '../conexion.php';
 header('Content-Type: application/json'); // Importante: Respondemos con JSON
 
+// Leer los datos que vienen del Javascript
 $input = json_decode(file_get_contents('php://input'), true);
 
 if (isset($input['accion']) && $input['accion'] === 'actualizar') {
@@ -15,28 +16,30 @@ if (isset($input['accion']) && $input['accion'] === 'actualizar') {
     if (isset($_SESSION['carrito'][$id_prod])) {
         $cantidad = $_SESSION['carrito'][$id_prod]['cantidad'];
 
-        // Consultar Stock
-        $stmt = $conn->prepare("SELECT stock FROM productos WHERE id = ?");
-        $stmt->execute([$id_prod]);
-        $stock = $stmt->fetchColumn();
+        // --- CORRECCIÓN AQUÍ: HEMOS QUITADO LA CONSULTA DE STOCK ---
 
         // Lógica de cambio
         if ($modo === 'sumar') {
-            if ($cantidad < $stock) $cantidad++;
+            // Simplemente sumamos, ya no hay límite de stock
+            $cantidad++;
         } else {
-            if ($cantidad > 1) $cantidad--;
+            // Para restar, validamos que no baje de 1
+            if ($cantidad > 1) {
+                $cantidad--;
+            }
         }
 
-        // 2. Guardar cambios
+        // 2. Guardar cambios en la SESIÓN
         $_SESSION['carrito'][$id_prod]['cantidad'] = $cantidad;
 
+        // 3. Guardar cambios en la BASE DE DATOS (si es usuario registrado)
         if ($uid) {
             $sql = "UPDATE carrito SET cantidad = ? WHERE cliente_id = ? AND producto_id = ?";
             $stmtUpd = $conn->prepare($sql);
             $stmtUpd->execute([$cantidad, $uid, $id_prod]);
         }
 
-        // 3. Recalcular Totales
+        // 4. Recalcular Totales para actualizar la pantalla
         $total_precio = 0;
         $total_items = 0;
         foreach ($_SESSION['carrito'] as $p) {
@@ -44,7 +47,7 @@ if (isset($input['accion']) && $input['accion'] === 'actualizar') {
             $total_items += $p['cantidad'];
         }
 
-        // 4. Responder a JavaScript
+        // 5. Responder a JavaScript con los nuevos datos
         echo json_encode([
             'ok' => true,
             'nuevaCantidad' => $cantidad,
@@ -55,5 +58,6 @@ if (isset($input['accion']) && $input['accion'] === 'actualizar') {
     }
 }
 
+// Si algo falla
 echo json_encode(['ok' => false]);
 ?>

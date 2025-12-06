@@ -1,10 +1,10 @@
 <?php
-include 'conexion.php';
+include '../conexion.php';
 
 // 1. VERIFICAR QUE RECIBIMOS UN ID
 if (!isset($_GET['id'])) {
     // Si no hay ID, redirigimos al listado para evitar errores
-    header("Location: ListadoProductosAdmin.php"); // O admin.php si usas PHP
+    header("Location: ../Administrador/ListadoProductosAdmin.php"); // O admin.php si usas PHP
     exit;
 }
 
@@ -80,7 +80,7 @@ if (!$producto) {
             <div class="container">
                 <div class="logo-main">
                     <!-- CORRECCIÓN AQUÍ: Se ha completado el href y eliminado la etiqueta rota -->
-                    <a href="indexAdmin.php" class="logo-main">
+                    <a href="../Administrador/indexAdmin.php" class="logo-main">
                         <img src="../imagenes/logo.png" alt="Logo Metalful">
                         <div class="logo-text">
                             <span> Metalisteria</span>
@@ -90,9 +90,9 @@ if (!$producto) {
                 </div>
                 
                 <nav class="nav-bar">
-                    <a href="ListadoVentasAdmin.php">Ventas</a>
-                    <a href="ListadoProductosAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
-                    <a href="ListadoClientesAdmin.php">Clientes</a>
+                    <a href="../Administrador/ListadoVentasAdmin.php">Ventas</a>
+                    <a href="../Administrador/ListadoProductosAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
+                    <a href="../Administrador/ListadoClientesAdmin.php">Clientes</a>
                 </nav>
 
                 <div class="log-out">
@@ -106,7 +106,7 @@ if (!$producto) {
             <div class="degradado"></div>
             <div class="recuadro-fondo-titulo"></div> 
             <!-- Flecha para volver (apunta a admin.php o tu listado) -->
-            <a href="ListadoProductosAdmin.php" class="flecha-circular">&#8592;</a>
+            <a href="../Administrador/ListadoProductosAdmin.php" class="flecha-circular">&#8592;</a>
             
             <!-- Mostramos la Referencia o el ID real -->
             <h1 class="titulo-principal"><?php echo $producto['referencia']; ?></h1>
@@ -189,7 +189,7 @@ if (!$producto) {
                     <!-- Botones de acción DENTRO del formulario -->
                     <div class="botones-finales">
                         <div class="boton-salir">
-                            <a href="admin.php">Salir</a>
+                            <a href="../Administrador/indexAdmin.php">Salir</a>
                         </div>
                         
                         <!-- El botón de guardar debe ser un <button> o <input submit> -->

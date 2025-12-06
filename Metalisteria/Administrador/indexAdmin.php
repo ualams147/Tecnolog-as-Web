@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="stylesAdmin.css">
+    <link rel="stylesheet" href="../css/stylesAdmin.css">
 </head>
 <body>
     <div class="inicio-administrador">
@@ -23,9 +23,9 @@
                 </div>
                 
                 <nav class="nav-bar">
-                    <a href="ListadoVentasAdmin.php">Ventas</a>
-                    <a href="ListadoProductosAdmin.php">Productos</a>
-                    <a href="ListadoClientesAdmin.php">Clientes</a>
+                    <a href="../Administrador/ListadoVentasAdmin.php">Ventas</a>
+                    <a href="../Administrador/ListadoProductosAdmin.php">Productos</a>
+                    <a href="../Administrador/ListadoClientesAdmin.php">Clientes</a>
                 </nav>
 
                 <div class="log-out">
@@ -107,25 +107,25 @@
         <!-- Opciones -->
         <div class="cards-grid">
             <!-- Productos -->
-            <a href="ListadoProductosAdmin.php" class="card">
+            <a href="../Administrador/ListadoProductosAdmin.php" class="card">
                 <img src="../imagenes/4.png" alt="Productos" class="card-icon">
                 <h3>Productos</h3>
             </a>
 
             <!-- Crear Producto -->
-            <a href="CrearProductoAdmin.php" class="card">
+            <a href="../Administrador/CrearProductoAdmin.php" class="card">
                 <img src="../imagenes/2.png" alt="Crear Producto" class="card-icon">
                 <h3>Crear Producto</h3>
             </a>
 
             <!-- Clientes -->
-            <a href="ListadoClientesAdmin.php" class="card">
+            <a href="../Administrador/ListadoClientesAdmin.php" class="card">
                 <img src="../imagenes/3.png" alt="Clientes" class="card-icon">
                 <h3>Clientes</h3>
             </a>
 
             <!-- Ventas -->
-            <a href="ListadoVentasAdmin.php" class="card">
+            <a href="../Administrador/ListadoVentasAdmin.php" class="card">
                 <img src="../imagenes/5.png" alt="Ventas" class="card-icon">
                 <h3>Ventas</h3>
             </a>

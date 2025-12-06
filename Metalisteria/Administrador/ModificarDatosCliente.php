@@ -1,9 +1,9 @@
 <?php
-include 'conexion.php';
+include '../conexion.php';
 
 // 1. VERIFICAR ID
 if (!isset($_GET['id'])) {
-    header("Location: ListadoClientesAdmin.php");
+    header("Location: ../Administrador/ListadoClientesAdmin.php");
     exit;
 }
 
@@ -86,7 +86,7 @@ if (!$cliente) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modificar Cliente - Metalistería Fulsán</title>
-    <link rel="stylesheet" href="stylesModificarDatosCliente.css">
+    <link rel="stylesheet" href="../css/stylesModificarDatosCliente.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
@@ -109,7 +109,7 @@ if (!$cliente) {
     <header class="cabecera">
             <div class="container">
                 <div class="logo-main">
-                    <a href="indexAdmin.php" class="logo-main">
+                    <a href="../Administrador/indexAdmin.php" class="logo-main">
                         <img src="../imagenes/logo.png" alt="Logo Metalful">
                         <div class="logo-text">
                             <span> Metalisteria</span>
@@ -119,9 +119,9 @@ if (!$cliente) {
                 </div>
                 
                 <nav class="nav-bar">
-                    <a href="ListadoVentasAdmin.php">Ventas</a>
-                    <a href="ListadoProductosAdmin.php">Productos</a>
-                    <a href="ListadoClientesAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Clientes</a> 
+                    <a href="../Administrador/ListadoVentasAdmin.php">Ventas</a>
+                    <a href="../Administrador/ListadoProductosAdmin.php">Productos</a>
+                    <a href="../Administrador/ListadoClientesAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Clientes</a> 
                 </nav>
 
                 <div class="log-out">
@@ -134,7 +134,7 @@ if (!$cliente) {
         <div class="titulo-section">
             <div class="degradado"></div>
             <div class="recuadro-fondo-titulo"></div> 
-            <a href="ListadoClientesAdmin.php" class="flecha-circular">&#8592;</a>
+            <a href="../Administrador/ListadoClientesAdmin.php" class="flecha-circular">&#8592;</a>
             
             <h1 class="titulo-principal"><?php echo htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']); ?></h1>
         </div>
@@ -220,7 +220,7 @@ if (!$cliente) {
                     <!-- Botones -->
                     <div class="botones-finales full-width" style="grid-column: span 2;">
                         <div class="boton-salir">
-                            <a href="ListadoClientesAdmin.php">Salir</a>
+                            <a href="../Administrador/ListadoClientesAdmin.php">Salir</a>
                         </div>
                         
                         <div class="boton-modificar">
@@ -273,7 +273,7 @@ if (!$cliente) {
     </div>
     
     <!-- Cargamos tu script de validación -->
-    <script src="AlgoritmoDNIs.js"></script>
+    <script src="../js/AlgoritmoDNIs.js"></script>
 
 </body>
 </html>

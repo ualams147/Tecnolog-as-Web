@@ -1,5 +1,5 @@
 <?php
-include 'conexion.php';
+include '../conexion.php';
 
 // --- LÓGICA PARA ELIMINAR PRODUCTO ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_eliminar'])) {
@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_eliminar'])) {
     try {
         $stmtBorrar = $conn->prepare("DELETE FROM productos WHERE id = ?");
         $stmtBorrar->execute([$idBorrar]);
-        header("Location: ListadoProductosAdmin.php");
+        header("Location: ../Administrador/ListadoProductosAdmin.php");
         exit;
     } catch(PDOException $e) {
         // Error handling
@@ -34,7 +34,7 @@ $total_productos = count($productos);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="stylesListadoProductosAdmin.css">
+    <link rel="stylesheet" href="../css/stylesListadoProductosAdmin.css">
 </head>
 <body>
     <div class="listadoProductos-administrador">
@@ -42,8 +42,8 @@ $total_productos = count($productos);
         <header class="cabecera">
             <div class="container">
                 <div class="logo-main">
-                    <a href="indexAdmin.php">
-                        <img src="imagenes/logo.png" alt="Logo Metalful">
+                    <a href="../Administrador/indexAdmin.php">
+                        <img src="../imagenes/logo.png" alt="Logo Metalful">
                         <div class="logo-text">
                             <span> Metalisteria</span>
                             <strong>Fulsan</strong>
@@ -52,9 +52,9 @@ $total_productos = count($productos);
                 </div>
                 
                 <nav class="nav-bar">
-                    <a href="ListadoVentasAdmin.php">Ventas</a>
-                    <a href="ListadoProductosAdmin.php" class="activo" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
-                    <a href="ListadoClientesAdmin.php">Clientes</a>
+                    <a href="../Administrador/ListadoVentasAdmin.php">Ventas</a>
+                    <a href="../Administrador/ListadoProductosAdmin.php" class="activo" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
+                    <a href="../Administrador/ListadoClientesAdmin.php">Clientes</a>
                 </nav>
 
                 <div class="log-out">
@@ -80,7 +80,7 @@ $total_productos = count($productos);
         </div>
         
         <div class="botones-superiores">
-            <a href="CrearProductoAdmin.php" class="boton-anadir-nuevo">
+            <a href="../Administrador/CrearProductoAdmin.php" class="boton-anadir-nuevo">
                 <p>+ Añadir producto</p>
             </a>
         </div>
@@ -94,10 +94,10 @@ $total_productos = count($productos);
             </button>
             
             <div class="crear-producto" id="menu-lateral">
-                <a href="ListadoProductosAdmin.php" class="menu-item">Productos</a>
-                <a href="crear_producto.php" class="menu-item">Crear Producto</a>
-                <a href="ListadoClientesAdmin.php" class="menu-item">Listado de clientes</a>
-                <a href="ListadoVentasAdmin.php" class="menu-item">Listado de ventas</a>
+                <a href="../Administrador/ListadoProductosAdmin.php" class="menu-item">Productos</a>
+                <a href="../Administrador/crear_producto.php" class="menu-item">Crear Producto</a>
+                <a href="../Administrador/ListadoClientesAdmin.php" class="menu-item">Listado de clientes</a>
+                <a href="../Administrador/ListadoVentasAdmin.php" class="menu-item">Listado de ventas</a>
             </div>
             
             <div class="cuadro-fondo">
@@ -121,7 +121,7 @@ $total_productos = count($productos);
                             <!-- Clase 'item-producto' y 'data-categoria' VITALES para JS -->
                             <div class="producto item-producto" data-categoria="<?php echo $prod['id_categoria']; ?>">
                                 
-                                <form method="POST" action="ListadoProductosAdmin.php" style="display:inline;" onsubmit="return confirm('¿Estás seguro de querer eliminar este producto?');">
+                                <form method="POST" action="../Administrador/ListadoProductosAdmin.php" style="display:inline;" onsubmit="return confirm('¿Estás seguro de querer eliminar este producto?');">
                                     <input type="hidden" name="id_eliminar" value="<?php echo $prod['id']; ?>">
                                     <button type="submit" class="boton-eliminar" title="Eliminar">✖</button>
                                 </form>
@@ -133,7 +133,7 @@ $total_productos = count($productos);
                                     <p><strong>Precio:</strong> <?php echo $prod['precio']; ?>€</p>
                                 </div>
 
-                                <a href="ModificarProductoAdmin.php?id=<?php echo $prod['id']; ?>" class="boton-editar-pequeno">
+                                <a href="../Administrador/ModificarProductoAdmin.php?id=<?php echo $prod['id']; ?>" class="boton-editar-pequeno">
                                     <p>Editar</p>
                                 </a>
                             </div>
