@@ -1,11 +1,3 @@
-¡Entendido! Es mejor quitar el botón de "Añadir rápido" del catálogo general si tus productos tienen opciones obligatorias (como color o medida), para obligar al cliente a entrar en la ficha y elegirlas bien.
-
-Aquí tienes el archivo Cliente/productos.php limpio. He eliminado el botón de añadir directo, dejando solo el precio y el botón de "Ver Opciones", pero he mantenido los filtros y el buscador que ya funcionaban.
-
-Copia y pega este código en Cliente/productos.php:
-
-PHP
-
 <?php
 session_start();
 include '../conexion.php'; 

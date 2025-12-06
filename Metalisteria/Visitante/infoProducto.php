@@ -21,7 +21,7 @@ try {
     }
 
     // 3. CONSULTA DE VARIANTES (Para los desplegables)
-    $stmt_var = $conn->prepare("SELECT id, color, medidas, stock FROM productos WHERE referencia = :ref");
+    $stmt_var = $conn->prepare("SELECT id, color, medidas FROM productos WHERE referencia = :ref");
     $stmt_var->execute([':ref' => $producto['referencia']]);
     $todas_las_variantes = $stmt_var->fetchAll(PDO::FETCH_ASSOC);
 
@@ -48,9 +48,11 @@ if (isset($_SESSION['carrito'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($producto['nombre']); ?> - Metalistería Fulsan</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="../css/infoProducto.css">
     
     <style>
@@ -130,7 +132,8 @@ if (isset($_SESSION['carrito'])) {
             <div class="product-card">
                 
                 <div class="product-image-col">
-                    <img src="../<?php echo htmlspecialchars($producto['imagen_url']); ?>" 
+                    <img id="prod-img" 
+                         src="../<?php echo htmlspecialchars($producto['imagen_url']); ?>" 
                          alt="<?php echo htmlspecialchars($producto['nombre']); ?>"
                          onerror="this.src='https://via.placeholder.com/600x400?text=Imagen+No+Disponible'">
                 </div>
@@ -139,18 +142,21 @@ if (isset($_SESSION['carrito'])) {
                     
                     <div class="detail-group">
                         <h3>Detalles:</h3>
-                        <p class="detail-text"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
-                        <p style="color: #666; font-size: 0.9em; margin-top: 5px;">Ref: <?php echo $producto['referencia']; ?></p>
+                        <p class="detail-text" id="prod-desc"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
+                        
+                        <p style="color: #666; font-size: 0.9em; margin-top: 5px;">
+                            Ref: <span id="prod-ref"><?php echo $producto['referencia']; ?></span>
+                        </p>
                     </div>
 
                     <div class="detail-group price-group">
                         <h3>Precio:</h3>
-                        <span class="price-value"><?php echo number_format($producto['precio'], 2); ?>€</span>
+                        <span class="price-value" id="prod-price"><?php echo number_format($producto['precio'], 2); ?></span>€
                     </div>
 
                     <form action="AgregarCarrito.php" method="POST" id="form-carrito">
                         
-                        <input type="hidden" name="id_producto" value="<?php echo $producto['id']; ?>">
+                        <input type="hidden" name="id_producto" id="input-id-producto" value="<?php echo $producto['id']; ?>">
 
                         <div class="detail-group quantity-group">
                             <h3>Unidades:</h3>
@@ -162,15 +168,11 @@ if (isset($_SESSION['carrito'])) {
                                        id="input-cantidad" 
                                        value="1" 
                                        min="1" 
-                                       max="<?php echo $producto['stock']; ?>"
                                        class="qty-input"
                                        style="width: 50px; text-align: center; border: none; background: transparent; font-weight: bold; font-size: 18px; color: #333; margin: 0 5px; outline: none; padding: 0;">
                                 
                                 <button type="button" class="qty-btn btn-mas">+</button>
                             </div>
-                            <span style="font-size: 0.8em; color: #666; margin-left: 10px;">
-                                (Stock: <?php echo $producto['stock']; ?>)
-                            </span>
                         </div>
 
                         <div class="selectors-container">
@@ -231,7 +233,7 @@ if (isset($_SESSION['carrito'])) {
                         <div class="contacto-footer">
                             <h3>Contacto</h3>
                             <ul>
-                                <li><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><a href="#">Granada, España</a></li>
+                                <li><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><a href="#">Extrarradio Cortijo la Purisima, 2P</a></li>
                                 <li><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><a href="tel:652921960">652 921 960</a></li>
                                 <li><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><a href="mailto:metalfulsan@gmail.com">metalfulsan@gmail.com</a></li>
                             </ul>

@@ -270,7 +270,7 @@ foreach ($_SESSION['carrito'] as $item) {
     // 1. FUNCIÓN PARA ACTUALIZAR CANTIDAD (AJAX)
     function actualizarCantidad(idProducto, accion) {
         // Llamada al archivo PHP en segundo plano
-        fetch('api_carrito.php', {
+        fetch('ApiCarrito.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
