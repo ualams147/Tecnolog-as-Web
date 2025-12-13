@@ -178,28 +178,34 @@ $total_clientes = count($clientes);
                 <?php else: ?>
 
                     <!-- BUCLE DE CLIENTES REALES -->
-                    <?php foreach ($clientes as $cli): ?>
-                        <div class="cliente">
+                    <div id="lista-clientes-container"> <?php foreach ($clientes as $cli): ?>
                             
-                            <form method="POST" action="../Administrador/ListadoClientesAdmin.php" style="position: absolute; top: 10px; left: 10px;">
-                                <input type="hidden" name="id_eliminar" value="<?php echo $cli['id']; ?>">
-                                <button type="submit" class="boton-eliminar" title="Eliminar Cliente" onclick="return confirm('¿Estás seguro de eliminar a <?php echo $cli['nombre']; ?>?');">✖</button>
-                            </form>
+                            <div class="cliente item-cliente">
+                                
+                                <form method="POST" action="../Administrador/ListadoClientesAdmin.php" style="position: absolute; top: 10px; left: 10px;">
+                                    <input type="hidden" name="id_eliminar" value="<?php echo $cli['id']; ?>">
+                                    <button type="submit" class="boton-eliminar" title="Eliminar Cliente" onclick="return confirm('¿Estás seguro de eliminar a <?php echo $cli['nombre']; ?>?');">✖</button>
+                                </form>
 
-                            <div class="cliente-info">
-                                <p><strong>Nombre:</strong> <?php echo $cli['nombre']; ?></p>
-                                <p><strong>Apellidos:</strong> <?php echo $cli['apellidos']; ?></p>
-                                <p><strong>Correo:</strong> <?php echo $cli['email']; ?></p>
-                                <p><strong>DNI:</strong> <?php echo $cli['dni']; ?></p>
-                                <p><strong>Teléfono:</strong> <?php echo $cli['telefono']; ?></p>
-                                <p><strong>Domicilio:</strong> <?php echo $cli['direccion'] . ', ' . $cli['ciudad']; ?></p>
+                                <div class="cliente-info">
+                                    <p><strong>Nombre:</strong> <?php echo $cli['nombre']; ?></p>
+                                    <p><strong>Apellidos:</strong> <?php echo $cli['apellidos']; ?></p>
+                                    <p><strong>Correo:</strong> <?php echo $cli['email']; ?></p>
+                                    <p><strong>DNI:</strong> <?php echo $cli['dni']; ?></p>
+                                    <p><strong>Teléfono:</strong> <?php echo $cli['telefono']; ?></p>
+                                    <p><strong>Domicilio:</strong> <?php echo $cli['direccion'] . ', ' . $cli['ciudad']; ?></p>
+                                </div>
+                                
+                                <a href="../Administrador/ModificarDatosCliente.php?id=<?php echo $cli['id']; ?>" class="boton-editar-pequeno">
+                                    <p>Editar</p>
+                                </a>
                             </div>
-                            
-                            <a href="../Administrador/ModificarDatosCliente.php?id=<?php echo $cli['id']; ?>" class="boton-editar-pequeno">
-                                <p>Editar</p>
-                            </a>
-                        </div>
-                    <?php endforeach; ?>
+
+                        <?php endforeach; ?>
+                    
+                    </div> <div class="contenedor-ver-mas">
+                        <button id="btn-cargar-mas" class="btn-ver-mas" style="display: none;">Ver más clientes</button>
+                    </div>
 
                 <?php endif; ?>
 
@@ -265,6 +271,7 @@ $total_clientes = count($clientes);
     </div> 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            // --- MENÚ LATERAL ---
             const botonMenu = document.querySelector(".boton-menu-lateral");
             const menuLateral = document.getElementById("menu-lateral");
 
@@ -273,14 +280,61 @@ $total_clientes = count($clientes);
                     menuLateral.classList.toggle("oculto");
                 });
             }
+
+            // --- LÓGICA DE PAGINACIÓN "VER MÁS" ---
+            const clientes = document.querySelectorAll('.item-cliente');
+            const btnCargar = document.getElementById('btn-cargar-mas');
+            
+            // Configuración
+            const iniciales = 5; 
+            const porCarga = 5;
+            let visiblesActuales = iniciales;
+
+            // Función para actualizar qué clientes se ven
+            function actualizarVistaClientes() {
+                let mostrados = 0;
+                let totalClientes = clientes.length;
+
+                clientes.forEach((cli, index) => {
+                    // Si el índice es menor que el límite actual, lo mostramos
+                    if (index < visiblesActuales) {
+                        cli.style.display = 'flex'; // Usamos flex porque tu CSS usa display:flex en .cliente
+                        mostrados++;
+                    } else {
+                        cli.style.display = 'none';
+                    }
+                });
+
+                // Controlar visibilidad del botón
+                if (btnCargar) {
+                    // Si el número actual visible es mayor o igual al total, ocultamos el botón
+                    if (visiblesActuales >= totalClientes) {
+                        btnCargar.style.display = 'none';
+                    } else {
+                        btnCargar.style.display = 'flex'; // O block
+                    }
+                }
+            }
+
+            // Evento click en el botón
+            if (btnCargar) {
+                btnCargar.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    visiblesActuales += porCarga; // Sumamos 5 más
+                    actualizarVistaClientes();
+                });
+            }
+
+            // Ejecutar al cargar la página para ocultar los sobrantes iniciales
+            if (clientes.length > 0) {
+                actualizarVistaClientes();
+            }
         });
 
-        // Función principal para recargar la página con parámetros
+        // --- TUS FUNCIONES DE FILTRO PHP (Se mantienen igual) ---
         function aplicarFiltros() {
             const fecha = document.getElementById('filtro-fecha').value;
             const cliente = document.getElementById('filtro-cliente').value;
-            
-            // Construimos la URL con los parámetros GET
             const url = new URL(window.location.href);
             
             if (fecha) url.searchParams.set('fecha', fecha);
@@ -292,23 +346,20 @@ $total_clientes = count($clientes);
             window.location.href = url.toString();
         }
 
-        // Detectar tecla Enter en el buscador de texto
         function checkEnter(event) {
             if (event.key === "Enter") {
                 aplicarFiltros();
             }
         }
 
-        // Borrar un filtro específico
         function borrarFiltro(tipo) {
             const input = document.getElementById('filtro-' + tipo);
             if(input) {
                 input.value = '';
-                aplicarFiltros(); // Recargar tras borrar
+                aplicarFiltros();
             }
         }
 
-        // Borrar todos
         function borrarTodo() {
             window.location.href = '../Administrador/ListadoClientesAdmin.php';
         }
