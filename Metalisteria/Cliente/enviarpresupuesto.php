@@ -1,8 +1,7 @@
 <?php
 // Nombre del archivo: enviar_presupuesto.php
 header('Content-Type: application/json');
-
-// 1. Recibimos los datos enviados por el Javascript
+// 1. RECIBIMOS LOS DATOS DEL FORMULARIO
 $data = json_decode(file_get_contents('php://input'), true);
 
 if ($data) {

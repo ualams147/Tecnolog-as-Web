@@ -285,6 +285,7 @@ body {
 }
 /* === AÑADIR AL FINAL DE css/productomedida.css === */
 
+
 /* Estilo cuando el input tiene un error */
 .custom-input.input-error {
     border: 2px solid #e74c3c !important; /* Rojo */

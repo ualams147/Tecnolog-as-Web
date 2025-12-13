@@ -339,6 +339,7 @@ if (isset($_SESSION['carrito'])) {
                 setTimeout(() => actionDiv.style.display = 'none', 300);
             }
         }
+
         
         function enviarPropuesta() {
             const inputMedida = document.getElementById('input-medida').value;
