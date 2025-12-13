@@ -10,7 +10,6 @@ if ($data) {
     // Cambia este correo por el tuyo real
     $destinatario = "metalfulsan@gmail.com"; 
     $asunto = "Nuevo Presupuesto Web - Producto a Medida";
-
     // 3. Construimos el mensaje que te llegará a ti
     $mensaje = "Has recibido una nueva solicitud de presupuesto desde la web:\n\n";
     $mensaje .= "-------------------------------------\n";

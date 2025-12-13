@@ -291,7 +291,6 @@ body {
     background-color: #fff8f8; /* Un fondo rojo muy clarito */
     color: #e74c3c;
 }
-
 /* Estilo del mensajito de error debajo del input */
 .error-message {
     color: #e74c3c; /* Rojo */
