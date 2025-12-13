@@ -187,13 +187,26 @@ if (!$producto) {
                         <div id="tamanos-container" class="tamanos-container">
                             </div>
                         
-                        <div class="input-group-tamanos">
-                            <input type="text" id="nuevo-tamano-input" class="form-input" placeholder="Ej: 150x200" style="margin-bottom: 0;">
+                        <div class="input-group-medidas">
+                            
+                            <div class="medida-input-wrapper">
+                                <input type="number" id="input-ancho" class="form-input input-corto" placeholder="Ancho" min="30">
+                                <span class="medida-label">cm</span>
+                            </div>
+
+                            <span class="separador-x">✕</span>
+
+                            <div class="medida-input-wrapper">
+                                <input type="number" id="input-alto" class="form-input input-corto" placeholder="Alto" min="30">
+                                <span class="medida-label">cm</span>
+                            </div>
                             
                             <button type="button" id="btn-add-tamano" class="btn-add-medida">
                                 Añadir
                             </button>
                         </div>
+
+                        <p class="nota-medidas">* La medida mínima es de 30 cm.</p>
                         
                         <input type="hidden" id="tamanos-final" name="tamanos" value="<?php echo htmlspecialchars($producto['medidas'] ?? ''); ?>">
                     </div>
@@ -270,73 +283,80 @@ if (!$producto) {
                 });
             });
 
-            // --- 2. Lógica de Tamaños (MEDIDAS) ---
+            // --- LÓGICA DE MEDIDAS (Actualizada) ---
             const tamanosContainer = document.getElementById('tamanos-container');
-            const tamanosInput = document.getElementById('nuevo-tamano-input');
-            const btnAddTamano = document.getElementById('btn-add-tamano'); // El botón nuevo
-            const tamanosHiddenInput = document.getElementById('tamanos-final');
+            const inputAncho = document.getElementById('input-ancho');
+            const inputAlto = document.getElementById('input-alto');
+            const btnAdd = document.getElementById('btn-add-tamano');
+            const hiddenInput = document.getElementById('tamanos-final');
 
-            // Función para crear la etiqueta visual
+            // Función crear etiqueta
             function createTag(text) {
                 const tag = document.createElement('span');
                 tag.classList.add('tamano-chip');
-                tag.innerHTML = `
-                    ${text}
-                    <span class="remove-tag" title="Eliminar medida">✕</span>
-                `;
-                // Añadir funcionalidad de eliminar al crear la etiqueta
-                tag.querySelector('.remove-tag').addEventListener('click', function() {
+                tag.innerHTML = `${text} <span class="remove-tag">✕</span>`;
+                
+                tag.querySelector('.remove-tag').addEventListener('click', () => {
                     tag.remove();
                     updateHiddenInput();
                 });
                 tamanosContainer.appendChild(tag);
             }
 
-            // Función para actualizar el input oculto (Base de datos)
+            // Actualizar el input oculto para la BD
             function updateHiddenInput() {
                 const tags = Array.from(tamanosContainer.querySelectorAll('.tamano-chip'))
-                                .map(tag => tag.innerText.replace('✕', '').trim());
-                tamanosHiddenInput.value = tags.join(', '); // Se guardará como "10x10, 20x20"
+                                .map(t => t.innerText.replace('✕', '').trim());
+                hiddenInput.value = tags.join(', ');
             }
 
-            // Función principal para agregar
-            function addTamano() {
-                const value = tamanosInput.value.trim();
-                if (value) {
-                    // Evitar duplicados
-                    const currentTags = Array.from(tamanosContainer.querySelectorAll('.tamano-chip'))
-                                            .map(tag => tag.innerText.replace('✕', '').trim());
-                    
-                    if (!currentTags.includes(value)) {
-                        createTag(value);
-                        updateHiddenInput();
-                        tamanosInput.value = ''; // Limpiar input
-                        tamanosInput.focus();    // Volver a poner el cursor en el input
-                    } else {
-                        alert('Esa medida ya está añadida');
-                    }
+            // VALIDACIÓN Y AÑADIDO
+            function addMedida() {
+                const ancho = parseInt(inputAncho.value);
+                const alto = parseInt(inputAlto.value);
+
+                // 1. Validar que sean números
+                if (isNaN(ancho) || isNaN(alto)) {
+                    alert("Por favor, introduce números válidos en Ancho y Alto.");
+                    return;
                 }
+
+                // 2. RESTRICCIÓN: Mínimo 30cm
+                if (ancho < 30 || alto < 30) {
+                    alert("⚠️ Las medidas no pueden ser menores de 30 cm por seguridad.");
+                    return;
+                }
+
+                // 3. Formato estandarizado: "ANCHOxALTO"
+                const nuevaMedida = `${ancho}x${alto}`;
+
+                // 4. Comprobar duplicados
+                const actuales = hiddenInput.value.split(', ').map(t => t.trim());
+                if (actuales.includes(nuevaMedida)) {
+                    alert("Esta medida ya existe en la lista.");
+                    return;
+                }
+
+                // Crear y limpiar
+                createTag(nuevaMedida);
+                updateHiddenInput();
+                inputAncho.value = '';
+                inputAlto.value = '';
+                inputAncho.focus();
             }
 
-            // Evento 1: Clic en el botón Añadir
-            btnAddTamano.addEventListener('click', function(e) {
-                e.preventDefault(); // Evita que se envíe el form principal
-                addTamano();
+            btnAdd.addEventListener('click', addMedida);
+
+            // Permitir añadir pulsando Enter en el campo de Alto
+            inputAlto.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') addMedida();
             });
 
-            // Evento 2: Pulsar Enter en el input
-            tamanosInput.addEventListener('keyup', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    addTamano();
-                }
-            });
-
-            // Cargar tamaños existentes al iniciar la página
-            if (tamanosHiddenInput.value) {
-                const existing = tamanosHiddenInput.value.split(',');
-                existing.forEach(tamano => {
-                    if(tamano.trim()) createTag(tamano.trim());
+            // Cargar datos iniciales (desde PHP)
+            if (hiddenInput.value) {
+                const existentes = hiddenInput.value.split(',');
+                existentes.forEach(medida => {
+                    if (medida.trim()) createTag(medida.trim());
                 });
             }
         });
