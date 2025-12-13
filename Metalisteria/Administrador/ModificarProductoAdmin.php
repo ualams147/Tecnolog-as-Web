@@ -120,7 +120,9 @@ if (!$producto) {
                 <div style="background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px; width: 100%; text-align: center;">
                     <?php echo $mensaje; ?>
                 </div>
+                
             <?php endif; ?>
+            <div id="mensaje-error-js" class="alerta-error" style="display: none;"></div>
 
             <!-- INICIO FORMULARIO (Importante: method="POST" y enctype para imágenes) -->
             <form method="POST" enctype="multipart/form-data" class="product-card">
@@ -311,33 +313,54 @@ if (!$producto) {
             }
 
             // VALIDACIÓN Y AÑADIDO
+            // --- 3. Lógica VALIDACIÓN Y AÑADIDO (Modificada) ---
             function addMedida() {
                 const ancho = parseInt(inputAncho.value);
                 const alto = parseInt(inputAlto.value);
+                const errorDiv = document.getElementById('mensaje-error-js');
+
+                // Función auxiliar para mostrar el error
+                function mostrarError(mensaje) {
+                    errorDiv.textContent = mensaje;
+                    errorDiv.style.display = 'block';
+                    // Opcional: Hacer scroll hacia arriba para ver el mensaje si la pantalla es pequeña
+                    errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Opcional: Ocultar automáticamente tras 5 segundos
+                    setTimeout(() => {
+                        errorDiv.style.display = 'none';
+                    }, 5000);
+                }
+
+                // Función para ocultar error (si todo sale bien)
+                function ocultarError() {
+                    errorDiv.style.display = 'none';
+                }
 
                 // 1. Validar que sean números
                 if (isNaN(ancho) || isNaN(alto)) {
-                    alert("Por favor, introduce números válidos en Ancho y Alto.");
+                    mostrarError("⚠️ Por favor, introduce números válidos en Ancho y Alto.");
                     return;
                 }
 
                 // 2. RESTRICCIÓN: Mínimo 30cm
                 if (ancho < 30 || alto < 30) {
-                    alert("⚠️ Las medidas no pueden ser menores de 30 cm por seguridad.");
+                    mostrarError("⚠️ Las medidas no pueden ser menores de 30 cm.");
                     return;
                 }
 
-                // 3. Formato estandarizado: "ANCHOxALTO"
+                // 3. Formato estandarizado
                 const nuevaMedida = `${ancho}x${alto}`;
 
                 // 4. Comprobar duplicados
                 const actuales = hiddenInput.value.split(', ').map(t => t.trim());
                 if (actuales.includes(nuevaMedida)) {
-                    alert("Esta medida ya existe en la lista.");
+                    mostrarError("⚠️ Esta medida ya existe en la lista.");
                     return;
                 }
 
-                // Crear y limpiar
+                // Si llegamos aquí, todo está BIEN:
+                ocultarError(); // Quitamos el error si lo había
                 createTag(nuevaMedida);
                 updateHiddenInput();
                 inputAncho.value = '';

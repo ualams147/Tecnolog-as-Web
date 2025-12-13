@@ -379,7 +379,7 @@
         }
         .currency-symbol {
             position: absolute;
-            right: 15px;
+            right: 40px;
             top: 50%;
             transform: translateY(-50%);
             font-weight: 500;
@@ -524,6 +524,30 @@
             font-weight: 400;
         }
 
+        /* --- Estilos para Mensajes de Alerta --- */
+        .alerta-error {
+            background-color: #f8d7da; /* Fondo rojo suave */
+            color: #721c24;            /* Texto rojo oscuro */
+            border: 1px solid #f5c6cb; /* Borde rojo sutil */
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            box-sizing: border-box;
+            animation: fadeIn 0.3s ease-in-out; /* Pequeña animación de entrada */
+        }
+
+        /* Animación opcional para que aparezca suavemente */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        
+        /* ================= Botones Finales ================= */
 
 
        /* Botones de acción */
