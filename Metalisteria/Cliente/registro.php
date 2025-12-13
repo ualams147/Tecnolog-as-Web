@@ -197,11 +197,11 @@
 
                 <div class="footer-bottom">
                     <div class="politica-legal">
-                        <a href="aviso-legal.php">Aviso Legal</a>
+                        <a href="../aviso-legal.php">Aviso Legal</a>
                         <span>•</span>
-                        <a href="privacidad.php">Política de Privacidad</a>
+                        <a href="../privacidad.php">Política de Privacidad</a>
                         <span>•</span>
-                        <a href="cookies.php">Política de Cookies</a>
+                        <a href="../cookies.php">Política de Cookies</a>
                     </div>
                 </div>
             </div>

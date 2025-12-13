@@ -97,6 +97,7 @@ foreach ($_SESSION['carrito'] as $item) {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="../css/carrito.css">
+
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
@@ -258,7 +259,11 @@ foreach ($_SESSION['carrito'] as $item) {
                 </div>
                 <div class="footer-bottom">
                     <div class="politica-legal">
-                        <a href="aviso-legal.php">Aviso Legal</a><span>•</span><a href="privacidad.php">Política de Privacidad</a><span>•</span><a href="cookies.php">Política de Cookies</a>
+                        <a href="../aviso-legal.php">Aviso Legal</a>
+                        <span>•</span>
+                        <a href="../privacidad.php">Política de Privacidad</a>
+                        <span>•</span>
+                        <a href="../cookies.php">Política de Cookies</a>
                     </div>
                 </div>
             </div>

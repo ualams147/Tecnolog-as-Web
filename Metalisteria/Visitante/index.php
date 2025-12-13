@@ -21,6 +21,7 @@ if (isset($_SESSION['carrito'])) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/CabeceraFooterAdmin.css">
 </head>
 <body>
     <div class="inicio-visitante">
@@ -243,11 +244,11 @@ if (isset($_SESSION['carrito'])) {
 
                 <div class="footer-bottom">
                     <div class="politica-legal">
-                        <a href="aviso-legal.php">Aviso Legal</a>
+                        <a href="../aviso-legal.php">Aviso Legal</a>
                         <span>•</span>
-                        <a href="privacidad.php">Política de Privacidad</a>
+                        <a href="../privacidad.php">Política de Privacidad</a>
                         <span>•</span>
-                        <a href="cookies.php">Política de Cookies</a>
+                        <a href="../cookies.php">Política de Cookies</a>
                     </div>
                 </div>
             </div>
