@@ -386,6 +386,100 @@
             color: #666;
         }
 
+        /* Estilos para el contenedor de Chips/Tags */
+        /* --- ESTILOS GESTOR DE TAMAÑOS --- */
+
+        /* Contenedor visual de las etiquetas (arriba) */
+        .tamanos-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            min-height: 50px; /* Altura mínima por si está vacío */
+        }
+
+        /* Las etiquetas individuales (Chips) */
+        .tamano-chip {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--primary-blue); /* Usamos tu azul corporativo */
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .tamano-chip:hover {
+            transform: translateY(-2px);
+        }
+
+        /* La cruz de eliminar */
+        .remove-tag {
+            margin-left: 10px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            line-height: 1;
+            transition: background 0.3s;
+        }
+
+        .remove-tag:hover {
+            background: rgba(255,255,255,0.5);
+            color: #fff;
+        }
+
+        /* Contenedor del Input + Botón (para que estén en línea) */
+        .input-group-tamanos {
+            display: flex;
+            gap: 10px; /* Espacio entre input y botón */
+            align-items: stretch; /* Misma altura */
+        }
+
+        /* Ajuste del input dentro del grupo para que ocupe el espacio */
+        .input-group-tamanos .form-input {
+            flex-grow: 1;
+        }
+
+        /* Botón de añadir medida */
+        .btn-add-medida {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            white-space: nowrap; /* Que el texto no salte de línea */
+        }
+
+        .btn-add-medida:hover {
+            background-color: var(--dark-blue);
+        }
+
+        .btn-add-medida:active {
+            transform: scale(0.98);
+        }
+
+
+
+
+
+
        /* Botones de acción */
         .botones-finales {
             display: flex;

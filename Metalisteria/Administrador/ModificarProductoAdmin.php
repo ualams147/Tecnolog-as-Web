@@ -182,8 +182,20 @@ if (!$producto) {
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="tamanos">Tamaños disponibles:</label>
-                        <input type="text" id="tamanos" name="tamanos" class="form-input" value="<?php echo $producto['medidas']; ?>">
+                        <label class="form-label">Tamaños disponibles:</label>
+                        
+                        <div id="tamanos-container" class="tamanos-container">
+                            </div>
+                        
+                        <div class="input-group-tamanos">
+                            <input type="text" id="nuevo-tamano-input" class="form-input" placeholder="Ej: 150x200" style="margin-bottom: 0;">
+                            
+                            <button type="button" id="btn-add-tamano" class="btn-add-medida">
+                                Añadir
+                            </button>
+                        </div>
+                        
+                        <input type="hidden" id="tamanos-final" name="tamanos" value="<?php echo htmlspecialchars($producto['medidas'] ?? ''); ?>">
                     </div>
 
                     <!-- Botones de acción DENTRO del formulario -->
@@ -245,31 +257,97 @@ if (!$producto) {
 
     <!-- Script para selección única de Checkboxes y Previsualización -->
     <script>
-        // 1. Selección única de color
         document.addEventListener('DOMContentLoaded', function() {
+            // --- 1. Lógica de Checkboxes de Color (Igual que antes) ---
             const checkboxes = document.querySelectorAll('input[name="colores"]');
-            
             checkboxes.forEach(box => {
                 box.addEventListener('change', function() {
                     if (this.checked) {
                         checkboxes.forEach(otherBox => {
-                            if (otherBox !== this) {
-                                otherBox.checked = false;
-                            }
+                            if (otherBox !== this) otherBox.checked = false;
                         });
                     }
                 });
             });
+
+            // --- 2. Lógica de Tamaños (MEDIDAS) ---
+            const tamanosContainer = document.getElementById('tamanos-container');
+            const tamanosInput = document.getElementById('nuevo-tamano-input');
+            const btnAddTamano = document.getElementById('btn-add-tamano'); // El botón nuevo
+            const tamanosHiddenInput = document.getElementById('tamanos-final');
+
+            // Función para crear la etiqueta visual
+            function createTag(text) {
+                const tag = document.createElement('span');
+                tag.classList.add('tamano-chip');
+                tag.innerHTML = `
+                    ${text}
+                    <span class="remove-tag" title="Eliminar medida">✕</span>
+                `;
+                // Añadir funcionalidad de eliminar al crear la etiqueta
+                tag.querySelector('.remove-tag').addEventListener('click', function() {
+                    tag.remove();
+                    updateHiddenInput();
+                });
+                tamanosContainer.appendChild(tag);
+            }
+
+            // Función para actualizar el input oculto (Base de datos)
+            function updateHiddenInput() {
+                const tags = Array.from(tamanosContainer.querySelectorAll('.tamano-chip'))
+                                .map(tag => tag.innerText.replace('✕', '').trim());
+                tamanosHiddenInput.value = tags.join(', '); // Se guardará como "10x10, 20x20"
+            }
+
+            // Función principal para agregar
+            function addTamano() {
+                const value = tamanosInput.value.trim();
+                if (value) {
+                    // Evitar duplicados
+                    const currentTags = Array.from(tamanosContainer.querySelectorAll('.tamano-chip'))
+                                            .map(tag => tag.innerText.replace('✕', '').trim());
+                    
+                    if (!currentTags.includes(value)) {
+                        createTag(value);
+                        updateHiddenInput();
+                        tamanosInput.value = ''; // Limpiar input
+                        tamanosInput.focus();    // Volver a poner el cursor en el input
+                    } else {
+                        alert('Esa medida ya está añadida');
+                    }
+                }
+            }
+
+            // Evento 1: Clic en el botón Añadir
+            btnAddTamano.addEventListener('click', function(e) {
+                e.preventDefault(); // Evita que se envíe el form principal
+                addTamano();
+            });
+
+            // Evento 2: Pulsar Enter en el input
+            tamanosInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addTamano();
+                }
+            });
+
+            // Cargar tamaños existentes al iniciar la página
+            if (tamanosHiddenInput.value) {
+                const existing = tamanosHiddenInput.value.split(',');
+                existing.forEach(tamano => {
+                    if(tamano.trim()) createTag(tamano.trim());
+                });
+            }
         });
 
-        // 2. Previsualizar imagen al seleccionar
+        // --- 3. Previsualización de imagen ---
         function mostrarPrevisualizacion(event) {
             const input = event.target;
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const img = document.getElementById('preview-img');
-                    img.src = e.target.result;
+                    document.getElementById('preview-img').src = e.target.result;
                 }
                 reader.readAsDataURL(input.files[0]);
             }
