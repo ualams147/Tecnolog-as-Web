@@ -242,9 +242,8 @@
   justify-content: center;
   width: 60px;
   height: 60px;
-  border-radius: 50%;
-  background-color: whitesmoke;   /* círculo negro */
-  color: #293661;              /* flecha blanca */
+  border-radius: 50%;  /* círculo negro */
+  color: white;              /* flecha blanca */
   font-size: 30px;           /* tamaño de flecha */
   text-decoration: none;
   position: absolute;
@@ -255,8 +254,7 @@
 }
 
 .flecha-circular:hover {
-  transform: scale(1.1);
-  background-color: white; /* tono más oscuro al pasar el ratón */
+  transform: scale(1.5);
 }
 
         

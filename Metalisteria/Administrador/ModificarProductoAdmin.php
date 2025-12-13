@@ -68,7 +68,7 @@ if (!$producto) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modificar Producto - Metalistería Fulsan</title>
-    <link rel="stylesheet" href="stylesModificarProductosAdmin.css">
+    <link rel="stylesheet" href=".../css/stylesModificarProductosAdmin.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
@@ -106,7 +106,7 @@ if (!$producto) {
             <div class="degradado"></div>
             <div class="recuadro-fondo-titulo"></div> 
             <!-- Flecha para volver (apunta a admin.php o tu listado) -->
-            <a href="../Administrador/ListadoProductosAdmin.php" class="flecha-circular">&#8592;</a>
+            <a href="ListadoProductosAdmin.php" class="flecha-circular">&#8592;</a>
             
             <!-- Mostramos la Referencia o el ID real -->
             <h1 class="titulo-principal"><?php echo $producto['referencia']; ?></h1>
