@@ -464,9 +464,9 @@ body {
 
 /* Activo (seleccionado) */
 .titulo-section .filtro-productos .filtro-text.activo {
-  background: #a0d2ac!important;
-  color: #fff!important;
-  border-color: #a0d2ac!important;
+   background: #a0d2ac;
+   color: #fff;
+   transform: scale(1.1);
 
 }
 
