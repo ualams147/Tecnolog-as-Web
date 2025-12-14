@@ -1,119 +1,67 @@
 <?php
-include_once("config.php");
-include_once("protect.php");
-
-header("Cache-Control: max-age=300, public");
-
-//Header
-function sectionheader($activepage = 1){
-    echo '<div class="container">
-                <div class="logo-main">
-                    <a href="index.php" class="logo-link">
-                        <img src="imagenes/logo.png" alt="Logo Metalful">
-                        <div class="logo-text">
-                            <span>Metalistería</span>
-                            <strong>Fulsan</strong>
-                        </div>
-                    </a>
-                </div>
-
-                <nav class="nav-bar">
-                    <a href="conocenos.php" '.($activepage == 2 ? 'class="activo"' : '').'>Conócenos</a>
-                    <a href="productos.php" '.($activepage == 3 ? 'class="activo"' : '').'>Productos</a>
-                    <a href="carrito.php" '.($activepage == 4 ? 'class="activo"' : '').'>Carrito</a>
-                    ';
-                    if (isset($_SESSION["usercode"])){
-                        echo '<a href="perfil.php" '.($activepage == 5 ? 'class="activo"' : '').'>Mi Perfil</a>
-                        ';
-                    }else{
-                        echo '<a href="login.php" id="link-login" '.($activepage == 5 ? 'class="activo"' : '').'>Acceder</a>
-                        ';
-                    }
-               echo'</nav>
-               ';
-                if (isset($_SESSION["usercode"])){
-                    echo '<div class="btn-logout" id="box-registro">
-                    <a href="logout.php" id="link-logout" class="btn-logout">Salir</a>';
-                }else{
-                    echo '<div class="sign-in" id="box-registro">
-                    <a href="Administrador/indexAdmin.php" id="link-registro">Registrarse</a>';
-                }
-                echo '</div>
-            </div>';
+// Evitamos iniciar sesión si ya está iniciada
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
-function sectionfooter(){
-    echo '<footer class="footer">
-            <div class="container">
-                <div class="footer-content">
-                    <div class="footer-logo-section">
-                        <div class="logo-footer">
-                            <img src="imagenes/footer.png" alt="Logo Metalful">
-                        </div>
-                        <div class="redes">
-                            <a href="https://www.instagram.com/metalfulsansl/" target="_blank" class="instagram-link">
-                                <svg viewBox="0 0 24 24" fill="white">
-                                    <path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="footer-links">
-                        <div class="enlaces-rapidos">
-                            <h3>Enlaces rápidos</h3>
-                            <ul>
-                                <li><a href="conocenos.php">Conócenos</a></li>
-                                <li><a href="productos.php">Productos</a></li>
-                                <li><a href="login.php">Iniciar Sesión</a></li>
-                            </ul>
-                        </div>
-
-                        <div class="contacto-footer">
-                            <h3>Contacto</h3>
-                            <ul>
-                                <li>
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-                                    </svg>
-                                    <a href="https://www.google.com/maps/place//data=!4m2!3m1!1s0xd71fd00684554b1:0xef4e70ab821a7762?sa=X&ved=1t:8290&ictx=111" target="_blank">
-                                        Extrarradio Cortijo la Purisima, 2P, 18004 Granada
-                                    </a>
-                                </li>
-                                <li>
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
-                                    </svg>
-                                    <a href="tel:652921960">652 921 960</a>
-                                </li>
-                                <li>
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-                                    </svg>
-                                    <a href="mailto:metalfulsan@gmail.com">metalfulsan@gmail.com</a>
-                                </li>
-                            </ul>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="footer-bottom">
-                    <div class="politica-legal">
-                        <a href="aviso-legal.php">Aviso Legal</a>
-                        <span>•</span>
-                        <a href="privacidad.php">Política de Privacidad</a>
-                        <span>•</span>
-                        <a href="cookies.php">Política de Cookies</a>
-                    </div>
-                </div>
+/**
+ * Función para mostrar el encabezado (Header)
+ * $active: Número de la opción del menú activa
+ */
+function sectionheader($active = 0) {
+    // Calculamos cantidad del carrito
+    $cantidad_carrito = 0;
+    if (isset($_SESSION['carrito'])) {
+        foreach ($_SESSION['carrito'] as $item) {
+            $cantidad_carrito += $item['cantidad'];
+        }
+    }
+    ?>
+    <div class="nav-container">
+        <nav class="navbar">
+            <div class="logo">
+                <a href="../index.php">
+                    <img src="../imagenes/logo.png" alt="Metalistería Fulsan" style="height: 50px;">
+                </a>
             </div>
-        </footer>';
+            <ul class="nav-links">
+                <li><a href="../index.php" class="<?php echo ($active == 1) ? 'active' : ''; ?>">Inicio</a></li>
+                <li><a href="conocenos.php" class="<?php echo ($active == 2) ? 'active' : ''; ?>">Conócenos</a></li>
+                <li><a href="productos.php" class="<?php echo ($active == 3) ? 'active' : ''; ?>">Productos</a></li>
+                <li><a href="contacto.php" class="<?php echo ($active == 4) ? 'active' : ''; ?>">Contacto</a></li>
+            </ul>
+            <div class="nav-icons">
+                <a href="carrito.php" class="cart-icon">
+                    🛒 <span id="cart-count"><?php echo $cantidad_carrito; ?></span>
+                </a>
+                <?php if (isset($_SESSION['usuario'])): ?>
+                    <a href="logout.php">Salir</a>
+                <?php else: ?>
+                    <a href="IniciarSesion.php">Login</a>
+                <?php endif; ?>
+            </div>
+        </nav>
+    </div>
+    
+    <style>
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .nav-links { list-style: none; display: flex; gap: 20px; }
+        .nav-links a { text-decoration: none; color: #333; font-weight: 500; }
+        .nav-links a.active { color: #a0d2ac; font-weight: 700; }
+    </style>
+    <?php
 }
 
-function emailValidation($email) {
-    $regex = "/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,10})$/";
-    $email = strtolower($email);
-
-    return preg_match ($regex, $email);
+/**
+ * Función para mostrar el pie de página (Footer)
+ */
+function sectionfooter() {
+    ?>
+    <footer class="footer" style="background: #333; color: white; padding: 20px; margin-top: 50px;">
+        <div class="container" style="text-align: center;">
+            <p>&copy; <?php echo date('Y'); ?> Metalistería Fulsan. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    <?php
 }
+?>
