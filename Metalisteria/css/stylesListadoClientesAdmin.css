@@ -79,80 +79,185 @@ body {
 }
 
 
-/* Filtros */
-/* ====== FILTROS EN EL RECUADRO DEL TÍTULO ====== */
+/* =========================================
+   === FILTROS: LOGICA VISUAL REFORZADA ===
+   ========================================= */
+
+/* Posicionamiento base */
 .filtros-en-titulo {
     position: absolute;
-    bottom: 40px;              /* coloca los filtros dentro del recuadro */
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 40px;                 /* separación entre filtros */
+    gap: 20px;
     z-index: 3;
-    flex-wrap: wrap;           /* permite que se adapten en pantallas pequeñas */
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .filtro-item {
     display: flex;
     flex-direction: column;
-    font-family: 'Poppins', sans-serif;
-    font-size: 16px;
     color: white;
 }
 
 .filtro-item label {
-    display: flex;
-    align-items: center;
-    gap: 8px;                  /* espacio entre icono y texto */
-    margin-bottom: 6px;
+    font-size: 14px;
     font-weight: 600;
-    color: white;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
-.filtro-item .icon {
-    display: flex;
+.filtro-wrapper {
+    position: relative;
+    width: 220px;
+    height: 45px;
+}
+
+/* INPUTS */
+.filtro-wrapper input,
+.filtro-wrapper select {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0 40px 0 15px; /* Hueco para icono */
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    color: #293661;
+    outline: none;
+    appearance: none;
+    box-sizing: border-box;
+}
+
+.filtro-wrapper input:focus, .filtro-wrapper select:focus {
+    background: white;
+    border-color: #a0d2ac;
+}
+
+/* --- ELEMENTOS FLOTANTES (ICONO Y CRUZ) --- */
+
+.input-icon, .btn-borrar {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.2s ease;
+}
+
+/* 1. CONFIGURACIÓN DEL ICONO */
+.input-icon {
+    right: 12px;
+    top:25px;
+    color: #293661;
+    pointer-events: none;
+    z-index: 4;
+}
+
+/* 2. CONFIGURACIÓN DE LA CRUZ */
+.btn-borrar {
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    background: none;
+    border: none;
+    color: #e74c3c;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 5;
     align-items: center;
     justify-content: center;
 }
 
-.filtro-item input,
-.filtro-item select {
-    padding: 8px 12px;
-    border: 2px solid white;
-    border-radius: 6px;
-    font-size: 16px;
-    font-family: 'Poppins', sans-serif;
-    background-color: white;
-    color: #293661;
-    box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
-    cursor: pointer;
-    margin-bottom: 10px;
-    min-width: 210px;          /* ancho mínimo para que se vean bien */
-    max-width: 200px;
-    width: 200px;          /* ancho mínimo para que se vean bien */
+.btn-borrar:hover {
+    transform: translateY(-50%) scale(1.1);
 }
 
-/* Hover para los selectores */
-.filtro-item input[type="date"]:hover,
-.filtro-item select:hover {
-    border-color: #a0d2ac;
-    box-shadow: 0px 2px 8px rgba(41,54,97,0.2);
+/* --- LÓGICA DE ESTADOS (AQUÍ ESTÁ LA CLAVE) --- */
+
+
+.filtro-wrapper .input-icon {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(-50%) scale(1) !important;
 }
 
-/* Responsive: filtros en columna en móviles */
+.filtro-wrapper .btn-borrar {
+    display: none !important;
+}
+
+/* ESTADO B: CON VALOR (Clase .con-valor añadida por JS)
+   - Icono: OCULTO
+   - Cruz: VISIBLE
+*/
+.filtro-wrapper.con-valor .input-icon {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: translateY(-50%) scale(0.5) !important;
+}
+
+.filtro-wrapper.con-valor .btn-borrar {
+    display: flex !important;
+}
+
+/* Limpieza extra para inputs date */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0; color: transparent; cursor: pointer; height: auto;
+    left: 0; position: absolute; right: 0; top: 0; width: auto; z-index: 1;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-    .filtros-en-titulo {
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-        bottom: 20px;
-    }
-    .filtro-item input[type="date"],
-    .filtro-item select {
-        min-width: 220px;
-    }
+    .filtros-en-titulo { bottom: 10px; gap: 10px; }
+    .filtro-wrapper { width: 100%; min-width: 280px; }
+}
+/* =========================================
+   === ESTILOS DEL AUTOCOMPLETADO (DROPDOWN) ===
+   ========================================= */
+
+.lista-autocompletado {
+    position: absolute;
+    top: 100%; /* Justo debajo del input */
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    max-height: 250px; /* Si hay muchos, hace scroll */
+    overflow-y: auto;
+    z-index: 1000; /* Para que flote encima de todo */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: none; /* Oculto por defecto */
 }
 
+.item-sugerencia {
+    padding: 12px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #2b2b2b;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: left;
+    transition: background 0.2s;
+}
+
+.item-sugerencia:last-child {
+    border-bottom: none;
+}
+
+.item-sugerencia:hover {
+    background-color: #f0f4ff; /* Azul muy clarito al pasar el ratón */
+    color: #293661;
+    font-weight: 500;
+}
+
+.item-sugerencia strong {
+    color: #293661;
+}
 
 /* ====== MENÚ LATERAL Y LISTADO DE PRODUCTOS ====== */
 .productos-layout {

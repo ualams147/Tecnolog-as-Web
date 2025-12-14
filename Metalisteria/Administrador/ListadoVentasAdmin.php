@@ -5,7 +5,6 @@ include '../conexion.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_eliminar'])) {
     $idBorrar = $_POST['id_eliminar'];
     try {
-        // Al borrar la venta, se borran los detalles por el ON DELETE CASCADE
         $stmt = $conn->prepare("DELETE FROM ventas WHERE id = ?");
         $stmt->execute([$idBorrar]);
         header("Location: ../Administrador/ListadoVentasAdmin.php");
@@ -19,24 +18,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_eliminar'])) {
 $where = "WHERE 1=1";
 $params = [];
 
-// Filtros persistentes
 $filtro_fecha = $_GET['fecha'] ?? '';
 $filtro_cliente = $_GET['cliente'] ?? '';
 $filtro_producto = $_GET['producto'] ?? '';
 
-// A) Filtro Fecha
 if (!empty($filtro_fecha)) {
     $where .= " AND DATE(v.fecha) = :fecha";
     $params[':fecha'] = $filtro_fecha;
 }
 
-// B) Filtro Cliente
 if (!empty($filtro_cliente)) {
     $where .= " AND (c.nombre LIKE :cliente OR c.apellidos LIKE :cliente)";
     $params[':cliente'] = "%" . $filtro_cliente . "%";
 }
 
-// C) Filtro Producto (Opcional - Filtra ventas que contengan productos de esa categoría)
 if (!empty($filtro_producto)) {
     $where .= " AND EXISTS (
         SELECT 1 FROM detalle_ventas dv 
@@ -74,8 +69,8 @@ $total_registros = count($ventas);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* Estilos auxiliares para JS y estado vacío */
-        .item-venta { display: none; } /* Oculto para paginación */
+        /* Estilos auxiliares específicos para Ventas */
+        .item-venta { display: none; } /* Oculto para paginación inicial */
         
         .empty-state-ventas {
             text-align: center; padding: 50px; display: flex; flex-direction: column; align-items: center;
@@ -84,25 +79,10 @@ $total_registros = count($ventas);
         .empty-state-ventas i { font-size: 60px; color: #ccc; margin-bottom: 20px; }
         .empty-state-ventas h3 { color: #293661; margin-bottom: 10px; }
         .empty-state-ventas p { color: #666; }
-
-        /* Estilo Botón Ver Más */
-        .contenedor-ver-mas { display: flex; justify-content: center; margin-top: 30px; width: 100%; }
-        .btn-ver-mas {
-            background-color: white; color: #293661; border: 2px solid #293661;
-            padding: 10px 40px; border-radius: 25px; font-family: 'Poppins'; font-weight: 600;
-            cursor: pointer; transition: 0.3s;
-        }
-        .btn-ver-mas:hover { background-color: #293661; color: white; }
-        
-        /* Ocultar botón borrar filtro por defecto */
-        .btn-borrar { display: none; }
-        .filtro-wrapper input:not(:placeholder-shown) ~ .btn-borrar,
-        .filtro-wrapper select:not([value=""]) ~ .btn-borrar { display: block; }
     </style>
 </head>
 <body>
     <div class="ListadoVentasAdmin">
-        <!-- Cabecera -->
         <header class="cabecera">
             <div class="container">
                 <div class="logo-main">
@@ -124,60 +104,68 @@ $total_registros = count($ventas);
                 <div class="log-out">
                     <a href="../Visitante/index.php">Cerrar Sesión</a>
                 </div>
-
             </div>
         </header>
 
-        
-        <!-- Título con filtros dentro -->
         <div class="titulo-section">
             <div class="degradado"></div>
             <div class="recuadro-fondo"></div>
             <h1 class="titulo-principal">Listado Ventas</h1>
 
-            <!-- Filtros -->
             <div class="filtros-en-titulo">
-                <!-- Filtro Fecha -->
+                
                 <div class="filtro-item">
-                    <label for="fecha">
-                        <span class="icon"><i class="far fa-calendar-alt" style="font-size:20px;"></i></span> Fecha
-                    </label>
-                    <div class="filtro-wrapper">
-                        <input type="date" id="filtro-fecha" value="<?php echo $filtro_fecha; ?>" onchange="aplicarFiltros()">
-                        <button type="button" class="btn-borrar" onclick="borrarFiltro('fecha')">&times;</button>
+                    <label for="filtro-fecha">Fecha de registro</label>
+                    <div class="filtro-wrapper" id="wrapper-fecha">
+                        <input type="date" id="filtro-fecha" value="<?php echo $filtro_fecha; ?>" onchange="checkInput('fecha'); aplicarFiltros()">
+                        
+                        <div class="input-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        </div>
+
+                        <button type="button" class="btn-borrar" onclick="borrarFiltro('fecha')">×</button>
                     </div>
                 </div>
 
-                <!-- Filtro Cliente -->
                 <div class="filtro-item">
-                    <label for="cliente">
-                        <span class="icon"><i class="far fa-user" style="font-size:20px;"></i></span> Cliente
-                    </label>
-                    <div class="filtro-wrapper">
-                        <input type="text" id="filtro-cliente" placeholder="Buscar..." value="<?php echo htmlspecialchars($filtro_cliente); ?>" onkeypress="checkEnter(event)">
-                        <button type="button" class="btn-borrar" onclick="borrarFiltro('cliente')">&times;</button>
+                    <label for="filtro-cliente">Nombre cliente</label>
+                    <div class="filtro-wrapper" id="wrapper-cliente">
+                        <input type="text" id="filtro-cliente" placeholder="Buscar..." 
+                               value="<?php echo htmlspecialchars($filtro_cliente); ?>" 
+                               autocomplete="off"
+                               oninput="checkInput('cliente'); mostrarSugerencias()" 
+                               onkeypress="checkEnter(event)">
+                        
+                        <div class="input-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        </div>
+
+                        <button type="button" class="btn-borrar" onclick="borrarFiltro('cliente')">×</button>
+
+                        <div id="sugerencias-cliente" class="lista-autocompletado"></div>
                     </div>
                 </div>
 
-                <!-- Filtro Producto (Categoría) -->
                 <div class="filtro-item">
-                    <label for="producto">
-                        <span class="icon"><i class="fas fa-list" style="font-size:20px;"></i></span> Categoría
-                    </label>
-                    <div class="filtro-wrapper">
-                        <select id="filtro-producto" onchange="aplicarFiltros()">
-                            <option value="">Todas</option>
-                            <option value="Ventanas" <?php if($filtro_producto == 'Ventanas') echo 'selected'; ?>>Ventanas</option>
-                            <option value="Puertas" <?php if($filtro_producto == 'Puertas') echo 'selected'; ?>>Puertas</option>
-                            <option value="Barandillas" <?php if($filtro_producto == 'Barandillas') echo 'selected'; ?>>Barandillas</option>
+                    <label for="producto">Categoría de productos</label>
+                    <div class="filtro-wrapper" id="wrapper-producto">
+                        <select id="producto" name="producto" onchange="checkInput('producto'); aplicarFiltros()"> 
+                            <option value="" selected>Todos</option>
+                            <option value="ventanas">Ventanas</option>
+                            <option value="puertas">Puertas</option>
                         </select>
-                        <button type="button" class="btn-borrar" onclick="borrarFiltro('producto')">&times;</button>
+                        
+                        <div class="input-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                        </div>
+
+                        <button type="button" class="btn-borrar" onclick="borrarFiltro('producto')">×</button>
                     </div>
                 </div>
+
             </div>
         </div>
 
-        <!-- Menú lateral y listado -->
         <div class="productos-layout">
             <button class="boton-menu-lateral">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" viewBox="0 0 24 24">
@@ -196,8 +184,6 @@ $total_registros = count($ventas);
                 <p class="header-tabla">Ventas Realizadas</p>
 
                 <?php if ($total_registros == 0): ?>
-                    
-                    <!-- ESTADO VACÍO -->
                     <div class="empty-state-ventas">
                         <i class="fas fa-shopping-cart"></i>
                         <h3>No hay ventas registradas</h3>
@@ -206,16 +192,11 @@ $total_registros = count($ventas);
                              <button onclick="borrarTodo()" style="margin-top:15px; background:#293661; color:white; padding:8px 15px; border:none; border-radius:5px; cursor:pointer;">Limpiar Filtros</button>
                         <?php endif; ?>
                     </div>
-
                 <?php else: ?>
 
                     <div id="lista-ventas">
                         <?php foreach ($ventas as $venta): ?>
-                            
-                            <!-- TARJETA VENTA -->
                             <div class="venta item-venta">
-                                
-                                <!-- Botón Borrar -->
                                 <form method="POST" action="" style="position: absolute; top: 10px; left: 10px;">
                                     <input type="hidden" name="id_eliminar" value="<?php echo $venta['id']; ?>">
                                     <button type="submit" class="boton-eliminar" title="Eliminar Venta" onclick="return confirm('¿Eliminar venta #<?php echo $venta['id']; ?>?');">✖</button>
@@ -228,25 +209,20 @@ $total_registros = count($ventas);
                                     <p><strong>Total:</strong> <?php echo number_format($venta['total'], 2); ?> €</p>
                                 </div>
                                 
-                                <!-- Enlace a detalles -->
                                 <a href="../Administrador/DetallesVentas.php?id=<?php echo $venta['id']; ?>" class="boton-detalles">
                                     <p>Ver detalles</p>
                                 </a>
                             </div>
-
                         <?php endforeach; ?>
                     </div>
 
-                    <!-- BOTÓN VER MÁS -->
                     <div class="contenedor-ver-mas">
                         <button id="btn-cargar-mas" class="btn-ver-mas">Ver más ventas</button>
                     </div>
-
                 <?php endif; ?>
             </div>
         </div>
 
-        <!-- Footer -->
         <footer class="footer">
             <div class="container">
                 <div class="footer-content">
@@ -256,116 +232,239 @@ $total_registros = count($ventas);
                         </div>
                         <div class="redes">
                             <a href="https://www.instagram.com/metalfulsansl/" target="_blank" class="instagram-link">
-                                <svg viewBox="0 0 24 24" fill="white">
-                                    <path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/>
-                                </svg>
+                                <svg viewBox="0 0 24 24" fill="white"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/></svg>
                             </a>
                         </div>
                     </div>
-
                     <div class="footer-links">
                         <div class="contacto-footer">
                             <h3>Contacto</h3>
                             <div class="contacto-item">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                                </svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                                 <a href="https://maps.google.com" target="_blank">Extrarradio Cortijo la Purisima, 2P, 18004 Granada</a>
                             </div>
                             <div class="contacto-item">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-                                </svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
                                 <a href="tel:652921960">652 921 960</a>
                             </div>
                             <div class="contacto-item">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                                </svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                                 <a href="mailto:metalfulsan@gmail.com">metalfulsan@gmail.com</a>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="footer-bottom">
                     <div class="politica-legal">
-                        <a href="#">Aviso Legal</a>
-                        <span>•</span>
-                        <a href="#">Política de Privacidad</a>
-                        <span>•</span>
-                        <a href="#">Política de Cookies</a>
+                        <a href="#">Aviso Legal</a> • <a href="#">Política de Privacidad</a> • <a href="#">Política de Cookies</a>
                     </div>
                 </div>
             </div>
         </footer>
     </div> 
     
-    <!-- SCRIPT PAGINACIÓN Y FILTROS -->
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Menú Lateral
-            const botonMenu = document.querySelector(".boton-menu-lateral");
-            const menuLateral = document.getElementById("menu-lateral");
-            if(botonMenu) {
-                botonMenu.addEventListener("click", () => menuLateral.classList.toggle("oculto"));
-            }
+        // ==========================================
+        // VARIABLES GLOBALES
+        // ==========================================
+        let datosVentas = []; 
+        let btnCargarElement = null;
+        let visibleCount = 5;
+        const loadStep = 5;
 
-            // Paginación
-            const items = document.querySelectorAll('.item-venta');
-            const btnCargar = document.getElementById('btn-cargar-mas');
-            const iniciales = 5; 
-            const porCarga = 5;
-            let visibles = iniciales;
+        // ==========================================
+        // 1. FUNCIONES VISUALES (ICONO/CRUZ)
+        // ==========================================
+        function checkInput(tipo) {
+            let input = document.getElementById('filtro-' + tipo);
+            let wrapper = document.getElementById('wrapper-' + tipo);
+            if (!input) input = document.getElementById(tipo); 
+            if (!wrapper && input) wrapper = document.getElementById('wrapper-' + tipo);
 
-            function actualizarVista() {
-                if (items.length === 0) return;
-                items.forEach((item, index) => {
-                    if (index < visibles) item.style.display = 'flex'; // Flex para mantener diseño tarjeta
-                    else item.style.display = 'none';
-                });
-                if (btnCargar) {
-                    btnCargar.style.display = (visibles >= items.length) ? 'none' : 'inline-block';
+            if (input && wrapper) {
+                if (input.value.trim() !== "") {
+                    wrapper.classList.add('con-valor');
+                } else {
+                    wrapper.classList.remove('con-valor');
                 }
             }
+        }
 
-            actualizarVista();
+        function borrarFiltro(tipo) {
+            let input = document.getElementById('filtro-' + tipo);
+            if (!input) input = document.getElementById(tipo);
 
-            if (btnCargar) {
-                btnCargar.addEventListener('click', function() {
-                    visibles += porCarga;
-                    actualizarVista();
+            if (input) {
+                input.value = '';
+                checkInput(tipo);
+                
+                if (tipo === 'cliente') {
+                    // Si borramos cliente, ocultamos sugerencias y restauramos lista
+                    document.getElementById('sugerencias-cliente').style.display = 'none';
+                    restaurarListadoCompleto(); 
+                } else {
+                    aplicarFiltros(); 
+                }
+            }
+        }
+
+        // ==========================================
+        // 2. LÓGICA DE AUTOCOMPLETADO
+        // ==========================================
+        function mostrarSugerencias() {
+            const input = document.getElementById('filtro-cliente');
+            const texto = input.value.toLowerCase().trim();
+            const contenedor = document.getElementById('sugerencias-cliente');
+            
+            contenedor.innerHTML = '';
+
+            if (texto.length === 0) {
+                contenedor.style.display = 'none';
+                restaurarListadoCompleto();
+                return;
+            }
+
+            const nombresVistos = new Set();
+            const coincidencias = datosVentas.filter(venta => {
+                const coincide = venta.nombreCliente.toLowerCase().includes(texto);
+                if (coincide && !nombresVistos.has(venta.nombreCliente)) {
+                    nombresVistos.add(venta.nombreCliente);
+                    return true;
+                }
+                return false;
+            });
+
+            if (coincidencias.length > 0) {
+                coincidencias.forEach(venta => {
+                    const div = document.createElement('div');
+                    div.classList.add('item-sugerencia');
+                    div.innerHTML = `<strong>${venta.nombreCliente}</strong>`;
+                    
+                    div.addEventListener('click', () => {
+                        seleccionarCliente(venta.nombreCliente);
+                    });
+                    
+                    contenedor.appendChild(div);
                 });
+                contenedor.style.display = 'block';
+            } else {
+                contenedor.style.display = 'none';
+            }
+        }
+
+        function seleccionarCliente(nombreCliente) {
+            const input = document.getElementById('filtro-cliente');
+            input.value = nombreCliente;
+            checkInput('cliente');
+
+            document.getElementById('sugerencias-cliente').style.display = 'none';
+
+            const todasLasVentas = document.querySelectorAll('.item-venta');
+            
+            todasLasVentas.forEach(div => {
+                const infoCliente = div.querySelector('.venta-info p:nth-child(2)').innerText;
+                if (infoCliente.includes(nombreCliente)) {
+                    div.style.display = 'flex';
+                } else {
+                    div.style.display = 'none';
+                }
+            });
+
+            if(btnCargarElement) btnCargarElement.style.display = 'none';
+        }
+
+        function restaurarListadoCompleto() {
+            const todasLasVentas = document.querySelectorAll('.item-venta');
+            todasLasVentas.forEach((div, index) => {
+                if (index < visibleCount) div.style.display = 'flex';
+                else div.style.display = 'none';
+            });
+
+            if(btnCargarElement) {
+                if (visibleCount >= todasLasVentas.length) btnCargarElement.style.display = 'none';
+                else btnCargarElement.style.display = 'flex';
+            }
+        }
+
+        document.addEventListener('click', function(e) {
+            const wrapper = document.getElementById('wrapper-cliente');
+            const lista = document.getElementById('sugerencias-cliente');
+            if (lista && !wrapper.contains(e.target)) {
+                lista.style.display = 'none';
             }
         });
 
-        // Funciones de Filtro
+        // ==========================================
+        // 3. INICIALIZACIÓN
+        // ==========================================
         function aplicarFiltros() {
             const fecha = document.getElementById('filtro-fecha').value;
-            const cliente = document.getElementById('filtro-cliente').value;
-            const producto = document.getElementById('filtro-producto').value;
-            
+            const producto = document.getElementById('producto').value;
+            const inputCliente = document.getElementById('filtro-cliente');
+            const cliente = inputCliente ? inputCliente.value : ''; 
+
             const url = new URL(window.location.href);
-            
             if (fecha) url.searchParams.set('fecha', fecha); else url.searchParams.delete('fecha');
-            if (cliente) url.searchParams.set('cliente', cliente); else url.searchParams.delete('cliente');
             if (producto) url.searchParams.set('producto', producto); else url.searchParams.delete('producto');
+            if (cliente) url.searchParams.set('cliente', cliente); else url.searchParams.delete('cliente');
 
             window.location.href = url.toString();
         }
 
         function checkEnter(event) {
-            if (event.key === "Enter") aplicarFiltros();
-        }
-
-        function borrarFiltro(tipo) {
-            document.getElementById('filtro-' + tipo).value = '';
-            aplicarFiltros();
+            if (event.key === "Enter") {
+                const texto = document.getElementById('filtro-cliente').value.toLowerCase();
+                document.getElementById('sugerencias-cliente').style.display = 'none';
+                
+                const todas = document.querySelectorAll('.item-venta');
+                todas.forEach(div => {
+                    if (div.innerText.toLowerCase().includes(texto)) div.style.display = 'flex';
+                    else div.style.display = 'none';
+                });
+                if(btnCargarElement) btnCargarElement.style.display = 'none';
+            }
         }
 
         function borrarTodo() {
             window.location.href = '../Administrador/ListadoVentasAdmin.php';
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            checkInput('fecha');
+            checkInput('cliente');
+            checkInput('producto');
+
+            const botonMenu = document.querySelector(".boton-menu-lateral");
+            const menuLateral = document.getElementById("menu-lateral");
+            if (botonMenu && menuLateral) {
+                botonMenu.addEventListener("click", () => menuLateral.classList.toggle("oculto"));
+            }
+
+            const itemsDOM = document.querySelectorAll('.item-venta');
+            btnCargarElement = document.getElementById('btn-cargar-mas');
+
+            itemsDOM.forEach(div => {
+                const pCliente = div.querySelector('.venta-info p:nth-child(2)');
+                let nombreLimpio = "Cliente Desconocido";
+                if (pCliente) {
+                    nombreLimpio = pCliente.innerText.replace('Cliente:', '').trim();
+                }
+                datosVentas.push({
+                    nombreCliente: nombreLimpio,
+                    elemento: div
+                });
+            });
+
+            restaurarListadoCompleto();
+
+            if (btnCargarElement) {
+                btnCargarElement.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    visibleCount += loadStep;
+                    restaurarListadoCompleto();
+                });
+            }
+        });
     </script>
 </body>
 </html>

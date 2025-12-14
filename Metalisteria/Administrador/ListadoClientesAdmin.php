@@ -92,56 +92,39 @@ $total_clientes = count($clientes);
             <!-- Filtros -->
             <div class="filtros-en-titulo">
                 
-                <!-- FILTRO FECHA -->
                 <div class="filtro-item">
-                    <label for="filtro-fecha">
-                        <span class="icon">
-                            <svg width="20" height="20" viewBox="0 0 40 40" fill="none"><path d="M33.3333 6.66675H6.66667C4.82572 6.66675 3.33334 8.15913 3.33334 10.0001V36.6667C3.33334 38.5077 4.82572 40.0001 6.66667 40.0001H33.3333C35.1743 40.0001 36.6667 38.5077 36.6667 36.6667V10.0001C36.6667 8.15913 35.1743 6.66675 33.3333 6.66675Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M26.6667 3.33325V9.99992" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.3333 3.33325V9.99992" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.33334 16.6667H36.6667" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </span>
-                        Fecha
-                    </label>
-                    <div class="filtro-wrapper">
-                        <!-- CORREGIDO: ID coincide con JS, onchange añadido, value añadido -->
-                        <input type="date" id="filtro-fecha" value="<?php echo $filtro_fecha; ?>" onchange="aplicarFiltros()">
-                        <!-- CORREGIDO: Button type="button" y evento onclick -->
-                        <button type="button" class="btn-borrar" onclick="borrarFiltro('fecha')">&times;</button>
+                    <label for="filtro-fecha">Fecha de registro</label>
+                    <div class="filtro-wrapper" id="wrapper-fecha">
+                        <input type="date" id="filtro-fecha" value="<?php echo $filtro_fecha; ?>" onchange="checkInput('fecha'); aplicarFiltros()">
+                        
+                        <div class="input-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        </div>
+
+                        <button type="button" class="btn-borrar" onclick="borrarFiltro('fecha')">×</button>
                     </div>
                 </div>
 
-                <!-- FILTRO CLIENTE -->
-                <div class="filtro-item">
-                    <label for="filtro-cliente">
-                        <span class="icon">
-                            <svg width="20" height="20" viewBox="0 0 40 40" fill="none"><path d="M33.3333 35V31.6667C33.3333 29.8986 32.631 28.2029 31.3807 26.9526C30.1305 25.7024 28.4348 25 26.6667 25H13.3333C11.5652 25 9.86953 25.7024 8.61929 26.9526C7.36905 28.2029 6.66667 29.8986 6.66667 31.6667V35" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 18.3333C23.6819 18.3333 26.6667 15.3486 26.6667 11.6667C26.6667 7.98477 23.6819 5 20 5C16.3181 5 13.3333 7.98477 13.3333 11.6667C13.3333 15.3486 16.3181 18.3333 20 18.3333Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </span>
-                        Cliente
-                    </label>
-                    <div class="filtro-wrapper">
-                        <!-- CORREGIDO: ID coincide con JS, onkeypress añadido, value añadido -->
-                        <input type="text" id="filtro-cliente" placeholder="Buscar..." value="<?php echo htmlspecialchars($filtro_cliente); ?>" onkeypress="checkEnter(event)">
-                        <button type="button" class="btn-borrar" onclick="borrarFiltro('cliente')">&times;</button>
-                    </div>
-                </div>
+                
 
                 <div class="filtro-item">
-                    <label for="producto">
-                        <span class="icon">
-                            <svg width="20" height="20" viewBox="0 0 45 45" fill="none"><path d="M37.5 15H15M37.5 22.5H15M37.5 30H15M7.5 15H7.51875M7.5 22.5H7.51875M7.5 30H7.51875" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </span>
-                        Producto
-                    </label>
-                    <div class="filtro-wrapper">
-                        <select id="producto" name="producto">
-                            <option value="" selected>Todos</option>
+                    <label for="producto">Categoría de productos</label>
+                    <div class="filtro-wrapper" id="wrapper-producto">
+                        <select id="producto" name="producto" onchange="checkInput('producto')"> <option value="" selected>Todos</option>
                             <option value="ventanas">Ventanas</option>
                             <option value="puertas">Puertas</option>
                         </select>
-                        <button type="button" class="btn-borrar">&times;</button>
+                        
+                        <div class="input-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                        </div>
+
+                        <button type="button" class="btn-borrar" onclick="borrarFiltro('producto')">×</button>
                     </div>
                 </div>
+
             </div>
         </div>
-
         <!-- Menú lateral y listado -->
         <div class="productos-layout">
             <button class="boton-menu-lateral">
@@ -271,99 +254,231 @@ $total_clientes = count($clientes);
         </footer>
     </div> 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // --- MENÚ LATERAL ---
-            const botonMenu = document.querySelector(".boton-menu-lateral");
-            const menuLateral = document.getElementById("menu-lateral");
+        // ==========================================
+        // VARIABLES GLOBALES
+        // ==========================================
+        let datosClientes = []; // Array limpio con info de clientes para buscar rápido
+        let btnCargarElement = null;
+        let visibleCount = 5;
+        const loadStep = 5;
 
-            if (botonMenu) {
-                botonMenu.addEventListener("click", function () {
-                    menuLateral.classList.toggle("oculto");
-                });
-            }
+        // ==========================================
+        // 1. FUNCIONES VISUALES (ICONO/CRUZ)
+        // ==========================================
+        function checkInput(tipo) {
+            let input = document.getElementById('filtro-' + tipo);
+            let wrapper = document.getElementById('wrapper-' + tipo);
+            if (!input) input = document.getElementById(tipo); // Fallback select
+            if (!wrapper && input) wrapper = document.getElementById('wrapper-' + tipo);
 
-            // --- LÓGICA DE PAGINACIÓN "VER MÁS" ---
-            const clientes = document.querySelectorAll('.item-cliente');
-            const btnCargar = document.getElementById('btn-cargar-mas');
-            
-            // Configuración
-            const iniciales = 5; 
-            const porCarga = 5;
-            let visiblesActuales = iniciales;
-
-            // Función para actualizar qué clientes se ven
-            function actualizarVistaClientes() {
-                let mostrados = 0;
-                let totalClientes = clientes.length;
-
-                clientes.forEach((cli, index) => {
-                    // Si el índice es menor que el límite actual, lo mostramos
-                    if (index < visiblesActuales) {
-                        cli.style.display = 'flex'; // Usamos flex porque tu CSS usa display:flex en .cliente
-                        mostrados++;
-                    } else {
-                        cli.style.display = 'none';
-                    }
-                });
-
-                // Controlar visibilidad del botón
-                if (btnCargar) {
-                    // Si el número actual visible es mayor o igual al total, ocultamos el botón
-                    if (visiblesActuales >= totalClientes) {
-                        btnCargar.style.display = 'none';
-                    } else {
-                        btnCargar.style.display = 'flex'; // O block
-                    }
+            if (input && wrapper) {
+                if (input.value.trim() !== "") {
+                    wrapper.classList.add('con-valor');
+                } else {
+                    wrapper.classList.remove('con-valor');
                 }
             }
+        }
 
-            // Evento click en el botón
-            if (btnCargar) {
-                btnCargar.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    visiblesActuales += porCarga; // Sumamos 5 más
-                    actualizarVistaClientes();
-                });
+        function borrarFiltro(tipo) {
+            let input = document.getElementById('filtro-' + tipo);
+            if (!input) input = document.getElementById(tipo);
+
+            if (input) {
+                input.value = '';
+                checkInput(tipo);
+                
+                if (tipo === 'cliente') {
+                    // Si borramos cliente, ocultamos sugerencias y restauramos la lista original
+                    document.getElementById('sugerencias-cliente').style.display = 'none';
+                    restaurarListadoCompleto(); 
+                } else if (tipo !== 'producto') {
+                    aplicarFiltros(); // Recargar si es fecha
+                }
+            }
+        }
+
+        // ==========================================
+        // 2. LÓGICA DE AUTOCOMPLETADO (LO NUEVO)
+        // ==========================================
+        
+        function mostrarSugerencias() {
+            const input = document.getElementById('filtro-cliente');
+            const texto = input.value.toLowerCase().trim();
+            const contenedor = document.getElementById('sugerencias-cliente');
+            
+            // Limpiar sugerencias previas
+            contenedor.innerHTML = '';
+
+            // Si no hay texto, ocultar lista y no hacer nada más (no filtramos abajo aún)
+            if (texto.length === 0) {
+                contenedor.style.display = 'none';
+                restaurarListadoCompleto(); // Opcional: si borras todo, vuelve al estado inicial
+                return;
             }
 
-            // Ejecutar al cargar la página para ocultar los sobrantes iniciales
-            if (clientes.length > 0) {
-                actualizarVistaClientes();
+            // Buscar coincidencias en nuestro array de memoria
+            const coincidencias = datosClientes.filter(cliente => 
+                cliente.busqueda.includes(texto)
+            );
+
+            if (coincidencias.length > 0) {
+                // Crear elementos de la lista
+                coincidencias.forEach(cliente => {
+                    const div = document.createElement('div');
+                    div.classList.add('item-sugerencia');
+                    // Mostramos Nombre y DNI en la sugerencia
+                    div.innerHTML = `<strong>${cliente.nombre}</strong> <span style="font-size:12px; color:#666">(${cliente.dni})</span>`;
+                    
+                    // Al hacer clic en una sugerencia...
+                    div.addEventListener('click', () => {
+                        seleccionarCliente(cliente);
+                    });
+                    
+                    contenedor.appendChild(div);
+                });
+                contenedor.style.display = 'block';
+            } else {
+                contenedor.style.display = 'none';
+            }
+        }
+
+        function seleccionarCliente(clienteData) {
+            // 1. Poner el nombre en el input
+            const input = document.getElementById('filtro-cliente');
+            input.value = clienteData.nombre; // O el nombre completo
+            checkInput('cliente'); // Asegurar que sale la X
+
+            // 2. Ocultar sugerencias
+            document.getElementById('sugerencias-cliente').style.display = 'none';
+
+            // 3. FILTRAR EL CUERPO (Ahora sí actualizamos abajo)
+            const todosLosDivs = document.querySelectorAll('.item-cliente');
+            
+            todosLosDivs.forEach(div => {
+                // Comparamos el ID único para no fallar con nombres duplicados
+                // Asumimos que el input hidden del form de eliminar tiene el ID
+                const idInput = div.querySelector('input[name="id_eliminar"]');
+                
+                if (idInput && idInput.value == clienteData.id) {
+                    div.style.display = 'flex';
+                } else {
+                    div.style.display = 'none';
+                }
+            });
+
+            // 4. Ocultar el botón "Ver más" porque ya estamos viendo uno específico
+            if(btnCargarElement) btnCargarElement.style.display = 'none';
+        }
+
+        // Función para volver a ver los 5 primeros si borramos la búsqueda
+        function restaurarListadoCompleto() {
+            const todosLosDivs = document.querySelectorAll('.item-cliente');
+            
+            // Volvemos a la lógica de paginación
+            todosLosDivs.forEach((div, index) => {
+                if (index < visibleCount) div.style.display = 'flex';
+                else div.style.display = 'none';
+            });
+
+            // Restaurar botón si hace falta
+            if(btnCargarElement) {
+                if (visibleCount >= todosLosDivs.length) btnCargarElement.style.display = 'none';
+                else btnCargarElement.style.display = 'flex';
+            }
+        }
+
+        // Cerrar autocompletado si clicamos fuera
+        document.addEventListener('click', function(e) {
+            const wrapper = document.getElementById('wrapper-cliente');
+            const lista = document.getElementById('sugerencias-cliente');
+            if (lista && !wrapper.contains(e.target)) {
+                lista.style.display = 'none';
             }
         });
 
-        // --- TUS FUNCIONES DE FILTRO PHP (Se mantienen igual) ---
+
+        // ==========================================
+        // 3. INICIALIZACIÓN Y OTRAS FUNCIONES
+        // ==========================================
+        
         function aplicarFiltros() {
+            // Filtro clásico de servidor (Fecha)
             const fecha = document.getElementById('filtro-fecha').value;
-            const cliente = document.getElementById('filtro-cliente').value;
             const url = new URL(window.location.href);
-            
             if (fecha) url.searchParams.set('fecha', fecha);
             else url.searchParams.delete('fecha');
-
-            if (cliente) url.searchParams.set('cliente', cliente);
-            else url.searchParams.delete('cliente');
-
+            // Nota: El cliente lo filtramos por JS, no recargamos
             window.location.href = url.toString();
         }
 
         function checkEnter(event) {
             if (event.key === "Enter") {
-                aplicarFiltros();
-            }
-        }
-
-        function borrarFiltro(tipo) {
-            const input = document.getElementById('filtro-' + tipo);
-            if(input) {
-                input.value = '';
-                aplicarFiltros();
+                // Si pulsa enter, aplicamos filtro de texto puro en el listado
+                const texto = document.getElementById('filtro-cliente').value.toLowerCase();
+                document.getElementById('sugerencias-cliente').style.display = 'none';
+                
+                // Filtrar abajo por texto genérico (no selección exacta)
+                const todos = document.querySelectorAll('.item-cliente');
+                todos.forEach(div => {
+                    if (div.innerText.toLowerCase().includes(texto)) div.style.display = 'flex';
+                    else div.style.display = 'none';
+                });
+                if(btnCargarElement) btnCargarElement.style.display = 'none';
             }
         }
 
         function borrarTodo() {
             window.location.href = '../Administrador/ListadoClientesAdmin.php';
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // 1. Inicializar Visuales
+            checkInput('fecha');
+            checkInput('cliente');
+            checkInput('producto');
+
+            // 2. Menú Lateral
+            const botonMenu = document.querySelector(".boton-menu-lateral");
+            const menuLateral = document.getElementById("menu-lateral");
+            if (botonMenu && menuLateral) {
+                botonMenu.addEventListener("click", () => menuLateral.classList.toggle("oculto"));
+            }
+
+            // 3. PREPARAR DATOS PARA AUTOCOMPLETADO
+            // Leemos el DOM para crear nuestro índice de búsqueda
+            const itemsDOM = document.querySelectorAll('.item-cliente');
+            btnCargarElement = document.getElementById('btn-cargar-mas');
+
+            itemsDOM.forEach(div => {
+                // Extraemos datos de cada tarjeta para buscar
+                const textoCompleto = div.innerText.toLowerCase(); // Todo el texto visible
+                // Sacamos el nombre "limpio" buscando el primer <p> o strong
+                // Esto es un aproximado, ajustamos buscando el strong del nombre
+                const nombreRaw = div.querySelector('.cliente-info p:nth-child(1)').innerText.replace('Nombre:', '').trim();
+                const dniRaw = div.querySelector('.cliente-info p:nth-child(4)').innerText.replace('DNI:', '').trim();
+                const idRaw = div.querySelector('input[name="id_eliminar"]').value;
+
+                datosClientes.push({
+                    id: idRaw,
+                    nombre: nombreRaw, // Para poner en el input al seleccionar
+                    dni: dniRaw,
+                    busqueda: textoCompleto // Para filtrar sucio
+                });
+            });
+
+            // 4. Inicializar Paginación "Ver Más"
+            restaurarListadoCompleto();
+
+            // Evento Botón
+            if (btnCargarElement) {
+                btnCargarElement.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    visibleCount += loadStep;
+                    restaurarListadoCompleto();
+                });
+            }
+        });
     </script>
 </body>
 </html>
