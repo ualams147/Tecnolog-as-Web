@@ -86,8 +86,7 @@ if (!$cliente) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modificar Cliente - Metalistería Fulsán</title>
-    <link rel="stylesheet" href="../css/stylesModificarDatosCliente.css">
-    <link rel="stylesheet" href="../css/CabeceraFooterAdmin.css">
+    <link rel="stylesheet" href="../css/administrador.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
@@ -134,7 +133,7 @@ if (!$cliente) {
 
         <div class="titulo-section">
             <div class="degradado"></div>
-            <div class="recuadro-fondo-titulo"></div> 
+            <div class="recuadro-fondo"></div> 
             <a href="../Administrador/ListadoClientesAdmin.php" class="flecha-circular">&#8592;</a>
             
             <h1 class="titulo-principal"><?php echo htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']); ?></h1>

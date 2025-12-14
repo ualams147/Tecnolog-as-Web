@@ -60,8 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/stylesCrearProductosAdmin.css">
-    <link rel="stylesheet" href="../css/CabeceraFooterAdmin.css">
+    <link rel="stylesheet" href="../css/administrador.css">
 </head>
 <body>
     <div class="CrearProductoAdmin">
@@ -93,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- Título -->
         <div class="titulo-section">
             <div class="degradado"></div>
-            <div class="recuadro-fondo-titulo"></div> 
+            <div class="recuadro-fondo"></div> 
             <a href="../Administrador/ListadoProductosAdmin.php" class="flecha-circular">&#8592;</a>
             <h1 class="titulo-principal">Nuevo Producto</h1>
         </div>
