@@ -329,8 +329,8 @@ if (isset($_SESSION['carrito'])) {
                                     <button type="button" class="qty-btn btn-mas">+</button>
                                 </div>
 
-                                <a href="productomedida.php" class="btn-personaliza-pill">
-                                    Personaliza este Producto
+                                <a href="productomedida.php?categoria=<?php echo $producto['id_categoria']; ?>" class="btn-personaliza-pill">
+                                    Personaliza producto
                                 </a>
                             </div>
                         </div>
