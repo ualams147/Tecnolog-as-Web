@@ -102,6 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="container main-container">
             
             <!-- FORMULARIO CONECTADO -->
+            <div id="mensaje-error-js" class="alerta-error" style="display: none;"></div>
             <form method="POST" enctype="multipart/form-data" class="product-card">
                 
                 <!-- Columna Imagen -->
@@ -148,8 +149,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="tamanos">Tamaños disponibles:</label>
-                        <input type="text" id="tamanos" name="tamanos" class="form-input">
+                        <label class="form-label">Tamaños disponibles:</label>
+                        
+                        <div id="tamanos-container" class="tamanos-container">
+                            </div>
+                        
+                        <div class="input-group-medidas">
+                            
+                            <div class="medida-input-wrapper">
+                                <input type="number" id="input-ancho" class="form-input input-corto" placeholder="Ancho" min="30">
+                                <span class="medida-label">cm</span>
+                            </div>
+
+                            <span class="separador-x">✕</span>
+
+                            <div class="medida-input-wrapper">
+                                <input type="number" id="input-alto" class="form-input input-corto" placeholder="Alto" min="30">
+                                <span class="medida-label">cm</span>
+                            </div>
+                            
+                            <button type="button" id="btn-add-tamano" class="btn-add-medida">
+                                Añadir
+                            </button>
+                        </div>
+
+                        <p class="nota-medidas">* La medida mínima es de 30 cm.</p>
+                        
+                        <input type="hidden" id="tamanos-final" name="tamanos" value="<?php echo htmlspecialchars($producto['medidas'] ?? ''); ?>">
                     </div>
 
                     <!-- DESPLEGABLE DE CATEGORÍAS -->
@@ -221,6 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
+        // 1. Previsualización de imagen
         function verImagen(event) {
             const input = event.target;
             if (input.files && input.files[0]) {
@@ -235,6 +262,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+            // --- 2. Lógica de Checkboxes (Colores) ---
             const checkboxes = document.querySelectorAll('input[name="colores"]');
             checkboxes.forEach(box => {
                 box.addEventListener('change', function() {
@@ -245,6 +273,100 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 });
             });
+
+            // --- 3. LÓGICA DE MEDIDAS (Corregida) ---
+            const tamanosContainer = document.getElementById('tamanos-container');
+            const inputAncho = document.getElementById('input-ancho');
+            const inputAlto = document.getElementById('input-alto');
+            const btnAdd = document.getElementById('btn-add-tamano');
+            const hiddenInput = document.getElementById('tamanos-final');
+            const errorDiv = document.getElementById('mensaje-error-js'); // Ahora sí lo encontrará
+
+            // Función crear etiqueta
+            function createTag(text) {
+                const tag = document.createElement('span');
+                tag.classList.add('tamano-chip');
+                tag.innerHTML = `${text} <span class="remove-tag">✕</span>`;
+                
+                tag.querySelector('.remove-tag').addEventListener('click', () => {
+                    tag.remove();
+                    updateHiddenInput();
+                });
+                tamanosContainer.appendChild(tag);
+            }
+
+            // Actualizar el input oculto
+            function updateHiddenInput() {
+                const tags = Array.from(tamanosContainer.querySelectorAll('.tamano-chip'))
+                                .map(t => t.innerText.replace('✕', '').trim());
+                hiddenInput.value = tags.join(', ');
+            }
+
+            // Funciones de Error
+            function mostrarError(mensaje) {
+                if(errorDiv) {
+                    errorDiv.textContent = mensaje;
+                    errorDiv.style.display = 'block';
+                    errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => { errorDiv.style.display = 'none'; }, 5000);
+                } else {
+                    alert(mensaje); // Fallback por si acaso
+                }
+            }
+
+            function ocultarError() {
+                if(errorDiv) errorDiv.style.display = 'none';
+            }
+
+            // Función Añadir Medida
+            function addMedida() {
+                const ancho = parseInt(inputAncho.value);
+                const alto = parseInt(inputAlto.value);
+
+                // Validaciones
+                if (isNaN(ancho) || isNaN(alto)) {
+                    mostrarError("⚠️ Por favor, introduce números válidos en Ancho y Alto.");
+                    return;
+                }
+                if (ancho < 30 || alto < 30) {
+                    mostrarError("⚠️ Las medidas no pueden ser menores de 30 cm.");
+                    return;
+                }
+
+                const nuevaMedida = `${ancho}x${alto}`;
+
+                // Comprobar duplicados
+                const actuales = hiddenInput.value.split(', ').map(t => t.trim());
+                if (actuales.includes(nuevaMedida)) {
+                    mostrarError("⚠️ Esta medida ya existe en la lista.");
+                    return;
+                }
+
+                // Todo OK
+                ocultarError();
+                createTag(nuevaMedida);
+                updateHiddenInput();
+                inputAncho.value = '';
+                inputAlto.value = '';
+                inputAncho.focus();
+            }
+
+            // Eventos
+            if(btnAdd) btnAdd.addEventListener('click', addMedida);
+            
+            if(inputAlto) {
+                inputAlto.addEventListener('keyup', (e) => {
+                    if (e.key === 'Enter') addMedida();
+                });
+            }
+
+            // Cargar datos iniciales (si hubiera al recargar por error PHP)
+            if (hiddenInput && hiddenInput.value) {
+                const existentes = hiddenInput.value.split(',');
+                existentes.forEach(medida => {
+                    if (medida.trim()) createTag(medida.trim());
+                });
+            }
         });
     </script>
 

@@ -249,16 +249,176 @@
         }
 
         /* Precio */
-        .price-wrapper {
+         .price-wrapper {
             position: relative;
         }
         .currency-symbol {
             position: absolute;
-            right: 15px;
+            right: 40px;
             top: 50%;
             transform: translateY(-50%);
             font-weight: 500;
             color: #666;
+        }
+
+        /* ======================================================= */
+        /* ESTILOS GESTOR DE TAMAÑOS (MEDIDAS)          */
+        /* ======================================================= */
+
+        /* --- 1. Contenedor visual de las etiquetas (arriba) --- */
+        .tamanos-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            min-height: 54px;
+            align-items: center;
+        }
+
+        /* --- 2. Las etiquetas individuales (Chips) --- */
+        .tamano-chip {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease, background-color 0.2s;
+            user-select: none;
+        }
+
+        .tamano-chip:hover {
+            transform: translateY(-2px);
+            background-color: var(--dark-blue);
+        }
+
+        .remove-tag {
+            margin-left: 10px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.25);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .remove-tag:hover {
+            background: rgba(255,255,255,1);
+            color: var(--primary-blue);
+        }
+
+        /* --- 3. Grupo de Inputs (Ancho x Alto + Botón) --- */
+        .input-group-medidas {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Espacio entre los bloques */
+            flex-wrap: wrap;
+        }
+
+        /* Wrapper para posicionar el texto "cm" */
+        .medida-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 140px; /* Ancho fijo */
+        }
+
+        /* Input numérico específico */
+        .form-input.input-corto {
+            width: 100%;
+            /* ⬇️ AQUÍ ESTÁ EL CAMBIO DEL ESPACIO: 50px de margen interno derecho */
+            padding-right: 50px; 
+            margin-bottom: 0;
+            height: 48px; /* Altura fija para cuadrar con botón */
+        }
+
+        /* Texto "cm" flotando a la derecha */
+        .medida-label {
+            position: absolute;
+            /* ⬇️ Ajustado para que no esté pegado al borde */
+            right: 15px; 
+            color: #888;
+            font-size: 14px;
+            font-weight: 500;
+            pointer-events: none;
+        }
+
+        /* La "X" decorativa entre inputs */
+        .separador-x {
+            font-weight: 700;
+            color: var(--primary-blue);
+            font-size: 18px;
+            user-select: none;
+        }
+
+        /* --- 4. Botón de Añadir (RECUPERADO) --- */
+        .btn-add-medida {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            height: 48px; /* Misma altura exacta que los inputs */
+            padding: 0 30px; /* Un poco más ancho para que se vea bien */
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-add-medida:hover {
+            background-color: var(--dark-blue);
+        }
+
+        .btn-add-medida:active {
+            transform: scale(0.98);
+        }
+
+        /* --- 5. Nota informativa pequeña (MODIFICADA) --- */
+        .nota-medidas {
+            font-size: 11px;  /* 👈 Aquí está el cambio: letra más pequeña */
+            color: #888;      /* Gris suave */
+            margin-top: 6px;  /* Un poco de espacio arriba */
+            margin-left: 2px; /* Alineado sutilmente */
+            font-style: Popins;
+            font-weight: 400;
+        }
+
+        /* --- Estilos para Mensajes de Alerta --- */
+        .alerta-error {
+            background-color: #f8d7da; /* Fondo rojo suave */
+            color: #721c24;            /* Texto rojo oscuro */
+            border: 1px solid #f5c6cb; /* Borde rojo sutil */
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            box-sizing: border-box;
+            animation: fadeIn 0.3s ease-in-out; /* Pequeña animación de entrada */
+        }
+
+        /* Animación opcional para que aparezca suavemente */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
        /* Botones de acción */
