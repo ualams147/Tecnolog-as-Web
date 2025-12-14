@@ -134,7 +134,7 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
             <!-- Botones de acción -->
             <div class="botones-finales">
                 <div class="boton-salir">
-                    <a href="../Administrador/ListadoVentasAdmin.php">Volver al listado</a>
+                    <a href="../Administrador/ListadoVentasAdmin.php">Salir</a>
                 </div>
                 <div class="boton-usuario">
                     <!-- Enlace dinámico al perfil del cliente -->

@@ -212,7 +212,7 @@ if (!$producto) {
                     <!-- Botones de acción DENTRO del formulario -->
                     <div class="botones-finales">
                         <div class="boton-salir">
-                            <a href="../Administrador/indexAdmin.php">Salir</a>
+                            <a href="../Administrador/ListadoProductosAdmin.php">Salir</a>
                         </div>
                         
                         <!-- El botón de guardar debe ser un <button> o <input submit> -->

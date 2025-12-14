@@ -1,3 +1,8 @@
+<?php
+// IMPORTANTE: Inicializar variables vacías para evitar errores en el value="" de los inputs
+$filtro_fecha = '';
+$filtro_cliente = '';
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -44,56 +49,56 @@
             <h1 class="titulo-principal">Resumen de ventas</h1>
             
             <div class="filtros-en-titulo">
-                <!-- Filtro Fecha -->
+                
                 <div class="filtro-item">
-                <label for="fecha">
-                    <span class="icon">
-                    <svg width="20" height="20" viewBox="0 0 40 40" fill="none">
-                        <path d="M33.3333 6.66675H6.66667C4.82572 6.66675 3.33334 8.15913 3.33334 10.0001V36.6667C3.33334 38.5077 4.82572 40.0001 6.66667 40.0001H33.3333C35.1743 40.0001 36.6667 38.5077 36.6667 36.6667V10.0001C36.6667 8.15913 35.1743 6.66675 33.3333 6.66675Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M26.6667 3.33325V9.99992" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M13.3333 3.33325V9.99992" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M3.33334 16.6667H36.6667" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    </span>
-                    Fecha
-                </label>
-                <input type="date" id="fecha" name="fecha" />
+                    <label for="filtro-fecha">Fecha de registro</label>
+                    <div class="filtro-wrapper" id="wrapper-fecha">
+                        <input type="date" id="filtro-fecha" value="<?php echo $filtro_fecha; ?>" onchange="checkInput('fecha'); aplicarFiltros()">
+                        
+                        <div class="input-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        </div>
+
+                        <button type="button" class="btn-borrar" onclick="borrarFiltro('fecha')">×</button>
+                    </div>
                 </div>
 
-                <!-- Filtro Cliente -->
                 <div class="filtro-item">
-                <label for="cliente">
-                    <span class="icon">
-                    <svg width="20" height="20" viewBox="0 0 40 40" fill="none">
-                        <path d="M33.3333 35V31.6667C33.3333 29.8986 32.631 28.2029 31.3807 26.9526C30.1305 25.7024 28.4348 25 26.6667 25H13.3333C11.5652 25 9.86953 25.7024 8.61929 26.9526C7.36905 28.2029 6.66667 29.8986 6.66667 31.6667V35" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M20 18.3333C23.6819 18.3333 26.6667 15.3486 26.6667 11.6667C26.6667 7.98477 23.6819 5 20 5C16.3181 5 13.3333 7.98477 13.3333 11.6667C13.3333 15.3486 16.3181 18.3333 20 18.3333Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    </span>
-                    Cliente
-                </label>
-                <select id="cliente" name="cliente">
-                    <option value="">Todos los clientes</option>
-                    <option value="cliente1">Cliente 1</option>
-                    <option value="cliente2">Cliente 2</option>
-                </select>
+                    <label for="filtro-cliente">Nombre cliente</label>
+                    <div class="filtro-wrapper" id="wrapper-cliente">
+                        <input type="text" id="filtro-cliente" placeholder="Buscar..." 
+                               value="<?php echo htmlspecialchars($filtro_cliente); ?>" 
+                               autocomplete="off"
+                               oninput="checkInput('cliente'); mostrarSugerencias()" 
+                               onkeypress="checkEnter(event)">
+                        
+                        <div class="input-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        </div>
+
+                        <button type="button" class="btn-borrar" onclick="borrarFiltro('cliente')">×</button>
+
+                        <div id="sugerencias-cliente" class="lista-autocompletado"></div>
+                    </div>
                 </div>
 
-                <!-- Filtro Producto -->
                 <div class="filtro-item">
-                <label for="producto">
-                    <span class="icon">
-                    <svg width="20" height="20" viewBox="0 0 45 45" fill="none">
-                        <path d="M37.5 15H15M37.5 22.5H15M37.5 30H15M7.5 15H7.51875M7.5 22.5H7.51875M7.5 30H7.51875" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    </span>
-                    Producto
-                </label>
-                <select id="producto" name="producto">
-                    <option value="">Todos los productos</option>
-                    <option value="ventanas">Ventanas</option>
-                    <option value="puertas">Puertas</option>
-                </select>
+                    <label for="producto">Categoría de productos</label>
+                    <div class="filtro-wrapper" id="wrapper-producto">
+                        <select id="producto" name="producto" onchange="checkInput('producto'); aplicarFiltros()"> 
+                            <option value="" selected>Todos</option>
+                            <option value="ventanas">Ventanas</option>
+                            <option value="puertas">Puertas</option>
+                        </select>
+                        
+                        <div class="input-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                        </div>
+
+                        <button type="button" class="btn-borrar" onclick="borrarFiltro('producto')">×</button>
+                    </div>
                 </div>
+
             </div>
         </div>
 
@@ -187,6 +192,248 @@
             </div>
         </footer>
     </div>
+    <script>
+        // ==========================================
+        // 1. VARIABLES GLOBALES
+        // ==========================================
+        let datosVentas = []; // Almacena los datos para el buscador rápido
+        let btnCargarElement = null;
+        let visibleCount = 5; // Cuántas se ven al principio
+        const loadStep = 5;   // Cuántas se suman al dar "Ver más"
 
+        // ==========================================
+        // 2. FUNCIONES VISUALES (ICONO VS CRUZ)
+        // ==========================================
+        function checkInput(tipo) {
+            let input = document.getElementById('filtro-' + tipo);
+            let wrapper = document.getElementById('wrapper-' + tipo);
+            
+            // Fallback por si el ID es diferente (ej. select producto)
+            if (!input) input = document.getElementById(tipo);
+            if (!wrapper && input) wrapper = document.getElementById('wrapper-' + tipo);
+
+            if (input && wrapper) {
+                if (input.value.trim() !== "") {
+                    wrapper.classList.add('con-valor'); // Muestra la X
+                } else {
+                    wrapper.classList.remove('con-valor'); // Muestra la Lupa/Icono
+                }
+            }
+        }
+
+        // ==========================================
+        // 3. LÓGICA DE BORRADO (BOTÓN X)
+        // ==========================================
+        function borrarFiltro(tipo) {
+            let input = document.getElementById('filtro-' + tipo);
+            if (!input) input = document.getElementById(tipo);
+
+            if (input) {
+                input.value = '';
+                checkInput(tipo); // Restaurar icono visualmente
+                
+                if (tipo === 'cliente') {
+                    // Si es cliente, limpiamos sugerencias y restauramos lista completa por JS
+                    document.getElementById('sugerencias-cliente').style.display = 'none';
+                    restaurarListadoCompleto(); 
+                } else {
+                    // Si es fecha o producto, recargamos la página (PHP)
+                    aplicarFiltros(); 
+                }
+            }
+        }
+
+        // ==========================================
+        // 4. LÓGICA DE AUTOCOMPLETADO (CLIENTE)
+        // ==========================================
+        function mostrarSugerencias() {
+            const input = document.getElementById('filtro-cliente');
+            const texto = input.value.toLowerCase().trim();
+            const contenedor = document.getElementById('sugerencias-cliente');
+            
+            contenedor.innerHTML = ''; // Limpiar lista anterior
+
+            // Si está vacío, ocultar lista y mostrar todo normal
+            if (texto.length === 0) {
+                contenedor.style.display = 'none';
+                restaurarListadoCompleto();
+                return;
+            }
+
+            // Buscar coincidencias en memoria (evitando duplicados)
+            const nombresVistos = new Set();
+            const coincidencias = datosVentas.filter(venta => {
+                const coincide = venta.nombreCliente.toLowerCase().includes(texto);
+                if (coincide && !nombresVistos.has(venta.nombreCliente)) {
+                    nombresVistos.add(venta.nombreCliente);
+                    return true;
+                }
+                return false;
+            });
+
+            // Dibujar sugerencias
+            if (coincidencias.length > 0) {
+                coincidencias.forEach(venta => {
+                    const div = document.createElement('div');
+                    div.classList.add('item-sugerencia');
+                    div.innerHTML = `<strong>${venta.nombreCliente}</strong>`;
+                    
+                    // Al hacer click, seleccionamos ese cliente
+                    div.addEventListener('click', () => {
+                        seleccionarCliente(venta.nombreCliente);
+                    });
+                    
+                    contenedor.appendChild(div);
+                });
+                contenedor.style.display = 'block';
+            } else {
+                contenedor.style.display = 'none';
+            }
+        }
+
+        function seleccionarCliente(nombreCliente) {
+            // 1. Poner valor en el input
+            const input = document.getElementById('filtro-cliente');
+            input.value = nombreCliente;
+            checkInput('cliente'); // Activar la X
+
+            // 2. Ocultar lista desplegable
+            document.getElementById('sugerencias-cliente').style.display = 'none';
+
+            // 3. Filtrar las tarjetas de abajo
+            const todasLasVentas = document.querySelectorAll('.item-venta');
+            
+            todasLasVentas.forEach(div => {
+                // Buscamos el nombre dentro de la tarjeta (2º párrafo)
+                const infoCliente = div.querySelector('.venta-info p:nth-child(2)').innerText;
+                
+                if (infoCliente.includes(nombreCliente)) {
+                    div.style.display = 'flex';
+                } else {
+                    div.style.display = 'none';
+                }
+            });
+
+            // Ocultar botón "Ver más" porque estamos filtrando
+            if(btnCargarElement) btnCargarElement.style.display = 'none';
+        }
+
+        // ==========================================
+        // 5. LÓGICA DE PAGINACIÓN (VER MÁS)
+        // ==========================================
+        function restaurarListadoCompleto() {
+            const todasLasVentas = document.querySelectorAll('.item-venta');
+            
+            todasLasVentas.forEach((div, index) => {
+                if (index < visibleCount) div.style.display = 'flex';
+                else div.style.display = 'none';
+            });
+
+            // Controlar visibilidad del botón "Ver más"
+            if(btnCargarElement) {
+                if (visibleCount >= todasLasVentas.length) {
+                    btnCargarElement.style.display = 'none';
+                } else {
+                    btnCargarElement.style.display = 'flex'; // o block
+                }
+            }
+        }
+
+        // ==========================================
+        // 6. FILTROS DE URL (PHP - FECHA/PRODUCTO)
+        // ==========================================
+        function aplicarFiltros() {
+            const fecha = document.getElementById('filtro-fecha').value;
+            const producto = document.getElementById('producto').value;
+            const inputCliente = document.getElementById('filtro-cliente');
+            const cliente = inputCliente ? inputCliente.value : ''; 
+
+            const url = new URL(window.location.href);
+            
+            // Actualizamos la URL sin borrar los otros parámetros
+            if (fecha) url.searchParams.set('fecha', fecha); else url.searchParams.delete('fecha');
+            if (producto) url.searchParams.set('producto', producto); else url.searchParams.delete('producto');
+            if (cliente) url.searchParams.set('cliente', cliente); else url.searchParams.delete('cliente');
+
+            window.location.href = url.toString();
+        }
+
+        function checkEnter(event) {
+            if (event.key === "Enter") {
+                // Búsqueda manual por texto
+                const texto = document.getElementById('filtro-cliente').value.toLowerCase();
+                document.getElementById('sugerencias-cliente').style.display = 'none';
+                
+                const todas = document.querySelectorAll('.item-venta');
+                todas.forEach(div => {
+                    if (div.innerText.toLowerCase().includes(texto)) div.style.display = 'flex';
+                    else div.style.display = 'none';
+                });
+                if(btnCargarElement) btnCargarElement.style.display = 'none';
+            }
+        }
+
+        function borrarTodo() {
+            window.location.href = '../Administrador/ListadoVentasAdmin.php';
+        }
+
+        // Cerrar autocompletado si se hace click fuera
+        document.addEventListener('click', function(e) {
+            const wrapper = document.getElementById('wrapper-cliente');
+            const lista = document.getElementById('sugerencias-cliente');
+            if (lista && !wrapper.contains(e.target)) {
+                lista.style.display = 'none';
+            }
+        });
+
+        // ==========================================
+        // 7. INICIALIZACIÓN AL CARGAR
+        // ==========================================
+        document.addEventListener("DOMContentLoaded", function () {
+            // A. Revisar si hay filtros aplicados para mostrar las X
+            checkInput('fecha');
+            checkInput('cliente');
+            checkInput('producto');
+
+            // B. Menú Lateral
+            const botonMenu = document.querySelector(".boton-menu-lateral");
+            const menuLateral = document.getElementById("menu-lateral");
+            if (botonMenu && menuLateral) {
+                botonMenu.addEventListener("click", () => menuLateral.classList.toggle("oculto"));
+            }
+
+            // C. Preparar datos para el buscador (Scraping del DOM)
+            const itemsDOM = document.querySelectorAll('.item-venta');
+            btnCargarElement = document.getElementById('btn-cargar-mas');
+
+            itemsDOM.forEach(div => {
+                // Extraemos el nombre del cliente de la tarjeta HTML
+                const pCliente = div.querySelector('.venta-info p:nth-child(2)');
+                let nombreLimpio = "Cliente Desconocido";
+                
+                if (pCliente) {
+                    // Quitamos la etiqueta "Cliente:" para guardar solo el nombre
+                    nombreLimpio = pCliente.innerText.replace('Cliente:', '').trim();
+                }
+
+                datosVentas.push({
+                    nombreCliente: nombreLimpio,
+                    elemento: div
+                });
+            });
+
+            // D. Ejecutar paginación inicial
+            restaurarListadoCompleto();
+
+            // E. Evento Botón Cargar Más
+            if (btnCargarElement) {
+                btnCargarElement.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    visibleCount += loadStep;
+                    restaurarListadoCompleto();
+                });
+            }
+        });
+    </script>
 </body>
 </html>
