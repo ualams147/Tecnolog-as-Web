@@ -2,7 +2,7 @@
 session_start();
 include '../conexion.php'; 
 
-// 1. CONSULTA: Traemos productos y también su categoría
+// 1. CONSULTA
 try {
     $sql = "SELECT * FROM productos WHERE id IN (SELECT MIN(id) FROM productos GROUP BY referencia)";
     $stmt = $conn->query($sql);
@@ -12,7 +12,6 @@ try {
     die();
 }
 
-// Lógica del contador del menú
 $total_items = 0;
 if (isset($_SESSION['carrito'])) {
     foreach ($_SESSION['carrito'] as $item) {
@@ -33,21 +32,13 @@ if (isset($_SESSION['carrito'])) {
     <link rel="stylesheet" href="../css/productos.css">
     
     <style>
-        /* Ocultamos productos por defecto */
         .item-producto { display: none; }
-        
-        /* Estilo para indicar qué filtros están activos */
         .cat-card.active .cat-frame {
             border: 3px solid #a0d2ac;
             box-shadow: 0 0 15px rgba(160, 210, 172, 0.6);
             transform: translateY(-5px);
         }
-        .cat-card.active .cat-name {
-            color: #a0d2ac;
-        }
-        
-        .hero-title { cursor: pointer; transition: opacity 0.2s; }
-        .hero-title:hover { opacity: 0.8; }
+        .cat-card.active .cat-name { color: #a0d2ac; }
     </style>
 </head>
 <body>
@@ -67,7 +58,7 @@ if (isset($_SESSION['carrito'])) {
 
                 <nav class="nav-bar">
                     <a href="conocenos.php">Conócenos</a>
-                    <a href="productos.php" class="activo">Productos</a>
+                    <span class="activo">Productos</span>
                     <a href="carrito.php">
                         Carrito 
                         <?php if($total_items > 0): ?>
@@ -113,12 +104,10 @@ if (isset($_SESSION['carrito'])) {
 
         <main class="catalogo-main container">
             
-         <div class="cta-medida-info" onclick="window.location.href='productomedida.php'">
-    <div class="cta-content">
-        <h2>Crea tu producto a Medida</h2>
-        <p>Diseñamos y fabricamos exactamente lo que necesitas</p>
-    </div>
-</div>
+            <div class="cta-medida-info">
+                <h2>CREA TU PRODUCTO A MEDIDA</h2>
+                <p>Selecciona un producto para personalizarlo a tu gusto</p>
+            </div>
 
             <div class="productos-grid" id="lista-productos">
                 
@@ -128,9 +117,11 @@ if (isset($_SESSION['carrito'])) {
                         <div class="prod-card-outer item-producto" data-categoria="<?php echo $producto['id_categoria']; ?>">
                             <div class="prod-card-inner">
                                 <div class="prod-img-box">
-                                    <img src="../<?php echo htmlspecialchars($producto['imagen_url']); ?>" 
-                                         alt="<?php echo htmlspecialchars($producto['nombre']); ?>"
-                                         onerror="this.src='https://via.placeholder.com/300x300?text=Sin+Imagen'">
+                                    <a href="infoProducto.php?id=<?php echo $producto['id']; ?>">
+                                        <img src="../<?php echo htmlspecialchars($producto['imagen_url']); ?>" 
+                                             alt="<?php echo htmlspecialchars($producto['nombre']); ?>"
+                                             onerror="this.src='https://via.placeholder.com/300x300?text=Sin+Imagen'">
+                                    </a>
                                 </div>
                                 <div class="prod-info">
                                     <h3><?php echo htmlspecialchars($producto['nombre']); ?></h3>
@@ -205,7 +196,9 @@ if (isset($_SESSION['carrito'])) {
     <script>
         let filtrosActivos = [];
         let iniciales = 9; 
-        let porCarga = 3;
+        
+        // CAMBIO: Ahora cargamos 6 de golpe (2 filas)
+        let porCarga = 6;
         let visiblesActuales = iniciales;
 
         document.addEventListener("DOMContentLoaded", function () {
