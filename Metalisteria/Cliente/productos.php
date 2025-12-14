@@ -268,6 +268,7 @@ if (isset($_SESSION['carrito'])) {
                     }
                 }
 
+                
                 if (cumpleFiltro) {
                     totalCoincidencias++;
                     if (mostradosAhora < visiblesActuales) {
