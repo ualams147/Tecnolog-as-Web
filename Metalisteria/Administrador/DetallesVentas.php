@@ -42,8 +42,7 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/stylesDetallesVentas.css">
-    <link rel="stylesheet" href="../css/CabeceraFooterAdmin.css">
+    <link rel="stylesheet" href="../css/administrador.css">
 </head>
 <body>
     <div class="DetallesVentas">
@@ -76,9 +75,8 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
         <!-- Título -->
         <div class="titulo-section">
             <div class="degradado"></div>
-            <div class="recuadro-fondo-titulo"></div> 
-            <a href="ListadoVentasAdmin.php" class="flecha-circular">&#8592;</a>
-            <!-- Mostramos el ID de la venta formateado -->
+            <div class="recuadro-fondo"></div> 
+            <a href="ListadoVentasAdmin.php" class="flecha-circular">←</a>
             <h1 class="titulo-principal">Venta #<?php echo str_pad($venta['id'], 4, '0', STR_PAD_LEFT); ?></h1>
         </div>
 
