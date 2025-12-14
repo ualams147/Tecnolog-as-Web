@@ -134,15 +134,10 @@ if (isset($_SESSION['carrito'])) {
                                 </div>
                                 <div class="prod-info">
                                     <h3><?php echo htmlspecialchars($producto['nombre']); ?></h3>
-                                    <p style="font-size: 0.85em; color: #666; margin-bottom: 5px;">
-                                        Ref: <?php echo htmlspecialchars($producto['referencia']); ?>
-                                    </p>
-
-                                    <p class="precio-label">Precio desde</p>
                                     
                                     <div class="prod-actions">
                                         <span class="precio-box"><?php echo number_format($producto['precio'], 2); ?>€</span>
-                                        <a href="infoProducto.php?id=<?php echo $producto['id']; ?>" class="btn-detalles">Ver Opciones</a>
+                                        <a href="infoProducto.php?id=<?php echo $producto['id']; ?>" class="btn-detalles">Ver Detalles</a>
                                     </div>
                                 </div>
                             </div>
