@@ -180,7 +180,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <!-- DESPLEGABLE DE CATEGORÍAS -->
                     <div class="form-group">
                         <label class="form-label" for="categoria">Categoría:</label>
-                        <select id="categoria" name="categoria" class="form-input" style="cursor: pointer;">
+                        <select id="categoria" name="categoria" class="form-input" style="cursor: pointer;" required>
+                            <option value="" selected disabled hidden>Selecciona una categoría</option>
+                            
                             <option value="1">Ventanas</option>
                             <option value="2">Balcones</option>
                             <option value="3">Rejas</option>
