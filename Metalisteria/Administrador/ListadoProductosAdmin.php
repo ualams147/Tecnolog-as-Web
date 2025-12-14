@@ -43,7 +43,7 @@ $total_productos = count($productos);
         <header class="cabecera">
             <div class="container">
                 <div class="logo-main">
-                    <a href="../Administrador/indexAdmin.php">
+                    <a href="../Administrador/indexAdmin.php" class="logo-main">
                         <img src="../imagenes/logo.png" alt="Logo Metalful">
                         <div class="logo-text">
                             <span> Metalisteria</span>

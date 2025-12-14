@@ -24,6 +24,7 @@
 
 .logo-main {
     flex-shrink: 0;
+    text-decoration: none;
     position: relative;
     display: flex;
     align-items: center;
