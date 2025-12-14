@@ -113,12 +113,12 @@ if (isset($_SESSION['carrito'])) {
 
         <main class="catalogo-main container">
             
-            <div class="cta-medida-info">
-                <div class="cta-content">
-                    <h2>Crea tu producto a Medida</h2>
-                    <p>Diseñamos y fabricamos exactamente lo que necesitas</p>
-                </div>
-            </div>
+         <div class="cta-medida-info" onclick="window.location.href='productomedida.php'">
+    <div class="cta-content">
+        <h2>Crea tu producto a Medida</h2>
+        <p>Diseñamos y fabricamos exactamente lo que necesitas</p>
+    </div>
+</div>
 
             <div class="productos-grid" id="lista-productos">
                 
