@@ -358,12 +358,22 @@
 .cards-grid {
     margin: 40px auto 120px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 288px)); /* Responsive automático */
-    justify-content: center;
+    /* Forzamos exactamente 2 columnas del tamaño que diseñaste */
+    grid-template-columns: repeat(2, 288px); 
+    justify-content: center; /* Centrado horizontal */
     gap: 80px;
     width: 100%;
     max-width: 1400px;
     padding: 0 20px;
+}
+
+/* IMPORTANTE: Añadir media query para móvil (1 columna) */
+@media (max-width: 768px) {
+    .cards-grid {
+        grid-template-columns: 1fr; /* En móvil, una sola columna */
+        justify-items: center; /* Centrar tarjetas */
+        gap: 40px;
+    }
 }
 
 .cards-grid a {
@@ -406,41 +416,141 @@
     margin: 0;
 }
 
-/* --- FILTROS PAGINA INICIO --- */
+/* =========================================
+   === FILTROS UNIFICADOS (CORREGIDOS) ===
+   ========================================= */
 
-.inicio-administrador .filtros-en-titulo {
-    bottom: 40px; 
-    width: 100%;
+/* Contenedor principal de los filtros */
+.filtros-en-titulo {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    z-index: 4; /* Encima del título */
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-.inicio-administrador .filtro-item label {
+/* Items individuales (Label + Input) */
+.filtro-item {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 6px;
-    font-weight: 600;
+    flex-direction: column;
     color: white;
 }
 
-.inicio-administrador .filtro-item input[type="date"],
-.inicio-administrador .filtro-item select {
-    padding: 8px 12px;
-    border: 2px solid white;
-    border-radius: 6px;
-    font-size: 16px;
-    font-family: 'Poppins', sans-serif;
-    background-color: white;
-    color: #293661;
-    box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
-    cursor: pointer;
-    width: 200px;
-    appearance: auto; /* Mantiene estilo nativo simple para el dashboard */
+.filtro-item label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    /* En listados a la izquierda, en dashboard se centrará con otra regla específica si hace falta */
 }
 
-.inicio-administrador .filtro-item input:hover,
-.inicio-administrador .filtro-item select:hover {
+/* Wrapper relativo para contener los iconos */
+.filtro-wrapper {
+    position: relative;
+    width: 220px;
+    height: 45px;
+}
+
+/* Estilos de los Inputs y Selects */
+.filtro-wrapper input,
+.filtro-wrapper select {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0 40px 0 15px; /* Espacio a la derecha para el icono */
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    color: #293661;
+    outline: none;
+    appearance: none; /* Quita estilos por defecto del navegador */
+    box-sizing: border-box;
+}
+
+.filtro-wrapper input:focus,
+.filtro-wrapper select:focus {
+    background: white;
     border-color: #a0d2ac;
+}
+
+/* --- POSICIONAMIENTO DE ICONOS (EL ARREGLO CLAVE) --- */
+.input-icon,
+.btn-borrar {
+    position: absolute;
+    top: 50%; /* Centrado vertical absoluto */
+    transform: translateY(-50%); /* Corrección exacta del centro */
+    transition: all 0.2s ease;
+}
+
+/* Icono (Lupa/Calendario) */
+.input-icon {
+    right: 12px;
+    color: #293661;
+    pointer-events: none; /* Permite hacer clic a través del icono */
+    z-index: 4;
+}
+
+/* Botón de borrar (X) */
+.btn-borrar {
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    background: none;
+    border: none;
+    color: #e74c3c;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- LÓGICA DE ESTADOS (Mostrar/Ocultar) --- */
+
+/* 1. Estado por defecto (Sin texto): Se ve el icono */
+.filtro-wrapper .input-icon {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(-50%) scale(1) !important;
+}
+
+.filtro-wrapper .btn-borrar {
+    display: none !important;
+}
+
+/* 2. Estado Con Valor (JS añade clase .con-valor): Se ve la X */
+.filtro-wrapper.con-valor .input-icon {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: translateY(-50%) scale(0.5) !important;
+}
+
+.filtro-wrapper.con-valor .btn-borrar {
+    display: flex !important;
+}
+
+/* Limpieza del icono nativo de calendario en Chrome */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+    z-index: 1;
 }
 
 /* --- RESPONSIVE ESPECÍFICO DASHBOARD --- */
@@ -871,7 +981,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: 230px;
     height: 40px;
     background: white;
-    border: 3px solid rgba(41, 54, 97, 0.71);
+    border: 2px solid #293661;
     border-radius: 40px;
     display: flex;
     align-items: center;
@@ -881,6 +991,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-size: 16px;
     font-weight: 500;
     color: #2b2b2b;
+    font-family: 'Poppins', sans-serif;
 }
 
 .btn-ver-mas:hover {
@@ -1428,7 +1539,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .boton-modificar button {
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
-    font-size: 22px;
+    font-size: 20px !important;
     color: white;
     text-decoration: none;
     margin: 0;
@@ -1436,6 +1547,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border: none;
     cursor: pointer;
 }
+
+
 
 /* --- RESPONSIVE ESPECÍFICO DE FORMULARIOS --- */
 @media (max-width: 768px) {
