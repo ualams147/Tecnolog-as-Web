@@ -354,7 +354,6 @@ if (isset($_SESSION['carrito'])) {
 
             // Desbloquear Paso 3
             document.getElementById('step-3').classList.remove('disabled');
-            abrirPaso(3);
             tituloPaso(2, 'Material: ' + matValue);
         }
     }
@@ -375,7 +374,6 @@ if (isset($_SESSION['carrito'])) {
                 const paso4 = document.getElementById('step-4');
                 if (paso4) {
                     paso4.classList.remove('disabled'); // Quita el candado visual
-                    abrirPaso(4);                       // Despliega el acordeón
                 }
                 // -----------------------------------------------
 
@@ -385,7 +383,7 @@ if (isset($_SESSION['carrito'])) {
 
             // Actualizar título del paso actual
             tituloPaso(3, 'Color: ' + val);
-        }
+    }
 
         // ======================================================
         // 3. FUNCIONES VISUALES (ACORDEÓN)
