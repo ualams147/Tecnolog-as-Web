@@ -112,7 +112,7 @@
 
                     <div class="material-item">
                         <div class="material-image">
-                            <img src="../imagenes/aceroGalvanizado.png" alt="Acero Galvanizado">
+                            <img src="../imagenes/AceroGalvanizado.png" alt="Acero Galvanizado">
                         </div>
                         <p class="material-label">Acero Galvanizado</p>
                     </div>
@@ -126,7 +126,7 @@
 
                     <div class="material-item">
                         <div class="material-image">
-                            <img src="../imagenes/hierro.png" alt="Hierro">
+                            <img src="../imagenes/Hierro.png" alt="Hierro">
                         </div>
                         <p class="material-label">Hierro</p>
                     </div>
