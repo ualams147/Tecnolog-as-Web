@@ -12,14 +12,13 @@ if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])) {
         $total_a_pagar += $item['precio'] * $item['cantidad'];
     }
 } else {
-    // Si el carrito está vacío por error, redirigimos al carrito para que no pague 0€
+    // Si el carrito está vacío por error, redirigimos al carrito
     header("Location: carrito.php");
     exit;
 }
 
-// Guardamos este total en la sesión para que Stripe lo pueda leer después
+// Guardamos este total en la sesión para que Stripe o el sistema de pedidos lo use
 $_SESSION['total_carrito'] = $total_a_pagar;
-
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -36,9 +35,13 @@ $_SESSION['total_carrito'] = $total_a_pagar;
     <style>
         /* Estilos de las opciones de pago y overlay */
         .payment-selection { margin-bottom: 30px; display: flex; flex-direction: column; gap: 15px; }
-        .payment-option { display: flex; align-items: center; gap: 15px; padding: 20px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; background: white; }
+        .payment-option { display: flex; flex-direction: column; padding: 20px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; background: white; }
         .payment-option:hover { border-color: #999; }
         .payment-option.selected { border-color: #293661; background-color: #f0f4ff; }
+        
+        /* Contenedor interno para alinear radio + texto */
+        .option-header { display: flex; align-items: center; gap: 15px; width: 100%; }
+        
         .option-content { display: flex; align-items: center; justify-content: space-between; width: 100%; }
         .option-title { font-weight: 700; font-size: 18px; color: #2b2b2b; }
         .option-desc { font-size: 14px; color: #666; display: block; margin-top: 4px; }
@@ -51,6 +54,7 @@ $_SESSION['total_carrito'] = $total_a_pagar;
         .processing-text { font-family: 'Poppins', sans-serif; font-size: 22px; font-weight: 600; color: #2b2b2b; margin-bottom: 10px; }
         .processing-subtext { font-family: 'Source Sans Pro', sans-serif; font-size: 16px; color: #666; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
         .hidden { display: none !important; }
     </style>
 </head>
@@ -106,25 +110,35 @@ $_SESSION['total_carrito'] = $total_a_pagar;
                     <div class="payment-selection">
                         
                         <label class="payment-option selected" onclick="selectOption(this)">
-                            <input type="radio" name="metodo_pago" value="stripe" checked>
-                            <div class="option-content">
-                                <div>
-                                    <span class="option-title">Tarjeta de Crédito / Débito</span>
-                                    <span class="option-desc">Plataforma segura Stripe (Visa, MC, Amex)</span>
+                            <div class="option-header">
+                                <input type="radio" name="metodo_pago" value="stripe" checked>
+                                <div class="option-content">
+                                    <div>
+                                        <span class="option-title">Tarjeta de Crédito / Débito</span>
+                                        <span class="option-desc">Plataforma segura Stripe (Visa, MC, Amex)</span>
+                                    </div>
+                                    <div class="card-icons">💳 🛡️</div>
                                 </div>
-                                <div class="card-icons">💳 🛡️</div>
                             </div>
                         </label>
 
                         <label class="payment-option" onclick="selectOption(this)">
-                            <input type="radio" name="metodo_pago" value="bizum">
-                            <div class="option-content">
-                                <div>
-                                    <span class="option-title">Bizum</span>
-                                    <span class="option-desc">Pago rápido y seguro desde tu móvil</span>
+                            <div class="option-header">
+                                <input type="radio" name="metodo_pago" value="bizum">
+                                <div class="option-content">
+                                    <div>
+                                        <span class="option-title">Bizum</span>
+                                        <span class="option-desc">Pago rápido y seguro desde tu móvil</span>
+                                    </div>
+                                    <div style="font-weight:800; color:#00bfd3;">bizum</div>
                                 </div>
-                                <div style="font-weight:800; color:#00bfd3;">bizum</div>
                             </div>
+
+                            <div id="bizum-input-container" class="hidden" style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; padding-left: 30px;">
+                                <label style="display:block; font-size: 14px; margin-bottom: 5px; font-weight:600;">Introduce tu nº de móvil:</label>
+                                <input type="tel" id="telefono_bizum" name="telefono_bizum" placeholder="Ej: 600 123 456" 
+                                       style="width: 100%; max-width: 300px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;"
+                                       onclick="event.stopPropagation();"> </div>
                         </label>
                     </div>
 
@@ -145,24 +159,6 @@ $_SESSION['total_carrito'] = $total_a_pagar;
                     <div class="footer-logo-section">
                         <div class="logo-footer"><img src="../imagenes/footer.png" alt="Logo Metalful"></div>
                     </div>
-                    <div class="footer-links">
-                        <div class="enlaces-rapidos">
-                            <h3>Enlaces rápidos</h3>
-                            <ul>
-                                <li><a href="conocenos.php">Conócenos</a></li>
-                                <li><a href="productos.php">Productos</a></li>
-                                <li><a href="IniciarSesion.php">Iniciar Sesión</a></li>
-                            </ul>
-                        </div>
-                        <div class="contacto-footer">
-                            <h3>Contacto</h3>
-                            <ul>
-                                <li><a href="#">Granada, España</a></li>
-                                <li><a href="tel:652921960">652 921 960</a></li>
-                                <li><a href="mailto:metalfulsan@gmail.com">metalfulsan@gmail.com</a></li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
             </div>
         </footer>
@@ -178,9 +174,27 @@ $_SESSION['total_carrito'] = $total_a_pagar;
 
     <script>
         function selectOption(label) {
+            // 1. Quitamos la clase 'selected' de todos
             document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
+            
+            // 2. Marcamos el seleccionado
             label.classList.add('selected');
-            label.querySelector('input').checked = true;
+            const radio = label.querySelector('input[type="radio"]');
+            radio.checked = true;
+
+            // 3. LOGICA PARA MOSTRAR/OCULTAR CAMPO BIZUM
+            const bizumContainer = document.getElementById('bizum-input-container');
+            
+            if (radio.value === 'bizum') {
+                bizumContainer.classList.remove('hidden');
+                // Hacemos foco en el input con un pequeño retraso
+                setTimeout(() => {
+                    const input = document.getElementById('telefono_bizum');
+                    if(input) input.focus();
+                }, 100);
+            } else {
+                bizumContainer.classList.add('hidden');
+            }
         }
 
         const form = document.getElementById('paymentForm');
@@ -192,19 +206,30 @@ $_SESSION['total_carrito'] = $total_a_pagar;
             const metodo = document.querySelector('input[name="metodo_pago"]:checked').value;
 
             if (metodo === 'stripe') {
-                // Ir a Stripe
+                // Opción 1: STRIPE
                 form.action = "procesar_pago_stripe.php";
                 overlay.querySelector('.processing-text').innerText = "Conectando con Stripe...";
                 overlay.classList.remove('hidden');
                 form.submit(); 
 
             } else {
-                // Ir a Bizum (Fake)
-                overlay.querySelector('.processing-text').innerText = "Redirigiendo a Bizum...";
+                // Opción 2: BIZUM
+                const movil = document.getElementById('telefono_bizum').value.trim();
+
+                // Validación simple: que haya escrito algo decente (al menos 9 dígitos)
+                if(movil.length < 9) {
+                    alert("⚠️ Por favor, introduce un número de móvil válido para Bizum.");
+                    // Volvemos a mostrar el campo por si acaso
+                    document.getElementById('bizum-input-container').classList.remove('hidden');
+                    return; // Paramos aquí, no seguimos
+                }
+
+                overlay.querySelector('.processing-text').innerText = "Conectando con Bizum...";
                 overlay.classList.remove('hidden');
                 
                 setTimeout(function(){
-                    window.location.href = "fake_bizum.php";
+                    // Enviamos el móvil por la URL para que fake_bizum.php lo pueda leer
+                    window.location.href = "fake_bizum.php?movil=" + encodeURIComponent(movil);
                 }, 1500);
             }
         });

@@ -1,12 +1,14 @@
 <?php
 // 1. CARGAMOS LIBRERÍAS
-// Ajusta la ruta si en tu host las carpetas son distintas
 require '../../../vendor/autoload.php'; 
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+
+// --- [COMENTADO PARA HOST GRATUITO] ---
+// use PHPMailer\PHPMailer\PHPMailer;
+// use PHPMailer\PHPMailer\Exception;
+// --------------------------------------
 
 session_start();
 include '../conexion.php'; 
@@ -19,7 +21,7 @@ $productos_compra = isset($_SESSION['carrito']) ? $_SESSION['carrito'] : [];
 $total_pagado = isset($_SESSION['total_carrito']) ? $_SESSION['total_carrito'] : 0;
 $usuario_id = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : 0;
 
-// DATOS DE RELLENO (Por si recargas la página)
+// DATOS FICTICIOS SI SE RECARGA LA PÁGINA
 if (empty($productos_compra)) {
     $productos_compra[] = [
         'nombre' => 'Producto de Prueba (Recarga)',
@@ -46,8 +48,6 @@ $fecha_pedido = date('d/m/Y H:i');
 // ====================================================
 // 3. GENERAR PDF (Dompdf)
 // ====================================================
-// NOTA: En hostings gratuitos, a veces '../imagenes' falla. 
-// Si no sale el logo, prueba a quitar esta parte o usar ruta absoluta.
 $pathLogo = '../imagenes/logo.png';
 $base64Logo = '';
 if (file_exists($pathLogo)) {
@@ -116,50 +116,45 @@ $dompdf = new Dompdf($options);
 $dompdf->loadHtml($html_factura);
 $dompdf->setPaper('A4', 'portrait');
 $dompdf->render();
+$pdfOutput = $dompdf->output(); 
 
-$pdfOutput = $dompdf->output(); // EL PDF BINARIO
-$pdfBase64 = base64_encode($pdfOutput); // PARA EL BOTÓN DE DESCARGA
+// --- TRUCO PARA EL BOTÓN DE DESCARGA ---
+$pdfBase64 = base64_encode($pdfOutput);
 
 
 // ====================================================
-// 4. ENVIAR EMAIL (CONTROLADO POR INTERRUPTOR)
+// 4. ENVIAR EMAIL (TODO ESTE BLOQUE ESTÁ COMENTADO)
 // ====================================================
+/* $mail = new PHPMailer(true);
 
-// --- [INTERRUPTOR] ---
-// true = Intenta enviar el correo (Para localhost o Host de Pago)
-// false = Salta el envío (Para Host Gratuito que bloquea puertos)
-$activar_envio_email = false; 
-// ---------------------
+try {
+    $mail->isSMTP();
+    $mail->Host       = 'smtp.gmail.com';
+    $mail->SMTPAuth   = true;
+    
+    // TUS DATOS DE ENVÍO
+    $mail->Username   = 'ams147@inlumine.ual.es'; 
+    $mail->Password   = 'ijqf gkvu jdzx rqsg';    
+    
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port       = 587;
 
-if ($activar_envio_email) {
-    $mail = new PHPMailer(true);
+    $mail->setFrom($mail->Username, 'Metalisteria Fulsan'); 
+    
+    $mail->addAddress('ams147@inlumine.ual.es', 'Cliente Prueba'); 
 
-    try {
-        $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com';
-        $mail->SMTPAuth   = true;
-        
-        // TUS DATOS
-        $mail->Username   = 'ams147@inlumine.ual.es'; 
-        $mail->Password   = 'ijqf gkvu jdzx rqsg';    
-        
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = 587; // Este puerto es el que bloquean los host gratuitos
+    $mail->isHTML(true);
+    $mail->Subject = "Factura Pedido $numero_pedido";
+    $mail->Body    = "Hola, gracias por tu compra. Adjuntamos tu factura.";
+    $mail->addStringAttachment($pdfOutput, "Factura_$numero_pedido.pdf");
 
-        $mail->setFrom($mail->Username, 'Metalisteria Fulsan'); 
-        $mail->addAddress('ams147@inlumine.ual.es', 'Cliente Prueba'); 
+    $mail->send();
 
-        $mail->isHTML(true);
-        $mail->Subject = "Factura Pedido $numero_pedido";
-        $mail->Body    = "Hola, gracias por tu compra. Adjuntamos tu factura.";
-        $mail->addStringAttachment($pdfOutput, "Factura_$numero_pedido.pdf");
-
-        $mail->send();
-
-    } catch (Exception $e) {
-        // Si falla aunque esté activo, no hacemos nada para no romper la página
-    }
+} catch (Exception $e) {
+    // Silencioso
 }
+*/
+// ====================================================
 
 unset($_SESSION['carrito']); 
 ?>
@@ -176,6 +171,7 @@ unset($_SESSION['carrito']);
         .factura-container { max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         .success-icon { font-size: 50px; color: #28a745; text-align: center; margin-bottom: 20px; }
         
+        /* Estilo para el botón de descargar */
         .btn-descargar {
             background-color: #666;
             color: white;
@@ -222,13 +218,8 @@ unset($_SESSION['carrito']);
             <div class="factura-container">
                 <div class="success-icon">✅</div>
                 <h1 style="text-align: center; color: #293661;">¡Gracias por tu compra!</h1>
-                <p style="text-align: center; color: #666;">
-                    <?php if($activar_envio_email): ?>
-                        Hemos enviado la factura a tu correo electrónico.
-                    <?php else: ?>
-                        Pedido registrado correctamente. Puedes descargar tu factura abajo.
-                    <?php endif; ?>
-                </p>
+                
+                <p style="text-align: center; color: #666;">Tu pedido ha sido registrado correctamente.</p>
 
                 <h3 style="border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 30px;">Resumen del Pedido</h3>
                 
