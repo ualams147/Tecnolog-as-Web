@@ -1,22 +1,20 @@
 <?php
-session_start();
+// 1. IMPORTANTE: Primero incluimos el archivo de funciones (que inicia la sesión)
+// Asegúrate de que el nombre del archivo es correcto (funciones.php o CabeceraFooter.php)
+include '../CabeceraFooter.php'; 
+
+// 2. Luego la conexión a la base de datos
 include '../conexion.php'; 
 
-// 1. CONSULTA
+// 3. LÓGICA DE PRODUCTOS
 try {
+    // Tu consulta para sacar un producto único por referencia
     $sql = "SELECT * FROM productos WHERE id IN (SELECT MIN(id) FROM productos GROUP BY referencia)";
     $stmt = $conn->query($sql);
     $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "Error al cargar productos: " . $e->getMessage();
     die();
-}
-
-$total_items = 0;
-if (isset($_SESSION['carrito'])) {
-    foreach ($_SESSION['carrito'] as $item) {
-        $total_items += $item['cantidad'];
-    }
 }
 ?>
 
@@ -55,37 +53,7 @@ if (isset($_SESSION['carrito'])) {
 <body>
     <div class="visitante-productos">
         
-        <header class="cabecera">
-            <div class="container">
-                <div class="logo-main">
-                    <a href="index.php" class="logo-link">
-                        <img src="../imagenes/logo.png" alt="Logo Metalful">
-                        <div class="logo-text">
-                            <span>Metalistería</span>
-                            <strong>Fulsan</strong>
-                        </div>
-                    </a>
-                </div>
-
-                <nav class="nav-bar">
-                    <a href="conocenos.php">Conócenos</a>
-                    <span class="activo">Productos</span>
-                    <a href="carrito.php">
-                        Carrito 
-                        <?php if($total_items > 0): ?>
-                            <span style="background: #e74c3c; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; position: relative; top: -2px;">
-                                <?php echo $total_items; ?>
-                            </span>
-                        <?php endif; ?>
-                    </a>
-                    <a href="IniciarSesion.php" id="link-login">Iniciar Sesión</a>
-                </nav>
-
-                <div class="sign-in" id="box-registro">
-                    <a href="registro.php" id="link-registro">Registrarse</a>
-                </div>
-            </div>
-        </header>
+        <?php sectionheader(3); ?>
 
         <section class="hero-productos">
             <h1 class="hero-title" onclick="filtrar('todos')" title="Clic para ver todos">Nuestros productos</h1>
@@ -162,17 +130,7 @@ if (isset($_SESSION['carrito'])) {
 
         </main>
 
-        <footer class="footer">
-            <div class="container">
-                <div class="footer-content">
-                    <div class="footer-logo-section">
-                        <div class="logo-footer"><img src="../imagenes/footer.png" alt="Logo Metalful"></div>
-                    </div>
-                </div>
-                <div class="footer-bottom">
-                     </div>
-            </div>
-        </footer>
+        <?php sectionfooter(); ?>
     </div>
     
     <script src="../js/auth.js"></script>

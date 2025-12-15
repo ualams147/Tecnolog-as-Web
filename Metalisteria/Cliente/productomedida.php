@@ -1,13 +1,15 @@
 <?php
-session_start();
+// 1. SIEMPRE PRIMERO: Funciones y Sesión
+include '../CabeceraFooter.php'; 
+
+// 2. CONEXIÓN A BD
 include '../conexion.php'; 
 
 // =================================================================================
-// 1. CARGA DE DATOS DINÁMICA (BASE DE DATOS RELACIONAL)
+// 3. CARGA DE DATOS DINÁMICA (BASE DE DATOS RELACIONAL)
 // =================================================================================
 try {
-    // Consulta SQL con JOINS para traer los NOMBRES en vez de los números
-    // Agrupamos para evitar duplicados masivos
+    // Consulta SQL con JOINS
     $sql = "SELECT 
                 c.id AS cat_id,
                 c.nombre AS categoria, 
@@ -22,44 +24,34 @@ try {
     $stmt = $conn->query($sql);
     $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Array principal para el JavaScript (Categoría -> Material -> Colores)
+    // Arrays para JavaScript
     $datos_dinamicos = [];
-    
-    // Array auxiliar para generar el primer <select> en HTML (Solo categorías)
     $lista_categorias = [];
-
-    // Array mapa para la auto-selección (ID -> Nombre exacto)
-    // Ej: [1 => "Ventanas", 5 => "Barandillas"]
     $mapa_ids_js = [];
 
     foreach ($resultados as $row) {
-        // Normalizamos nombres (quitar espacios extra y convertir a minúsculas para consistencia)
-        $cat = trim($row['categoria']); // Ej: "Ventanas"
-        $mat = trim($row['material']);  // Ej: "Aluminio"
-        $col = trim($row['color']);     // Ej: "Blanco"
+        $cat = trim($row['categoria']); 
+        $mat = trim($row['material']);  
+        $col = trim($row['color']);     
         $id  = $row['cat_id'];
 
-        // Clave en minúsculas para facilitar la búsqueda en JS
         $catKey = strtolower($cat);
 
-        // 1. Guardar categoría en la lista simple si no está
+        // 1. Lista simple de categorías
         if (!in_array($cat, $lista_categorias)) {
             $lista_categorias[] = $cat;
         }
 
-        // 2. Guardar en el mapa de IDs (para la auto-selección desde url)
-        // Guardamos el nombre tal cual sale en el select (value)
+        // 2. Mapa de IDs
         $mapa_ids_js[$id] = $catKey;
 
-        // 3. Construir el árbol de datos
-        // Usamos claves en minúsculas para evitar problemas de "Ventanas" vs "ventanas"
+        // 3. Árbol de datos
         if (!isset($datos_dinamicos[$catKey])) {
             $datos_dinamicos[$catKey] = [];
         }
         if (!isset($datos_dinamicos[$catKey][$mat])) {
             $datos_dinamicos[$catKey][$mat] = [];
         }
-        // Añadir color si no existe ya
         if (!in_array($col, $datos_dinamicos[$catKey][$mat])) {
             $datos_dinamicos[$catKey][$mat][] = $col;
         }
@@ -67,16 +59,10 @@ try {
 
 } catch (PDOException $e) {
     echo "Error al cargar datos: " . $e->getMessage();
-    $datos_dinamicos = []; // Evitar error en JS
+    $datos_dinamicos = []; 
 }
 
-// Lógica del carrito para el Header
-$total_items = 0;
-if (isset($_SESSION['carrito'])) {
-    foreach ($_SESSION['carrito'] as $item) {
-        $total_items += $item['cantidad'];
-    }
-}
+// NOTA: He borrado la lógica del contador del carrito porque sectionheader() ya lo hace.
 ?>
 
 <!DOCTYPE html>
@@ -93,35 +79,8 @@ if (isset($_SESSION['carrito'])) {
 </head>
 <body>
     <div class="page-wrapper">
-        <header class="cabecera">
-            <div class="container">
-                <div class="logo-main">
-                    <a href="index.php" class="logo-link">
-                        <img src="../imagenes/logo.png" alt="Logo Metalful">
-                        <div class="logo-text">
-                            <span>Metalistería</span>
-                            <strong>Fulsan</strong>
-                        </div>
-                    </a>
-                </div>
-                <nav class="nav-bar">
-                    <a href="conocenos.php">Conócenos</a>
-                    <a href="productos.php">Productos</a>
-                    <a href="carrito.php">
-                        Carrito 
-                        <?php if($total_items > 0): ?>
-                            <span style="background: #e74c3c; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; position: relative; top: -2px;">
-                                <?php echo $total_items; ?>
-                            </span>
-                        <?php endif; ?>
-                    </a>
-                    <a href="IniciarSesion.php" id="link-login">Iniciar Sesión</a>
-                </nav>
-                <div class="sign-in" id="box-registro">
-                    <a href="registro.php" id="link-registro">Registrarse</a>
-                </div>
-            </div>
-        </header>
+        
+        <?php sectionheader(3); ?>
 
         <section class="medida-hero">
             <div class="hero-container">
@@ -219,47 +178,7 @@ if (isset($_SESSION['carrito'])) {
             </div>
         </main>
 
-        <footer class="footer">
-            <div class="container">
-                <div class="footer-content">
-                    <div class="footer-logo-section">
-                        <div class="logo-footer"><img src="../imagenes/footer.png" alt="Logo Metalful"></div>
-                        <div class="redes">
-                            <a href="https://www.instagram.com/metalfulsansl/" target="_blank" class="instagram-link">
-                                <svg viewBox="0 0 24 24" fill="white"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/></svg>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="footer-links">
-                        <div class="enlaces-rapidos">
-                            <h3>Enlaces rápidos</h3>
-                            <ul>
-                                <li><a href="conocenos.php">Conócenos</a></li>
-                                <li><a href="productos.php">Productos</a></li>
-                                <li><a href="IniciarSesion.php">Iniciar Sesión</a></li>
-                            </ul>
-                        </div>
-                        <div class="contacto-footer">
-                            <h3>Contacto</h3>
-                            <ul>
-                                <li><a href="#">Extrarradio Cortijo la Purisima, 2P</a></li>
-                                <li><a href="tel:652921960">652 921 960</a></li>
-                                <li><a href="mailto:metalfulsan@gmail.com">metalfulsan@gmail.com</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="footer-bottom">
-                    <div class="politica-legal">
-                        <a href="../aviso-legal.php">Aviso Legal</a>
-                        <span>•</span>
-                        <a href="../privacidad.php">Política de Privacidad</a>
-                        <span>•</span>
-                        <a href="../cookies.php">Política de Cookies</a>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        <?php sectionfooter(); ?>
     </div>
 
     <script src="../js/auth.js"></script>

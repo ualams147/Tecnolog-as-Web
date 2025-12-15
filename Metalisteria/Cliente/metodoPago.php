@@ -1,5 +1,9 @@
 <?php
-session_start();
+// 1. PRIMERO LAS FUNCIONES (Inicia la sesión y carga los estilos)
+include '../CabeceraFooter.php'; 
+
+// 2. LUEGO LA CONEXIÓN (Por si necesitas guardar el pedido más tarde)
+include '../conexion.php';
 
 // =======================================================================
 // CALCULAR EL TOTAL REAL DEL CARRITO
@@ -17,9 +21,10 @@ if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])) {
     exit;
 }
 
-// Guardamos este total en la sesión para que Stripe o el sistema de pedidos lo use
+// Guardamos este total en la sesión
 $_SESSION['total_carrito'] = $total_a_pagar;
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -61,30 +66,7 @@ $_SESSION['total_carrito'] = $total_a_pagar;
 <body>
     <div class="visitante-conocenos">
         
-        <header class="cabecera">
-            <div class="container">
-                <div class="logo-main">
-                    <a href="index.php" class="logo-link">
-                        <img src="../imagenes/logo.png" alt="Logo Metalful">
-                        <div class="logo-text">
-                            <span>Metalistería</span>
-                            <strong>Fulsan</strong>
-                        </div>
-                    </a>
-                </div>
-
-                <nav class="nav-bar">
-                    <a href="conocenos.php">Conócenos</a>
-                    <a href="productos.php">Productos</a>
-                    <a href="carrito.php">Carrito</a>
-                    <a href="IniciarSesion.php" id="link-login">Iniciar Sesión</a>
-                </nav>
-
-                <div class="sign-in" id="box-registro">
-                    <a href="registro.php" id="link-registro">Registrarse</a>
-                </div>
-            </div>
-        </header>
+        <?php sectionheader(); ?>
 
         <section class="steps-section">
             <div class="container">
@@ -153,15 +135,7 @@ $_SESSION['total_carrito'] = $total_a_pagar;
             </div>
         </main>
         
-        <footer class="footer">
-            <div class="container">
-                <div class="footer-content">
-                    <div class="footer-logo-section">
-                        <div class="logo-footer"><img src="../imagenes/footer.png" alt="Logo Metalful"></div>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        <?php sectionfooter(); ?>
     </div>
     
     <div id="payment-overlay" class="hidden">
