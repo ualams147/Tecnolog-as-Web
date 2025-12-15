@@ -336,30 +336,27 @@ if (isset($_SESSION['carrito'])) {
                         </div>
 
 
-
                         <div class="selectors-container">
 
                             <div class="custom-select-wrapper">
-
                                 <label style="display:block; margin-bottom:5px; font-weight:600;">Color:</label>
+    
+                                <div style="display: flex; align-items: center; gap: 15px;">
+        
+                                    <select id="select-color" class="custom-select" style="flex: 1;">
+                                        <?php foreach ($colores_disponibles as $color): ?>
+                                            <option value="<?php echo $color; ?>" <?php echo ($color == $producto['color']) ? 'selected' : ''; ?>>
+                                                <?php echo ucfirst($color); ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
 
-                                <select id="select-color" class="custom-select">
-
-                                    <?php foreach ($colores_disponibles as $color): ?>
-
-                                        <option value="<?php echo $color; ?>" <?php echo ($color == $producto['color']) ? 'selected' : ''; ?>>
-
-                                            <?php echo ucfirst($color); ?>
-
-                                        </option>
-
-                                    <?php endforeach; ?>
-
-                                </select>
-
+                                    <img id="img-color-preview" 
+                                        src="" 
+                                        onerror="this.style.display='none'" 
+                                        style="width: 50px; height: 50px; object-fit: contain; border: 1px solid #ddd; border-radius: 5px; display: none;">
+                                </div>
                             </div>
-
-
 
                             <div class="custom-select-wrapper">
 
@@ -498,5 +495,29 @@ if (isset($_SESSION['carrito'])) {
     <script src="../js/infoProductos.js"></script>
 
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectColor = document.getElementById('select-color');
+        const imgPreview = document.getElementById('img-color-preview');
 
+        // Función que actualiza la imagen
+        function actualizarImagenColor() {
+            const val = selectColor.value;
+            if (val) {
+                // Usamos trim() por si acaso, pero respetamos tildes (Marrón)
+                // Ruta relativa: ../imagenes/colorNombre.png
+                imgPreview.src = '../imagenes/color' + val.trim() + '.png';
+                imgPreview.style.display = 'block';
+            } else {
+                imgPreview.style.display = 'none';
+            }
+        }
+
+        // 1. Ejecutar al cambiar la opción
+        selectColor.addEventListener('change', actualizarImagenColor);
+
+        // 2. Ejecutar al cargar la página (para mostrar el color inicial si lo hay)
+        actualizarImagenColor();
+    });
+</script>
 </html>
