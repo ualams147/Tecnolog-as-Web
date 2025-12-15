@@ -369,3 +369,34 @@ body {
     margin-right: 12px;
     vertical-align: middle;
 }
+
+/* ======================================================= */
+/* NUEVO: CONTENEDOR PARA IMAGEN AL LADO DEL SELECT        */
+/* ======================================================= */
+
+/* Contenedor que pone el select y la imagen en fila */
+.contenedor-material {
+    display: flex;
+    align-items: center; /* Los centra verticalmente */
+    gap: 20px;           /* Espacio entre el select y la foto */
+    width: 100%;
+}
+
+/* Forzamos al select a ocupar todo el espacio disponible menos el de la foto */
+.contenedor-material .custom-select {
+    flex: 1; 
+    width: auto; /* Reseteamos el width 100% original para que funcione el flex */
+}
+
+/* Estilo de la imagen de previsualización */
+#imgMaterialPreview {
+    width: 70px;         /* Tamaño de la foto */
+    height: 70px;
+    object-fit: contain; /* Ajusta la imagen sin recortarla */
+    display: none;       /* Empieza oculta */
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 5px;
+    background: white;
+    flex-shrink: 0;      /* Evita que la imagen se aplaste si la pantalla es pequeña */
+}
