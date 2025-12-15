@@ -160,25 +160,30 @@ if (isset($_SESSION['carrito'])) {
                         <h3 class="step-title">2. Elige el Material:</h3>
                         <svg class="step-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                     </div>
-                    <div class="step-content">
-                        <select id="select-material" class="custom-select" onchange="materialSeleccionado()">
+                    <div class="step-content" style="display: flex; align-items: center; gap: 15px;">
+                        <select id="select-material" class="custom-select" onchange="materialSeleccionado()" style="flex: 1; width: auto;">
                             <option value="" disabled selected>Primero selecciona producto...</option>
                         </select>
+    
+                        <img id="img-material" src="" style="width: 60px; height: 60px; object-fit: contain; border: 1px solid #ddd; border-radius: 5px; display: none;">
                     </div>
                 </div>
 
                 <div class="step-item disabled" id="step-3">
                     <div class="step-header" onclick="toggleStep(3)">
-                        <h3 class="step-title">3. Elige el Color:</h3>
-                        <svg class="step-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                    </div>
-                    <div class="step-content">
-                        <select id="select-color" class="custom-select" onchange="colorSeleccionado()">
-                            <option value="" disabled selected>Primero selecciona material...</option>
-                        </select>
-                    </div>
+                    <h3 class="step-title">3. Elige el Color:</h3>
+                    <svg class="step-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                 </div>
 
+            <div class="step-content" style="display: flex; align-items: center; gap: 15px;">
+                <select id="select-color" class="custom-select" onchange="colorSeleccionado()" style="flex: 1; width: auto;">
+                    <option value="" disabled selected>Primero selecciona material...</option>
+                </select>
+        
+                <img id="img-color" src="" onerror="this.style.display='none'" style="width: 60px; height: 60px; object-fit: contain; border: 1px solid #ddd; border-radius: 5px; display: none;">
+            </div>
+        </div> 
+         
                 <div class="step-item disabled" id="step-4">
                     <div class="step-header" onclick="toggleStep(4)">
                         <h3 class="step-title">4. Tamaño del Producto:</h3>
@@ -280,28 +285,34 @@ if (isset($_SESSION['carrito'])) {
             const colorSelect = document.getElementById('select-color');
             const prodValue = prodSelect.value;
 
+            // --- NUEVO: Si cambias de producto, ocultamos las fotos anteriores ---
+            const imgMat = document.getElementById('img-material');
+            const imgColor = document.getElementById('img-color');
+
+            if (imgMat) imgMat.style.display = 'none';
+            if (imgColor) imgColor.style.display = 'none';
+            // ---------------------------------------------------------------------
+
             // 1. Limpiar siguientes pasos
             matSelect.innerHTML = '<option value="" disabled selected>Selecciona un material...</option>';
             colorSelect.innerHTML = '<option value="" disabled selected>Primero selecciona material...</option>';
-            
+
             document.getElementById('step-3').classList.add('disabled');
             document.getElementById('step-3').classList.remove('active');
-            
+
             // 2. Comprobar si hay datos para esa categoría
             if (prodValue && datosDB[prodValue]) {
                 const materiales = Object.keys(datosDB[prodValue]);
-
                 if (materiales.length > 0) {
-                    materiales.forEach(mat => {
-                        const option = document.createElement('option');
-                        option.value = mat;
-                        option.textContent = mat;
-                        matSelect.appendChild(option);
-                    });
-                } else {
+                materiales.forEach(mat => {
+                    const option = document.createElement('option');
+                    option.value = mat;
+                    option.textContent = mat;
+                    matSelect.appendChild(option);
+                });
+                 } else {
                     matSelect.innerHTML = '<option>No hay materiales disponibles</option>';
                 }
-
                 // Desbloquear Paso 2
                 document.getElementById('step-2').classList.remove('disabled');
                 abrirPaso(2);
@@ -314,35 +325,66 @@ if (isset($_SESSION['carrito'])) {
             const matSelect = document.getElementById('select-material');
             const colorSelect = document.getElementById('select-color');
             const matValue = matSelect.value;
-
+            const imgMat = document.getElementById('img-material');
+            
+            if (imgMat) {
+                if (matValue) {
+                    const nombre = matValue.toLowerCase().trim();
+                    if (nombre === 'aluminio' || nombre === 'pvc') {
+                        imgMat.src = '../imagenes/' + nombre + '.png';
+                        imgMat.style.display = 'block'; // Al aparecer, el select se hace pequeño automáticamente
+                    }   else {
+                        imgMat.style.display = 'none';  // Si es otro material, ocultamos foto y el select crece
+                    }
+                } else {
+                    imgMat.style.display = 'none';
+                }
+            }
             // 1. Limpiar colores
             colorSelect.innerHTML = '<option value="" disabled selected>Selecciona un color...</option>';
-
             // 2. Buscar colores en el array
             if (prodValue && matValue && datosDB[prodValue][matValue]) {
                 const colores = datosDB[prodValue][matValue];
-                
                 colores.forEach(col => {
                     const option = document.createElement('option');
                     option.value = col;
                     option.textContent = col;
                     colorSelect.appendChild(option);
-                });
+            });
 
-                // Desbloquear Paso 3
-                document.getElementById('step-3').classList.remove('disabled');
-                abrirPaso(3);
-                tituloPaso(2, 'Material: ' + matValue);
-            }
+            // Desbloquear Paso 3
+            document.getElementById('step-3').classList.remove('disabled');
+            abrirPaso(3);
+            tituloPaso(2, 'Material: ' + matValue);
         }
+    }
 
         function colorSeleccionado() {
-            const colorVal = document.getElementById('select-color').value;
-            if (colorVal) {
-                document.getElementById('step-4').classList.remove('disabled');
-                abrirPaso(4);
-                tituloPaso(3, 'Color: ' + colorVal);
+            const colorSelect = document.getElementById('select-color');
+            const imgColor = document.getElementById('img-color');
+            const val = colorSelect.value; 
+
+            if (val) {
+             // 1. Lógica de la imagen (mantiene lo que ya funcionaba)
+                let nombreLimpio = val.trim(); 
+                imgColor.src = '../imagenes/color' + nombreLimpio + '.png';
+                imgColor.style.display = 'block';
+
+                // 2. --- ESTO ES LO QUE FALTABA: ABRIR PASO 4 ---
+                // Buscamos el paso 4 y lo desbloqueamos
+                const paso4 = document.getElementById('step-4');
+                if (paso4) {
+                    paso4.classList.remove('disabled'); // Quita el candado visual
+                    abrirPaso(4);                       // Despliega el acordeón
+                }
+                // -----------------------------------------------
+
+            } else {
+                imgColor.style.display = 'none';
             }
+
+            // Actualizar título del paso actual
+            tituloPaso(3, 'Color: ' + val);
         }
 
         // ======================================================
