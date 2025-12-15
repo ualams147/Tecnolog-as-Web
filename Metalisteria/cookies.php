@@ -50,7 +50,6 @@
                     <h2>2. Tipos de Cookies que utilizamos</h2>
                     <ul>
                         <li><strong>Cookies técnicas:</strong> Son necesarias para el correcto funcionamiento de la web (ej. mantener la sesión o el carrito de compra).</li>
-                        <li><strong>Cookies de análisis:</strong> Nos permiten cuantificar el número de usuarios y realizar análisis estadísticos de la utilización que hacen los usuarios del servicio.</li>
                     </ul>
 
                     <h2>3. Gestión de Cookies</h2>
