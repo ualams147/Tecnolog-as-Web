@@ -157,6 +157,8 @@ input[type="date"]::-webkit-calendar-picker-indicator { background: transparent;
 .item-sugerencia { padding: 12px 15px; cursor: pointer; font-size: 14px; color: #2b2b2b; border-bottom: 1px solid #f0f0f0; }
 .item-sugerencia:hover { background-color: #f0f4ff; color: #293661; }
 
+
+
 /* --- ESTRUCTURA CUERPO Y MENÚ --- */
 .productos-layout {
     display: flex; gap: 40px; width: 90%; max-width: 1200px;
@@ -280,33 +282,64 @@ input[type="date"]::-webkit-calendar-picker-indicator { background: transparent;
 .footer-bottom { padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.2); }
 .politica-legal { display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
 
-/* =========================================================
-   ESTILOS ESPECÍFICOS: DASHBOARD / INICIO
-   ========================================================= */
-.inicio-administrador { display: flex; flex-direction: column; min-height: 100vh; }
+/* =========================================
+   SECCIÓN DE ESTADÍSTICAS Y GRÁFICAS
+   ========================================= */
 
-.diagrama-section { position: relative; margin: 40px auto 0; width: 100%; max-width: 1063px; padding: 0 20px; }
+/* Título de la sección */
+.titulo-estadisticas {
+    font-family: 'Poppins', sans-serif;
+    color: #293661;      /* Azul corporativo */
+    text-align: center;
+    font-weight: 700;
+    font-size: 30px;
+    margin-bottom: 30px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+/* Contenedor principal de la sección */
+.diagrama-section { 
+    position: relative; 
+    margin: 40px auto 0; 
+    width: 100%; 
+    max-width: 1400px; /* Ancho amplio para que quepan las dos */
+    padding: 0 40px; 
+}
+
+/* Rejilla (Grid) para las 2 gráficas */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Izquierda grande, derecha pequeña */
+    gap: 20px;
+    width: 100%;
+}
+
+/* Estilo de la caja blanca de cada gráfica */
 .grafica-container {
     position: relative; 
     width: 100%; 
-    height: 375px; 
-    background: #f4f4f4; 
-    border-radius: 12px;
-    padding: 15px;
+    height: 400px; 
+    background: white;        /* Fondo blanco limpio */
+    border-radius: 20px;      /* Bordes redondeados */
+    padding: 20px;
     display: flex; 
     align-items: center; 
     justify-content: center; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Sombra suave */
+    border: 1px solid #eee;
+    font-family: 'Poppins', sans-serif;
     overflow: hidden;
 }
 
-.grafica-image { width: 80%; max-width: 519px; height: auto; object-fit: cover; }
-.grafica-title { position: absolute; bottom: 20px; left: 0; right: 0; text-align: center; font-weight: 600; font-size: 25px; color: black; }
+
 
 .cards-grid {
     margin: 40px auto 120px; display: grid; grid-template-columns: repeat(2, 288px);
     justify-content: center; gap: 80px; width: 100%; max-width: 1400px; padding: 0 20px;
 }
 .cards-grid a { text-decoration: none; color: inherit; }
+
 .card {
     width: 100%; height: 182px; background: #a0d2ac; border-radius: 20px; border: 2px solid #a0d2ac;
     box-shadow: 0px 4px 4px rgba(0,0,0,0.25); display: flex; flex-direction: column;
@@ -314,7 +347,11 @@ input[type="date"]::-webkit-calendar-picker-indicator { background: transparent;
 }
 .card:hover { transform: translateY(-5px); box-shadow: 0px 10px 20px rgba(0,0,0,0.15); }
 .card-icon { height: 70px; width: auto; object-fit: contain; margin-bottom: 10px; }
-.card h3 { font-weight: 700; font-size: 22px; color: black; margin: 0; }
+
+.card h3 { 
+    font-weight: 700; font-size: 22px; color: black; margin: 0;
+    font-family: 'Poppins', sans-serif; /* AÑADIDO para asegurar */
+}
 
 .inicio-administrador .filtros-en-titulo { bottom: 40px; width: 100%; }
 .inicio-administrador .filtro-item label { justify-content: center; }
@@ -454,12 +491,19 @@ input[type="date"]::-webkit-calendar-picker-indicator { background: transparent;
     font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 22px !important; color: white; text-decoration: none; margin: 0; background: none; border: none; cursor: pointer; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; outline: none;
 }
 
-/* =========================================
-   FIX ALINEACIÓN FORMULARIOS (LABELS)
-   ========================================= */
-/* =========================================
-   FIX ALINEACIÓN (SOLO ESPACIO)
-   ========================================= */
+
+/* --- ESTILOS PERSONALIZADOS PARA SWEETALERT2 --- */
+.swal2-popup {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+/* Opcional: Si quieres ajustar el peso de la fuente de los botones */
+.swal2-confirm, .swal2-cancel {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important; /* O 600 si los quieres más gruesos */
+    font-size: 15px !important;
+}
+
     .form-group label {
         /* 1. Mantiene los inputs alineados (reserva hueco de 2 líneas) */
         min-height: 52px; 
@@ -644,8 +688,29 @@ input[type="date"]::-webkit-calendar-picker-indicator { background: transparent;
     .boton-anadir-nuevo:hover { background: #293661 !important; }
     .boton-anadir-nuevo:hover p { color: white !important; }
 
-    /* Grid Inicio */
-    .cards-grid { grid-template-columns: 1fr !important; gap: 40px; justify-items: center; }
+    /* Grid Inicio: 2 columnas para formar el cuadrado */
+    .cards-grid { 
+        grid-template-columns: repeat(2, 1fr) !important; /* FORZAMOS 2 COLUMNAS */
+        gap: 15px;       /* Reducimos el hueco para que quepan bien */
+        padding: 0 10px; /* Un poco de margen a los lados */
+        justify-items: center; /* Que se estiren para ocupar el hueco */
+    }
+
+    /* AJUSTE TARJETAS MÓVIL (Para que quepan en 2 columnas) */
+    .card {
+        height: 115px;   /* Un poco más bajitas que en PC */
+        width: 100%;     /* Que ocupen todo el ancho de su columna */
+        padding: 10px;
+    }
+    
+    .card-icon {
+        height: 50px;    /* Icono un poco más pequeño */
+        margin-bottom: 5px;
+    }
+
+    .card h3 {
+        font-size: 16px; /* Texto ajustado para que no se salga */
+    }
     
     /* Listados */
     .cuadro-fondo { padding: 20px; }
@@ -702,8 +767,20 @@ input[type="date"]::-webkit-calendar-picker-indicator { background: transparent;
     }
     
     /* Formularios */
-    .formulario-cliente { grid-template-columns: 1fr; }
-    .form-group.full-width { grid-column: span 1; }
+    /* 1. Definimos una sola columna para todo el formulario */
+    .formulario-cliente { 
+        display: grid;
+        grid-template-columns: 1fr !important; 
+    }
+
+    /* 2. CORRECCIÓN: Le decimos a los campos anchos que NO ocupen 2, sino todo el ancho disponible (1 / -1) */
+    .full-width, 
+    .form-group.full-width { 
+        grid-column: 1 / -1 !important; /* Ocupar de principio a fin */
+        width: 100%;
+    }
+
+    /* Resto de tu código (esto estaba bien) */
     .boton-cambiar-imagen { width: 100%; }
     .products-section, .client-row { flex-direction: column; align-items: flex-start; }
     .botones-finales { flex-direction: column; align-items: center; gap: 20px; }
@@ -716,4 +793,24 @@ input[type="date"]::-webkit-calendar-picker-indicator { background: transparent;
     .boton-anadir-nuevo { width: 100%; height: auto; padding: 15px; }
     .boton-anadir-nuevo p { font-size: 18px; }
     .filtro-text { width: 100%; font-size: 16px; padding: 10px; }
+}
+
+/* --- RESPONSIVE GRAFICAS --- */
+@media (max-width: 992px) {
+    .diagrama-section { 
+        padding: 0 20px; 
+    }
+    
+    .dashboard-grid { 
+        grid-template-columns: 1fr; /* Una debajo de otra */
+        height: auto; 
+    }
+
+    .grafica-container { 
+        height: 350px; /* Un poco más bajitas en móvil */
+    }
+    
+    .titulo-estadisticas {
+        font-size: 24px; /* Título un poco más pequeño en móvil */
+    }
 }
