@@ -17,6 +17,7 @@ if (isset($_SESSION['carrito'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio Visitante - Metalful</title>
+    <link rel="icon" type="image/png" href="../imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
@@ -118,7 +119,7 @@ if (isset($_SESSION['carrito'])) {
                         </div>
                     </div>
 
-                    <button class="ver-mas-btn">Ver más</button>
+                    <a href="productos.php" class="ver-mas-btn">Ver más</a>
                 </div>
             </section>
 
