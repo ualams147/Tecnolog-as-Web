@@ -152,6 +152,8 @@ $total_registros = count($ventas);
                             <option value="" selected>Todos</option>
                             <option value="ventanas">Ventanas</option>
                             <option value="puertas">Puertas</option>
+                            <option value="barandillas">Barandillas</option>
+                            <option value="otros">Otros</option>
                         </select>
                         
                         <div class="input-icon">
