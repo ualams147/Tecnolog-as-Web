@@ -122,7 +122,7 @@ $telefono = isset($_GET['tel']) ? $_GET['tel'] : '6XX XXX XXX';
         </div>
 
         <h2>Confirmación de Pago</h2>
-        <p>Hemos enviado una solicitud push a su dispositivo móvil. Por favor, acéptela para finalizar.</p>
+        <p>Hemos enviado una solicitud de bizum a su dispositivo móvil. Por favor, acéptela en su aplicación de banco para finalizar.</p>
         
         <div class="phone-box"><?php echo htmlspecialchars($telefono); ?></div>
 
