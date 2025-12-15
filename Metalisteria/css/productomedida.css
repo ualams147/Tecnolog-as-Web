@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: white; /* El fondo blanco detrás de todo */
+    background-color: white;
     overflow-x: hidden;
 }
 
@@ -25,7 +25,7 @@ body {
     padding: 0 40px;
 }
 
-/* ========================== CABECERA (Estilos básicos) ========================== */
+/* ========================== CABECERA ========================== */
 .cabecera {
     position: relative;
     width: 100%;
@@ -60,9 +60,8 @@ body {
 .sign-in a { font-weight: 700; font-size: 18px; color: white; text-decoration: none; }
 
 
-/* ================== ESTILOS ESPECÍFICOS DE PRODUCTO A MEDIDA ================== */
+/* ================== ESTILOS DE PRODUCTO A MEDIDA ================== */
 
-/* --- HERO SECTION: Fondo Azul degradado --- */
 .medida-hero {
     background-color: #293661;
     position: relative;
@@ -73,7 +72,6 @@ body {
     z-index: 1;
 }
 
-/* CAPA SUPERPUESTA CON GRADIENTE */
 .medida-hero::before {
     content: "";
     position: absolute;
@@ -81,10 +79,8 @@ body {
     left: 0;
     width: 100%;
     height: 270px;
-    
     background: linear-gradient(180deg, #ffffff 0%, #e4e4e4 26.923%, rgba(153,153,153,0) 100%);
     opacity: 0.9;
-    
     z-index: 1;
     pointer-events: none;
 }
@@ -100,18 +96,16 @@ body {
     align-items: center;
 }
 
-/* Título Blanco centrado */
 .titulo-hero {
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
-    font-size: 56px; /* Más grande como en la foto */
+    font-size: 56px;
     color: white;
     text-shadow: 0px 4px 10px rgba(0,0,0,0.3);
     margin-top: 40px;
     margin-bottom: 20px;
 }
 
-/* Botón atrás flotante */
 .btn-back-hero {
     position: absolute;
     left: 40px;
@@ -124,44 +118,39 @@ body {
 .btn-back-hero:hover { transform: translateY(-50%) translateX(-5px); opacity: 1; }
 .btn-back-hero svg { width: 48px; height: 48px; }
 
-
-/* --- CONTENEDOR PRINCIPAL QUE SUBE SOBRE EL HERO --- */
 .medida-main {
     position: relative;
     z-index: 10;
-    margin-top: -120px; /* Margen negativo para subir el cuadro sobre el azul */
+    margin-top: -120px;
     margin-bottom: 80px;
     padding: 0 20px;
     display: flex;
     justify-content: center;
 }
 
-/* --- EL CUADRO BLANCO (ESTILO TARJETA) --- */
-/* Antes se llamaba .form-card, ahora .medida-card para coincidir con tu PHP */
 .medida-card {
-    background: #f4f4f4; /* Gris muy claro/blanco, como en el diseño */
+    background: #f4f4f4;
     width: 100%;
-    max-width: 900px; /* Ancho máximo de la tarjeta */
+    max-width: 900px;
     margin: 0 auto;
-    border-radius: 20px; /* Bordes redondeados */
-    box-shadow: 0 20px 40px rgba(0,0,0,0.2); /* Sombra para efecto flotante */
-    padding: 60px 80px; /* Espacio interior amplio */
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    padding: 60px 80px;
     display: flex;
     flex-direction: column;
-    gap: 30px; /* Espacio entre cada filtro desplegable */
+    gap: 30px;
 }
 
 /* --- LOS FILTROS (ACORDEÓN) --- */
 .step-item {
     background: white;
-    border: 1px solid #dcdcdc; /* Borde sutil */
+    border: 1px solid #dcdcdc;
     border-radius: 12px;
     overflow: hidden;
     transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
-/* Cuando está activo, borde azul */
 .step-item.active {
     border-color: #293661;
     box-shadow: 0 4px 12px rgba(41, 54, 97, 0.15);
@@ -209,12 +198,14 @@ body {
     background: white;
 }
 
+/* IMPORTANTE: Cuando el paso está abierto, permitimos que se vea lo que sobresale (el menú de colores) */
 .step-item.active .step-content {
-    max-height: 300px;
+    max-height: 500px; /* Aumentado para que quepa el menú */
     padding-bottom: 30px;
+    overflow: visible; 
 }
 
-/* Inputs y Selects */
+/* Inputs y Selects Standard */
 .custom-select, .custom-input, .custom-textarea {
     width: 100%;
     padding: 15px;
@@ -229,7 +220,6 @@ body {
     border-color: #293661;
 }
 
-/* Botón Enviar */
 .btn-enviar {
     background-color: #293661;
     color: white;
@@ -247,8 +237,7 @@ body {
     background-color: #1f2849;
 }
 
-
-/* ============ FOOTER (Copiado igual) ============ */
+/* ============ FOOTER ============ */
 .footer {
     background: #293661;
     color: white;
@@ -271,7 +260,6 @@ body {
 .politica-legal { display: flex; justify-content: center; gap: 15px; }
 .politica-legal a { color: white; text-decoration: none; font-size: 14px; }
 
-
 /* Responsive */
 @media (max-width: 768px) {
     .cabecera .container { flex-direction: column; gap: 20px; }
@@ -283,22 +271,101 @@ body {
     .contacto-footer ul li { justify-content: center; }
     .footer-logo-section { justify-content: center; }
 }
-/* === AÑADIR AL FINAL DE css/productomedida.css === */
 
-
-/* Estilo cuando el input tiene un error */
 .custom-input.input-error {
-    border: 2px solid #e74c3c !important; /* Rojo */
-    background-color: #fff8f8; /* Un fondo rojo muy clarito */
+    border: 2px solid #e74c3c !important;
+    background-color: #fff8f8;
     color: #e74c3c;
 }
-/* Estilo del mensajito de error debajo del input */
 .error-message {
-    color: #e74c3c; /* Rojo */
+    color: #e74c3c;
     font-size: 13px;
     font-weight: 500;
     margin-top: 8px;
-    display: none; /* Oculto por defecto */
+    display: none;
     font-family: 'Poppins', sans-serif;
 }
-/* ================================================= */
+
+/* ======================================================= */
+/* NUEVOS ESTILOS PARA EL SELECTOR DE COLORES             */
+/* ======================================================= */
+.custom-select-wrapper {
+    position: relative;
+    user-select: none;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+}
+
+.select-display {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: border-color 0.3s;
+}
+
+.select-display:hover, 
+.custom-select-wrapper.open .select-display {
+    border-color: #293661;
+}
+
+.select-options {
+    position: absolute;
+    top: 105%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    z-index: 9999;
+    display: none; 
+    max-height: 250px;
+    overflow-y: auto;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.select-options.open {
+    display: block;
+}
+
+.option-item {
+    padding: 12px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background 0.2s;
+    font-size: 16px;
+    color: #2b2b2b;
+}
+
+.option-item:hover {
+    background-color: #f4f4f4;
+    color: #293661;
+}
+
+.color-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    margin-right: 12px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+/* --- Añadir al final de tu CSS --- */
+
+/* Icono del material (la imagen pequeña) */
+.material-icon {
+    width: 24px; /* Tamaño de la imagen */
+    height: 24px;
+    object-fit: contain; /* Para que no se deforme */
+    margin-right: 12px;
+    vertical-align: middle;
+}
