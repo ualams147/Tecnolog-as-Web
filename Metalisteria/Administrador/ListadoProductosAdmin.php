@@ -60,7 +60,7 @@ $total_productos = count($productos);
                 </nav>
 
                 <div class="log-out">
-                    <a href="../Visitante/index.php">Cerrar Sesión</a>
+                    <a href="../Cliente/index.php">Cerrar Sesión</a>
                 </div>
             </div>
         </header>

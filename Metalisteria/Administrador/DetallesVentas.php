@@ -68,8 +68,8 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
                     </nav>
 
                     <div class="log-out">
-                    <a href="../Visitante/index.php">Cerrar Sesión</a>
-                </div>
+                        <a href="../Cliente/index.php">Cerrar Sesión</a>
+                    </div>
 
                 </div>
         </header>

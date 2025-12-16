@@ -123,7 +123,7 @@ if (isset($conn)) {
                     <a href="../Administrador/ListadoClientesAdmin.php">Clientes</a>
                 </nav>
                 <div class="log-out">
-                    <a href="../Visitante/index.php">Cerrar Sesión</a>
+                    <a href="../Cliente/index.php">Cerrar Sesión</a>
                 </div>
             </div>
         </header>
