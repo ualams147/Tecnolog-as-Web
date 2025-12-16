@@ -1,7 +1,6 @@
 <?php
 // 1. CABECERA Y SESIÓN (Siempre lo primero)
 include 'CabeceraFooter.php'; 
-
 include 'conexion.php'; 
 
 // 2. SEGURIDAD: Si no hay sesión iniciada, lo mandamos al login
@@ -16,8 +15,6 @@ $sql = "SELECT * FROM clientes WHERE id = :id";
 $stmt = $conn->prepare($sql);
 $stmt->execute([':id' => $id_usuario]);
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-
-
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +37,7 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
         <section class="profile-hero">
             <div class="container hero-content">
-                <a href="#" class="btn-pedidos">
+                <a href="pedidosactivos.php" class="btn-pedidos">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
                     </svg>
@@ -54,7 +51,6 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
                 
                 <h1 class="profile-title">Mi Perfil</h1>
                 
-
                 <form class="profile-form">
                     
                     <div class="form-row">
@@ -62,7 +58,6 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
                             <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                             Nombre:
                         </label>
-                        <!-- Usamos htmlspecialchars para evitar problemas si el nombre tiene caracteres raros -->
                         <input type="text" value="<?php echo htmlspecialchars($usuario['nombre']); ?>" class="form-input" readonly>
                     </div>
 
@@ -98,7 +93,6 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
                         <input type="tel" value="<?php echo htmlspecialchars($usuario['telefono']); ?>" class="form-input" readonly>
                     </div>
 
-                    <!-- Sección de Dirección (Opcional, si quieres mostrarla) -->
                     <div class="form-row">
                          <label class="label-icon">🏠 Dirección:</label>
                          <input type="text" value="<?php echo htmlspecialchars($usuario['direccion'] . ', ' . $usuario['numero'] . ', ' . $usuario['piso']); ?>" class="form-input" readonly>
@@ -119,31 +113,23 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
         <?php sectionfooter(); ?>
     </div>
 
-    <!-- MANTENEMOS auth.js -->
     <script src="js/auth.js"></script>
     
-    
     <script>
-        // Cierre de sesión HÍBRIDO (JS + PHP)
+        // Cierre de sesión
         document.getElementById('btn-logout-page').addEventListener('click', function(e) {
             e.preventDefault();
-            // 1. Borramos la marca del navegador
             localStorage.removeItem('usuarioLogueado');
             localStorage.removeItem('usuarioNombre');
             
-            // 2. Redirigimos al destructor de sesión PHP para limpiar el servidor
-            // Asumo que tu archivo CerrarSesion.php está en admin
-            window.location.href = 'CerrarSesion.php';
+            // CORREGIDO: En tus archivos tienes 'logout.php', no 'CerrarSesion.php'
+            window.location.href = 'logout.php';
         });
-
-        
     </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Detectar si la URL tiene ?actualizado=1
             const params = new URLSearchParams(window.location.search);
-            
             if (params.get('actualizado') === '1') {
                 Swal.fire({
                     title: '¡Datos actualizados!',
@@ -152,7 +138,6 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
                     confirmButtonColor: '#293661',
                     confirmButtonText: 'Genial'
                 }).then(() => {
-                    // Limpia la URL para que no salga la alerta si el usuario recarga
                     window.history.replaceState({}, document.title, window.location.pathname);
                 });
             }
