@@ -99,7 +99,7 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
                     </div>
 
                     <div class="edit-buttons-container">
-                        <a href="modificardatoscliente.php" class="btn-edit" style="text-decoration: none; text-align: center; display: block;">
+                        <a href="editarinformacionperfil.php" class="btn-edit" style="text-decoration: none; text-align: center; display: block;">
                             <?php echo $lang['perfil_btn_editar']; ?>
                         </a>
                     </div>
