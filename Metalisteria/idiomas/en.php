@@ -390,5 +390,52 @@ $lang = array(
     "registro_err_tecnico" => "There was a technical error: ",
     "registro_js_dni_titulo" => "Invalid ID",
     "registro_js_dni_texto" => "The ID format is invalid or the letter is incorrect.",
+
+
+
+    // PRODUCT INFO
+    "info_detalles" => "Details:",
+    "info_precio" => "Price:",
+    "info_sin_iva" => "excl. VAT",
+    "info_unidades" => "Units:",
+    "info_btn_personaliza" => "Customize product",
+    "info_lbl_color" => "Color:",
+    "info_lbl_medidas" => "Measurements:",
+    "info_btn_add" => "Add to cart",
+
+
+
+    // INVOICE
+    'factura_titulo' => 'Invoice',
+    'factura_paso1' => 'Shipping Info',
+    'factura_paso2' => 'Payment Method',
+    'factura_paso3' => 'Invoice',
+    'factura_ref_pedido' => 'Order Ref.',
+    'factura_facturar_a' => 'Bill To',
+    'factura_email' => 'Email',
+    'factura_direccion' => 'Address',
+    'factura_detalles_pago' => 'Payment Details',
+    'factura_estado' => 'Status',
+    'factura_pagado' => 'Paid',
+    'factura_metodo' => 'Method',
+    'factura_moneda' => 'Currency',
+    'factura_mensaje_registrado' => 'Thank you for your purchase. You can find the invoice and order details in <strong>My Profile</strong>.',
+    'factura_mensaje_invitado' => 'Thank you for your purchase. Please save or print this document as your receipt.',
+    'factura_tabla_desc' => 'Description / Product',
+    'factura_tabla_cant' => 'Qty.',
+    'factura_tabla_precio' => 'Unit Price',
+    'factura_tabla_subtotal' => 'Subtotal',
+    'factura_sin_iva' => 'excl. VAT',
+    'factura_base_imponible' => 'Tax Base',
+    'factura_iva' => 'VAT',
+    'factura_total_pagado' => 'Total Paid',
+    'factura_btn_descargar' => 'Download Invoice PDF',
+    'factura_btn_volver' => 'Return to Store',
+    'factura_cliente_invitado' => 'Guest Client',
+    'factura_sin_email' => 'No email',
+    'factura_recogida_tienda' => 'Store Pickup',
+    'factura_recogida_tienda_no_esp' => 'Store Pickup / Not specified',
+    'factura_pago_tarjeta' => 'Credit/Debit Card',
+    'factura_pago_bizum' => 'Bizum',
 );
 ?>

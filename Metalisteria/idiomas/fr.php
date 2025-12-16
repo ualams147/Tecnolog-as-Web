@@ -389,5 +389,52 @@ $lang = array(
     "registro_err_tecnico" => "Une erreur technique s'est produite : ",
     "registro_js_dni_titulo" => "CNI Incorrect",
     "registro_js_dni_texto" => "Le format du CNI n'est pas valide ou la lettre est incorrecte.",
+
+
+
+    // INFOS PRODUIT
+    "info_detalles" => "Détails :",
+    "info_precio" => "Prix :",
+    "info_sin_iva" => "HT",
+    "info_unidades" => "Unités :",
+    "info_btn_personaliza" => "Personnaliser le produit",
+    "info_lbl_color" => "Couleur :",
+    "info_lbl_medidas" => "Mesures :",
+    "info_btn_add" => "Ajouter au panier",
+
+
+
+    // FACTURE
+    'factura_titulo' => 'Facture',
+    'factura_paso1' => 'Livraison',
+    'factura_paso2' => 'Paiement',
+    'factura_paso3' => 'Facture',
+    'factura_ref_pedido' => 'Réf. Commande',
+    'factura_facturar_a' => 'Facturer à',
+    'factura_email' => 'Email',
+    'factura_direccion' => 'Adresse',
+    'factura_detalles_pago' => 'Détails du paiement',
+    'factura_estado' => 'État',
+    'factura_pagado' => 'Payé',
+    'factura_metodo' => 'Méthode',
+    'factura_moneda' => 'Devise',
+    'factura_mensaje_registrado' => 'Merci pour votre achat. Vous pouvez trouver la facture et les détails dans <strong>Mon Profil</strong>.',
+    'factura_mensaje_invitado' => 'Merci pour votre achat. Veuillez conserver ou imprimer ce document comme reçu.',
+    'factura_tabla_desc' => 'Description / Produit',
+    'factura_tabla_cant' => 'Qté.',
+    'factura_tabla_precio' => 'Prix Unit.',
+    'factura_tabla_subtotal' => 'Sous-total',
+    'factura_sin_iva' => 'HT',
+    'factura_base_imponible' => 'Base Imposable',
+    'factura_iva' => 'TVA',
+    'factura_total_pagado' => 'Total Payé',
+    'factura_btn_descargar' => 'Télécharger Facture PDF',
+    'factura_btn_volver' => 'Retour à la boutique',
+    'factura_cliente_invitado' => 'Client Invité',
+    'factura_sin_email' => 'Pas d\'email',
+    'factura_recogida_tienda' => 'Retrait en magasin',
+    'factura_recogida_tienda_no_esp' => 'Retrait en magasin / Non spécifié',
+    'factura_pago_tarjeta' => 'Carte de Crédit/Débit',
+    'factura_pago_bizum' => 'Bizum',
 );
 ?>

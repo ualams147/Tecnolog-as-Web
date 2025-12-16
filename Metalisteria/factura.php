@@ -1,5 +1,5 @@
 <?php
-// 1. CARGAMOS LA CABECERA Y FUNCIONES COMUNES
+// 1. CARGAMOS LA CABECERA Y FUNCIONES COMUNES (Aquí se carga $lang)
 include 'CabeceraFooter.php'; 
 
 // 2. CONEXIÓN A BASE DE DATOS
@@ -16,196 +16,208 @@ if (session_status() === PHP_SESSION_NONE) {
 // CONFIGURACIÓN DE LA EMPRESA
 $email_empresa = "metalfulsan@gmail.com"; 
 
+// Recuperamos datos
 $productos_compra = isset($_SESSION['carrito']) ? $_SESSION['carrito'] : [];
-$total_pagado = isset($_SESSION['total_carrito']) ? $_SESSION['total_carrito'] : 0;
-$usuario_id = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : 0;
+$total_pagado     = isset($_SESSION['total_carrito']) ? $_SESSION['total_carrito'] : 0;
+$usuario_id       = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : 0; // 0 = Invitado
 
 // -----------------------------------------------------------------------
-// [SEGURIDAD] ANTI-REFRESH
+// [SEGURIDAD] ANTI-REFRESH Y VALIDACIÓN
 // -----------------------------------------------------------------------
-if (empty($productos_compra)) {
+if (empty($productos_compra) && !isset($_SESSION['pedido_procesado_temp'])) {
     header("Location: index.php");
     exit;
 }
+
+// LÓGICA DE RECARGA (F5): Si existe la variable temporal, es un refresco.
+if (isset($_SESSION['pedido_procesado_temp'])) {
+    $datos_temp = $_SESSION['pedido_procesado_temp'];
+    
+    $productos_compra     = $datos_temp['productos'];
+    $total_pagado         = $datos_temp['total'];
+    $cliente              = $datos_temp['cliente'];
+    $numero_pedido_visual = $datos_temp['ref'];
+    $fecha_visual         = $datos_temp['fecha'];
+    $metodo_pago_texto    = $datos_temp['metodo'];
+    
+    $pedido_ya_guardado = true; // Bloqueamos el INSERT
+} else {
+    $pedido_ya_guardado = false; // Es un pedido nuevo
+}
 // -----------------------------------------------------------------------
 
-// --- LÓGICA DE DETECCIÓN DE PAGO ---
-$metodo_pago_texto = "Tarjeta de Crédito/Débito"; // Valor por defecto
-
-$origen = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-if (strpos($origen, 'fake_bizum.php') !== false) {
-    $metodo_pago_texto = "Bizum";
-} elseif (isset($_SESSION['metodo_pago_final'])) {
-    $metodo_pago_texto = $_SESSION['metodo_pago_final'];
-}
-
-$_SESSION['metodo_pago_final'] = $metodo_pago_texto;
-
-
-$numero_pedido_visual = "PED-" . date('dmY') . "-" . rand(100, 999);
-$fecha_visual = date('d/m/Y H:i');
-
-// ====================================================
-// 4. DATOS DEL CLIENTE (LÓGICA DE PRIORIDAD)
-// ====================================================
-
-$cliente = [
-    'nombre_completo' => 'Cliente Invitado', 
-    'email' => 'Sin email',
-    'direccion_completa' => 'Recogida en tienda'
-]; 
-
-$nombre_envio = ''; 
-$email_envio  = '';
-$tel_envio    = '';
-$calle        = '';
-$numero       = '';
-$piso         = '';
-$cp           = '';
-$localidad    = '';
-$notas        = '';
-
-// CASO A: DATOS DE SESIÓN (FORMULARIO)
-if (isset($_SESSION['datos_envio']) && !empty($_SESSION['datos_envio'])) {
-    $d = $_SESSION['datos_envio']; 
+if (!$pedido_ya_guardado) {
     
-    $nombre_envio = $d['nombre']; 
-    $email_envio  = $d['email'];
-    $tel_envio    = $d['telefono'];
-    $calle        = $d['calle'];
-    $numero       = $d['numero'];
-    $piso         = $d['piso'];
-    $cp           = $d['cp'];
-    $localidad    = $d['localidad'];
-    $notas        = isset($d['notas']) ? $d['notas'] : '';
+    // --- LÓGICA DE DETECCIÓN DE PAGO (Solo pedido nuevo) ---
+    // Usamos las variables de idioma para los valores por defecto
+    $metodo_pago_texto = isset($lang['factura_pago_tarjeta']) ? $lang['factura_pago_tarjeta'] : "Tarjeta de Crédito/Débito";
 
-    $cliente['nombre_completo'] = $nombre_envio;
-    $cliente['email'] = $email_envio;
-    
+    if (isset($_SESSION['metodo_pago_final'])) {
+        // Nota: Si el método viene de sesión tal cual, se mostrará como se guardó (quizás en otro idioma)
+        // Idealmente guardaríamos un código, pero por compatibilidad lo dejamos así.
+        $metodo_pago_texto = $_SESSION['metodo_pago_final'];
+    } elseif (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'fake_bizum.php') !== false) {
+        $metodo_pago_texto = isset($lang['factura_pago_bizum']) ? $lang['factura_pago_bizum'] : "Bizum";
+    }
+
+    $numero_pedido_visual = "PED-" . date('dmY') . "-" . rand(100, 999);
+    $fecha_visual = date('d/m/Y H:i');
+
+    // ====================================================
+    // 4. PREPARACIÓN DATOS DEL CLIENTE
+    // ====================================================
+
+    $cliente = [
+        'nombre_completo' => isset($lang['factura_cliente_invitado']) ? $lang['factura_cliente_invitado'] : 'Cliente Invitado', 
+        'email' => isset($lang['factura_sin_email']) ? $lang['factura_sin_email'] : 'Sin email',
+        'direccion_completa' => isset($lang['factura_recogida_tienda']) ? $lang['factura_recogida_tienda'] : 'Recogida en tienda'
+    ]; 
+
+    $nombre_envio = 'Invitado'; 
+    $email_envio  = '';
+    $tel_envio    = '';
+    $calle        = '';
+    $numero       = '';
+    $piso         = '';
+    $cp           = '';
+    $localidad    = '';
+    $notas        = '';
+
+    // CASO A: DATOS DE SESIÓN (FORMULARIO RECIENTE) - Prioridad ALTA
+    if (isset($_SESSION['datos_envio']) && !empty($_SESSION['datos_envio'])) {
+        $d = $_SESSION['datos_envio']; 
+        
+        $nombre_envio = $d['nombre']; 
+        $email_envio  = $d['email'];
+        $tel_envio    = $d['telefono'];
+        $calle        = $d['calle'];
+        $numero       = $d['numero'];
+        $piso         = $d['piso'];
+        $cp           = $d['cp'];
+        $localidad    = $d['localidad'];
+        $notas        = isset($d['notas']) ? $d['notas'] : '';
+
+        $cliente['nombre_completo'] = $nombre_envio;
+        $cliente['email'] = $email_envio;
+    } 
+    // CASO B: BASE DE DATOS (FALLBACK)
+    elseif ($usuario_id > 0 && isset($conn)) {
+        try {
+            $stmt = $conn->prepare("SELECT nombre, apellidos, email, telefono, direccion, numero, piso, codigo_postal, ciudad FROM clientes WHERE id = ?");
+            $stmt->execute([$usuario_id]);
+            $datos_bd = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($datos_bd) {
+                $nombre_envio = $datos_bd['nombre'] . ' ' . $datos_bd['apellidos'];
+                $email_envio  = $datos_bd['email'];
+                $tel_envio    = $datos_bd['telefono'];
+                $calle        = $datos_bd['direccion'];
+                $numero       = $datos_bd['numero'];
+                $piso         = $datos_bd['piso'];
+                $cp           = $datos_bd['codigo_postal'];
+                $localidad    = $datos_bd['ciudad'];
+                
+                $cliente['nombre_completo'] = $nombre_envio;
+                $cliente['email'] = $email_envio;
+            }
+        } catch (Exception $e) { /* Silencio */ }
+    }
+
+    // Formateo de dirección
     $dir = $calle;
     if(!empty($numero)) $dir .= ", Nº " . $numero;
     if(!empty($piso))   $dir .= ", Piso " . $piso;
     if(!empty($cp))     $dir .= ", CP: " . $cp;
     if(!empty($localidad)) $dir .= " (" . $localidad . ")";
     
-    $cliente['direccion_completa'] = $dir;
-
-} 
-// CASO B: BASE DE DATOS (FALLBACK)
-elseif ($usuario_id > 0 && isset($conn)) {
-    try {
-        $stmt = $conn->prepare("SELECT nombre, apellidos, email, telefono, direccion, numero, piso, codigo_postal, ciudad FROM clientes WHERE id = ?");
-        $stmt->execute([$usuario_id]);
-        $datos_bd = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if ($datos_bd) {
-            $nombre_envio = $datos_bd['nombre'] . ' ' . $datos_bd['apellidos'];
-            $email_envio  = $datos_bd['email'];
-            $tel_envio    = $datos_bd['telefono'];
-            $calle        = $datos_bd['direccion'];
-            $numero       = $datos_bd['numero'];
-            $piso         = $datos_bd['piso'];
-            $cp           = $datos_bd['codigo_postal'];
-            $localidad    = $datos_bd['ciudad'];
-            
-            $cliente['nombre_completo'] = $nombre_envio;
-            $cliente['email'] = $email_envio;
-            
-            $dir = $calle;
-            if(!empty($numero)) $dir .= ", Nº " . $numero;
-            if(!empty($piso))   $dir .= ", Piso " . $piso;
-            if(!empty($cp))     $dir .= ", CP: " . $cp;
-            if(!empty($localidad)) $dir .= " (" . $localidad . ")";
-            
-            $cliente['direccion_completa'] = $dir;
-        }
-    } catch (Exception $e) { }
-}
-
-// ====================================================
-// 5. GUARDAR EN BASE DE DATOS
-// ====================================================
-if (isset($conn) && $usuario_id > 0) {
-    try {
-        $conn->beginTransaction();
-
-        $sql_venta = "INSERT INTO ventas (
-                        fecha, 
-                        id_cliente, 
-                        total, 
-                        nombre_completo, 
-                        email, 
-                        telefono, 
-                        calle, 
-                        numero, 
-                        piso, 
-                        codigo_postal, 
-                        localidad, 
-                        notas
-                      ) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
-        $stmt_venta = $conn->prepare($sql_venta);
-        
-        $stmt_venta->execute([
-            $usuario_id, 
-            $total_pagado,
-            $nombre_envio,
-            $email_envio,
-            $tel_envio,
-            $calle,
-            $numero,
-            $piso,
-            $cp,
-            $localidad,
-            $notas
-        ]);
-        
-        $id_venta_generada = $conn->lastInsertId();
-
-        $sql_detalle = "INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario, subtotal) VALUES (?, ?, ?, ?, ?)";
-        $stmt_detalle = $conn->prepare($sql_detalle);
-
-        foreach ($productos_compra as $item) {
-            $subtotal_producto = $item['precio'] * $item['cantidad'];
-            $id_prod = isset($item['id']) ? $item['id'] : 0; 
-
-            $stmt_detalle->execute([
-                $id_venta_generada,
-                $id_prod,
-                $item['cantidad'],
-                $item['precio'],
-                $subtotal_producto
-            ]);
-        }
-
-        $sql_borrar_carrito = "DELETE FROM carrito WHERE cliente_id = ?";
-        $stmt_borrar = $conn->prepare($sql_borrar_carrito);
-        $stmt_borrar->execute([$usuario_id]);
-
-        $conn->commit();
-    } catch (Exception $e) {
-        $conn->rollBack();
+    if (!empty(trim($dir))) {
+        $cliente['direccion_completa'] = $dir;
     }
-}
 
-// ====================================================
-// 6. LIMPIEZA DE SESIÓN
-// ====================================================
-if(isset($_SESSION['carrito'])) {
-    unset($_SESSION['carrito']);
-    unset($_SESSION['total_carrito']);
-}
-if(isset($_SESSION['datos_envio'])) {
-    unset($_SESSION['datos_envio']);
+    // ====================================================
+    // 5. GUARDAR EN BASE DE DATOS (TRANSACCIÓN)
+    // ====================================================
+    // CORRECCIÓN: Guardamos si hay productos, sin importar si es invitado (id=0)
+    if (isset($conn) && !empty($productos_compra)) {
+        try {
+            $conn->beginTransaction();
+
+            $sql_venta = "INSERT INTO ventas (
+                            fecha, id_cliente, total, nombre_completo, email, telefono, 
+                            calle, numero, piso, codigo_postal, localidad, notas
+                          ) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            
+            $stmt_venta = $conn->prepare($sql_venta);
+            
+            $stmt_venta->execute([
+                $usuario_id, 
+                $total_pagado,
+                $nombre_envio,
+                $email_envio,
+                $tel_envio,
+                $calle,
+                $numero,
+                $piso,
+                $cp,
+                $localidad,
+                $notas
+            ]);
+            
+            $id_venta_generada = $conn->lastInsertId();
+
+            $sql_detalle = "INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario, subtotal) VALUES (?, ?, ?, ?, ?)";
+            $stmt_detalle = $conn->prepare($sql_detalle);
+
+            foreach ($productos_compra as $item) {
+                $subtotal_producto = $item['precio'] * $item['cantidad'];
+                $id_prod = isset($item['id']) ? $item['id'] : 0; 
+
+                $stmt_detalle->execute([
+                    $id_venta_generada,
+                    $id_prod,
+                    $item['cantidad'],
+                    $item['precio'],
+                    $subtotal_producto
+                ]);
+            }
+
+            // Solo borramos de la tabla 'carrito' si es un usuario registrado
+            if ($usuario_id > 0) {
+                $sql_borrar_carrito = "DELETE FROM carrito WHERE cliente_id = ?";
+                $stmt_borrar = $conn->prepare($sql_borrar_carrito);
+                $stmt_borrar->execute([$usuario_id]);
+            }
+
+            $conn->commit();
+
+            // Guardamos datos en sesión temporal para el "Anti-Refresh"
+            $_SESSION['pedido_procesado_temp'] = [
+                'productos' => $productos_compra,
+                'total' => $total_pagado,
+                'cliente' => $cliente,
+                'ref' => $numero_pedido_visual,
+                'fecha' => $fecha_visual,
+                'metodo' => $metodo_pago_texto
+            ];
+
+            // Limpiamos la sesión de compra activa
+            unset($_SESSION['carrito']);
+            unset($_SESSION['total_carrito']);
+            if(isset($_SESSION['datos_envio'])) unset($_SESSION['datos_envio']);
+
+        } catch (Exception $e) {
+            $conn->rollBack();
+        }
+    }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo isset($_SESSION['idioma']) ? $_SESSION['idioma'] : 'es'; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Factura - Metalistería Fulsan</title>
+    <title><?php echo $lang['factura_titulo']; ?> - Metalistería Fulsan</title>
     
     <link rel="stylesheet" href="css/datosEnvio.css">
     <link rel="icon" type="image/png" href="imagenes/logo.png">
@@ -224,12 +236,11 @@ if(isset($_SESSION['datos_envio'])) {
 
         body {
             background-color: var(--bg-light);
-            /* Reducimos un poco la fuente base para ganar espacio */
             font-size: 14px; 
         }
 
         .factura-wrapper {
-            max-width: 800px; /* Un poco más estrecha */
+            max-width: 800px;
             margin: 0 auto;
             background: #fff;
             border-radius: 15px;
@@ -242,7 +253,7 @@ if(isset($_SESSION['datos_envio'])) {
         .invoice-header {
             background: linear-gradient(135deg, var(--primary) 0%, #1a2442 100%);
             color: white;
-            padding: 25px 30px; /* Reducido de 40px */
+            padding: 25px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -256,7 +267,7 @@ if(isset($_SESSION['datos_envio'])) {
         .status-badge {
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(5px);
-            padding: 8px 15px; /* Más pequeño */
+            padding: 8px 15px;
             border-radius: 8px;
             text-align: right;
             border: 1px solid rgba(255,255,255,0.2);
@@ -265,12 +276,12 @@ if(isset($_SESSION['datos_envio'])) {
         .status-badge .value { font-size: 16px; font-weight: 700; color: #4ade80; display: block; margin-top: 2px; }
 
         /* CUERPO MÁS COMPACTO */
-        .invoice-body { padding: 25px 30px; } /* Reducido de 40px */
+        .invoice-body { padding: 25px 30px; }
 
         .info-grid { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
-            gap: 20px; /* Reducido de 40px */
+            gap: 20px;
             margin-bottom: 25px; 
         }
         
@@ -296,7 +307,7 @@ if(isset($_SESSION['datos_envio'])) {
             display: flex; flex-direction: column; align-items: flex-end; justify-content: center; margin-top: 15px;
             -webkit-print-color-adjust: exact; 
             print-color-adjust: exact;
-            page-break-inside: avoid; /* Evita que se rompa al imprimir */
+            page-break-inside: avoid;
         }
         
         .botones-container { display: flex; justify-content: center; gap: 20px; margin-top: 30px; padding-top: 10px; }
@@ -310,17 +321,13 @@ if(isset($_SESSION['datos_envio'])) {
         .btn-inicio { background-color: white; color: var(--text-dark); border: 2px solid #eee; }
         .btn-inicio:hover { border-color: var(--primary); color: var(--primary); }
 
-        /* AJUSTES PARA IMPRESIÓN (CLAVE PARA QUE QUEPA EN UNA HOJA) */
+        /* AJUSTES PARA IMPRESIÓN */
         @media print {
-            /* Configuración de la hoja: Quitamos márgenes del navegador */
-            @page {
-                size: auto;
-                margin: 0mm; 
-            }
+            @page { size: auto; margin: 0mm; }
 
             body {
                 background-color: white;
-                margin: 10mm; /* Pequeño margen real de seguridad */
+                margin: 10mm;
                 -webkit-print-color-adjust: exact;
             }
 
@@ -340,11 +347,10 @@ if(isset($_SESSION['datos_envio'])) {
                 padding: 0 !important; 
                 box-shadow: none !important; 
                 border: none !important;
-                transform: scale(0.95); /* Truco: Escala todo al 95% para asegurar que quepa */
+                transform: scale(0.95);
                 transform-origin: top left;
             }
 
-            /* Forzamos que nada se corte a la mitad */
             .invoice-header, .invoice-body, .total-section, .info-grid {
                 page-break-inside: avoid;
             }
@@ -365,11 +371,11 @@ if(isset($_SESSION['datos_envio'])) {
         <section class="steps-section no-print">
             <div class="container">
                 <div class="steps-container">
-                    <div class="step"><span class="step-number">Paso 1</span><span class="step-label">Datos de envío</span></div>
+                    <div class="step"><span class="step-number">1</span><span class="step-label"><?php echo $lang['factura_paso1']; ?></span></div>
                     <div class="step-line"></div>
-                    <div class="step"><span class="step-number">Paso 2</span><span class="step-label">Método de Pago</span></div>
+                    <div class="step"><span class="step-number">2</span><span class="step-label"><?php echo $lang['factura_paso2']; ?></span></div>
                     <div class="step-line"></div>
-                    <div class="step active"><span class="step-number">Paso 3</span><span class="step-label">Factura</span></div>
+                    <div class="step active"><span class="step-number">3</span><span class="step-label"><?php echo $lang['factura_paso3']; ?></span></div>
                 </div>
             </div>
         </section>
@@ -384,7 +390,7 @@ if(isset($_SESSION['datos_envio'])) {
                         <p>Tlf: 652 921 960 | <?php echo htmlspecialchars($email_empresa); ?></p>
                     </div>
                     <div class="status-badge">
-                        <span class="label">Ref. Pedido</span>
+                        <span class="label"><?php echo $lang['factura_ref_pedido']; ?></span>
                         <span class="value"><?php echo $numero_pedido_visual; ?></span>
                         <div style="font-size: 12px; margin-top: 5px; color: #ccc;"><?php echo $fecha_visual; ?></div>
                     </div>
@@ -394,13 +400,13 @@ if(isset($_SESSION['datos_envio'])) {
                     <div class="info-grid">
                         
                         <div class="info-card">
-                            <h3>Facturar A</h3>
+                            <h3><?php echo $lang['factura_facturar_a']; ?></h3>
                             <div class="client-data">
                                 <div style="font-size: 20px; font-weight: 700; margin-bottom: 10px; color: #293661;">
                                     <?php echo htmlspecialchars($cliente['nombre_completo']); ?>
                                 </div>
-                                <p><strong>Email:</strong> <?php echo htmlspecialchars($cliente['email']); ?></p>
-                                <p><strong>Dirección:</strong></p>
+                                <p><strong><?php echo $lang['factura_email']; ?>:</strong> <?php echo htmlspecialchars($cliente['email']); ?></p>
+                                <p><strong><?php echo $lang['factura_direccion']; ?>:</strong></p>
                                 <p style="padding-left: 10px; border-left: 3px solid #eeca00;">
                                     <?php echo htmlspecialchars($cliente['direccion_completa']); ?>
                                 </p>
@@ -408,14 +414,21 @@ if(isset($_SESSION['datos_envio'])) {
                         </div>
 
                         <div class="info-card">
-                            <h3>Detalles del Pago</h3>
+                            <h3><?php echo $lang['factura_detalles_pago']; ?></h3>
                             <div class="client-data">
-                                <p><strong>Estado:</strong> <span style="color: green; font-weight: bold;">Pagado ✅</span></p>
-                                <p><strong>Método:</strong> <?php echo htmlspecialchars($metodo_pago_texto); ?></p>
-                                <p><strong>Moneda:</strong> EUR (€)</p>
+                                <p><strong><?php echo $lang['factura_estado']; ?>:</strong> <span style="color: green; font-weight: bold;"><?php echo $lang['factura_pagado']; ?> ✅</span></p>
+                                <p><strong><?php echo $lang['factura_metodo']; ?>:</strong> <?php echo htmlspecialchars($metodo_pago_texto); ?></p>
+                                <p><strong><?php echo $lang['factura_moneda']; ?>:</strong> EUR (€)</p>
                                 <br>
                                 <div style="background: #f0f8ff; padding: 10px; border-radius: 8px; font-size: 13px; color: #293661;">
-                                    Gracias por tu compra. Tienes la factura y los detalles del pedido disponibles <strong>Mi Perfil</strong>.
+                                    <?php 
+                                    // Mensaje diferente si es invitado o usuario registrado
+                                    if ($usuario_id > 0) {
+                                        echo $lang['factura_mensaje_registrado']; 
+                                    } else {
+                                        echo $lang['factura_mensaje_invitado']; 
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         </div>
@@ -425,10 +438,10 @@ if(isset($_SESSION['datos_envio'])) {
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Descripción / Producto</th>
-                                    <th style="text-align: center;">Cant.</th>
-                                    <th style="text-align: right;">Precio Unit.</th>
-                                    <th style="text-align: right;">Subtotal</th>
+                                    <th><?php echo $lang['factura_tabla_desc']; ?></th>
+                                    <th style="text-align: center;"><?php echo $lang['factura_tabla_cant']; ?></th>
+                                    <th style="text-align: right;"><?php echo $lang['factura_tabla_precio']; ?></th>
+                                    <th style="text-align: right;"><?php echo $lang['factura_tabla_subtotal']; ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -441,7 +454,7 @@ if(isset($_SESSION['datos_envio'])) {
                                         <div style="display:flex; flex-direction:column; align-items:flex-end;">
                                             <span><?php echo number_format($item['precio'], 2); ?> €</span>
                                             <span style="font-size: 11px; opacity: 0.7;">
-                                                (<?php echo number_format($item['precio'] / 1.21, 2); ?> € sin IVA)
+                                                (<?php echo number_format($item['precio'] / 1.21, 2); ?> € <?php echo $lang['factura_sin_iva']; ?>)
                                             </span>
                                         </div>
                                     </td>
@@ -455,16 +468,16 @@ if(isset($_SESSION['datos_envio'])) {
 
                     <div class="total-section">
                         <div style="display: flex; justify-content: space-between; width: 100%; max-width: 300px; margin-bottom: 5px; font-size: 14px; opacity: 0.9;">
-                            <span>Base Imponible:</span>
+                            <span><?php echo $lang['factura_base_imponible']; ?>:</span>
                             <span><?php echo number_format($total_pagado / 1.21, 2); ?> €</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; width: 100%; max-width: 300px; margin-bottom: 10px; font-size: 14px; opacity: 0.9;">
-                            <span>IVA (21%):</span>
+                            <span><?php echo $lang['factura_iva']; ?> (21%):</span>
                             <span><?php echo number_format($total_pagado - ($total_pagado / 1.21), 2); ?> €</span>
                         </div>
                         
                         <div style="display: flex; justify-content: space-between; width: 100%; max-width: 300px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 10px;">
-                            <span class="total-label" style="font-size: 18px; font-weight: 600;">Total Pagado:</span>
+                            <span class="total-label" style="font-size: 18px; font-weight: 600;"><?php echo $lang['factura_total_pagado']; ?>:</span>
                             <span class="total-amount" style="font-size: 24px; font-weight: 800;"><?php echo number_format($total_pagado, 2); ?> €</span>
                         </div>
                     </div>
@@ -472,11 +485,11 @@ if(isset($_SESSION['datos_envio'])) {
                     <div class="botones-container no-print">
                         <a href="#" onclick="window.print(); return false;" class="btn-base btn-imprimir">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-                            Descargar Factura PDF
+                            <?php echo $lang['factura_btn_descargar']; ?>
                         </a>
 
                         <a href="index.php" class="btn-base btn-inicio">
-                            Volver a la Tienda
+                            <?php echo $lang['factura_btn_volver']; ?>
                         </a>
                     </div>
 
