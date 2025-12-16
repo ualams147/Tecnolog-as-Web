@@ -33,6 +33,7 @@ $_SESSION['total_carrito'] = $total_a_pagar;
     <title>Método de Pago - Metalistería Fulsan</title>
     
     <link rel="stylesheet" href="../css/datosEnvio.css">
+    <link rel="icon" type="image/png" href="../imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
