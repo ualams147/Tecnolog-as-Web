@@ -5,11 +5,11 @@
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo isset($_SESSION['idioma']) ? $_SESSION['idioma'] : 'es'; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Política de Privacidad - Metalistería Fulsan</title>
+    <title><?php echo $lang['privacidad_titulo_pag']; ?></title>
     <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,29 +22,29 @@
 
         <main class="legal-main">
             <div class="legal-document">
-                <h1 class="legal-title">Política de Privacidad</h1>
-                <span class="legal-date">Última actualización: 15 de Marzo de 2024</span>
+                <h1 class="legal-title"><?php echo $lang['privacidad_h1']; ?></h1>
+                <span class="legal-date"><?php echo $lang['privacidad_fecha']; ?></span>
 
                 <div class="legal-body">
-                    <p>En Metalistería Fulsan nos tomamos muy en serio la privacidad de tus datos. Esta Política de Privacidad describe cómo recopilamos, utilizamos y protegemos tu información personal.</p>
+                    <p><?php echo $lang['privacidad_intro']; ?></p>
 
-                    <h2>1. Responsable del Tratamiento</h2>
-                    <p>El responsable del tratamiento de sus datos es <strong>Metalistería Fulsan S.L.</strong>, con domicilio en Granada. Puede contactarnos a través del email metalfulsan@gmail.com para cualquier consulta relacionada con sus datos.</p>
+                    <h2><?php echo $lang['privacidad_h2_1']; ?></h2>
+                    <p><?php echo $lang['privacidad_p_1']; ?></p>
 
-                    <h2>2. Finalidad del Tratamiento</h2>
-                    <p>Sus datos personales serán utilizados con las siguientes finalidades:</p>
+                    <h2><?php echo $lang['privacidad_h2_2']; ?></h2>
+                    <p><?php echo $lang['privacidad_p_2_intro']; ?></p>
                     <ul>
-                        <li>Gestión de pedidos y facturación.</li>
-                        <li>Envío de presupuestos personalizados a medida.</li>
-                        <li>Atención al cliente y resolución de consultas.</li>
-                        <li>Envío de comunicaciones comerciales relacionadas con nuestros productos (solo si ha dado su consentimiento).</li>
+                        <li><?php echo $lang['privacidad_li_1']; ?></li>
+                        <li><?php echo $lang['privacidad_li_2']; ?></li>
+                        <li><?php echo $lang['privacidad_li_3']; ?></li>
+                        <li><?php echo $lang['privacidad_li_4']; ?></li>
                     </ul>
 
-                    <h2>3. Legitimación</h2>
-                    <p>La base legal para el tratamiento de sus datos es la ejecución del contrato de compraventa o prestación de servicios, así como el consentimiento expreso del usuario para el envío de formularios de contacto.</p>
+                    <h2><?php echo $lang['privacidad_h2_3']; ?></h2>
+                    <p><?php echo $lang['privacidad_p_3']; ?></p>
 
-                    <h2>4. Derechos del Usuario</h2>
-                    <p>Usted tiene derecho a acceder, rectificar y suprimir sus datos, así como a oponerse al tratamiento de los mismos. Para ejercer estos derechos, envíe una solicitud por escrito a nuestra dirección de correo electrónico.</p>
+                    <h2><?php echo $lang['privacidad_h2_4']; ?></h2>
+                    <p><?php echo $lang['privacidad_p_4']; ?></p>
                 </div>
             </div>
         </main>

@@ -203,5 +203,238 @@ $lang = array(
     "profile_js_err_short" => "Le mot de passe doit contenir au moins 4 caractères.",
     "profile_js_err_match" => "Les mots de passe ne correspondent pas.",
     "profile_js_err_empty" => "Veuillez entrer votre mot de passe actuel.",
+
+    // E-MAIL DEVIS
+    "mail_asunto" => "Nouveau Devis Web - Produit sur Mesure",
+    "mail_intro" => "Vous avez reçu une nouvelle demande de devis depuis le web :",
+    "mail_prod" => "Produit :",
+    "mail_color" => "Couleur :",
+    "mail_medida" => "Mesures :",
+    "mail_detalles" => "Détails supplémentaires :",
+    "mail_fecha" => "Date de la demande :",
+    "mail_err_envio" => "Impossible d'envoyer l'e-mail.",
+    "mail_err_datos" => "Aucune donnée reçue.",
+
+
+    // PASSERELLE BIZUM
+    "bizum_titulo_pag" => "Passerelle de paiement - Bizum",
+    "bizum_h2" => "Confirmation de paiement",
+    "bizum_desc" => "Nous avons envoyé une demande Bizum sur votre mobile. Veuillez l'accepter dans votre application bancaire pour finaliser.",
+    "bizum_estado_inicial" => "Connexion à votre banque...",
+    "bizum_footer_seguridad" => "Passerelle de paiement sécurisée",
+    
+    // JS BIZUM
+    "bizum_js_esperando" => "En attente d'autorisation dans l'application...",
+    "bizum_js_verificando" => "Vérification du solde disponible...",
+    "bizum_js_exito" => "Paiement réussi !",
+
+
+    // CONNEXION
+    "login_titulo_pag" => "Connexion - Metalistería Fulsan",
+    "login_h1" => "Se connecter",
+    "login_lbl_email" => "E-mail :",
+    "login_ph_email" => "exemple@gmail.com",
+    "login_lbl_pass" => "Mot de passe :",
+    "login_btn_submit" => "Se connecter",
+    "login_txt_no_account" => "Vous n'avez pas de compte ?",
+    "login_link_register" => "Inscrivez-vous ici",
+    "login_err_credenciales" => "Nom d'utilisateur ou mot de passe incorrect.",
+    "login_success_reg" => "Inscription réussie ! Vous pouvez maintenant vous connecter.",
+
+
+
+    // MÉTHODE DE PAIEMENT
+    "pago_titulo_pag" => "Méthode de paiement - Metalistería Fulsan",
+    "pago_h1" => "Méthode de paiement",
+    "pago_total_pagar" => "Total à payer :",
+    "pago_tarjeta_tit" => "Carte de crédit / débit",
+    "pago_tarjeta_desc" => "Plateforme sécurisée Stripe (Visa, MC, Amex)",
+    "pago_bizum_tit" => "Bizum",
+    "pago_bizum_desc" => "Paiement rapide et sécurisé depuis votre mobile",
+    "pago_bizum_lbl_movil" => "Entrez votre numéro de mobile :",
+    "pago_bizum_ph_movil" => "Ex : 600 123 456",
+    "pago_btn_volver" => "Retour",
+    "pago_btn_pagar" => "Payer maintenant",
+    
+    // OVERLAY TRAITEMENT
+    "pago_overlay_procesando" => "Traitement...",
+    "pago_overlay_espere" => "Veuillez patienter",
+    "pago_overlay_stripe" => "Connexion à Stripe...",
+    "pago_overlay_bizum" => "Connexion à Bizum...",
+    "pago_alert_bizum_movil" => "⚠️ Veuillez saisir un numéro de mobile valide pour Bizum.",
+
+
+    // MON PROFIL
+    "perfil_titulo_pag" => "Mon Profil - Metalistería Fulsan",
+    "perfil_btn_pedidos" => "Commandes actives",
+    "perfil_h1" => "Mon Profil",
+    "perfil_lbl_nombre" => "Prénom :",
+    "perfil_lbl_apellidos" => "Nom :",
+    "perfil_lbl_email" => "E-mail :",
+    "perfil_lbl_dni" => "CNI/NIF :",
+    "perfil_lbl_telefono" => "Téléphone :",
+    "perfil_lbl_direccion" => "Adresse :",
+    "perfil_btn_editar" => "Modifier les informations",
+    "perfil_swal_success_tit" => "Données mises à jour !",
+    "perfil_swal_success_txt" => "Votre profil a été enregistré avec succès.",
+    "perfil_swal_btn" => "Super",
+
+
+
+
+    // POLITIQUE DE CONFIDENTIALITÉ
+    "privacidad_titulo_pag" => "Politique de Confidentialité - Metalistería Fulsan",
+    "privacidad_h1" => "Politique de Confidentialité",
+    "privacidad_fecha" => "Dernière mise à jour : 15 mars 2024",
+    "privacidad_intro" => "Chez Metalistería Fulsan, nous prenons très au sérieux la confidentialité de vos données. Cette politique de confidentialité décrit comment nous recueillons, utilisons et protégeons vos informations personnelles.",
+    "privacidad_h2_1" => "1. Responsable du Traitement",
+    "privacidad_p_1" => "Le responsable du traitement de vos données est <strong>Metalistería Fulsan S.L.</strong>, domicilié à Grenade. Vous pouvez nous contacter par e-mail à metalfulsan@gmail.com pour toute question relative à vos données.",
+    "privacidad_h2_2" => "2. Finalité du Traitement",
+    "privacidad_p_2_intro" => "Vos données personnelles seront utilisées aux fins suivantes :",
+    "privacidad_li_1" => "Gestion des commandes et facturation.",
+    "privacidad_li_2" => "Envoi de devis personnalisés sur mesure.",
+    "privacidad_li_3" => "Service client et résolution des demandes.",
+    "privacidad_li_4" => "Envoi de communications commerciales liées à nos produits (uniquement si vous avez donné votre consentement).",
+    "privacidad_h2_3" => "3. Légitimation",
+    "privacidad_p_3" => "La base légale du traitement de vos données est l'exécution du contrat de vente ou de prestation de services, ainsi que le consentement exprès de l'utilisateur pour l'envoi de formulaires de contact.",
+    "privacidad_h2_4" => "4. Droits de l'Utilisateur",
+    "privacidad_p_4" => "Vous avez le droit d'accéder, de rectifier et de supprimer vos données, ainsi que de vous opposer à leur traitement. Pour exercer ces droits, envoyez une demande écrite à notre adresse e-mail.",
+
+
+    // STRIPE
+    "stripe_prod_name" => "Commande Metalistería Fulsan",
+    "stripe_err_connection" => "Erreur de connexion à Stripe : ",
+    "stripe_err_init" => "Erreur lors de l'initialisation du paiement",
+
+
+
+
+    // PRODUIT SUR MESURE
+    "medida_titulo_pag" => "Produit sur Mesure - Metalistería Fulsan",
+    "medida_h1" => "Produit sur mesure",
+    
+    // ÉTAPES
+    "medida_paso_1" => "1. Sélection du produit :",
+    "medida_paso_2" => "2. Choisissez le matériau :",
+    "medida_paso_3" => "3. Choisissez la couleur :",
+    "medida_paso_4" => "4. Taille du produit :",
+    "medida_paso_5" => "5. Autres détails :",
+    
+    // PLACEHOLDERS SELECTS
+    "medida_ph_sel_tipo" => "Sélectionnez un type...",
+    "medida_ph_sel_mat" => "Sélectionnez d'abord le produit...",
+    "medida_ph_sel_col" => "Sélectionnez d'abord le matériau...",
+    "medida_ph_input_medida" => "Ex : 50x100",
+    "medida_ph_input_detalles" => "Dites-nous tout détail supplémentaire...",
+    "medida_btn_enviar" => "Envoyer la proposition",
+    
+    // JS ALERTS
+    "medida_js_sel_mat_ok" => "Sélectionnez un matériau...",
+    "medida_js_sel_col_ok" => "Sélectionnez une couleur...",
+    "medida_js_no_mat" => "Aucun matériau disponible",
+    "medida_js_min_30" => "⚠️ Le minimum est de 30 cm.",
+    "medida_js_alert_enviada" => "✅ Proposition envoyée ! Nous vous contacterons bientôt.",
+    "medida_js_alert_error" => "❌ Erreur lors de l'envoi. Veuillez réessayer.",
+    "medida_js_funcionalidad_ok" => "✅ Fonctionnalité d'envoi prête. Implémenter fetch PHP ici.",
+
+
+    // PRODUITS
+    "productos_titulo_pag" => "Produits - Metalistería Fulsan",
+    "productos_h1" => "Nos Produits",
+    "productos_h1_title" => "Cliquez pour voir tout",
+    "productos_cat_puertas" => "PORTES",
+    "productos_cat_ventanas" => "FENÊTRES",
+    "productos_cat_barandillas" => "GARDE-CORPS",
+    "productos_cat_otras" => "AUTRES<br>STRUCTURES",
+    "productos_cta_titulo" => "CRÉEZ VOTRE PRODUIT SUR MESURE",
+    "productos_cta_desc" => "Sélectionnez un produit pour le personnaliser à votre goût",
+    "productos_btn_ver_detalles" => "Voir les détails",
+    "productos_msg_vacio" => "Aucun produit disponible.",
+    "productos_msg_no_filtro" => "Aucun produit trouvé avec les filtres sélectionnés.",
+    "productos_btn_ver_mas" => "Voir plus",
+
+
+    // INSCRIPTION
+    "registro_titulo_pag" => "S'inscrire - Metalistería Fulsan",
+    "registro_h1" => "S'inscrire",
+    "registro_lbl_nombre" => "Prénom :",
+    "registro_ph_nombre" => "Ex : Jean",
+    "registro_lbl_apellidos" => "Nom :",
+    "registro_ph_apellidos" => "Ex : Dupont",
+    "registro_lbl_email" => "E-mail :",
+    "registro_ph_email" => "exemple@gmail.com",
+    "registro_lbl_email_conf" => "Confirmer l'e-mail :",
+    "registro_ph_email_conf" => "Répétez votre e-mail",
+    "registro_lbl_pass" => "Mot de passe :",
+    "registro_lbl_pass_conf" => "Répéter le mot de passe :",
+    "registro_lbl_dni" => "CNI/NIF :",
+    "registro_ph_dni" => "Ex : 12345678A",
+    "registro_lbl_telefono" => "Téléphone :",
+    "registro_ph_telefono" => "Ex : 600 000 000",
+    "registro_lbl_calle" => "Rue :",
+    "registro_ph_calle" => "Ex : Rue de la Paix",
+    "registro_lbl_numero" => "N° / Étage :",
+    "registro_ph_numero" => "Ex : 12",
+    "registro_ph_piso" => "Ex : 3ème A",
+    "registro_lbl_cp" => "Code postal / Ville :",
+    "registro_ph_cp" => "Ex : 75001",
+    "registro_ph_localidad" => "Ex : Paris",
+    "registro_btn_submit" => "M'inscrire",
+    "registro_txt_login" => "Vous avez déjà un compte ?",
+    "registro_link_login" => "Connectez-vous ici",
+    "registro_err_emails" => "Les adresses e-mail ne correspondent pas.",
+    "registro_err_pass" => "Les mots de passe ne correspondent pas.",
+    "registro_err_email_existe" => "❌ Cet e-mail est déjà enregistré.",
+    "registro_err_dni_existe" => "❌ Ce CNI est déjà enregistré.",
+    "registro_err_tecnico" => "Une erreur technique s'est produite : ",
+    "registro_js_dni_titulo" => "CNI Incorrect",
+    "registro_js_dni_texto" => "Le format du CNI n'est pas valide ou la lettre est incorrecte.",
+
+
+
+    // INFOS PRODUIT
+    "info_detalles" => "Détails :",
+    "info_precio" => "Prix :",
+    "info_sin_iva" => "HT",
+    "info_unidades" => "Unités :",
+    "info_btn_personaliza" => "Personnaliser le produit",
+    "info_lbl_color" => "Couleur :",
+    "info_lbl_medidas" => "Mesures :",
+    "info_btn_add" => "Ajouter au panier",
+
+
+
+    // FACTURE
+    'factura_titulo' => 'Facture',
+    'factura_paso1' => 'Livraison',
+    'factura_paso2' => 'Paiement',
+    'factura_paso3' => 'Facture',
+    'factura_ref_pedido' => 'Réf. Commande',
+    'factura_facturar_a' => 'Facturer à',
+    'factura_email' => 'Email',
+    'factura_direccion' => 'Adresse',
+    'factura_detalles_pago' => 'Détails du paiement',
+    'factura_estado' => 'État',
+    'factura_pagado' => 'Payé',
+    'factura_metodo' => 'Méthode',
+    'factura_moneda' => 'Devise',
+    'factura_mensaje_registrado' => 'Merci pour votre achat. Vous pouvez trouver la facture et les détails dans <strong>Mon Profil</strong>.',
+    'factura_mensaje_invitado' => 'Merci pour votre achat. Veuillez conserver ou imprimer ce document comme reçu.',
+    'factura_tabla_desc' => 'Description / Produit',
+    'factura_tabla_cant' => 'Qté.',
+    'factura_tabla_precio' => 'Prix Unit.',
+    'factura_tabla_subtotal' => 'Sous-total',
+    'factura_sin_iva' => 'HT',
+    'factura_base_imponible' => 'Base Imposable',
+    'factura_iva' => 'TVA',
+    'factura_total_pagado' => 'Total Payé',
+    'factura_btn_descargar' => 'Télécharger Facture PDF',
+    'factura_btn_volver' => 'Retour à la boutique',
+    'factura_cliente_invitado' => 'Client Invité',
+    'factura_sin_email' => 'Pas d\'email',
+    'factura_recogida_tienda' => 'Retrait en magasin',
+    'factura_recogida_tienda_no_esp' => 'Retrait en magasin / Non spécifié',
+    'factura_pago_tarjeta' => 'Carte de Crédit/Débit',
+    'factura_pago_bizum' => 'Bizum',
 );
 ?>

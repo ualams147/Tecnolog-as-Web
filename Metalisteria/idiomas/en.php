@@ -203,5 +203,239 @@ $lang = array(
     "profile_js_err_short" => "Password must be at least 4 characters long.",
     "profile_js_err_match" => "Passwords do not match.",
     "profile_js_err_empty" => "Please enter your current password.",
+
+    // QUOTE EMAIL
+    "mail_asunto" => "New Web Quote - Custom Product",
+    "mail_intro" => "You have received a new quote request from the web:",
+    "mail_prod" => "Product:",
+    "mail_color" => "Color:",
+    "mail_medida" => "Measurements:",
+    "mail_detalles" => "Additional details:",
+    "mail_fecha" => "Request date:",
+    "mail_err_envio" => "Could not send email.",
+    "mail_err_datos" => "No data received.",
+
+
+    // BIZUM GATEWAY
+    "bizum_titulo_pag" => "Payment Gateway - Bizum",
+    "bizum_h2" => "Payment Confirmation",
+    "bizum_desc" => "We have sent a Bizum request to your mobile device. Please accept it in your banking app to finalize.",
+    "bizum_estado_inicial" => "Connecting to your bank...",
+    "bizum_footer_seguridad" => "Secure Payment Gateway",
+    
+    // JS BIZUM
+    "bizum_js_esperando" => "Waiting for authorization in the App...",
+    "bizum_js_verificando" => "Verifying available balance...",
+    "bizum_js_exito" => "Payment Successful!",
+
+
+
+    // LOGIN
+    "login_titulo_pag" => "Login - Metalistería Fulsan",
+    "login_h1" => "Login",
+    "login_lbl_email" => "Email:",
+    "login_ph_email" => "example@gmail.com",
+    "login_lbl_pass" => "Password:",
+    "login_btn_submit" => "Login",
+    "login_txt_no_account" => "Don't have an account?",
+    "login_link_register" => "Register here",
+    "login_err_credenciales" => "Incorrect username or password.",
+    "login_success_reg" => "Registration successful! You can now log in.",
+
+    // PAYMENT METHOD
+    "pago_titulo_pag" => "Payment Method - Metalistería Fulsan",
+    "pago_h1" => "Payment Method",
+    "pago_total_pagar" => "Total to pay:",
+    "pago_tarjeta_tit" => "Credit / Debit Card",
+    "pago_tarjeta_desc" => "Secure platform Stripe (Visa, MC, Amex)",
+    "pago_bizum_tit" => "Bizum",
+    "pago_bizum_desc" => "Fast and secure payment from your mobile",
+    "pago_bizum_lbl_movil" => "Enter your mobile number:",
+    "pago_bizum_ph_movil" => "Ex: 600 123 456",
+    "pago_btn_volver" => "Back",
+    "pago_btn_pagar" => "Pay Now",
+    
+    // PROCESSING OVERLAY
+    "pago_overlay_procesando" => "Processing...",
+    "pago_overlay_espere" => "Please wait",
+    "pago_overlay_stripe" => "Connecting to Stripe...",
+    "pago_overlay_bizum" => "Connecting to Bizum...",
+    "pago_alert_bizum_movil" => "⚠️ Please enter a valid mobile number for Bizum.",
+
+
+
+    // MY PROFILE
+    "perfil_titulo_pag" => "My Profile - Metalistería Fulsan",
+    "perfil_btn_pedidos" => "Active Orders",
+    "perfil_h1" => "My Profile",
+    "perfil_lbl_nombre" => "Name:",
+    "perfil_lbl_apellidos" => "Surnames:",
+    "perfil_lbl_email" => "Email:",
+    "perfil_lbl_dni" => "ID/Tax ID:",
+    "perfil_lbl_telefono" => "Phone:",
+    "perfil_lbl_direccion" => "Address:",
+    "perfil_btn_editar" => "Edit Information",
+    "perfil_swal_success_tit" => "Data Updated!",
+    "perfil_swal_success_txt" => "Your profile has been saved successfully.",
+    "perfil_swal_btn" => "Great",
+
+
+
+
+    // PRIVACY POLICY
+    "privacidad_titulo_pag" => "Privacy Policy - Metalistería Fulsan",
+    "privacidad_h1" => "Privacy Policy",
+    "privacidad_fecha" => "Last updated: March 15, 2024",
+    "privacidad_intro" => "At Metalistería Fulsan, we take the privacy of your data very seriously. This Privacy Policy describes how we collect, use, and protect your personal information.",
+    "privacidad_h2_1" => "1. Data Controller",
+    "privacidad_p_1" => "The data controller is <strong>Metalistería Fulsan S.L.</strong>, domiciled in Granada. You can contact us via email at metalfulsan@gmail.com for any inquiries regarding your data.",
+    "privacidad_h2_2" => "2. Purpose of Processing",
+    "privacidad_p_2_intro" => "Your personal data will be used for the following purposes:",
+    "privacidad_li_1" => "Order management and invoicing.",
+    "privacidad_li_2" => "Sending custom personalized quotes.",
+    "privacidad_li_3" => "Customer service and query resolution.",
+    "privacidad_li_4" => "Sending commercial communications related to our products (only if you have given your consent).",
+    "privacidad_h2_3" => "3. Legitimation",
+    "privacidad_p_3" => "The legal basis for the processing of your data is the execution of the purchase contract or provision of services, as well as the express consent of the user for sending contact forms.",
+    "privacidad_h2_4" => "4. User Rights",
+    "privacidad_p_4" => "You have the right to access, rectify, and delete your data, as well as to oppose its processing. To exercise these rights, send a written request to our email address.",
+
+
+
+    // STRIPE
+    "stripe_prod_name" => "Metalistería Fulsan Order",
+    "stripe_err_connection" => "Error connecting to Stripe: ",
+    "stripe_err_init" => "Error initiating payment",
+
+
+
+    // CUSTOM PRODUCT
+    "medida_titulo_pag" => "Custom Product - Metalistería Fulsan",
+    "medida_h1" => "Custom Product",
+    
+    // STEPS
+    "medida_paso_1" => "1. Product Selection:",
+    "medida_paso_2" => "2. Choose Material:",
+    "medida_paso_3" => "3. Choose Color:",
+    "medida_paso_4" => "4. Product Size:",
+    "medida_paso_5" => "5. Other Details:",
+    
+    // PLACEHOLDERS SELECTS
+    "medida_ph_sel_tipo" => "Select a type...",
+    "medida_ph_sel_mat" => "First select product...",
+    "medida_ph_sel_col" => "First select material...",
+    "medida_ph_input_medida" => "Ex: 50x100",
+    "medida_ph_input_detalles" => "Tell us any additional details...",
+    "medida_btn_enviar" => "Send Proposal",
+    
+    // JS ALERTS
+    "medida_js_sel_mat_ok" => "Select a material...",
+    "medida_js_sel_col_ok" => "Select a color...",
+    "medida_js_no_mat" => "No materials available",
+    "medida_js_min_30" => "⚠️ Minimum size is 30 cm.",
+    "medida_js_alert_enviada" => "✅ Proposal sent! We will contact you soon.",
+    "medida_js_alert_error" => "❌ Error sending proposal. Please try again.",
+    "medida_js_funcionalidad_ok" => "✅ Sending functionality ready. Implement PHP fetch here.",
+
+
+    // PRODUCTS
+    "productos_titulo_pag" => "Products - Metalistería Fulsan",
+    "productos_h1" => "Our Products",
+    "productos_h1_title" => "Click to see all",
+    "productos_cat_puertas" => "DOORS",
+    "productos_cat_ventanas" => "WINDOWS",
+    "productos_cat_barandillas" => "RAILINGS",
+    "productos_cat_otras" => "OTHER<br>STRUCTURES",
+    "productos_cta_titulo" => "CREATE YOUR CUSTOM PRODUCT",
+    "productos_cta_desc" => "Select a product to customize it to your liking",
+    "productos_btn_ver_detalles" => "View Details",
+    "productos_msg_vacio" => "No products available.",
+    "productos_msg_no_filtro" => "No products found with selected filters.",
+    "productos_btn_ver_mas" => "Load more",
+
+
+
+    // REGISTER
+    "registro_titulo_pag" => "Sign Up - Metalistería Fulsan",
+    "registro_h1" => "Sign Up",
+    "registro_lbl_nombre" => "Name:",
+    "registro_ph_nombre" => "Ex: John",
+    "registro_lbl_apellidos" => "Surnames:",
+    "registro_ph_apellidos" => "Ex: Doe Smith",
+    "registro_lbl_email" => "Email:",
+    "registro_ph_email" => "example@gmail.com",
+    "registro_lbl_email_conf" => "Confirm Email:",
+    "registro_ph_email_conf" => "Repeat your email",
+    "registro_lbl_pass" => "Password:",
+    "registro_lbl_pass_conf" => "Repeat Password:",
+    "registro_lbl_dni" => "ID/Tax ID:",
+    "registro_ph_dni" => "Ex: 12345678A",
+    "registro_lbl_telefono" => "Phone:",
+    "registro_ph_telefono" => "Ex: 600 000 000",
+    "registro_lbl_calle" => "Street:",
+    "registro_ph_calle" => "Ex: Main Street",
+    "registro_lbl_numero" => "No. / Floor:",
+    "registro_ph_numero" => "Ex: 12",
+    "registro_ph_piso" => "Ex: 3rd A",
+    "registro_lbl_cp" => "Zip Code / City:",
+    "registro_ph_cp" => "Ex: 18001",
+    "registro_ph_localidad" => "Ex: London",
+    "registro_btn_submit" => "Sign Up",
+    "registro_txt_login" => "Already have an account?",
+    "registro_link_login" => "Login here",
+    "registro_err_emails" => "Email addresses do not match.",
+    "registro_err_pass" => "Passwords do not match.",
+    "registro_err_email_existe" => "❌ This email is already registered.",
+    "registro_err_dni_existe" => "❌ This ID is already registered.",
+    "registro_err_tecnico" => "There was a technical error: ",
+    "registro_js_dni_titulo" => "Invalid ID",
+    "registro_js_dni_texto" => "The ID format is invalid or the letter is incorrect.",
+
+
+
+    // PRODUCT INFO
+    "info_detalles" => "Details:",
+    "info_precio" => "Price:",
+    "info_sin_iva" => "excl. VAT",
+    "info_unidades" => "Units:",
+    "info_btn_personaliza" => "Customize product",
+    "info_lbl_color" => "Color:",
+    "info_lbl_medidas" => "Measurements:",
+    "info_btn_add" => "Add to cart",
+
+
+
+    // INVOICE
+    'factura_titulo' => 'Invoice',
+    'factura_paso1' => 'Shipping Info',
+    'factura_paso2' => 'Payment Method',
+    'factura_paso3' => 'Invoice',
+    'factura_ref_pedido' => 'Order Ref.',
+    'factura_facturar_a' => 'Bill To',
+    'factura_email' => 'Email',
+    'factura_direccion' => 'Address',
+    'factura_detalles_pago' => 'Payment Details',
+    'factura_estado' => 'Status',
+    'factura_pagado' => 'Paid',
+    'factura_metodo' => 'Method',
+    'factura_moneda' => 'Currency',
+    'factura_mensaje_registrado' => 'Thank you for your purchase. You can find the invoice and order details in <strong>My Profile</strong>.',
+    'factura_mensaje_invitado' => 'Thank you for your purchase. Please save or print this document as your receipt.',
+    'factura_tabla_desc' => 'Description / Product',
+    'factura_tabla_cant' => 'Qty.',
+    'factura_tabla_precio' => 'Unit Price',
+    'factura_tabla_subtotal' => 'Subtotal',
+    'factura_sin_iva' => 'excl. VAT',
+    'factura_base_imponible' => 'Tax Base',
+    'factura_iva' => 'VAT',
+    'factura_total_pagado' => 'Total Paid',
+    'factura_btn_descargar' => 'Download Invoice PDF',
+    'factura_btn_volver' => 'Return to Store',
+    'factura_cliente_invitado' => 'Guest Client',
+    'factura_sin_email' => 'No email',
+    'factura_recogida_tienda' => 'Store Pickup',
+    'factura_recogida_tienda_no_esp' => 'Store Pickup / Not specified',
+    'factura_pago_tarjeta' => 'Credit/Debit Card',
+    'factura_pago_bizum' => 'Bizum',
 );
 ?>

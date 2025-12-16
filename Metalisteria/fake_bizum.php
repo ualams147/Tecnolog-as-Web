@@ -1,14 +1,27 @@
 <?php
+// 0. CARGAR IDIOMA
 session_start();
+
+if (!isset($_SESSION['idioma'])) {
+    $_SESSION['idioma'] = 'es';
+}
+
+$archivo_lang = "idiomas/" . $_SESSION['idioma'] . ".php";
+if (file_exists($archivo_lang)) {
+    include $archivo_lang;
+} else {
+    include "idiomas/es.php";
+}
+
 // Recogemos el teléfono de la URL. Si no viene, ponemos "6XX XXX XXX" de ejemplo.
 $telefono = isset($_GET['movil']) ? $_GET['movil'] : '6XX XXX XXX';
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo $_SESSION['idioma']; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pasarela de Pago - Bizum</title>
+    <title><?php echo $lang['bizum_titulo_pag']; ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap" rel="stylesheet">
     <style>
         body { 
@@ -122,17 +135,17 @@ $telefono = isset($_GET['movil']) ? $_GET['movil'] : '6XX XXX XXX';
             </svg>
         </div>
 
-        <h2>Confirmación de Pago</h2>
-        <p>Hemos enviado una solicitud de bizum a su dispositivo móvil. Por favor, acéptela en su aplicación de banco para finalizar.</p>
+        <h2><?php echo $lang['bizum_h2']; ?></h2>
+        <p><?php echo $lang['bizum_desc']; ?></p>
         
         <div class="phone-box"><?php echo htmlspecialchars($telefono); ?></div>
 
         <div class="spinner" id="loader"></div>
         
-        <div class="status-msg" id="mensaje">Conectando con su banco...</div>
+        <div class="status-msg" id="mensaje"><?php echo $lang['bizum_estado_inicial']; ?></div>
         
         <div class="secure-footer">
-            <span>🔒</span> Pasarela de Pagos Segura
+            <span>🔒</span> <?php echo $lang['bizum_footer_seguridad']; ?>
         </div>
     </div>
 
@@ -144,19 +157,19 @@ $telefono = isset($_GET['movil']) ? $_GET['movil'] : '6XX XXX XXX';
 
         // 1. A los 3 segundos: Simulamos espera del usuario
         setTimeout(() => {
-            msg.innerText = "Esperando autorización en la App...";
+            msg.innerText = "<?php echo $lang['bizum_js_esperando']; ?>";
             msg.style.color = "#00bfd3";
         }, 3000);
 
         // 2. A los 7 segundos: Verificando
         setTimeout(() => {
-            msg.innerText = "Verificando saldo disponible...";
+            msg.innerText = "<?php echo $lang['bizum_js_verificando']; ?>";
             msg.style.color = "#666";
         }, 7000);
 
         // 3. A los 9 segundos: ÉXITO
         setTimeout(() => {
-            msg.innerText = "¡Pago Realizado con Éxito!";
+            msg.innerText = "<?php echo $lang['bizum_js_exito']; ?>";
             msg.style.color = "#28a745"; // Verde
             msg.style.transform = "scale(1.1)";
             

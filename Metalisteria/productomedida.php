@@ -61,22 +61,21 @@ try {
     echo "Error al cargar datos: " . $e->getMessage();
     $datos_dinamicos = []; 
 }
-
-// NOTA: He borrado la lógica del contador del carrito porque sectionheader() ya lo hace.
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo isset($_SESSION['idioma']) ? $_SESSION['idioma'] : 'es'; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Producto a Medida - Metalistería Fulsan</title>
+    <title><?php echo $lang['medida_titulo_pag']; ?></title>
     <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/productos.css">
     <link rel="stylesheet" href="css/productomedida.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="page-wrapper">
@@ -90,7 +89,7 @@ try {
                         <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
                     </svg>
                 </a>
-                <h1 class="titulo-hero">Producto a medida</h1>
+                <h1 class="titulo-hero"><?php echo $lang['medida_h1']; ?></h1>
             </div>
         </section>
 
@@ -100,12 +99,12 @@ try {
                 
                 <div class="step-item active" id="step-1">
                     <div class="step-header" onclick="toggleStep(1)">
-                        <h3 class="step-title">1. Selección del Producto:</h3>
+                        <h3 class="step-title"><?php echo $lang['medida_paso_1']; ?></h3>
                         <svg class="step-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                     </div>
                     <div class="step-content">
                         <select id="select-producto" class="custom-select" onchange="productoSeleccionado()">
-                            <option value="" disabled selected>Selecciona un tipo...</option>
+                            <option value="" disabled selected><?php echo $lang['medida_ph_sel_tipo']; ?></option>
                             <?php foreach ($lista_categorias as $cat): ?>
                                 <option value="<?php echo htmlspecialchars(strtolower($cat)); ?>">
                                     <?php echo htmlspecialchars($cat); ?>
@@ -117,12 +116,12 @@ try {
 
                 <div class="step-item disabled" id="step-2">
                     <div class="step-header" onclick="toggleStep(2)">
-                        <h3 class="step-title">2. Elige el Material:</h3>
+                        <h3 class="step-title"><?php echo $lang['medida_paso_2']; ?></h3>
                         <svg class="step-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                     </div>
                     <div class="step-content" style="display: flex; align-items: center; gap: 15px;">
                         <select id="select-material" class="custom-select" onchange="materialSeleccionado()" style="flex: 1; width: auto;">
-                            <option value="" disabled selected>Primero selecciona producto...</option>
+                            <option value="" disabled selected><?php echo $lang['medida_ph_sel_mat']; ?></option>
                         </select>
     
                         <img id="img-material" src="" style="width: 60px; height: 60px; object-fit: contain; border: 1px solid #ddd; border-radius: 5px; display: none;">
@@ -131,13 +130,13 @@ try {
 
                 <div class="step-item disabled" id="step-3">
                     <div class="step-header" onclick="toggleStep(3)">
-                    <h3 class="step-title">3. Elige el Color:</h3>
+                    <h3 class="step-title"><?php echo $lang['medida_paso_3']; ?></h3>
                     <svg class="step-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                 </div>
 
             <div class="step-content" style="display: flex; align-items: center; gap: 15px;">
                 <select id="select-color" class="custom-select" onchange="colorSeleccionado()" style="flex: 1; width: auto;">
-                    <option value="" disabled selected>Primero selecciona material...</option>
+                    <option value="" disabled selected><?php echo $lang['medida_ph_sel_col']; ?></option>
                 </select>
         
                 <img id="img-color" src="" onerror="this.style.display='none'" style="width: 60px; height: 60px; object-fit: contain; border: 1px solid #ddd; border-radius: 5px; display: none;">
@@ -146,14 +145,14 @@ try {
          
                 <div class="step-item disabled" id="step-4">
                     <div class="step-header" onclick="toggleStep(4)">
-                        <h3 class="step-title">4. Tamaño del Producto:</h3>
+                        <h3 class="step-title"><?php echo $lang['medida_paso_4']; ?></h3>
                         <svg class="step-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                     </div>
                     <div class="step-content">
                         <input id="input-medida" 
                                class="custom-input" 
                                type="text" 
-                               placeholder="Ej: 50x100" 
+                               placeholder="<?php echo $lang['medida_ph_input_medida']; ?>" 
                                oninput="validarInputMedida(this)" 
                                onblur="validarYFormatearMedida()">
                         <p class="error-message" id="medida-error"></p>
@@ -162,17 +161,17 @@ try {
 
                 <div class="step-item disabled" id="step-5">
                     <div class="step-header" onclick="toggleStep(5)">
-                        <h3 class="step-title">5. Otros Detalles:</h3>
+                        <h3 class="step-title"><?php echo $lang['medida_paso_5']; ?></h3>
                         <svg class="step-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                     </div>
                     <div class="step-content">
-                        <textarea id="input-detalles" class="custom-textarea" placeholder="Cuéntanos cualquier detalle adicional..." oninput="verificarFinal()"></textarea>
+                        <textarea id="input-detalles" class="custom-textarea" placeholder="<?php echo $lang['medida_ph_input_detalles']; ?>" oninput="verificarFinal()"></textarea>
                     </div>
                 </div>
 
                 <div id="final-action" style="display:none; opacity:0; transition: opacity 0.5s;">
                     <button type="button" class="btn-enviar" onclick="enviarPropuesta()">
-                        Enviar propuesta
+                        <?php echo $lang['medida_btn_enviar']; ?>
                     </button>
                 </div>
 
@@ -186,13 +185,9 @@ try {
 
     <script>
         // ======================================================
-        // 1. RECEPCIÓN DE DATOS DESDE PHP (Base de Datos)
+        // 1. RECEPCIÓN DE DATOS DESDE PHP
         // ======================================================
-        
-        // Estructura: { "ventanas": { "Aluminio": ["Blanco"], "PVC": ["Blanco"] }, ... }
         const datosDB = <?php echo json_encode($datos_dinamicos); ?>;
-        
-        // Mapa ID -> Nombre (Ej: { 1: "ventanas", 5: "barandillas" })
         const mapaIds = <?php echo json_encode($mapa_ids_js); ?>;
 
         // ======================================================
@@ -205,22 +200,20 @@ try {
             const colorSelect = document.getElementById('select-color');
             const prodValue = prodSelect.value;
 
-            // --- NUEVO: Si cambias de producto, ocultamos las fotos anteriores ---
+            // Reset visual
             const imgMat = document.getElementById('img-material');
             const imgColor = document.getElementById('img-color');
-
             if (imgMat) imgMat.style.display = 'none';
             if (imgColor) imgColor.style.display = 'none';
-            // ---------------------------------------------------------------------
 
             // 1. Limpiar siguientes pasos
-            matSelect.innerHTML = '<option value="" disabled selected>Selecciona un material...</option>';
-            colorSelect.innerHTML = '<option value="" disabled selected>Primero selecciona material...</option>';
+            matSelect.innerHTML = '<option value="" disabled selected><?php echo $lang['medida_js_sel_mat_ok']; ?></option>';
+            colorSelect.innerHTML = '<option value="" disabled selected><?php echo $lang['medida_ph_sel_col']; ?></option>';
 
             document.getElementById('step-3').classList.add('disabled');
             document.getElementById('step-3').classList.remove('active');
 
-            // 2. Comprobar si hay datos para esa categoría
+            // 2. Comprobar si hay datos
             if (prodValue && datosDB[prodValue]) {
                 const materiales = Object.keys(datosDB[prodValue]);
                 if (materiales.length > 0) {
@@ -231,7 +224,7 @@ try {
                     matSelect.appendChild(option);
                 });
                  } else {
-                    matSelect.innerHTML = '<option>No hay materiales disponibles</option>';
+                    matSelect.innerHTML = '<option><?php echo $lang['medida_js_no_mat']; ?></option>';
                 }
                 // Desbloquear Paso 2
                 document.getElementById('step-2').classList.remove('disabled');
@@ -252,16 +245,16 @@ try {
                     const nombre = matValue.toLowerCase().trim();
                     if (nombre === 'aluminio' || nombre === 'pvc') {
                         imgMat.src = 'imagenes/' + nombre + '.png';
-                        imgMat.style.display = 'block'; // Al aparecer, el select se hace pequeño automáticamente
+                        imgMat.style.display = 'block'; 
                     }   else {
-                        imgMat.style.display = 'none';  // Si es otro material, ocultamos foto y el select crece
+                        imgMat.style.display = 'none';  
                     }
                 } else {
                     imgMat.style.display = 'none';
                 }
             }
             // 1. Limpiar colores
-            colorSelect.innerHTML = '<option value="" disabled selected>Selecciona un color...</option>';
+            colorSelect.innerHTML = '<option value="" disabled selected><?php echo $lang['medida_js_sel_col_ok']; ?></option>';
             // 2. Buscar colores en el array
             if (prodValue && matValue && datosDB[prodValue][matValue]) {
                 const colores = datosDB[prodValue][matValue];
@@ -270,7 +263,7 @@ try {
                     option.value = col;
                     option.textContent = col;
                     colorSelect.appendChild(option);
-            });
+                });
 
             // Desbloquear Paso 3
             document.getElementById('step-3').classList.remove('disabled');
@@ -284,24 +277,19 @@ try {
             const val = colorSelect.value; 
 
             if (val) {
-             // 1. Lógica de la imagen (mantiene lo que ya funcionaba)
                 let nombreLimpio = val.trim(); 
                 imgColor.src = 'imagenes/color' + nombreLimpio + '.png';
                 imgColor.style.display = 'block';
 
-                // 2. --- ESTO ES LO QUE FALTABA: ABRIR PASO 4 ---
-                // Buscamos el paso 4 y lo desbloqueamos
                 const paso4 = document.getElementById('step-4');
                 if (paso4) {
-                    paso4.classList.remove('disabled'); // Quita el candado visual
+                    paso4.classList.remove('disabled'); 
                 }
-                // -----------------------------------------------
 
             } else {
                 imgColor.style.display = 'none';
             }
 
-            // Actualizar título del paso actual
             tituloPaso(3, 'Color: ' + val);
     }
 
@@ -339,13 +327,11 @@ try {
             const errorMsg = document.getElementById('medida-error');
             let valor = input.value.toLowerCase();
 
-            // Reset visual
             input.classList.remove('input-error');
             errorMsg.style.display = 'none';
 
             if (valor.length === 0) return;
 
-            // Comprobar formato simple (número x número)
             if (!valor.includes('x')) return;
 
             const partes = valor.split('x');
@@ -354,13 +340,12 @@ try {
 
             if (ancho < 30 || alto < 30) {
                 input.classList.add('input-error');
-                errorMsg.textContent = "⚠️ El mínimo es 30 cm.";
+                errorMsg.textContent = "<?php echo $lang['medida_js_min_30']; ?>";
                 errorMsg.style.display = 'block';
                 input.value = "";
                 return;
             }
 
-            // Añadir 'cm' si falta
             if (!valor.includes('cm')) {
                 input.value = ancho + "x" + alto + " cm";
             }
@@ -390,16 +375,49 @@ try {
         }
 
         function enviarPropuesta() {
-            // AQUÍ PONES EL FETCH A TU ARCHIVO DE ENVÍO DE EMAIL
-            // O SUBMIT DEL FORMULARIO
-            alert('✅ Funcionalidad de envío lista. Implementar fetch a PHP aquí.');
+            // Recoger datos
+            const producto = document.getElementById('select-producto').options[document.getElementById('select-producto').selectedIndex].text;
+            const material = document.getElementById('select-material').value;
+            const color = document.getElementById('select-color').value;
+            const medida = document.getElementById('input-medida').value;
+            const detalles = document.getElementById('input-detalles').value;
+
+            // Enviar a PHP (AJAX)
+            fetch('enviar_presupuesto.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    producto: producto + " (" + material + ")",
+                    color: color,
+                    medida: medida,
+                    detalles: detalles
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: '¡Enviado!',
+                        text: '<?php echo $lang['medida_js_alert_enviada']; ?>',
+                        icon: 'success',
+                        confirmButtonColor: '#293661'
+                    }).then(() => {
+                        window.location.href = 'productos.php';
+                    });
+                } else {
+                    Swal.fire('Error', '<?php echo $lang['medida_js_alert_error']; ?>', 'error');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                Swal.fire('Error', 'Error técnico al conectar con el servidor.', 'error');
+            });
         }
 
         // ======================================================
         // 5. AUTO-SELECCIÓN (AL CARGAR LA PÁGINA)
         // ======================================================
         document.addEventListener("DOMContentLoaded", function() {
-            // Leer ?categoria=X de la URL
             const urlParams = new URLSearchParams(window.location.search);
             const idCat = urlParams.get('categoria');
 
@@ -407,11 +425,8 @@ try {
                 const nombreCat = mapaIds[idCat];
                 const select = document.getElementById('select-producto');
                 
-                // Intentar seleccionar la opción
-                // (El select ya está relleno con nombres reales desde PHP)
                 select.value = nombreCat;
 
-                // Si se seleccionó correctamente, activar lógica
                 if (select.value === nombreCat) {
                     productoSeleccionado();
                 }
