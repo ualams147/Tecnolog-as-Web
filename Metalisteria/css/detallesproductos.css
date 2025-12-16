@@ -1,0 +1,277 @@
+/* =========================================
+   ESTILOS DETALLES PRODUCTO (CLIENTE)
+   Archivo: css/detallesProducto.css
+   ========================================= */
+
+/* ===== RESET OBLIGATORIO (Adiós filo blanco) ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #f4f6f9;
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+}
+
+/* ===== LAYOUT PRINCIPAL ===== */
+.visitante-producto-detalle {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+    width: 100%;
+}
+
+/* ===== HERO SECTION (Azul Degradado) ===== */
+.product-hero {
+    background-color: #293661;
+    position: relative;
+    padding: 60px 0 180px 0; /* Padding inferior grande para solapamiento */
+    text-align: center;
+    width: 100%;
+    z-index: 1;
+}
+
+.product-hero::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 270px;
+    background: linear-gradient(180deg, #ffffff 0%, #e4e4e4 26.923%, rgba(153,153,153,0) 100%);
+    opacity: 0.9;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.product-title-main {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 50px;
+    color: white;
+    text-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+    margin: 0;
+}
+
+/* Botón Volver (Flecha) */
+.btn-back {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: transform 0.3s;
+}
+
+.btn-back:hover {
+    transform: translateY(-50%) translateX(-5px);
+}
+
+.btn-back svg {
+    width: 40px;
+    height: 40px;
+    fill: white;
+}
+
+/* ===== MAIN CONTENT (Tarjeta Flotante) ===== */
+.product-main {
+    margin-top: -120px;
+    position: relative;
+    z-index: 10;
+    margin-bottom: 80px;
+}
+
+.details-container-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    padding: 40px;
+    min-height: 400px;
+}
+
+/* --- CABECERA DE LA FICHA (Fecha, Estado, ID) --- */
+.info-pedido-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 25px;
+    margin-bottom: 30px;
+}
+
+.info-grupo h3 {
+    font-size: 14px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.info-grupo p {
+    font-size: 20px;
+    color: #293661;
+    font-weight: 700;
+}
+
+/* Badges de Estado */
+.estado-badge {
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    display: inline-block;
+}
+.estado-pendiente { background: #FFC107; color: #333; }
+.estado-proceso { background: #3498db; color: white; }
+.estado-entregado { background: #2ecc71; color: white; }
+.estado-cancelado { background: #e74c3c; color: white; }
+.estado-default { background: #e0e0e0; color: #333; }
+
+/* --- LISTA DE PRODUCTOS --- */
+.titulo-seccion {
+    color: #293661;
+    margin-bottom: 20px;
+    border-left: 5px solid #a0d2ac; /* Detalle verde lateral */
+    padding-left: 15px;
+    font-size: 22px;
+}
+
+.lista-productos {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.item-producto {
+    display: flex;
+    align-items: center;
+    background: #fcfcfc;
+    border: 1px solid #eef1f5;
+    border-radius: 15px;
+    padding: 20px;
+    transition: box-shadow 0.2s;
+}
+
+.item-producto:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.thumb-prod {
+    width: 90px;
+    height: 90px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    object-fit: contain;
+    margin-right: 25px;
+    padding: 5px;
+}
+
+.detalles-prod {
+    flex-grow: 1;
+}
+
+.detalles-prod h4 {
+    margin: 0 0 8px 0;
+    color: #293661;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.meta-info {
+    font-size: 14px;
+    color: #666;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.meta-tag {
+    background: #eef1f5;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.precio-column {
+    text-align: right;
+    min-width: 120px;
+}
+
+.precio-subtotal {
+    display: block;
+    font-size: 22px;
+    font-weight: 700;
+    color: #293661;
+}
+
+.precio-unitario {
+    display: block;
+    font-size: 13px;
+    color: #999;
+    margin-top: 4px;
+}
+
+/* --- RESUMEN ECONÓMICO --- */
+.resumen-economico {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px dashed #ddd;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.fila-resumen {
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+    font-size: 15px;
+    color: #555;
+}
+
+.fila-resumen.total {
+    font-size: 26px;
+    font-weight: 700;
+    color: #293661;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid #293661;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .product-title-main { font-size: 32px; }
+    .product-hero { padding-bottom: 120px; }
+    .details-container-card { padding: 20px; }
+    
+    .item-producto { flex-direction: column; text-align: center; gap: 15px; }
+    .thumb-prod { margin-right: 0; }
+    .meta-info { justify-content: center; }
+    .precio-column { text-align: center; }
+    
+    .fila-resumen { width: 100%; }
+}

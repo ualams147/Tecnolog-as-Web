@@ -199,7 +199,7 @@ try {
                                         <span class="precio-total"><?php echo number_format($pedido['total'], 2); ?> €</span>
                                     </div>
                                 </div>
-                                <a href="detallesventas.php?id=<?php echo $pedido['id']; ?>" class="btn-ver-detalles">
+                                <a href="detallesproductos.php?id=<?php echo $pedido['id']; ?>" class="btn-ver-detalles">
                                     Ver Detalles
                                 </a>
                             </div>
