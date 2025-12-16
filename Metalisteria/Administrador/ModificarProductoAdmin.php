@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mensaje = "¡Producto actualizado correctamente!";
         
         // Opcional: Redirigir tras guardar
-        // header("Location: admin.php"); 
+        header("Location: ../Administrador/ListadoProductosAdmin.php"); 
         
     } catch(PDOException $e) {
         $mensaje = "Error al guardar: " . $e->getMessage();
@@ -60,6 +60,16 @@ if (!$producto) {
     echo "Producto no encontrado.";
     exit;
 }
+
+// Comprobamos la ruta de la imagen ya tiene "../imagenes/"
+    $ruta_bd = $producto['imagen_url'];
+    
+    // Si la ruta NO empieza por "../", asumimos que es una foto vieja y le añadimos la carpeta
+    if (strpos($ruta_bd, '../') === 0) {
+        $ruta_foto = $ruta_bd;
+    } else {
+        $ruta_foto = '../' . $ruta_bd;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -68,10 +78,12 @@ if (!$producto) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modificar Producto - Metalistería Fulsan</title>
+    <link rel="icon" type="image/png" href="../imagenes/logo.png">
     <link rel="stylesheet" href="../css/administrador.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="ModificarProductoAdmin">
@@ -105,7 +117,7 @@ if (!$producto) {
             <div class="degradado"></div>
             <div class="recuadro-fondo"></div> 
             <a href="ListadoProductosAdmin.php" class="flecha-circular">&#8592;</a>
-            <h1 class="titulo-principal"><?php echo $producto['referencia']; ?></h1>
+            <h1 class="titulo-principal" style="font-weight: bold;">Modificar Producto</h1>
         </div>
 
         <!-- Main Content -->
@@ -121,13 +133,13 @@ if (!$producto) {
             <div id="mensaje-error-js" class="alerta-error" style="display: none;"></div>
 
             <!-- INICIO FORMULARIO (Importante: method="POST" y enctype para imágenes) -->
-            <form method="POST" enctype="multipart/form-data" class="product-card">
+            <form id="form-modificar" method="POST" enctype="multipart/form-data" class="product-card">
                 
                 <!-- Columna Imagen -->
                 <div class="image-column">
                     <div class="image-placeholder" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
                         <!-- Mostramos la imagen actual -->
-                        <img id="preview-img" src="<?php echo $producto['imagen_url']; ?>" alt="Producto" style="max-width: 100%; max-height: 100%; object-fit: contain;" onerror="this.src='img/sin-foto.jpg'">
+                        <img id="preview-img" src="<?php echo $ruta_foto; ?>" alt="Producto" style="max-width: 100%; max-height: 100%; object-fit: contain;" onerror="this.src='../imagenes/producto-sin-imagen.png'">
                     </div>
                     
                     <!-- Input oculto para subir archivo -->
@@ -212,13 +224,14 @@ if (!$producto) {
                     <!-- Botones de acción DENTRO del formulario -->
                     <div class="botones-finales">
                         <div class="boton-salir">
-                            <a href="../Administrador/ListadoProductosAdmin.php">Salir</a>
+                            <a href="javascript:void(0);" onclick="confirmarSalida()">Salir</a>
                         </div>
                         
-                        <!-- El botón de guardar debe ser un <button> o <input submit> -->
-                        <button type="submit" class="boton-crear" style="border:none; font-family: inherit;">
-                            <p>Guardar Cambios</p>
-                        </button>
+                        <div class="boton-modificar">
+                            <button type="button" name="actualizar" onclick="confirmarModificacion()">
+                                Guardar cambios
+                            </button>
+                        </div>
                     </div>
 
                 </div>
@@ -391,6 +404,64 @@ if (!$producto) {
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
+        function confirmarModificacion() {
+            // 1. Seleccionamos el formulario
+            const formulario = document.getElementById('form-modificar');
+
+            // 2. Comprobamos si los campos requeridos están llenos (HTML5 validation)
+            if (!formulario.checkValidity()) {
+                // Si falta algo, dejamos que el navegador muestre los errores rojos
+                formulario.reportValidity();
+                return; 
+            }
+
+            // 3. Si todo está relleno, lanzamos la alerta
+            Swal.fire({
+                title: 'Guardar cambios',
+                text: "¿Estás seguro de que quieres actualizar los datos de este producto?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#293661', // Tu azul corporativo para SI
+                cancelButtonColor: '#6c757d', // Gris para NO (seguir editando)
+                confirmButtonText: 'Sí, guardar cambios',
+                cancelButtonText: 'No, seguir editando',
+                background: '#fff',
+                // Estilo opcional para que quede más integrado
+                customClass: {
+                    popup: 'mi-alerta-redondeada'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // 4. Si dice que SÍ, enviamos el formulario manualmente
+                    formulario.submit();
+                }
+                // Si dice que NO, no hacemos nada y el cuadro se cierra solo.
+            });
+        }
+
+        // --- NUEVA FUNCIÓN PARA EL BOTÓN SALIR ---
+        function confirmarSalida() {
+            Swal.fire({
+                title: '¿Salir sin guardar?',
+                text: "Se perderán los cambios que no hayas guardado.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',     // Rojo para indicar "Salir/Peligro"
+                cancelButtonColor: '#293661',   // Azul para "Me quedo"
+                confirmButtonText: 'Sí, salir',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    popup: 'swal2-popup'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Si confirma, entonces sí redirigimos manualmente
+                    window.location.href = '../Administrador/ListadoProductosAdmin.php';
+                }
+            });
+        }
+
     </script>
 
 </body>

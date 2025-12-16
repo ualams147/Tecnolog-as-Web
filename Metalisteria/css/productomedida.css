@@ -25,41 +25,6 @@ body {
     padding: 0 40px;
 }
 
-/* ========================== CABECERA ========================== */
-.cabecera {
-    position: relative;
-    width: 100%;
-    background: white;
-    padding: 30px 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-.cabecera .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 40px;
-}
-
-.logo-main { flex-shrink: 0; position: relative; display: flex; align-items: center; }
-.logo-main img { height: 60px; width: auto; }
-.logo-text { display: flex; flex-direction: column; margin-left: 12px; line-height: 1.1; }
-.logo-text span { font-size: 14px; font-weight: 400; color: #2b2b2b; }
-.logo-text strong { font-size: 18px; font-weight: 700; color: #000; width: 100%; text-align: center; }
-.logo-link { display: flex; align-items: center; text-decoration: none; color: inherit; }
-
-.nav-bar { display: flex; align-items: center; justify-content: center; gap: 140px; flex: 1; font-weight: 500; font-size: 18px; color: #2b2b2b; }
-.nav-bar a { text-decoration: none; color: #2b2b2b; transition: color 0.3s; }
-.nav-bar a:hover { color: #293661; }
-
-.sign-in { background: #293661; border-radius: 40px; padding: 12px 24px; cursor: pointer; transition: 0.3s; }
-.sign-in:hover { background-color: #1f2849; transform: translateY(-2px); }
-.sign-in a { font-weight: 700; font-size: 18px; color: white; text-decoration: none; }
-
-
 /* ================== ESTILOS DE PRODUCTO A MEDIDA ================== */
 
 .medida-hero {
@@ -237,28 +202,6 @@ body {
     background-color: #1f2849;
 }
 
-/* ============ FOOTER ============ */
-.footer {
-    background: #293661;
-    color: white;
-    padding: 60px 0 30px;
-    margin-top: auto;
-}
-.footer-content { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; margin-bottom: 40px; }
-.footer-logo-section { display: flex; gap: 20px; align-items: center; }
-.logo-footer img { width: 200px; height: 200px; object-fit: contain; }
-.redes { display: flex; gap: 20px; }
-.instagram-link { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; }
-.footer-links { display: grid; grid-template-columns: 1fr 2fr; gap: 60px; }
-.enlaces-rapidos h3, .contacto-footer h3 { font-size: 20px; margin-bottom: 20px; font-weight: 600; }
-.enlaces-rapidos ul, .contacto-footer ul { list-style: none; }
-.enlaces-rapidos ul li, .contacto-footer ul li { margin-bottom: 12px; }
-.enlaces-rapidos ul li a, .contacto-footer ul li a { color: white; text-decoration: none; opacity: 0.9; }
-.contacto-footer ul li { display: flex; align-items: center; gap: 12px; }
-.contacto-footer ul li svg { width: 20px; height: 20px; fill: white; }
-.footer-bottom { padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.2); }
-.politica-legal { display: flex; justify-content: center; gap: 15px; }
-.politica-legal a { color: white; text-decoration: none; font-size: 14px; }
 
 /* Responsive */
 @media (max-width: 768px) {

@@ -1,4 +1,5 @@
 <?php
+
 // Recogemos el teléfono de la URL. Si no viene, ponemos "6XX XXX XXX" de ejemplo.
 $telefono = isset($_GET['tel']) ? $_GET['tel'] : '6XX XXX XXX';
 ?>

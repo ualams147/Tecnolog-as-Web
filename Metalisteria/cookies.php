@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Política de Cookies - Metalistería Fulsan</title>
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
@@ -50,7 +51,6 @@
                     <h2>2. Tipos de Cookies que utilizamos</h2>
                     <ul>
                         <li><strong>Cookies técnicas:</strong> Son necesarias para el correcto funcionamiento de la web (ej. mantener la sesión o el carrito de compra).</li>
-                        <li><strong>Cookies de análisis:</strong> Nos permiten cuantificar el número de usuarios y realizar análisis estadísticos de la utilización que hacen los usuarios del servicio.</li>
                     </ul>
 
                     <h2>3. Gestión de Cookies</h2>

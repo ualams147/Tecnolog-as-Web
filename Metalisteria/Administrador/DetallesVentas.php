@@ -39,10 +39,12 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles Venta #<?php echo $venta['id']; ?> - Metalisteria Fulsan</title>
+    <link rel="icon" type="image/png" href="../imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/administrador.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="DetallesVentas">
@@ -134,7 +136,7 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
             <!-- Botones de acción -->
             <div class="botones-finales">
                 <div class="boton-salir">
-                    <a href="../Administrador/ListadoVentasAdmin.php">Salir</a>
+                    <a href="javascript:void(0);" onclick="confirmarSalida()">Salir</a>
                 </div>
                 <div class="boton-usuario">
                     <!-- Enlace dinámico al perfil del cliente -->
@@ -199,5 +201,30 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
                 </div>
         </footer>
     </div>
+
+    <script>
+         function confirmarSalida() {
+            Swal.fire({
+                title: '¿Salir sin guardar?',
+                text: "Se perderán los cambios que no hayas guardado.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',     // Rojo para indicar "Salir/Peligro"
+                cancelButtonColor: '#293661',   // Azul para "Me quedo"
+                confirmButtonText: 'Sí, salir',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    popup: 'swal2-popup'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Si confirma, entonces sí redirigimos manualmente
+                    window.location.href = '../Administrador/ListadoVentasAdmin.php';
+                }
+            });
+        }
+    </script>
+
+
 </body>
 </html>

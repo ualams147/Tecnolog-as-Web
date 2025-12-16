@@ -1,4 +1,15 @@
 <?php
+// 1. CARGAMOS LIBRERÍAS
+require '../../../vendor/autoload.php'; 
+
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
+// --- [COMENTADO PARA HOST GRATUITO] ---
+// use PHPMailer\PHPMailer\PHPMailer;
+// use PHPMailer\PHPMailer\Exception;
+// --------------------------------------
+include '../CabeceraFooter.php';
 session_start();
 
 // 1. CONEXIÓN (Manejo de errores simple para evitar pantalla blanca)
@@ -124,21 +135,8 @@ if(isset($_SESSION['carrito'])) {
 </head>
 <body>
     <div class="visitante-conocenos">
-        <header class="cabecera no-print">
-            <div class="container">
-                <div class="logo-main">
-                    <a href="index.php" class="logo-link">
-                        <img src="../imagenes/logo.png" alt="Logo">
-                        <div class="logo-text"><span>Metalistería</span><strong>Fulsan</strong></div>
-                    </a>
-                </div>
-                <nav class="nav-bar">
-                    <a href="conocenos.php">Conócenos</a>
-                    <a href="productos.php">Productos</a>
-                    <a href="carrito.php">Carrito</a>
-                </nav>
-            </div>
-        </header>
+        
+        <?php sectionheader(); ?>
 
         <section class="steps-section no-print">
             <div class="container">
@@ -218,13 +216,7 @@ if(isset($_SESSION['carrito'])) {
             </div>
         </main>
         
-        <footer class="footer no-print">
-            <div class="container">
-                <div class="footer-content">
-                    <div class="footer-logo-section"><div class="logo-footer"><img src="../imagenes/footer.png" alt="Logo"></div></div>
-                </div>
-            </div>
-        </footer>
+        <?php sectionfooter(); ?>
     </div>
 </body>
 </html>

@@ -1,3 +1,4 @@
+
 <?php
 include '../conexion.php';
 
@@ -17,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre = $_POST['nombre'];
     $apellidos = $_POST['apellidos'];
     $email = $_POST['correo'];
-    $password = $_POST['contrasena'];
     $dni = $_POST['dni'];
     $telefono = $_POST['telefono'];
     
@@ -35,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     nombre=?, 
                     apellidos=?, 
                     email=?, 
-                    password=?, 
                     dni=?, 
                     telefono=?, 
                     direccion=?, 
@@ -51,7 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nombre, 
             $apellidos, 
             $email, 
-            $password, 
             $dni, 
             $telefono, 
             $calle,   
@@ -62,20 +60,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id
         ]);
         
-        $mensaje = "¡Cliente actualizado correctamente!";
+        // --- CAMBIO CLAVE AQUÍ: REDIRECCIÓN DIRECTA COMO EN PRODUCTOS ---
+        header("Location: ../Administrador/ListadoClientesAdmin.php"); 
+        exit;
         
     } catch(PDOException $e) {
         $mensaje = "Error al guardar: " . $e->getMessage();
     }
 }
 
-// 3. OBTENER DATOS DEL CLIENTE
-$stmt = $conn->prepare("SELECT * FROM clientes WHERE id = ?");
+// 3. OBTENER LOS DATOS ACTUALES DEL CLIENTE (¡Esto faltaba en tu código pegado!)
+// Es vital para rellenar el formulario al cargar la página
+$sql = "SELECT * FROM clientes WHERE id = ?";
+$stmt = $conn->prepare($sql);
 $stmt->execute([$id]);
-$cliente = $stmt->fetch(PDO::FETCH_ASSOC);
+$cliente = $stmt->fetch(PDO::FETCH_ASSOC); // Guardamos en $cliente para usarlo abajo
 
 if (!$cliente) {
-    echo "Cliente no encontrado";
+    echo "Cliente no encontrado.";
     exit;
 }
 ?>
@@ -86,11 +88,13 @@ if (!$cliente) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modificar Cliente - Metalistería Fulsán</title>
+    <link rel="icon" type="image/png" href="../imagenes/logo.png">
     <link rel="stylesheet" href="../css/administrador.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <!-- Estilos necesarios para que el script JS muestre los errores visualmente -->
     <style>
@@ -151,7 +155,7 @@ if (!$cliente) {
                 
                 <h2 class="form-section-title">Datos Personales</h2>
 
-                <form class="formulario-cliente" method="POST">
+                <form id="form-modificar" class="formulario-cliente" method="POST">
                     
                     <div class="form-group">
                         <label class="label-icon"><i class="far fa-user"></i> Nombre:</label>
@@ -163,19 +167,13 @@ if (!$cliente) {
                         <input type="text" id="apellidos" class="input-display" name="apellidos" value="<?php echo htmlspecialchars($cliente['apellidos']); ?>" required />
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group full-width">
                         <label class="label-icon"><i class="far fa-envelope"></i> Correo electrónico:</label>
                         <input type="email" id="correo" class="input-display" name="correo" value="<?php echo htmlspecialchars($cliente['email']); ?>" required />
                     </div>
 
                     <div class="form-group">
-                        <label class="label-icon"><i class="fas fa-user-lock"></i> Contraseña:</label>
-                        <input type="text" id="contrasena" class="input-display" name="contrasena" value="<?php echo htmlspecialchars($cliente['password']); ?>" />
-                    </div>
-
-                    <div class="form-group">
                         <label class="label-icon"><i class="far fa-id-card"></i> DNI/NIF/NIE:</label>
-                        <!-- El script busca input[name="dni"] -->
                         <input type="text" id="dni" class="input-display" name="dni" value="<?php echo isset($cliente['dni']) ? htmlspecialchars($cliente['dni']) : ''; ?>" placeholder="Ej: 12345678Z" />
                     </div>
 
@@ -220,11 +218,13 @@ if (!$cliente) {
                     <!-- Botones -->
                     <div class="botones-finales full-width" style="grid-column: span 2;">
                         <div class="boton-salir">
-                            <a href="../Administrador/ListadoClientesAdmin.php">Salir</a>
+                            <a href="javascript:void(0);" onclick="confirmarSalida()">Salir</a>
                         </div>
                         
                         <div class="boton-modificar">
-                            <button type="submit" name="actualizar">Modificar cliente</button>
+                            <button type="button" name="actualizar" onclick="confirmarModificacion()">
+                                Guardar cambios
+                            </button>
                         </div>
                     </div>
 
@@ -275,5 +275,58 @@ if (!$cliente) {
     <!-- Cargamos tu script de validación -->
     <script src="../js/AlgoritmoDNIs.js"></script>
 
+    <script>
+        function confirmarModificacion() {
+            // Seleccionamos el formulario por el ID que acabamos de poner
+            const formulario = document.getElementById('form-modificar');
+
+            // Validar campos requeridos
+            if (!formulario.checkValidity()) {
+                formulario.reportValidity();
+                return; 
+            }
+
+            // Validar DNI (si tu script externo tiene una función validarDNI, úsala aquí)
+            // if (typeof validarDNI === 'function' && !validarDNI()) return;
+
+            Swal.fire({
+                title: '¿Guardar cambios?',
+                text: "¿Estás seguro de que quieres actualizar los datos de este cliente?", // Texto corregido para cliente
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#293661',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, guardar cambios',
+                cancelButtonText: 'No, seguir editando',
+                customClass: {
+                    popup: 'swal2-popup'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    formulario.submit();
+                }
+            });
+        }
+
+        function confirmarSalida() {
+            Swal.fire({
+                title: '¿Salir sin guardar?',
+                text: "Se perderán los cambios que no hayas guardado.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#293661',
+                confirmButtonText: 'Sí, salir',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    popup: 'swal2-popup'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '../Administrador/ListadoClientesAdmin.php';
+                }
+            });
+        }
+    </script>
 </body>
 </html>

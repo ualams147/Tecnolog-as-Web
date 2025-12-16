@@ -56,11 +56,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Producto - Metalistería Fulsan</title>
-    
+    <link rel="icon" type="image/png" href="../imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/administrador.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="CrearProductoAdmin">
@@ -102,7 +103,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             <!-- FORMULARIO CONECTADO -->
             <div id="mensaje-error-js" class="alerta-error" style="display: none;"></div>
-            <form method="POST" enctype="multipart/form-data" class="product-card">
+            <input type="hidden" name="accion" value="crear">
+            <form id="form-crear" method="POST" enctype="multipart/form-data" class="product-card">
                 
                 <!-- Columna Imagen -->
                 <div class="image-column">
@@ -194,13 +196,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <!-- Botones de acción -->
                     <div class="botones-finales">
+    
                         <div class="boton-salir">
-                            <a href="../Administrador/ListadoProductosAdmin.php">Salir</a>
+                            <a href="javascript:void(0);" onclick="confirmarSalida()">Salir</a>
                         </div>
                         
-                        <button type="submit" class="boton-crear" style="border: 2px solid rgba(41, 54, 97, 0.6); font-family: inherit;">
-                            <p>Crear producto</p>
-                        </button>
+                        <div class="boton-modificar"> <button type="button" name="crear" onclick="confirmarCreacion()" style="border: 2px solid rgba(41, 54, 97, 0.6); font-family: inherit;">
+                                <p>Crear producto</p>
+                            </button>
+                        </div>
+
                     </div>
 
                 </div>
@@ -369,6 +374,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 });
             }
         });
+
+
+        // --- FUNCIONES DE ALERTA (SWEETALERT) ---
+
+        function confirmarCreacion() {
+            // 1. Seleccionamos el formulario
+            const formulario = document.getElementById('form-crear');
+
+            // 2. Validar campos requeridos (Nombre, Precio, Categoría...)
+            if (!formulario.checkValidity()) {
+                formulario.reportValidity();
+                return; 
+            }
+
+            // 3. Validar Medidas (Opcional: Obligar a poner al menos una medida)
+            // Si quieres obligar, descomenta estas 3 líneas:
+            
+            const medidas = document.getElementById('tamanos-final').value;
+            if (!medidas) {
+                Swal.fire('Faltan medidas', 'Por favor, añade al menos un tamaño para el producto.', 'warning');
+                return;
+            }
+
+            // 4. Mostrar Alerta
+            Swal.fire({
+                title: '¿Crear producto?',
+                text: "¿Estás seguro de que quieres añadir este nuevo producto al catálogo?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#293661',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, crear producto',
+                cancelButtonText: 'Revisar',
+                customClass: { popup: 'swal2-popup' } // Fuente Poppins
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    formulario.submit(); // Enviamos manualmente
+                }
+            });
+        }
+
+        function confirmarSalida() {
+            Swal.fire({
+                title: '¿Salir sin crear?',
+                text: "Se perderán los datos introducidos.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#293661',
+                confirmButtonText: 'Sí, salir',
+                cancelButtonText: 'Seguir creando',
+                customClass: { popup: 'swal2-popup' }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '../Administrador/ListadoProductosAdmin.php';
+                }
+            });
+        }
+
     </script>
 
 </body>
