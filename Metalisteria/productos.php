@@ -19,11 +19,11 @@ try {
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo isset($_SESSION['idioma']) ? $_SESSION['idioma'] : 'es'; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos - Metalistería Fulsan</title>
+    <title><?php echo $lang['productos_titulo_pag']; ?></title>
     <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,27 +57,27 @@ try {
         <?php sectionheader(3); ?>
 
         <section class="hero-productos">
-            <h1 class="hero-title" onclick="filtrar('todos')" title="Clic para ver todos">Nuestros productos</h1>
+            <h1 class="hero-title" onclick="filtrar('todos')" title="<?php echo $lang['productos_h1_title']; ?>"><?php echo $lang['productos_h1']; ?></h1>
             
             <div class="categorias-container">
                 <div class="cat-card" onclick="filtrar('2')" id="cat-2">
                     <div class="cat-frame"><img src="imagenes/p1.png" alt="Puertas"></div>
-                    <span class="cat-name">PUERTAS</span>
+                    <span class="cat-name"><?php echo $lang['productos_cat_puertas']; ?></span>
                 </div>
 
                 <div class="cat-card" onclick="filtrar('1')" id="cat-1">
                     <div class="cat-frame"><img src="imagenes/v1.png" alt="Ventanas"></div>
-                    <span class="cat-name">VENTANAS</span>
+                    <span class="cat-name"><?php echo $lang['productos_cat_ventanas']; ?></span>
                 </div>
 
                 <div class="cat-card" onclick="filtrar('5')" id="cat-5">
                     <div class="cat-frame"><img src="imagenes/b1.png" alt="Barandillas"></div>
-                    <span class="cat-name">BARANDILLAS</span>
+                    <span class="cat-name"><?php echo $lang['productos_cat_barandillas']; ?></span>
                 </div>
 
                 <div class="cat-card" onclick="filtrar('otros')" id="cat-otros">
                     <div class="cat-frame"><img src="imagenes/otro.png" alt="Otras"></div>
-                    <span class="cat-name">OTRAS<br>ESTRUCTURAS</span>
+                    <span class="cat-name"><?php echo $lang['productos_cat_otras']; ?></span>
                 </div>
             </div>
         </section>
@@ -85,8 +85,8 @@ try {
         <main class="catalogo-main container">
             
             <div class="cta-medida-info">
-                <h2>CREA TU PRODUCTO A MEDIDA</h2>
-                <p>Selecciona un producto para personalizarlo a tu gusto</p>
+                <h2><?php echo $lang['productos_cta_titulo']; ?></h2>
+                <p><?php echo $lang['productos_cta_desc']; ?></p>
             </div>
 
             <div class="productos-grid" id="lista-productos">
@@ -95,9 +95,9 @@ try {
                     <?php foreach ($productos as $producto): ?>
                         
                         <div class="prod-card-outer item-producto" 
-                             id="producto-<?php echo $producto['id']; ?>" 
-                             data-categoria="<?php echo $producto['id_categoria']; ?>">
-                             
+                            id="producto-<?php echo $producto['id']; ?>" 
+                            data-categoria="<?php echo $producto['id_categoria']; ?>">
+                            
                             <div class="prod-card-inner">
                                 <div class="prod-img-box">
                                     <a href="infoproducto.php?id=<?php echo $producto['id']; ?>">
@@ -111,22 +111,22 @@ try {
                                     
                                     <div class="prod-actions">
                                         <span class="precio-box"><?php echo number_format($producto['precio'], 2); ?>€</span>
-                                        <a href="infoproducto.php?id=<?php echo $producto['id']; ?>" class="btn-detalles">Ver Detalles</a>
+                                        <a href="infoproducto.php?id=<?php echo $producto['id']; ?>" class="btn-detalles"><?php echo $lang['productos_btn_ver_detalles']; ?></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <p style="text-align:center; width:100%;">No hay productos disponibles.</p>
+                    <p style="text-align:center; width:100%;"><?php echo $lang['productos_msg_vacio']; ?></p>
                 <?php endif; ?>
 
             </div>
             
-            <p id="msg-no-results" style="display:none; text-align:center; width:100%; font-size:18px; color:#666;">No hay productos con los filtros seleccionados.</p>
+            <p id="msg-no-results" style="display:none; text-align:center; width:100%; font-size:18px; color:#666;"><?php echo $lang['productos_msg_no_filtro']; ?></p>
 
             <div class="ver-mas-container">
-                <button id="btn-cargar-mas" class="btn-ver-mas">Ver más</button>
+                <button id="btn-cargar-mas" class="btn-ver-mas"><?php echo $lang['productos_btn_ver_mas']; ?></button>
             </div>
 
         </main>

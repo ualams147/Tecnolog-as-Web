@@ -1,6 +1,17 @@
 <?php
 session_start();
 
+// 0. CARGAR IDIOMA (Manual, ya que no usamos CabeceraFooter aquí)
+if (!isset($_SESSION['idioma'])) {
+    $_SESSION['idioma'] = 'es';
+}
+$archivo_lang = "idiomas/" . $_SESSION['idioma'] . ".php";
+if (file_exists($archivo_lang)) {
+    include $archivo_lang;
+} else {
+    include "idiomas/es.php";
+}
+
 // 1. CONFIGURACIÓN
 // ============================================
 // ¡PEGA AQUÍ TU CLAVE SECRETA DE STRIPE (sk_test_...)!
@@ -20,7 +31,9 @@ if (isset($_POST['metodo_pago']) && $_POST['metodo_pago'] === 'bizum_manual') {
 // 2. PREPARAR DATOS DEL CARRITO PARA STRIPE
 $total = $_SESSION['total_carrito'] ?? 100.00; // Valor por defecto si falla sesión
 $cantidadCentimos = intval($total * 100); // Stripe trabaja en céntimos (10€ = 1000)
-$nombreProducto = "Pedido Metalistería Fulsan";
+
+// Usamos la traducción para que en Stripe salga en el idioma correcto
+$nombreProducto = $lang['stripe_prod_name']; 
 
 // 3. CONEXIÓN DIRECTA A LA API DE STRIPE (cURL)
 // Esto crea una "Checkout Session"
@@ -54,7 +67,7 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
 $result = curl_exec($ch);
 
 if (curl_errno($ch)) {
-    die('Error conectando con Stripe: ' . curl_error($ch));
+    die($lang['stripe_err_connection'] . curl_error($ch));
 }
 curl_close($ch);
 
@@ -67,7 +80,7 @@ if (isset($response['id']) && isset($response['url'])) {
     exit;
 } else {
     // Si hay error (ej: clave mal puesta)
-    echo "<h1>Error al iniciar el pago</h1>";
+    echo "<h1>" . $lang['stripe_err_init'] . "</h1>";
     echo "<pre>"; print_r($response); echo "</pre>";
 }
 ?>
