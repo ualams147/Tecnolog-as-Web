@@ -232,20 +232,27 @@ function val($dato) {
                                 <div class="form-group">
                                     <label>Nueva Contraseña:</label>
                                     <div style="position: relative;">
-                                        <input type="password" id="password_nueva" class="input-display" placeholder="Mínimo 4 caracteres" style="padding-right: 40px;" />
-                                        <i class="fas fa-eye" id="ojo_nueva" onclick="mostrarOcultar('password_nueva', 'ojo_nueva')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #293661;"></i>
+                                        <input type="password" id="pass_nueva_input" class="input-display" placeholder="Mínimo 8 caracteres" style="padding-right: 40px;" />
+                                        <i class="fas fa-eye" id="ojo_nueva" onclick="mostrarOcultar('pass_nueva_input', 'ojo_nueva')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #293661;"></i>
                                     </div>
+                                    
+                                    <ul id="lista-requisitos-pass"></ul> 
                                 </div>
+
                                 <div class="form-group">
                                     <label>Confirmar Nueva:</label>
                                     <div style="position: relative;">
-                                        <input type="password" id="password_confirmar" class="input-display" placeholder="Repite la contraseña" style="padding-right: 40px;" />
-                                        <i class="fas fa-eye" id="ojo_confirmar" onclick="mostrarOcultar('password_confirmar', 'ojo_confirmar')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #293661;"></i>
+                                        <input type="password" id="pass_confirm_input" class="input-display" placeholder="Repite la contraseña" style="padding-right: 40px;" />
+                                        <i class="fas fa-eye" id="ojo_confirmar" onclick="mostrarOcultar('pass_confirm_input', 'ojo_confirmar')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #293661;"></i>
                                     </div>
                                 </div>
                             </div>
+
                             <div style="margin-top: 20px; text-align: right;">
-                                <button type="button" onclick="guardarPasswordAJAX()" style="background-color: #293661; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">Actualizar Contraseña</button>
+                                <button type="button" id="btn-guardar-pass" onclick="guardarPasswordAJAX()" 
+                                        style="background-color: #293661; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                                    Actualizar Contraseña
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -311,29 +318,72 @@ function val($dato) {
     </div>
 
     <script src="js/AlgoritmoDNIs.js"></script>
+    <script src="js/validarpasswd.js"></script>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+        
+            activarValidacionPassword(
+                'pass_nueva_input',      // ID del input contraseña
+                'pass_confirm_input',    // ID del input confirmar
+                'lista-requisitos-pass', // ID de la lista UL
+                'btn-guardar-pass'       // ID del botón a bloquear
+            );
+
+        });
+        
+        
         function confirmarModificacion() {
             const formulario = document.getElementById('form-modificar');
+            const inputDNI = document.getElementById('dni');
 
-            // 1. Validar campos obligatorios (Nombre, email, etc.)
+            // 1. Validar campos vacíos HTML
             if (!formulario.checkValidity()) {
                 formulario.reportValidity();
                 return; 
             }
 
-            // 2. Mostrar alerta de confirmación
+            // 2. VALIDAR DNI (CON SEGURIDAD)
+            // Primero comprobamos si la función existe
+            if (typeof validarDocumento === 'function') {
+                
+                // Ejecutamos validación
+                const esValido = validarDocumento(inputDNI);
+
+                if (esValido === false) {
+                    // SI ESTÁ MAL EL DNI:
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Documento Incorrecto',
+                        text: 'El DNI/NIE tiene un formato o letra inválida. Corrígelo para guardar.',
+                        confirmButtonColor: '#293661'
+                    });
+                    inputDNI.focus(); // Llevamos al usuario al campo DNI
+                    return; // <--- ¡STOP! AQUÍ PARAMOS EL PROCESO
+                }
+
+            } else {
+                // SI NO ENCUENTRA LA FUNCIÓN (ERROR TÉCNICO)
+                // Antes esto dejaba pasar, AHORA NO.
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Error de carga',
+                    text: 'No se ha cargado el validador de DNI. Prueba a recargar la página (Ctrl + F5).',
+                });
+                console.error("CRÍTICO: La función 'validarDocumento' no existe. Revisa js/AlgoritmoDNIs.js");
+                return; // <--- ¡STOP! NO DEJAMOS GUARDAR SI NO PODEMOS VALIDAR
+            }
+
+            // 3. SI LLEGAMOS AQUÍ, TODO ESTÁ BIEN -> GUARDAMOS
             Swal.fire({
                 title: '¿Guardar cambios?',
-                text: "¿Estás seguro de que quieres actualizar tus datos personales?",
+                text: "¿Estás seguro de que quieres actualizar tus datos?",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#293661',
-                cancelButtonColor: '#6c757d',
                 confirmButtonText: 'Sí, guardar',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
-                // 3. Si confirma, enviamos el formulario al PHP
                 if (result.isConfirmed) {
                     formulario.submit();
                 }

@@ -180,6 +180,68 @@ body {
     text-decoration: underline;
 }
 
+/* =========================================
+   ESTILOS PARA EL VALIDADOR DE CONTRASEÑA
+   ========================================= */
+
+#lista-requisitos-pass {
+    list-style: none;
+    padding: 10px;
+    margin-top: 5px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+    font-size: 0.85rem;
+    display: none; /* Se oculta por defecto */
+}
+
+.requisito-pendiente {
+    color: #6c757d; /* Gris */
+    transition: color 0.3s;
+}
+
+.requisito-bien {
+    color: #28a745; /* Verde éxito */
+    font-weight: 600;
+}
+
+.requisito-mal {
+    color: #dc3545; /* Rojo (opcional) */
+}
+
+#lista-requisitos-pass li {
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre icono y texto */
+}
+
+/* =========================================
+   CLASES AUXILIARES DE DISEÑO (NUEVO)
+   (Para que la lista se vea bien debajo del input)
+   ========================================= */
+
+/* 1. Contenedor que agrupa Input + Lista en columna */
+.grupo-input-columna {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 2. Hace que el input ocupe todo el ancho disponible */
+.grupo-input-columna input {
+    width: 100%;
+}
+
+/* 3. Alinea el icono/label arriba (para que no se centre raro cuando sale la lista) */
+.form-row.alinear-arriba {
+    align-items: flex-start;
+}
+
+.form-row.alinear-arriba .label-icon {
+    margin-top: 12px; /* Ajuste para centrar visualmente con el input */
+}
+
 /* ========================== RESPONSIVE ========================== */
 
 /* Tablets (max-width: 1024px) */

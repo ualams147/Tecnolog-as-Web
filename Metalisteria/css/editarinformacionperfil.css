@@ -260,6 +260,39 @@ body {
     outline: none;
 }
 
+/* Estilos para el validador de contraseña */
+#lista-requisitos-pass {
+    list-style: none;
+    padding: 10px;
+    margin-top: 5px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+    font-size: 0.85rem;
+    display: none; /* Se oculta por defecto */
+}
+
+.requisito-pendiente {
+    color: #6c757d; /* Gris */
+    transition: color 0.3s;
+}
+
+.requisito-bien {
+    color: #28a745; /* Verde éxito */
+    font-weight: 600;
+}
+
+.requisito-mal {
+    color: #dc3545; /* Rojo (opcional) */
+}
+
+#lista-requisitos-pass li {
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre icono y texto */
+}
+
 /* RESPONSIVE (MÓVIL) */
 @media (max-width: 768px) {
     .formulario-cliente {
