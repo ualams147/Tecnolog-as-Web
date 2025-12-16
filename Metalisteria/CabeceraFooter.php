@@ -155,7 +155,6 @@ function sectionfooter() {
                                 <li><a href="productos.php">Productos</a></li>
                                 <li><a href="perfil.php">Mi Perfil</a></li>
                                 <li><a href="carrito.php">Carrito</a></li>
-                                <li><a href="HistorialPedidos.php">Historial de pedidos</a></li>
                             <?php else: ?>
                                 <li><a href="conocenos.php">Conócenos</a></li>
                                 <li><a href="productos.php">Productos</a></li>
