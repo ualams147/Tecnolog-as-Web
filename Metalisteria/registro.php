@@ -1,15 +1,16 @@
 <?php
+// 1. INICIAR SESIÓN (Necesario para poder establecer variables $_SESSION después)
 session_start();
+
 include 'CabeceraFooter.php'; 
 include 'conexion.php'; 
 
 $error = '';
-$error_email = ''; // Variable específica para error de email
-$error_dni = '';   // Variable específica para error de DNI
+$error_email = '';
+$error_dni = '';
 $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // 1. Recogemos datos
     $nombre = $_POST['nombre'];
     $apellidos = $_POST['apellidos'];
     $email = $_POST['email'];
@@ -24,23 +25,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cp = $_POST['cp'];
     $localidad = $_POST['localidad'];
 
-    // 2. Validaciones básicas (JS ya lo hace, pero PHP es el portero final)
     if ($email !== $email_confirm) {
         $error = "Los correos no coinciden.";
     } elseif ($password !== $password_confirm) {
         $error = "Las contraseñas no coinciden.";
     } else {
         
-        // 3. COMPROBACIONES ESPECÍFICAS (¿Existe Email? ¿Existe DNI?)
-        
-        // A) Comprobar Email
+        // Comprobar Email
         $stmt = $conn->prepare("SELECT id FROM clientes WHERE email = :email LIMIT 1");
         $stmt->execute([':email' => $email]);
         if ($stmt->fetch()) {
             $error_email = "❌ Este correo ya está registrado.";
         }
 
-        // B) Comprobar DNI (Solo si escribió algo en DNI)
+        // Comprobar DNI
         if (!empty($dni)) {
             $stmt = $conn->prepare("SELECT id FROM clientes WHERE dni = :dni LIMIT 1");
             $stmt->execute([':dni' => $dni]);
@@ -49,29 +47,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // 4. Si NO hay errores de duplicados, insertamos
         if (empty($error_email) && empty($error_dni)) {
             try {
+                // IMPORTANTE: Encriptar contraseña antes de guardar
+                $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
                 $sql = "INSERT INTO clientes (nombre, apellidos, email, password, dni, telefono, direccion, numero, piso, ciudad, codigo_postal, rol) 
                         VALUES (:nombre, :apellidos, :email, :password, :dni, :telefono, :direccion, :numero, :piso, :ciudad, :codigo_postal, 'cliente')";
                 
                 $stmt = $conn->prepare($sql);
                 $stmt->execute([
                     ':nombre' => $nombre, ':apellidos' => $apellidos, ':email' => $email,
-                    ':password' => $password, ':dni' => $dni, ':telefono' => $telefono,
+                    ':password' => $password_hash, // Usamos la encriptada
+                    ':dni' => $dni, ':telefono' => $telefono,
                     ':direccion' => $calle, ':numero' => $numero, ':piso' => $piso,
                     ':ciudad' => $localidad, ':codigo_postal' => $cp
                 ]);
 
-                // Login automático y redirección
+                // --- LOGIN AUTOMÁTICO ---
                 $nuevo_id = $conn->lastInsertId();
-                $_SESSION['usuario_id'] = $nuevo_id;
-                $_SESSION['usuario_nombre'] = $nombre;
+                
+                // Recuperamos el usuario completo para guardarlo bien en sesión
+                $stmtUser = $conn->prepare("SELECT * FROM clientes WHERE id = ?");
+                $stmtUser->execute([$nuevo_id]);
+                $nuevo_usuario = $stmtUser->fetch(PDO::FETCH_ASSOC);
+
+                // Establecemos las variables de sesión
+                $_SESSION['usuario'] = $nuevo_usuario; // ESTA ACTIVA LA CABECERA
+                $_SESSION['usuario_id'] = $nuevo_usuario['id'];
+                $_SESSION['usuario_nombre'] = $nuevo_usuario['nombre'];
                 $_SESSION['usuario_rol'] = 'cliente';
 
                 echo "<script>
                     localStorage.setItem('usuarioLogueado', 'true');
-                    localStorage.setItem('usuarioNombre', '" . htmlspecialchars($nombre) . "');
                     window.location.href = 'index.php';
                   </script>";
                 exit;
@@ -95,8 +103,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/registro.css">
-
-        <!-- MANTENEMOS auth.js para la cabecera -->
     <script src="js/auth.js"></script>
 </head>
 <body>
@@ -108,14 +114,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="registro-card">
                 <h1 class="registro-title">Regístrate</h1>
                 
-                <!-- Mensaje de error si falla algo -->
                 <?php if(!empty($error)): ?>
                     <div style="background-color:#f8d7da; color:#721c24; padding:10px; border-radius:5px; margin-bottom:15px; text-align:center;">
                         <?php echo $error; ?>
                     </div>
                 <?php endif; ?>
 
-                <!-- AÑADIDO: method="POST" para que envíe los datos -->
                 <form class="registro-form" method="POST" action="">
                     
                     <div class="form-row">
@@ -139,12 +143,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                             Correo electrónico:
                         </label>
-                        
                         <input type="email" id="email" name="email" 
                             class="form-input <?php echo !empty($error_email) ? 'error' : ''; ?>" 
                             value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" 
                             placeholder="ejemplo@gmail.com" required>
-
                         <?php if(!empty($error_email)): ?>
                             <span class="error-text"><?php echo $error_email; ?></span>
                         <?php endif; ?>
@@ -156,8 +158,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             Confirmación Correo electrónico:
                         </label>
                         <input type="email" id="email_confirm" name="email_confirm" class="form-input" placeholder="Repite tu correo" required>
-    
-                        <span id="msg-email" class="error-text"></span>
                     </div>
 
                     <div class="form-row">
@@ -174,23 +174,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             Repetir contraseña:
                         </label>
                         <input type="password" id="password_confirm" name="password_confirm" class="form-input" required>
-
-                        <span id="msg-pass" class="error-text"></span>
                     </div>
 
                     <div class="form-row">
                         <label for="dni" class="label-icon">
-                            <svg viewBox="0 0 24 24">
-                                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                             </svg>
+                            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                             DNI/NIF/NIE:
                         </label>
-                        
                         <input type="text" id="dni" name="dni" 
                             class="form-input <?php echo !empty($error_dni) ? 'error' : ''; ?>" 
                             value="<?php echo isset($_POST['dni']) ? htmlspecialchars($_POST['dni']) : ''; ?>" 
                             placeholder="Ej: 12345678A">
-                            
                         <?php if(!empty($error_dni)): ?>
                             <span class="error-text"><?php echo $error_dni; ?></span>
                         <?php endif; ?>
@@ -219,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </label>
                         <div class="input-group">
                             <input type="text" id="numero" name="numero" class="form-input" placeholder="Ej: 12" required>
-                            <input type="text" id="piso" name="piso" class="form-input" placeholder="Ej: 3º A, Esc. Dcha">
+                            <input type="text" id="piso" name="piso" class="form-input" placeholder="Ej: 3º A">
                         </div>
                     </div>
 

@@ -1,16 +1,16 @@
 <?php
-session_start();
-// 1. INCLUIR FUNCIONES (Esto inicia la sesión)
-include 'CabeceraFooter.php'; 
+// 1. INICIAR SESIÓN (Si no está iniciada)
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-// 2. CONEXIÓN
+// 2. INCLUIR ARCHIVOS NECESARIOS
 include 'conexion.php'; 
+include 'CabeceraFooter.php'; 
 
 $error = '';
 
-// RECUPERAR EL ORIGEN (Para saber a dónde ir después)
-// 1. Si viene por GET (URL), lo cogemos.
-// 2. Si viene por POST (Formulario enviado), lo mantenemos.
+// 3. RECUPERAR EL ORIGEN
 $origen = '';
 if (isset($_GET['origen'])) {
     $origen = $_GET['origen'];
@@ -18,33 +18,42 @@ if (isset($_GET['origen'])) {
     $origen = $_POST['origen'];
 }
 
+// 4. PROCESAR FORMULARIO DE LOGIN
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // 1. Buscar usuario
+    // Buscar usuario
     $sql = "SELECT * FROM clientes WHERE email = :email";
     $stmt = $conn->prepare($sql);
     $stmt->execute([':email' => $email]);
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // 2. Verificación Híbrida (Encriptada o Texto Plano)
+    // Verificar contraseña
     $login_valido = false;
+    
     if ($usuario) {
-        if (password_verify($password, $usuario['password'])) {
+        // CORRECCIÓN AQUÍ: Usamos 'password' en lugar de 'pass'
+        // Opción 1: Contraseña encriptada
+        if (password_verify($password, $usuario['password'])) { 
             $login_valido = true;
-        } elseif ($password === $usuario['password']) {
+        } 
+        // Opción 2: Texto plano (por si acaso)
+        elseif ($password === $usuario['password']) {
             $login_valido = true;
         }
     }
 
     if ($login_valido) {
         // --- LOGIN CORRECTO ---
+        
+        // 1. Guardar datos en SESIÓN
+        $_SESSION['usuario'] = $usuario; 
         $_SESSION['usuario_id'] = $usuario['id'];
         $_SESSION['usuario_nombre'] = $usuario['nombre'];
         $_SESSION['usuario_rol'] = $usuario['rol'];
 
-        // --- FUSIÓN DE CARRITOS ---
+        // 2. FUSIÓN DE CARRITOS
         if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])) {
             foreach ($_SESSION['carrito'] as $item_sess) {
                 $pid = $item_sess['id']; 
@@ -65,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // Recargar carrito desde BD
+        // 3. RECARGAR CARRITO DESDE BD
         $_SESSION['carrito'] = []; 
         $sqlRecuperar = "SELECT c.producto_id, c.cantidad, p.nombre, p.precio, p.imagen_url, p.referencia, p.color, p.medidas 
                          FROM carrito c 
@@ -88,25 +97,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
         }
 
-        // ============================================================
-        // DECISIÓN DE REDIRECCIÓN (AQUÍ ESTÁ LA CLAVE)
-        // ============================================================
-        
+        // 4. REDIRECCIÓN
         if ($usuario['rol'] === 'admin') {
-            $destino = 'indexadmin.php';
+            $destino = 'indexAdmin.php'; 
         } else {
-            // Si venimos de comprar -> Datos Envio
             if ($origen === 'compra') {
                 $destino = 'datosenvio.php';
             } else {
-                // Si venimos de la cabecera -> Inicio Cliente
                 $destino = 'index.php';
             }
         }
         
         echo "<script>
                 localStorage.setItem('usuarioLogueado', 'true');
-                localStorage.setItem('usuarioNombre', '" . htmlspecialchars($usuario['nombre']) . "');
                 window.location.href = '$destino';
               </script>";
         exit;
@@ -124,11 +127,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio de Sesión - Metalistería Fulsan</title>
     <link rel="icon" type="image/png" href="imagenes/logo.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/IniciarSesion.css">
-    
+    <link rel="stylesheet" href="css/IniciarSesion.css"> 
     <script src="auth.js"></script>
 </head>
 <body>
@@ -153,6 +153,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif; ?>
 
                 <form class="login-form" method="POST" action="">
+                    <?php if(!empty($origen)): ?>
+                        <input type="hidden" name="origen" value="<?php echo htmlspecialchars($origen); ?>">
+                    <?php endif; ?>
+
                     <div class="form-row">
                         <label for="email" class="label-icon">
                             <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>

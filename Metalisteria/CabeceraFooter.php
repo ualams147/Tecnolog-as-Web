@@ -7,308 +7,76 @@ if (session_status() === PHP_SESSION_NONE) {
 /**
  * Función para mostrar el encabezado (Header)
  * $active: Número de la opción del menú activa
- * 1 = Inicio, 2 = Conócenos, 3 = Productos, 4 = Carrito, 5 = Login
+ * 1 = Inicio, 2 = Conócenos, 3 = Productos, 4 = Carrito, 5 = Login/Perfil
  */
 function sectionheader($active = 0) {
-    // Calculamos cantidad del carrito
+    // Calculamos cantidad del carrito (si existe)
     $cantidad_carrito = 0;
-    if (isset($_SESSION['carrito'])) {
+    if (isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])) {
         foreach ($_SESSION['carrito'] as $item) {
             $cantidad_carrito += $item['cantidad'];
         }
     }
+    
+    // Verificamos si el usuario está logueado
+    $usuario_logueado = isset($_SESSION['usuario']);
     ?>
 
     <style>
         /* ============================================================
-        ========================== CABECERA =========================
-        ============================================================ */
+           ========================== CABECERA ========================
+           ============================================================ */
+        /* ... (Tus estilos originales se mantienen intactos aquí) ... */
+        
+        .cabecera { position: relative; width: 100%; background: white; padding: 30px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .cabecera .container { display: flex; align-items: center; justify-content: space-between; gap: 40px; }
+        
+        /* LOGO */
+        .logo-main { flex-shrink: 0; position: relative; display: flex; align-items: center; }
+        .logo-main img { height: 60px; width: auto; }
+        .logo-text { display: flex; flex-direction: column; margin-left: 12px; margin-top: 4px; line-height: 1.1; }
+        .logo-text span { font-size: 14px; font-weight: 400; color: #2b2b2b; font-family: 'Poppins', sans-serif; }
+        .logo-text strong { font-size: 18px; font-weight: 700; color: #000000; text-align: center; width: 100%; font-family: 'Poppins', sans-serif; }
+        .logo-link { display: flex; align-items: center; text-decoration: none; color: inherit; }
 
-        .cabecera {
-            position: relative;
-            width: 100%;
-            background: white;
-            padding: 30px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+        /* NAV BAR */
+        .nav-bar { display: flex; align-items: center; justify-content: center; gap: 140px; flex: 1; font-weight: 500; font-size: 18px; color: #2b2b2b; white-space: nowrap; }
+        .nav-bar a { font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 18px; color: #2b2b2b; text-decoration: none; transition: color 0.3s ease; }
+        .nav-bar a:hover { font-size: 20px; color: #293661; text-shadow: 0 0 4px #aab6e8; }
+        .nav-bar a.activo { color: #293661; font-weight: bold; border-bottom: 2px solid #293661; }
 
-            .cabecera .container {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 40px;
-            }
+        /* SIGN IN */
+        .sign-in { background: #293661; border-radius: 40px; padding: 12px 24px; flex-shrink: 0; cursor: pointer; transition: background-color 0.3s ease, transform 0.2s ease; }
+        .sign-in:hover { background-color: #1f2849; transform: translateY(-2px); }
+        .sign-in:active { transform: translateY(0); }
+        .sign-in a { font-family: 'Source Sans Pro', sans-serif; font-weight: 700; font-size: 18px; color: white; text-decoration: none; white-space: nowrap; }
 
-        /* ======================= LOGO (adaptado) ======================= */
-
-        .logo-main {
-            flex-shrink: 0;
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-            .logo-main img {
-                height: 60px;
-                width: auto;
-            }
-
-        /* === LOGO TEXT AÑADIDO === */
-        .logo-text {
-            display: flex;
-            flex-direction: column;
-            margin-left: 12px;
-            margin-top: 4px;
-            line-height: 1.1;
-        }
-
-            .logo-text span {
-                font-size: 14px;
-                font-weight: 400;
-                color: #2b2b2b;
-                font-family: 'Poppins', sans-serif;
-            }
-
-            .logo-text strong {
-                font-size: 18px;
-                font-weight: 700;
-                color: #000000;
-                text-align: center;
-                width: 100%;
-                font-family: 'Poppins', sans-serif;
-            }
-
-            .logo-link {
-                display: flex;              /* mantiene logo + texto juntos */
-                align-items: center;
-                text-decoration: none;      /* quita el subrayado */
-                color: inherit;             /* mantiene el color del texto */
-            }
-        /* ========================================= */
-
-        /* ======================= NAV BAR ======================= */
-
-        .nav-bar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 140px;
-            flex: 1;
-            font-weight: 500;
-            font-size: 18px;
-            color: #2b2b2b;
-            white-space: nowrap;
-        }
-
-            .nav-bar a {
-                font-family: 'Poppins', sans-serif;
-                font-weight: 500;
-                font-size: 18px;
-                color: #2b2b2b;
-                text-decoration: none;
-                transition: color 0.3s ease;
-            }
-
-                .nav-bar a:hover {
-                    font-size: 20px;
-                    color: #293661;
-                    text-shadow: 0 0 4px #aab6e8; /* azul muy claro y suave */
-                }
-
-                /* Estilo para la página actual */
-                .nav-bar a.activo {
-                    color: #293661;           /* El azul corporativo */
-                    font-weight: bold;         /* Letra un poco más gruesa */
-                    border-bottom: 2px solid #293661; /* El subrayado (grosor y color) */      
-                }
-
-        /* ======================= SIGN IN ======================= */
-
-        .sign-in {
-            background: #293661;
-            border-radius: 40px;
-            padding: 12px 24px;
-            flex-shrink: 0;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-            .sign-in:hover {
-                background-color: #1f2849;
-                transform: translateY(-2px);
-            }
-
-            .sign-in:active {
-                transform: translateY(0);
-            }
-
-            .sign-in a {
-                font-family: 'Source Sans Pro', sans-serif;
-                font-weight: 700;
-                font-size: 18px;
-                color: white;
-                text-decoration: none;
-                white-space: nowrap;
-            }
-
-        /* ============ FOOTER ============ */
-
-        .footer {
-            background: #293661;
-            color: white;
-            padding: 60px 0 30px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 80px;
-            margin-bottom: 40px;
-        }
-
-        .footer-logo-section {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 20px; /* separación entre logo e icono */
-        }
-
-
-        .logo-footer img {
-            width: 200px;
-            height: 200px;
-            object-fit: contain;
-        }
-
-        .redes {
-            display: flex;
-            gap: 20px;
-        }
-
-        .instagram-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            transition: background 0.3s ease;
-        }
-
-            .instagram-link:hover {
-                background: rgba(255,255,255,0.2);
-            }
-
-            .instagram-link svg {
-                width: 24px;
-                height: 24px;
-            }
-
-        .footer-links {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 60px;
-        }
-
-        .enlaces-rapidos h3,
-        .contacto-footer h3 {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
-
-        .enlaces-rapidos ul {
-            list-style: none;
-        }
-
-            .enlaces-rapidos ul li {
-                margin-bottom: 12px;
-            }
-
-                .enlaces-rapidos ul li a {
-                    font-family: 'Poppins', sans-serif;
-                    font-weight: 400;
-                    font-size: 16px;
-                    color: white;
-                    text-decoration: none;
-                    transition: opacity 0.3s ease;
-                }
-
-                    .enlaces-rapidos ul li a:hover {
-                        opacity: 0.8;
-                    }
-
-        .contacto-footer ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-            .contacto-footer ul li {
-                margin-bottom: 12px; /* igual que enlaces rápidos */
-                display: flex;
-                align-items: center;
-                gap: 12px; /* separación entre icono y texto */
-            }
-
-                .contacto-footer ul li svg {
-                    width: 20px;
-                    height: 20px;
-                    fill: white; /* fuerza el color visible */
-                    flex-shrink: 0;
-                }
-
-                .contacto-footer ul li a {
-                    font-family: 'Poppins', sans-serif;
-                    font-weight: 400;
-                    font-size: 16px;
-                    color: white;
-                    text-decoration: none;
-                    transition: opacity 0.3s ease;
-                }
-
-                    .contacto-footer ul li a:hover {
-                        opacity: 0.8;
-                    }
-
-            
-        .footer-bottom {
-            padding-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .politica-legal {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-            .politica-legal a {
-                font-family: 'Poppins', sans-serif;
-                font-weight: 400;
-                font-size: 14px;
-                color: white;
-                text-decoration: none;
-                transition: opacity 0.3s ease;
-            }
-
-                .politica-legal a:hover {
-                    opacity: 0.8;
-                }
-
-            .politica-legal span {
-                font-size: 14px;
-                opacity: 0.5;
-            }
+        /* FOOTER (Estilos compactados para ahorrar espacio visual en este chat, son los mismos) */
+        .footer { background: #293661; color: white; padding: 60px 0 30px; }
+        .footer-content { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; margin-bottom: 40px; }
+        .footer-logo-section { display: flex; align-items: center; justify-content: flex-start; gap: 20px; }
+        .logo-footer img { width: 200px; height: 200px; object-fit: contain; }
+        .redes { display: flex; gap: 20px; }
+        .instagram-link { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; transition: background 0.3s ease; }
+        .instagram-link:hover { background: rgba(255,255,255,0.2); }
+        .instagram-link svg { width: 24px; height: 24px; }
+        .footer-links { display: grid; grid-template-columns: 1fr 2fr; gap: 60px; }
+        .enlaces-rapidos h3, .contacto-footer h3 { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 20px; margin-bottom: 20px; }
+        .enlaces-rapidos ul { list-style: none; }
+        .enlaces-rapidos ul li { margin-bottom: 12px; }
+        .enlaces-rapidos ul li a { font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 16px; color: white; text-decoration: none; transition: opacity 0.3s ease; }
+        .enlaces-rapidos ul li a:hover { opacity: 0.8; }
+        .contacto-footer ul { list-style: none; padding: 0; margin: 0; }
+        .contacto-footer ul li { margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+        .contacto-footer ul li svg { width: 20px; height: 20px; fill: white; flex-shrink: 0; }
+        .contacto-footer ul li a { font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 16px; color: white; text-decoration: none; transition: opacity 0.3s ease; }
+        .contacto-footer ul li a:hover { opacity: 0.8; }
+        .footer-bottom { padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.2); }
+        .politica-legal { display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .politica-legal a { font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; color: white; text-decoration: none; transition: opacity 0.3s ease; }
+        .politica-legal a:hover { opacity: 0.8; }
+        .politica-legal span { font-size: 14px; opacity: 0.5; }
     </style>
-
 
     <header class="cabecera">
         <div class="container">
@@ -335,7 +103,7 @@ function sectionheader($active = 0) {
                     <?php endif; ?>
                 </a>
 
-                <?php if (isset($_SESSION['usuario'])): ?>
+                <?php if ($usuario_logueado): ?>
                     <a href="perfil.php" class="<?php echo ($active == 6) ? 'activo' : ''; ?>">Mi Perfil</a>
                 <?php else: ?>
                     <a href="iniciarsesion.php" id="link-login" class="<?php echo ($active == 5) ? 'activo' : ''; ?>">Iniciar Sesión</a>
@@ -343,17 +111,17 @@ function sectionheader($active = 0) {
             </nav>
 
             <div class="sign-in" id="box-registro">
-                <?php if (!isset($_SESSION['usuario'])): ?>
-                    <a href="registro.php" id="link-registro">Registrarse</a>
-                <?php else: ?>
+                <?php if ($usuario_logueado): ?>
                     <a href="logout.php" id="link-registro">Cerrar Sesión</a>
+                <?php else: ?>
+                    <a href="registro.php" id="link-registro">Registrarse</a>
                 <?php endif; ?>
             </div>
 
         </div>
     </header>
     
-    <?php include 'aviso-cookies.php'; ?>
+    <?php // include 'aviso-cookies.php'; ?>
     <?php
 }
 
@@ -361,6 +129,7 @@ function sectionheader($active = 0) {
  * Función para mostrar el pie de página (Footer)
  */
 function sectionfooter() {
+    $usuario_logueado = isset($_SESSION['usuario']);
     ?>
     <footer class="footer">
         <div class="container">
@@ -382,7 +151,7 @@ function sectionfooter() {
                     <div class="enlaces-rapidos">
                         <h3>Enlaces rápidos</h3>
                         <ul>
-                            <?php if (isset($_SESSION['usuario'])): ?>
+                            <?php if ($usuario_logueado): ?>
                                 <li><a href="productos.php">Productos</a></li>
                                 <li><a href="perfil.php">Mi Perfil</a></li>
                                 <li><a href="carrito.php">Carrito</a></li>
