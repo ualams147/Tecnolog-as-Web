@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_eliminar'])) {
         $stmtBorrar = $conn->prepare("DELETE FROM productos WHERE id = ?");
         $stmtBorrar->execute([$idBorrar]);
         // Redirección corregida
-        header("Location: ListadoProductosAdmin.php");
+        header("Location: listadoproductosadmin.php");
         exit;
     } catch(PDOException $e) {
         // Error handling
@@ -45,7 +45,7 @@ $total_productos = count($productos);
         <header class="cabecera">
             <div class="container">
                 <div class="logo-main">
-                    <a href="indexAdmin.php" class="logo-main">
+                    <a href="indexadmin.php" class="logo-main">
                         <img src="imagenes/logo.png" alt="Logo Metalful">
                         <div class="logo-text">
                             <span> Metalisteria</span>
@@ -55,9 +55,9 @@ $total_productos = count($productos);
                 </div>
                 
                 <nav class="nav-bar">
-                    <a href="ListadoVentasAdmin.php">Ventas</a>
-                    <a href="ListadoProductosAdmin.php" class="activo" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
-                    <a href="ListadoClientesAdmin.php">Clientes</a>
+                    <a href="listadoventasadmin.php">Ventas</a>
+                    <a href="listadoproductosadmin.php" class="activo" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
+                    <a href="listadoclientesadmin.php">Clientes</a>
                 </nav>
 
                 <div class="log-out">
@@ -81,7 +81,7 @@ $total_productos = count($productos);
         </div>
         
         <div class="botones-superiores">
-            <a href="CrearProductoAdmin.php" class="boton-anadir-nuevo">
+            <a href="crearproductoadmin.php" class="boton-anadir-nuevo">
                 <p>+ Añadir producto</p>
             </a>
         </div>
@@ -95,10 +95,10 @@ $total_productos = count($productos);
             </button>
             
             <div class="crear-producto" id="menu-lateral">
-                <a href="ListadoProductosAdmin.php" class="menu-item">Productos</a>
-                <a href="CrearProductoAdmin.php" class="menu-item">Crear Producto</a>
-                <a href="ListadoClientesAdmin.php" class="menu-item">Listado de clientes</a>
-                <a href="ListadoVentasAdmin.php" class="menu-item">Listado de ventas</a>
+                <a href="listadoproductosadmin.php" class="menu-item">Productos</a>
+                <a href="crearproductoadmin.php" class="menu-item">Crear Producto</a>
+                <a href="listadoclientesadmin.php" class="menu-item">Listado de clientes</a>
+                <a href="listadoventasadmin.php" class="menu-item">Listado de ventas</a>
             </div>
             
             <div class="cuadro-fondo">
@@ -117,7 +117,7 @@ $total_productos = count($productos);
                             
                             <div class="producto item-producto" data-categoria="<?php echo $prod['id_categoria']; ?>">
                                 
-                                <form method="POST" action="ListadoProductosAdmin.php" style="display:inline;" onsubmit="return confirm('¿Estás seguro de querer eliminar este producto?');">
+                                <form method="POST" action="listadoproductosadmin.php" style="display:inline;" onsubmit="return confirm('¿Estás seguro de querer eliminar este producto?');">
                                     <input type="hidden" name="id_eliminar" value="<?php echo $prod['id']; ?>">
                                     <button type="submit" class="boton-eliminar" title="Eliminar">✖</button>
                                 </form>
@@ -129,7 +129,7 @@ $total_productos = count($productos);
                                     <p><strong>Precio:</strong> <?php echo $prod['precio']; ?>€</p>
                                 </div>
 
-                                <a href="ModificarProductoAdmin.php?id=<?php echo $prod['id']; ?>" class="boton-editar-pequeno">
+                                <a href="modificarproductoadmin.php?id=<?php echo $prod['id']; ?>" class="boton-editar-pequeno">
                                     <p>Editar</p>
                                 </a>
                             </div>

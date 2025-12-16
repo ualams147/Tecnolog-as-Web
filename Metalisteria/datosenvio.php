@@ -96,7 +96,7 @@ include 'CabeceraFooter.php';
                             Volver atrás
                         </a>
 
-                        <a href="metodoPago.php" class="btn-action btn-next">
+                        <a href="metodopago.php" class="btn-action btn-next">
                             Continuar con el pago
                         </a>
                     </div>

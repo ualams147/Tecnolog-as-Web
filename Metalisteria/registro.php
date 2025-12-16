@@ -123,7 +123,7 @@ include 'CabeceraFooter.php';
                     <button type="submit" class="btn-register-submit">Registrarme</button>
 
                     <p class="register-text">
-                        ¿Ya tienes cuenta? <a href="IniciarSesion.php"><em>Inicia sesión aquí</em></a>
+                        ¿Ya tienes cuenta? <a href="iniciarsesion.php"><em>Inicia sesión aquí</em></a>
                     </p>
 
                 </form>

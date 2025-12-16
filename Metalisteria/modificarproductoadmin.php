@@ -4,7 +4,7 @@ include 'conexion.php';
 // 1. VERIFICAR QUE RECIBIMOS UN ID
 if (!isset($_GET['id'])) {
     // Si no hay ID, redirigimos al listado para evitar errores
-    header("Location: ListadoProductosAdmin.php"); 
+    header("Location: listadoproductosadmin.php"); 
     exit;
 }
 
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mensaje = "¡Producto actualizado correctamente!";
         
         // Redirigir tras guardar (Ruta corregida)
-        header("Location: ListadoProductosAdmin.php"); 
+        header("Location: listadoproductosadmin.php"); 
         exit;
         
     } catch(PDOException $e) {
@@ -92,7 +92,7 @@ if (empty($ruta_foto)) {
         <header class="cabecera">
             <div class="container">
                 <div class="logo-main">
-                    <a href="indexAdmin.php" class="logo-main">
+                    <a href="indexadmin.php" class="logo-main">
                         <img src="imagenes/logo.png" alt="Logo Metalful">
                         <div class="logo-text">
                             <span> Metalisteria</span>
@@ -102,9 +102,9 @@ if (empty($ruta_foto)) {
                 </div>
                 
                 <nav class="nav-bar">
-                    <a href="ListadoVentasAdmin.php">Ventas</a>
-                    <a href="ListadoProductosAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
-                    <a href="ListadoClientesAdmin.php">Clientes</a>
+                    <a href="listadoventasadmin.php">Ventas</a>
+                    <a href="listadoproductosadmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
+                    <a href="listadoclientesadmin.php">Clientes</a>
                 </nav>
 
                 <div class="log-out">
@@ -116,7 +116,7 @@ if (empty($ruta_foto)) {
         <div class="titulo-section">
             <div class="degradado"></div>
             <div class="recuadro-fondo"></div> 
-            <a href="ListadoProductosAdmin.php" class="flecha-circular">&#8592;</a>
+            <a href="listadoproductosadmin.php" class="flecha-circular">&#8592;</a>
             <h1 class="titulo-principal" style="font-weight: bold;">Modificar Producto</h1>
         </div>
 
@@ -443,7 +443,7 @@ if (empty($ruta_foto)) {
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Si confirma, entonces sí redirigimos manualmente
-                    window.location.href = 'ListadoProductosAdmin.php';
+                    window.location.href = 'listadoproductosadmin.php';
                 }
             });
         }

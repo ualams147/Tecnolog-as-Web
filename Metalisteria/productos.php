@@ -100,7 +100,7 @@ try {
                              
                             <div class="prod-card-inner">
                                 <div class="prod-img-box">
-                                    <a href="infoProducto.php?id=<?php echo $producto['id']; ?>">
+                                    <a href="infoproducto.php?id=<?php echo $producto['id']; ?>">
                                         <img src="<?php echo htmlspecialchars($producto['imagen_url']); ?>" 
                                              alt="<?php echo htmlspecialchars($producto['nombre']); ?>"
                                              onerror="this.src='https://via.placeholder.com/300x300?text=Sin+Imagen'">
@@ -111,7 +111,7 @@ try {
                                     
                                     <div class="prod-actions">
                                         <span class="precio-box"><?php echo number_format($producto['precio'], 2); ?>€</span>
-                                        <a href="infoProducto.php?id=<?php echo $producto['id']; ?>" class="btn-detalles">Ver Detalles</a>
+                                        <a href="infoproducto.php?id=<?php echo $producto['id']; ?>" class="btn-detalles">Ver Detalles</a>
                                     </div>
                                 </div>
                             </div>

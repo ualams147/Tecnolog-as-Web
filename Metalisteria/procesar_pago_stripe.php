@@ -46,7 +46,7 @@ $postFields = http_build_query([
     ]],
     'mode' => 'payment',
     'success_url' => $domain . '/factura.php?session_id={CHECKOUT_SESSION_ID}', // Dónde vuelve si paga bien
-    'cancel_url' => $domain . '/metodoPago.php?error=cancelado', // Dónde vuelve si cancela
+    'cancel_url' => $domain . '/metodopago.php?error=cancelado', // Dónde vuelve si cancela
 ]);
 
 curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);

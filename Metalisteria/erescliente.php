@@ -26,8 +26,8 @@ include 'CabeceraFooter.php';
                 <h1 class="cliente-title">Inicia sesión o crea una cuenta para continuar</h1>
 
                 <div class="buttons-row">
-                    <a href="datosEnvio.php" class="btn-big-action">Iniciar Sesión</a>
-                    <a href="datosEnvio.php" class="btn-big-action">Registro</a>
+                    <a href="datosenvio.php" class="btn-big-action">Iniciar Sesión</a>
+                    <a href="datosenvio.php" class="btn-big-action">Registro</a>
                 </div>
 
                 <a href="carrito.php" class="btn-back-pill">

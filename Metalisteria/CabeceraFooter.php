@@ -336,9 +336,9 @@ function sectionheader($active = 0) {
                 </a>
 
                 <?php if (isset($_SESSION['usuario'])): ?>
-                    <a href="MiPerfil.php" class="<?php echo ($active == 6) ? 'activo' : ''; ?>">Mi Perfil</a>
+                    <a href="perfil.php" class="<?php echo ($active == 6) ? 'activo' : ''; ?>">Mi Perfil</a>
                 <?php else: ?>
-                    <a href="IniciarSesion.php" id="link-login" class="<?php echo ($active == 5) ? 'activo' : ''; ?>">Iniciar Sesión</a>
+                    <a href="iniciarsesion.php" id="link-login" class="<?php echo ($active == 5) ? 'activo' : ''; ?>">Iniciar Sesión</a>
                 <?php endif; ?>
             </nav>
 
@@ -384,13 +384,13 @@ function sectionfooter() {
                         <ul>
                             <?php if (isset($_SESSION['usuario'])): ?>
                                 <li><a href="productos.php">Productos</a></li>
-                                <li><a href="MiPerfil.php">Mi Perfil</a></li>
+                                <li><a href="perfil.php">Mi Perfil</a></li>
                                 <li><a href="carrito.php">Carrito</a></li>
                                 <li><a href="HistorialPedidos.php">Historial de pedidos</a></li>
                             <?php else: ?>
                                 <li><a href="conocenos.php">Conócenos</a></li>
                                 <li><a href="productos.php">Productos</a></li>
-                                <li><a href="IniciarSesion.php">Iniciar Sesión</a></li>
+                                <li><a href="iniciarsesion.php">Iniciar Sesión</a></li>
                             <?php endif; ?>
                         </ul>
                     </div>

@@ -6,7 +6,7 @@ include 'conexion.php';
 
 // 2. SEGURIDAD: Si no hay sesión iniciada, lo mandamos al login
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: IniciarSesion.php");
+    header("Location: iniciarsesion.php");
     exit;
 }
 
@@ -18,10 +18,7 @@ $stmt->execute([':id' => $id_usuario]);
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Si por lo que sea no existe el usuario (raro), cerramos sesión
-if (!$usuario) {
-    header("Location: admin/CerrarSesion.php");
-    exit;
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -108,10 +105,10 @@ if (!$usuario) {
                     </div>
 
                     <div class="edit-buttons-container">
-                        <a href="editarPago.php" class="btn-edit" style="text-decoration: none; text-align: center; display: block;">
+                        <a href="editarpago.php" class="btn-edit" style="text-decoration: none; text-align: center; display: block;">
                             Editar Información de Pago
                         </a>
-                        <a href="editarDomicilio.php" class="btn-edit" style="text-decoration: none; text-align: center; display: block;">
+                        <a href="editardomicilio.php" class="btn-edit" style="text-decoration: none; text-align: center; display: block;">
                             Editar Información de Domicilio
                         </a>
                     </div>

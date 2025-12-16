@@ -190,7 +190,7 @@ try {
 
 
 
-                    <form action="AgregarProducto.php" method="POST" id="form-carrito">
+                    <form action="agregarproducto.php" method="POST" id="form-carrito">
 
                        
 

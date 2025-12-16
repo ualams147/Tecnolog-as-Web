@@ -28,7 +28,7 @@
                     <a href="conocenos.php">Conócenos</a>
                     <a href="productos.php">Productos</a>
                     <a href="carrito.php">Carrito</a>
-                    <a href="IniciarSesion.php" id="link-login">Iniciar Sesión</a>
+                    <a href="iniciarsesion.php" id="link-login">Iniciar Sesión</a>
                 </nav>
 
                 <div class="sign-in" id="box-registro">
@@ -83,7 +83,7 @@
                             <ul>
                                 <li><a href="conocenos.php">Conócenos</a></li>
                                 <li><a href="productos.php">Productos</a></li>
-                                <li><a href="IniciarSesion.php">Iniciar Sesión</a></li>
+                                <li><a href="iniciarsesion.php">Iniciar Sesión</a></li>
                             </ul>
                         </div>
                         <div class="contacto-footer">

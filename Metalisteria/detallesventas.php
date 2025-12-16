@@ -3,7 +3,7 @@ include 'conexion.php';
 
 // 1. VERIFICAR ID DE VENTA
 if (!isset($_GET['id'])) {
-    header("Location: ListadoVentasAdmin.php");
+    header("Location: listadoventasadmin.php");
     exit;
 }
 
@@ -51,7 +51,7 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
         <header class="cabecera">
                 <div class="container">
                     <div class="logo-main">
-                        <a href="indexAdmin.php" class="logo-main">
+                        <a href="indexadmin.php" class="logo-main">
                             <img src="imagenes/logo.png" alt="Logo Metalful">
                             <div class="logo-text">
                                 <span> Metalisteria</span>
@@ -61,9 +61,9 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     
                     <nav class="nav-bar">
-                        <a href="ListadoVentasAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Ventas</a>
-                        <a href="ListadoProductosAdmin.php" >Productos</a>
-                        <a href="ListadoClientesAdmin.php">Clientes</a>
+                        <a href="listadoventasadmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Ventas</a>
+                        <a href="listadoproductosadmin.php" >Productos</a>
+                        <a href="listadoclientesadmin.php">Clientes</a>
                     </nav>
 
                     <div class="log-out">
@@ -76,7 +76,7 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
         <div class="titulo-section">
             <div class="degradado"></div>
             <div class="recuadro-fondo"></div> 
-            <a href="ListadoVentasAdmin.php" class="flecha-circular">←</a>
+            <a href="listadoventasadmin.php" class="flecha-circular">←</a>
             <h1 class="titulo-principal">Venta #<?php echo str_pad($venta['id'], 4, '0', STR_PAD_LEFT); ?></h1>
         </div>
 
@@ -128,7 +128,7 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
                     <a href="javascript:void(0);" onclick="confirmarSalida()">Salir</a>
                 </div>
                 <div class="boton-usuario">
-                    <a href="ModificarDatosCliente.php?id=<?php echo $venta['id_cliente']; ?>">Ir al usuario</a>
+                    <a href="modificardatoscliente.php?id=<?php echo $venta['id_cliente']; ?>">Ir al usuario</a>
                 </div>
             </div>
         </div>
@@ -206,7 +206,7 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Si confirma, entonces sí redirigimos manualmente
-                    window.location.href = 'ListadoVentasAdmin.php';
+                    window.location.href = 'listadoventasadmin.php';
                 }
             });
         }

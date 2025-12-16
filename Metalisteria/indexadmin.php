@@ -111,7 +111,7 @@ if (isset($conn)) {
         <header class="cabecera">
             <div class="container">
                 <div class="logo-main">
-                        <a href="indexAdmin.php" class="logo-main">
+                        <a href="indexadmin.php" class="logo-main">
                             <img src="imagenes/logo.png" alt="Logo Metalful">
                             <div class="logo-text">
                                 <span> Metalisteria</span>
@@ -120,9 +120,9 @@ if (isset($conn)) {
                         </a>
                     </div>
                 <nav class="nav-bar">
-                    <a href="ListadoVentasAdmin.php">Ventas</a>
-                    <a href="ListadoProductosAdmin.php">Productos</a>
-                    <a href="ListadoClientesAdmin.php">Clientes</a>
+                    <a href="listadoventasadmin.php">Ventas</a>
+                    <a href="listadoproductosadmin.php">Productos</a>
+                    <a href="listadoclientesadmin.php">Clientes</a>
                 </nav>
                 <div class="log-out">
                     <a href="index.php">Cerrar Sesión</a>
@@ -190,19 +190,19 @@ if (isset($conn)) {
         </div>
 
         <div class="cards-grid">
-            <a href="ListadoProductosAdmin.php" class="card">
+            <a href="listadoproductosadmin.php" class="card">
                 <img src="imagenes/4.png" alt="Productos" class="card-icon">
                 <h3>Productos</h3>
             </a>
-            <a href="CrearProductoAdmin.php" class="card">
+            <a href="crearproductoadmin.php" class="card">
                 <img src="imagenes/2.png" alt="Crear Producto" class="card-icon">
                 <h3>Crear Producto</h3>
             </a>
-            <a href="ListadoClientesAdmin.php" class="card">
+            <a href="listadoclientesadmin.php" class="card">
                 <img src="imagenes/3.png" alt="Clientes" class="card-icon">
                 <h3>Clientes</h3>
             </a>
-            <a href="ListadoVentasAdmin.php" class="card">
+            <a href="listadoventasadmin.php" class="card">
                 <img src="imagenes/5.png" alt="Ventas" class="card-icon">
                 <h3>Ventas</h3>
             </a>

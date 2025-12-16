@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_eliminar'])) {
         $stmt = $conn->prepare("DELETE FROM ventas WHERE id = ?");
         $stmt->execute([$idBorrar]);
         // Redirección corregida
-        header("Location: ListadoVentasAdmin.php");
+        header("Location: listadoventasadmin.php");
         exit;
     } catch(PDOException $e) {
         // Error silencioso
@@ -87,7 +87,7 @@ $total_registros = count($ventas);
         <header class="cabecera">
             <div class="container">
                 <div class="logo-main">
-                    <a href="indexAdmin.php" class="logo-main">
+                    <a href="indexadmin.php" class="logo-main">
                         <img src="imagenes/logo.png" alt="Logo Metalful">
                         <div class="logo-text">
                             <span> Metalisteria</span>
@@ -97,9 +97,9 @@ $total_registros = count($ventas);
                 </div>
                 
                 <nav class="nav-bar">
-                    <a href="ListadoVentasAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Ventas</a> 
-                    <a href="ListadoProductosAdmin.php">Productos</a>
-                    <a href="ListadoClientesAdmin.php">Clientes</a>
+                    <a href="listadoventasadmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Ventas</a> 
+                    <a href="listadoproductosadmin.php">Productos</a>
+                    <a href="listadoclientesadmin.php">Clientes</a>
                 </nav>
 
                 <div class="log-out">
@@ -177,10 +177,10 @@ $total_registros = count($ventas);
             </button>
 
             <div class="crear-producto" id="menu-lateral">
-                <a href="ListadoProductosAdmin.php" class="menu-item">Productos</a>
-                <a href="CrearProductoAdmin.php" class="menu-item">Crear Producto</a>
-                <a href="ListadoClientesAdmin.php" class="menu-item">Listado de clientes</a>
-                <a href="ListadoVentasAdmin.php" class="menu-item">Listado de ventas</a>
+                <a href="listadoproductosadmin.php" class="menu-item">Productos</a>
+                <a href="crearproductoadmin.php" class="menu-item">Crear Producto</a>
+                <a href="listadoclientesadmin.php" class="menu-item">Listado de clientes</a>
+                <a href="listadoventasadmin.php" class="menu-item">Listado de ventas</a>
             </div>
 
             <div class="cuadro-fondo">
@@ -200,7 +200,7 @@ $total_registros = count($ventas);
                     <div id="lista-ventas">
                         <?php foreach ($ventas as $venta): ?>
                             <div class="venta item-venta">
-                                <form method="POST" action="ListadoVentasAdmin.php" style="position: absolute; top: 10px; left: 10px;">
+                                <form method="POST" action="listadoventasadmin.php" style="position: absolute; top: 10px; left: 10px;">
                                     <input type="hidden" name="id_eliminar" value="<?php echo $venta['id']; ?>">
                                     <button type="submit" class="boton-eliminar" title="Eliminar Venta" onclick="return confirm('¿Eliminar venta #<?php echo $venta['id']; ?>?');">✖</button>
                                 </form>
@@ -212,7 +212,7 @@ $total_registros = count($ventas);
                                     <p><strong>Total:</strong> <?php echo number_format($venta['total'], 2); ?> €</p>
                                 </div>
                                 
-                                <a href="DetallesVentas.php?id=<?php echo $venta['id']; ?>" class="boton-detalles">
+                                <a href="detallesventas.php?id=<?php echo $venta['id']; ?>" class="boton-detalles">
                                     <p>Ver detalles</p>
                                 </a>
                             </div>
@@ -429,7 +429,7 @@ $total_registros = count($ventas);
         }
 
         function borrarTodo() {
-            window.location.href = 'ListadoVentasAdmin.php';
+            window.location.href = 'listadoventasadmin.php';
         }
 
         document.addEventListener("DOMContentLoaded", function () {

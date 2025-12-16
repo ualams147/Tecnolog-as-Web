@@ -93,11 +93,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // ============================================================
         
         if ($usuario['rol'] === 'admin') {
-            $destino = 'indexAdmin.php';
+            $destino = 'indexadmin.php';
         } else {
             // Si venimos de comprar -> Datos Envio
             if ($origen === 'compra') {
-                $destino = 'datosEnvio.php';
+                $destino = 'datosenvio.php';
             } else {
                 // Si venimos de la cabecera -> Inicio Cliente
                 $destino = 'index.php';

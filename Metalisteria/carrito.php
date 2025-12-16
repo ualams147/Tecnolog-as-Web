@@ -192,11 +192,11 @@ foreach ($_SESSION['carrito'] as $item) {
                             </a>
 
                             <?php if (isset($_SESSION['usuario_id'])): ?>
-                                <a href="datosEnvio.php" class="btn-comprar" style="text-align:center; text-decoration:none; display:block;">
+                                <a href="datosenvio.php" class="btn-comprar" style="text-align:center; text-decoration:none; display:block;">
                                     Tramitar Pedido
                                 </a>
                             <?php else: ?>
-                                <a href="eresCliente.php" class="btn-comprar" style="text-align:center; text-decoration:none; display:block;">
+                                <a href="erescliente.php" class="btn-comprar" style="text-align:center; text-decoration:none; display:block;">
                                     Comprar
                                 </a>
                             <?php endif; ?>
@@ -215,7 +215,7 @@ foreach ($_SESSION['carrito'] as $item) {
     // 1. FUNCIÓN PARA ACTUALIZAR CANTIDAD (AJAX)
     function actualizarCantidad(idProducto, accion) {
         // Llamada al archivo PHP en segundo plano
-        fetch('ApiCarrito.php', {
+        fetch('apicarrito.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

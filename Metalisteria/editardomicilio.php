@@ -7,7 +7,7 @@ include 'conexion.php';
 // 1. SEGURIDAD: Si no estás logueado, fuera.
 // (Esto funciona bien porque en el Login guardamos 'usuario_id')
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: IniciarSesion.php");
+    header("Location: iniciarsesion.php");
     exit;
 }
 
@@ -58,10 +58,7 @@ $stmt = $conn->prepare("SELECT * FROM clientes WHERE id = :id");
 $stmt->execute([':id' => $id_usuario]);
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$usuario) {
-    header("Location: admin/CerrarSesion.php");
-    exit;
-}
+
 ?>
 
 <!DOCTYPE html>

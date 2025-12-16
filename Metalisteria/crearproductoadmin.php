@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$referencia, $nombre, $descripcion, $precio, $color, $medidas, $ruta_imagen, $id_material, $id_categoria, $stock]);
         
         // Redirigir al listado si todo sale bien
-        header("Location: ListadoProductosAdmin.php");
+        header("Location: listadoproductosadmin.php");
         exit;
         
     } catch(PDOException $e) {
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <header class="cabecera">
             <div class="container">
                 <div class="logo-main">
-                    <a href="indexAdmin.php" class="logo-main">
+                    <a href="indexadmin.php" class="logo-main">
                         <img src="imagenes/logo.png" alt="Logo Metalful">
                         <div class="logo-text">
                             <span> Metalisteria</span>
@@ -78,9 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 
                 <nav class="nav-bar">
-                    <a href="ListadoVentasAdmin.php">Ventas</a>
-                    <a href="ListadoProductosAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
-                    <a href="ListadoClientesAdmin.php">Clientes</a>
+                    <a href="listadoventasadmin.php">Ventas</a>
+                    <a href="listadoproductosadmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
+                    <a href="listadoclientesadmin.php">Clientes</a>
                 </nav>
 
                 <div class="log-out">
@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="titulo-section">
             <div class="degradado"></div>
             <div class="recuadro-fondo"></div> 
-            <a href="ListadoProductosAdmin.php" class="flecha-circular">&#8592;</a>
+            <a href="listadoproductosadmin.php" class="flecha-circular">&#8592;</a>
             <h1 class="titulo-principal">Nuevo Producto</h1>
         </div>
 
@@ -417,7 +417,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 customClass: { popup: 'swal2-popup' }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = 'ListadoProductosAdmin.php';
+                    window.location.href = 'listadoproductosadmin.php';
                 }
             });
         }

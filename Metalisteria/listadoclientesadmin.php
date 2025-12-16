@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_eliminar'])) {
         $stmtBorrar = $conn->prepare("DELETE FROM clientes WHERE id = ?");
         $stmtBorrar->execute([$idBorrar]);
         // Redirección corregida
-        header("Location: ListadoClientesAdmin.php");
+        header("Location: listadoclientesadmin.php");
         exit;
     } catch(PDOException $e) {
         // Error handling
@@ -62,7 +62,7 @@ $total_clientes = count($clientes);
         <header class="cabecera">
             <div class="container">
                 <div class="logo-main">
-                    <a href="indexAdmin.php" class="logo-main">
+                    <a href="indexadmin.php" class="logo-main">
                         <img src="imagenes/logo.png" alt="Logo Metalful">
                         <div class="logo-text">
                             <span> Metalisteria</span>
@@ -72,9 +72,9 @@ $total_clientes = count($clientes);
                 </div>
                 
                 <nav class="nav-bar">
-                    <a href="ListadoVentasAdmin.php">Ventas</a>
-                    <a href="ListadoProductosAdmin.php">Productos</a>
-                    <a href="ListadoClientesAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Clientes</a> 
+                    <a href="listadoventasadmin.php">Ventas</a>
+                    <a href="listadoproductosadmin.php">Productos</a>
+                    <a href="listadoclientesadmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Clientes</a> 
                 </nav>
 
                 <div class="log-out">
@@ -144,10 +144,10 @@ $total_clientes = count($clientes);
                 </svg>
             </button>
             <div class="crear-producto" id="menu-lateral">
-                <a href="ListadoProductosAdmin.php" class="menu-item">Productos</a>
-                <a href="CrearProductoAdmin.php" class="menu-item">Crear Producto</a>
-                <a href="ListadoClientesAdmin.php" class="menu-item">Listado de clientes</a>
-                <a href="ListadoVentasAdmin.php" class="menu-item">Listado de ventas</a>
+                <a href="listadoproductosadmin.php" class="menu-item">Productos</a>
+                <a href="crearproductoadmin.php" class="menu-item">Crear Producto</a>
+                <a href="listadoclientesadmin.php" class="menu-item">Listado de clientes</a>
+                <a href="listadoventasadmin.php" class="menu-item">Listado de ventas</a>
             </div>
 
             <div class="cuadro-fondo">
@@ -173,7 +173,7 @@ $total_clientes = count($clientes);
                             
                             <div class="cliente item-cliente">
                                 
-                                <form method="POST" action="ListadoClientesAdmin.php" style="position: absolute; top: 10px; left: 10px;">
+                                <form method="POST" action="listadoclientesadmin.php" style="position: absolute; top: 10px; left: 10px;">
                                     <input type="hidden" name="id_eliminar" value="<?php echo $cli['id']; ?>">
                                     <button type="submit" class="boton-eliminar" title="Eliminar Cliente" onclick="return confirm('¿Estás seguro de eliminar a <?php echo $cli['nombre']; ?>?');">✖</button>
                                 </form>
@@ -187,7 +187,7 @@ $total_clientes = count($clientes);
                                     <p><strong>Domicilio:</strong> <?php echo $cli['direccion'] . ', ' . $cli['ciudad']; ?></p>
                                 </div>
                                 
-                                <a href="ModificarDatosCliente.php?id=<?php echo $cli['id']; ?>" class="boton-editar-pequeno">
+                                <a href="modificardatoscliente.php?id=<?php echo $cli['id']; ?>" class="boton-editar-pequeno">
                                     <p>Editar</p>
                                 </a>
                             </div>
@@ -435,7 +435,7 @@ $total_clientes = count($clientes);
         }
 
         function borrarTodo() {
-            window.location.href = 'ListadoClientesAdmin.php';
+            window.location.href = 'listadoclientesadmin.php';
         }
 
         document.addEventListener("DOMContentLoaded", function () {
