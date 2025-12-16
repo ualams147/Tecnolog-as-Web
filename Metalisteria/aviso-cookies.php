@@ -1,3 +1,9 @@
+<?php
+    // 1. CARGA DE RECURSOS Y SESIÓN
+    include 'CabeceraFooter.php'; 
+    include 'conexion.php';
+?>
+
 <style>
     .cookie-banner {
         position: fixed;
@@ -135,6 +141,7 @@
             <button class="btn-cookie-accept" onclick="gestionarCookies(true)">Aceptar todo</button>
         </div>
     </div>
+
 </div>
 
 <script>
