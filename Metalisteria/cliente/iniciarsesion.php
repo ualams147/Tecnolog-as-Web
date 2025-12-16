@@ -97,10 +97,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             // Si venimos de comprar -> Datos Envio
             if ($origen === 'compra') {
-                $destino = '../Cliente/datosEnvio.php';
+                $destino = '../cliente/datosEnvio.php';
             } else {
                 // Si venimos de la cabecera -> Inicio Cliente
-                $destino = '../Cliente/index.php';
+                $destino = '../cliente/index.php';
             }
         }
         
@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/IniciarSesion.css">
     
-    <script src="auth.js"></script>
+    <script src="../js/auth.js"></script>
 </head>
 <body>
     <div class="visitante-login">
