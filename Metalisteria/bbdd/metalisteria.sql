@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-12-2025 a las 16:48:49
+-- Tiempo de generación: 16-12-2025 a las 21:52:51
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -35,6 +35,13 @@ CREATE TABLE `carrito` (
   `cantidad` int(11) DEFAULT 1,
   `fecha_agregado` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `carrito`
+--
+
+INSERT INTO `carrito` (`id`, `cliente_id`, `producto_id`, `cantidad`, `fecha_agregado`) VALUES
+(23, 2, 10, 1, '2025-12-16 20:47:09');
 
 -- --------------------------------------------------------
 
@@ -124,7 +131,11 @@ INSERT INTO `detalle_ventas` (`id`, `id_venta`, `id_producto`, `cantidad`, `prec
 (17, 12, 37, 1, 600.00),
 (18, 13, 37, 1, 600.00),
 (19, 14, 1, 7, 120.00),
-(20, 14, 172, 3, 460.00);
+(20, 14, 172, 3, 460.00),
+(21, 15, 1, 1, 120.00),
+(22, 16, 1, 1, 120.00),
+(23, 17, 1, 1, 120.00),
+(24, 18, 1, 2, 120.00);
 
 -- --------------------------------------------------------
 
@@ -383,6 +394,7 @@ CREATE TABLE `ventas` (
   `id_cliente` int(11) NOT NULL,
   `fecha` datetime DEFAULT current_timestamp(),
   `total` decimal(10,2) DEFAULT 0.00,
+  `estado` varchar(20) DEFAULT 'Pendiente',
   `nombre_completo` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `telefono` varchar(50) DEFAULT NULL,
@@ -398,12 +410,16 @@ CREATE TABLE `ventas` (
 -- Volcado de datos para la tabla `ventas`
 --
 
-INSERT INTO `ventas` (`id`, `id_cliente`, `fecha`, `total`, `nombre_completo`, `email`, `telefono`, `calle`, `numero`, `piso`, `codigo_postal`, `localidad`, `notas`) VALUES
-(1, 1, '2023-11-01 10:30:00', 370.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(2, 2, '2023-11-05 16:45:00', 450.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(12, 2, '2025-12-16 16:37:08', 600.00, 'María Rodríguez Sánchez', 'maria.rod@email.com', '611222333', 'Av. Constitución', '20', '1º B', '18012', 'Granada', ''),
-(13, 2, '2025-12-16 16:40:28', 600.00, 'María Rodríguez Pérez', 'maria.rod@email.com', '611222333', 'Av. Constitución', '20', '1º B', '18012', 'Granada', ''),
-(14, 1, '2025-12-16 16:44:21', 2220.00, 'Juan García López', 'juan.garcia@email.com', '600111222', 'Calle Recogidas', '15', '2A', '18005', 'Granada', '');
+INSERT INTO `ventas` (`id`, `id_cliente`, `fecha`, `total`, `estado`, `nombre_completo`, `email`, `telefono`, `calle`, `numero`, `piso`, `codigo_postal`, `localidad`, `notas`) VALUES
+(1, 1, '2023-11-01 10:30:00', 370.00, 'Pendiente', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 2, '2023-11-05 16:45:00', 450.00, 'Pendiente', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(12, 2, '2025-12-16 16:37:08', 600.00, 'Pendiente', 'María Rodríguez Sánchez', 'maria.rod@email.com', '611222333', 'Av. Constitución', '20', '1º B', '18012', 'Granada', ''),
+(13, 2, '2025-12-16 16:40:28', 600.00, 'Pendiente', 'María Rodríguez Pérez', 'maria.rod@email.com', '611222333', 'Av. Constitución', '20', '1º B', '18012', 'Granada', ''),
+(14, 1, '2025-12-16 16:44:21', 2220.00, 'Pendiente', 'Juan García López', 'juan.garcia@email.com', '600111222', 'Calle Recogidas', '15', '2A', '18005', 'Granada', ''),
+(15, 2, '2025-12-16 20:46:35', 120.00, 'Pendiente', 'María Rodríguez Pérez', 'maria.rod@email.com', '611222333', 'Av. Constitución', '20', '1º B', '18012', 'Granada', ''),
+(16, 2, '2025-12-16 21:10:54', 120.00, 'Pendiente', 'María Rodríguez Pérez', 'maria.rod@email.com', '611222333', 'Av. Constitución', '20', '1º B', '18012', 'Granada', ''),
+(17, 2, '2025-12-16 21:18:23', 120.00, 'Pendiente', 'María Rodríguez Pérez', 'maria.rod@email.com', '611222333', 'Av. Constitución', '20', '1º B', '18012', 'Granada', ''),
+(18, 2, '2025-12-16 21:46:31', 240.00, 'Pendiente', 'María Rodríguez Pérez', 'maria.rod@email.com', '611222333', 'Av. Constitución', '20', '1º B', '18012', 'Granada', '');
 
 --
 -- Índices para tablas volcadas
@@ -468,7 +484,7 @@ ALTER TABLE `ventas`
 -- AUTO_INCREMENT de la tabla `carrito`
 --
 ALTER TABLE `carrito`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias`
@@ -486,7 +502,7 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de la tabla `detalle_ventas`
 --
 ALTER TABLE `detalle_ventas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de la tabla `materiales`
@@ -504,7 +520,7 @@ ALTER TABLE `productos`
 -- AUTO_INCREMENT de la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- Restricciones para tablas volcadas
