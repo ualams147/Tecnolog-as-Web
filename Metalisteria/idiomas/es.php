@@ -430,5 +430,46 @@ $lang = array(
     'factura_recogida_tienda_no_esp' => 'Recogida en tienda / No especificada',
     'factura_pago_tarjeta' => 'Tarjeta de Crédito/Débito',
     'factura_pago_bizum' => 'Bizum',
+
+    // MIS PEDIDOS
+    'pedidos_titulo' => 'Mis Pedidos',
+    'pedidos_filtro_fecha' => 'Fecha',
+    'pedidos_filtro_estado' => 'Estado',
+    'pedidos_filtro_cat' => 'Categoría',
+    'pedidos_opcion_activos' => 'Pedidos Activos',
+    'pedidos_opcion_historial' => 'Historial',
+    'pedidos_opcion_todos' => 'Todos',
+    'pedidos_cat_todas' => 'Todas',
+    'pedidos_cat_ventanas' => 'Ventanas',
+    'pedidos_cat_puertas' => 'Puertas',
+    'pedidos_cat_barandillas' => 'Barandillas',
+    'pedidos_cat_otros' => 'Otros',
+    'pedidos_vacio_titulo' => 'No se encontraron pedidos',
+    'pedidos_vacio_texto' => 'Intenta cambiar los filtros de búsqueda.',
+    'pedidos_btn_ver_todos' => 'Ver todos',
+    'pedidos_btn_detalles' => 'Ver Detalles',
+    
+    // ESTADOS PEDIDO (Deben coincidir con lo que guardas en BD)
+    'estado_pendiente' => 'Pendiente',
+    'estado_entregado' => 'Entregado',
+    'estado_cancelado' => 'Cancelado',
+    'estado_proceso' => 'En Proceso',
+    'estado_enviado' => 'Enviado',
+
+
+    // DETALLES PEDIDO
+    'detalle_titulo_pagina' => 'Detalle Pedido',
+    'detalle_titulo_hero' => 'Pedido #',
+    'detalle_fecha' => 'Fecha',
+    'detalle_estado' => 'Estado',
+    'detalle_referencia' => 'Referencia',
+    'detalle_seccion_productos' => 'Productos del Pedido',
+    'detalle_cant' => 'Cant:',
+    'detalle_color' => 'Color:',
+    'detalle_medidas' => 'Medidas:',
+    'detalle_precio_ud' => 'ud',
+    'detalle_base_imponible' => 'Base Imponible',
+    'detalle_iva' => 'IVA',
+    'detalle_total' => 'Total',
 );
 ?>

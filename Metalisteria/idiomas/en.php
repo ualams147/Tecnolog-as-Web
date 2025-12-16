@@ -437,5 +437,46 @@ $lang = array(
     'factura_recogida_tienda_no_esp' => 'Store Pickup / Not specified',
     'factura_pago_tarjeta' => 'Credit/Debit Card',
     'factura_pago_bizum' => 'Bizum',
+
+
+    // MY ORDERS
+    'pedidos_titulo' => 'My Orders',
+    'pedidos_filtro_fecha' => 'Date',
+    'pedidos_filtro_estado' => 'Status',
+    'pedidos_filtro_cat' => 'Category',
+    'pedidos_opcion_activos' => 'Active Orders',
+    'pedidos_opcion_historial' => 'Order History',
+    'pedidos_opcion_todos' => 'All',
+    'pedidos_cat_todas' => 'All',
+    'pedidos_cat_ventanas' => 'Windows',
+    'pedidos_cat_puertas' => 'Doors',
+    'pedidos_cat_barandillas' => 'Railings',
+    'pedidos_cat_otros' => 'Others',
+    'pedidos_vacio_titulo' => 'No orders found',
+    'pedidos_vacio_texto' => 'Try changing the search filters.',
+    'pedidos_btn_ver_todos' => 'View all',
+    'pedidos_btn_detalles' => 'View Details',
+
+    // ORDER STATUS
+    'estado_pendiente' => 'Pending',
+    'estado_entregado' => 'Delivered',
+    'estado_cancelado' => 'Cancelled',
+    'estado_proceso' => 'In Process',
+    'estado_enviado' => 'Shipped',
+
+    // ORDER DETAILS
+    'detalle_titulo_pagina' => 'Order Details',
+    'detalle_titulo_hero' => 'Order #',
+    'detalle_fecha' => 'Date',
+    'detalle_estado' => 'Status',
+    'detalle_referencia' => 'Reference',
+    'detalle_seccion_productos' => 'Order Products',
+    'detalle_cant' => 'Qty:',
+    'detalle_color' => 'Color:',
+    'detalle_medidas' => 'Size:',
+    'detalle_precio_ud' => 'ea',
+    'detalle_base_imponible' => 'Tax Base',
+    'detalle_iva' => 'VAT',
+    'detalle_total' => 'Total',
 );
 ?>

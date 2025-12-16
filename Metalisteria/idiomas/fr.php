@@ -436,5 +436,46 @@ $lang = array(
     'factura_recogida_tienda_no_esp' => 'Retrait en magasin / Non spécifié',
     'factura_pago_tarjeta' => 'Carte de Crédit/Débit',
     'factura_pago_bizum' => 'Bizum',
+
+    // MES COMMANDES
+    'pedidos_titulo' => 'Mes Commandes',
+    'pedidos_filtro_fecha' => 'Date',
+    'pedidos_filtro_estado' => 'État',
+    'pedidos_filtro_cat' => 'Catégorie',
+    'pedidos_opcion_activos' => 'Commandes Actives',
+    'pedidos_opcion_historial' => 'Historique',
+    'pedidos_opcion_todos' => 'Tous',
+    'pedidos_cat_todas' => 'Toutes',
+    'pedidos_cat_ventanas' => 'Fenêtres',
+    'pedidos_cat_puertas' => 'Portes',
+    'pedidos_cat_barandillas' => 'Garde-corps',
+    'pedidos_cat_otros' => 'Autres',
+    'pedidos_vacio_titulo' => 'Aucune commande trouvée',
+    'pedidos_vacio_texto' => 'Essayez de modifier les filtres de recherche.',
+    'pedidos_btn_ver_todos' => 'Voir tout',
+    'pedidos_btn_detalles' => 'Voir Détails',
+
+    // ÉTATS COMMANDE
+    'estado_pendiente' => 'En attente',
+    'estado_entregado' => 'Livré',
+    'estado_cancelado' => 'Annulé',
+    'estado_proceso' => 'En traitement',
+    'estado_enviado' => 'Expédié',
+
+
+    // DÉTAILS COMMANDE
+    'detalle_titulo_pagina' => 'Détails Commande',
+    'detalle_titulo_hero' => 'Commande #',
+    'detalle_fecha' => 'Date',
+    'detalle_estado' => 'État',
+    'detalle_referencia' => 'Référence',
+    'detalle_seccion_productos' => 'Produits de la commande',
+    'detalle_cant' => 'Qté :',
+    'detalle_color' => 'Couleur :',
+    'detalle_medidas' => 'Dimensions :',
+    'detalle_precio_ud' => 'un',
+    'detalle_base_imponible' => 'Base Imposable',
+    'detalle_iva' => 'TVA',
+    'detalle_total' => 'Total',
 );
 ?>
