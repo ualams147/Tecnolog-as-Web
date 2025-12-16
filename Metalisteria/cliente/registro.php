@@ -1,6 +1,89 @@
 <?php
+session_start();
 include '../CabeceraFooter.php'; 
+include '../conexion.php'; 
+
+$error = '';
+$error_email = ''; // Variable específica para error de email
+$error_dni = '';   // Variable específica para error de DNI
+$success = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // 1. Recogemos datos
+    $nombre = $_POST['nombre'];
+    $apellidos = $_POST['apellidos'];
+    $email = $_POST['email'];
+    $email_confirm = $_POST['email_confirm'];
+    $password = $_POST['password'];
+    $password_confirm = $_POST['password_confirm'];
+    $dni = $_POST['dni'];
+    $telefono = $_POST['telefono'];
+    $calle = $_POST['calle'];
+    $numero = $_POST['numero'];
+    $piso = $_POST['piso'];
+    $cp = $_POST['cp'];
+    $localidad = $_POST['localidad'];
+
+    // 2. Validaciones básicas (JS ya lo hace, pero PHP es el portero final)
+    if ($email !== $email_confirm) {
+        $error = "Los correos no coinciden.";
+    } elseif ($password !== $password_confirm) {
+        $error = "Las contraseñas no coinciden.";
+    } else {
+        
+        // 3. COMPROBACIONES ESPECÍFICAS (¿Existe Email? ¿Existe DNI?)
+        
+        // A) Comprobar Email
+        $stmt = $conn->prepare("SELECT id FROM clientes WHERE email = :email LIMIT 1");
+        $stmt->execute([':email' => $email]);
+        if ($stmt->fetch()) {
+            $error_email = "❌ Este correo ya está registrado.";
+        }
+
+        // B) Comprobar DNI (Solo si escribió algo en DNI)
+        if (!empty($dni)) {
+            $stmt = $conn->prepare("SELECT id FROM clientes WHERE dni = :dni LIMIT 1");
+            $stmt->execute([':dni' => $dni]);
+            if ($stmt->fetch()) {
+                $error_dni = "❌ Este DNI ya está registrado.";
+            }
+        }
+
+        // 4. Si NO hay errores de duplicados, insertamos
+        if (empty($error_email) && empty($error_dni)) {
+            try {
+                $sql = "INSERT INTO clientes (nombre, apellidos, email, password, dni, telefono, direccion, numero, piso, ciudad, codigo_postal, rol) 
+                        VALUES (:nombre, :apellidos, :email, :password, :dni, :telefono, :direccion, :numero, :piso, :ciudad, :codigo_postal, 'cliente')";
+                
+                $stmt = $conn->prepare($sql);
+                $stmt->execute([
+                    ':nombre' => $nombre, ':apellidos' => $apellidos, ':email' => $email,
+                    ':password' => $password, ':dni' => $dni, ':telefono' => $telefono,
+                    ':direccion' => $calle, ':numero' => $numero, ':piso' => $piso,
+                    ':ciudad' => $localidad, ':codigo_postal' => $cp
+                ]);
+
+                // Login automático y redirección
+                $nuevo_id = $conn->lastInsertId();
+                $_SESSION['usuario_id'] = $nuevo_id;
+                $_SESSION['usuario_nombre'] = $nombre;
+                $_SESSION['usuario_rol'] = 'cliente';
+
+                echo "<script>
+                    localStorage.setItem('usuarioLogueado', 'true');
+                    localStorage.setItem('usuarioNombre', '" . htmlspecialchars($nombre) . "');
+                    window.location.href = '../cliente/index.php';
+                  </script>";
+                exit;
+
+            } catch (PDOException $e) {
+                $error = "Hubo un error técnico: " . $e->getMessage();
+            }
+        }
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,6 +95,9 @@ include '../CabeceraFooter.php';
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/registro.css">
+
+        <!-- MANTENEMOS auth.js para la cabecera -->
+    <script src="../js/auth.js"></script>
 </head>
 <body>
     <div class="visitante-registro">
@@ -21,8 +107,16 @@ include '../CabeceraFooter.php';
         <main class="registro-section">
             <div class="registro-card">
                 <h1 class="registro-title">Regístrate</h1>
+                
+                <!-- Mensaje de error si falla algo -->
+                <?php if(!empty($error)): ?>
+                    <div style="background-color:#f8d7da; color:#721c24; padding:10px; border-radius:5px; margin-bottom:15px; text-align:center;">
+                        <?php echo $error; ?>
+                    </div>
+                <?php endif; ?>
 
-                <form class="registro-form">
+                <!-- AÑADIDO: method="POST" para que envíe los datos -->
+                <form class="registro-form" method="POST" action="">
                     
                     <div class="form-row">
                         <label for="nombre" class="label-icon">
@@ -45,7 +139,15 @@ include '../CabeceraFooter.php';
                             <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                             Correo electrónico:
                         </label>
-                        <input type="email" id="email" name="email" class="form-input" placeholder="ejemplo@gmail.com" required>
+                        
+                        <input type="email" id="email" name="email" 
+                            class="form-input <?php echo !empty($error_email) ? 'error' : ''; ?>" 
+                            value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" 
+                            placeholder="ejemplo@gmail.com" required>
+
+                        <?php if(!empty($error_email)): ?>
+                            <span class="error-text"><?php echo $error_email; ?></span>
+                        <?php endif; ?>
                     </div>
 
                     <div class="form-row">
@@ -54,6 +156,8 @@ include '../CabeceraFooter.php';
                             Confirmación Correo electrónico:
                         </label>
                         <input type="email" id="email_confirm" name="email_confirm" class="form-input" placeholder="Repite tu correo" required>
+    
+                        <span id="msg-email" class="error-text"></span>
                     </div>
 
                     <div class="form-row">
@@ -70,6 +174,8 @@ include '../CabeceraFooter.php';
                             Repetir contraseña:
                         </label>
                         <input type="password" id="password_confirm" name="password_confirm" class="form-input" required>
+
+                        <span id="msg-pass" class="error-text"></span>
                     </div>
 
                     <div class="form-row">
@@ -79,7 +185,15 @@ include '../CabeceraFooter.php';
                              </svg>
                             DNI/NIF/NIE:
                         </label>
-                         <input type="text" id="dni" name="dni" class="form-input" placeholder="Ej: 12345678A">
+                        
+                        <input type="text" id="dni" name="dni" 
+                            class="form-input <?php echo !empty($error_dni) ? 'error' : ''; ?>" 
+                            value="<?php echo isset($_POST['dni']) ? htmlspecialchars($_POST['dni']) : ''; ?>" 
+                            placeholder="Ej: 12345678A">
+                            
+                        <?php if(!empty($error_dni)): ?>
+                            <span class="error-text"><?php echo $error_dni; ?></span>
+                        <?php endif; ?>
                     </div>
 
                     <div class="form-row">
@@ -132,6 +246,5 @@ include '../CabeceraFooter.php';
 
         <?php sectionfooter(); ?>
     </div>
-    <script src="../js/auth.js"></script>
 </body>
 </html>
