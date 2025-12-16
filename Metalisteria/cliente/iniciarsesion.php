@@ -1,4 +1,5 @@
 <?php
+session_start();
 // 1. INCLUIR FUNCIONES (Esto inicia la sesión)
 include '../CabeceraFooter.php'; 
 
@@ -7,59 +8,66 @@ include '../conexion.php';
 
 $error = '';
 
-// ==========================================
-// LÓGICA DE LOGIN (Tu código adaptado)
-// ==========================================
+// RECUPERAR EL ORIGEN (Para saber a dónde ir después)
+// 1. Si viene por GET (URL), lo cogemos.
+// 2. Si viene por POST (Formulario enviado), lo mantenemos.
+$origen = '';
+if (isset($_GET['origen'])) {
+    $origen = $_GET['origen'];
+} elseif (isset($_POST['origen'])) {
+    $origen = $_POST['origen'];
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // 1. Buscamos el usuario
+    // 1. Buscar usuario
     $sql = "SELECT * FROM clientes WHERE email = :email";
     $stmt = $conn->prepare($sql);
     $stmt->execute([':email' => $email]);
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // 2. Verificamos contraseña
-    if ($usuario && password_verify($password, $usuario['password'])) {
-        
-        // A. Guardamos sesión (Array 'usuario' para coherencia con otros archivos)
-        $_SESSION['usuario'] = [
-            'id' => $usuario['id'],
-            'nombre' => $usuario['nombre'],
-            'rol' => $usuario['rol']
-        ];
-        // Compatibilidad extra por si usas estas variables sueltas en otro lado
-        $_SESSION['usuario_id'] = $usuario['id']; 
+    // 2. Verificación Híbrida (Encriptada o Texto Plano)
+    $login_valido = false;
+    if ($usuario) {
+        if (password_verify($password, $usuario['password'])) {
+            $login_valido = true;
+        } elseif ($password === $usuario['password']) {
+            $login_valido = true;
+        }
+    }
 
-        // ==========================================================
-        // B. FUSIONAR CARRITO (Invitado -> Base de Datos)
-        // ==========================================================
+    if ($login_valido) {
+        // --- LOGIN CORRECTO ---
+        $_SESSION['usuario_id'] = $usuario['id'];
+        $_SESSION['usuario_nombre'] = $usuario['nombre'];
+        $_SESSION['usuario_rol'] = $usuario['rol'];
+
+        // --- FUSIÓN DE CARRITOS ---
         if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])) {
-            foreach ($_SESSION['carrito'] as $prod_sess) {
-                $pid = $prod_sess['id'];       
-                $cant = $prod_sess['cantidad'];
+            foreach ($_SESSION['carrito'] as $item_sess) {
+                $pid = $item_sess['id']; 
+                $cantidad_nueva = $item_sess['cantidad'];
                 
-                // Comprobar si ya existe en BD
-                $stmtCheck = $conn->prepare("SELECT id FROM carrito WHERE cliente_id = ? AND producto_id = ?");
+                $stmtCheck = $conn->prepare("SELECT id, cantidad FROM carrito WHERE cliente_id = ? AND producto_id = ?");
                 $stmtCheck->execute([$usuario['id'], $pid]);
-                $existe = $stmtCheck->fetch();
+                $row = $stmtCheck->fetch();
 
-                if ($existe) {
-                    $stmtUpd = $conn->prepare("UPDATE carrito SET cantidad = cantidad + ? WHERE id = ?");
-                    $stmtUpd->execute([$cant, $existe['id']]);
+                if ($row) {
+                    $nueva_cantidad_total = $row['cantidad'] + $cantidad_nueva;
+                    $stmtUpd = $conn->prepare("UPDATE carrito SET cantidad = ? WHERE id = ?");
+                    $stmtUpd->execute([$nueva_cantidad_total, $row['id']]);
                 } else {
                     $stmtIns = $conn->prepare("INSERT INTO carrito (cliente_id, producto_id, cantidad) VALUES (?, ?, ?)");
-                    $stmtIns->execute([$usuario['id'], $pid, $cant]);
+                    $stmtIns->execute([$usuario['id'], $pid, $cantidad_nueva]);
                 }
             }
         }
 
-        // B.2. Vaciar sesión temporal
-        $_SESSION['carrito'] = [];
-
-        // B.3. Recuperar carrito DEFINITIVO de la BD
-        $sqlRecuperar = "SELECT c.producto_id, c.cantidad, p.nombre, p.precio, p.imagen, p.referencia 
+        // Recargar carrito desde BD
+        $_SESSION['carrito'] = []; 
+        $sqlRecuperar = "SELECT c.producto_id, c.cantidad, p.nombre, p.precio, p.imagen_url, p.referencia, p.color, p.medidas 
                          FROM carrito c 
                          JOIN productos p ON c.producto_id = p.id 
                          WHERE c.cliente_id = ?";
@@ -67,26 +75,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmtRec->execute([$usuario['id']]);
         $productosBD = $stmtRec->fetchAll(PDO::FETCH_ASSOC);
 
-        // B.4. Rellenar sesión (IMPORTANTE: Usamos el ID como clave del array)
         foreach ($productosBD as $item) {
-            // Nota: Asegúrate de si tu campo en BD es 'imagen' o 'imagen_url'
-            $img = $item['imagen'] ?? $item['imagen_url'] ?? 'sin_imagen.jpg';
-            
             $_SESSION['carrito'][$item['producto_id']] = [
                 'id' => $item['producto_id'],
                 'nombre' => $item['nombre'],
                 'precio' => $item['precio'],
-                'imagen' => $img,
-                'referencia' => $item['referencia'] ?? '',
+                'imagen' => $item['imagen_url'],
+                'referencia' => $item['referencia'],
+                'color' => $item['color'],
+                'medidas' => $item['medidas'],
                 'cantidad' => $item['cantidad']
             ];
         }
 
-        // C. Redirección
-        $destino = ($usuario['rol'] === 'admin') ? '../Administrador/indexAdmin.php' : '../Cliente/index.php';
+        // ============================================================
+        // DECISIÓN DE REDIRECCIÓN (AQUÍ ESTÁ LA CLAVE)
+        // ============================================================
         
-        // Usamos JS para redirigir porque ya se han enviado cabeceras HTML arriba
+        if ($usuario['rol'] === 'admin') {
+            $destino = '../Administrador/indexAdmin.php';
+        } else {
+            // Si venimos de comprar -> Datos Envio
+            if ($origen === 'compra') {
+                $destino = '../Cliente/datosEnvio.php';
+            } else {
+                // Si venimos de la cabecera -> Inicio Cliente
+                $destino = '../Cliente/index.php';
+            }
+        }
+        
         echo "<script>
+                localStorage.setItem('usuarioLogueado', 'true');
+                localStorage.setItem('usuarioNombre', '" . htmlspecialchars($usuario['nombre']) . "');
                 window.location.href = '$destino';
               </script>";
         exit;
