@@ -1,7 +1,10 @@
 <?php
     // 1. CARGA DE RECURSOS Y SESIÓN
-    include 'CabeceraFooter.php'; 
-    include 'conexion.php';
+    // Nota: Si este archivo se incluye dentro de otro que ya tiene CabeceraFooter,
+    // asegúrate de que $lang esté disponible. Al incluir CabeceraFooter aquí,
+    // garantizamos que cargue el idioma.
+    include_once 'CabeceraFooter.php'; 
+    include_once 'conexion.php';
 ?>
 
 <style>
@@ -132,13 +135,13 @@
         </div>
 
         <div class="cookie-text">
-            <p><strong>Privacidad y Cookies.</strong></p>
-            <p>Utilizamos cookies propias para mejorar tu experiencia. Puedes aceptarlas o rechazar su uso. Lee nuestra <a href="cookies.php">política de cookies</a>.</p>
+            <p><strong><?php echo $lang['cookie_titulo']; ?></strong></p>
+            <p><?php echo $lang['cookie_desc']; ?> <a href="cookies.php"><?php echo $lang['cookie_link']; ?></a>.</p>
         </div>
         
         <div class="cookie-buttons">
-            <button class="btn-cookie-reject" onclick="gestionarCookies(false)">Rechazar</button>
-            <button class="btn-cookie-accept" onclick="gestionarCookies(true)">Aceptar todo</button>
+            <button class="btn-cookie-reject" onclick="gestionarCookies(false)"><?php echo $lang['cookie_rechazar']; ?></button>
+            <button class="btn-cookie-accept" onclick="gestionarCookies(true)"><?php echo $lang['cookie_aceptar']; ?></button>
         </div>
     </div>
 

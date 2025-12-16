@@ -3,11 +3,11 @@ include 'CabeceraFooter.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo isset($_SESSION['idioma']) ? $_SESSION['idioma'] : 'es'; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio Visitante - Metalful</title>
+    <title><?php echo $lang['index_titulo']; ?></title>
     <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,24 +19,21 @@ include 'CabeceraFooter.php';
 
         <?php sectionheader(1); ?>
 
-        <!-- Portada -->
         <section class="portada">
             <div class="portada-image">
                 <img src="imagenes/principal.png" alt="Taller de metalurgia">
             </div>
             <div class="portada-overlay"></div>
-            <h1 class="portada-title">Metalistería con más de 30 años de experiencia en el sector</h1>
+            <h1 class="portada-title"><?php echo $lang['hero_titulo']; ?></h1>
         </section>
 
-        <!-- Main Content -->
         <main class="main-content">
 
-            <!-- Ubicación -->
             <section class="ubicacion">
                 <div class="container">
                     <div class="ubicacion-content">
                         <div class="texto-ubicacion">
-                            <h2>Donde nos encontramos</h2>
+                            <h2><?php echo $lang['donde_estamos']; ?></h2>
                             <div class="direccion-box">
                                 <a href="https://www.google.com/maps/place//data=!4m2!3m1!1s0xd71fd00684554b1:0xef4e70ab821a7762?sa=X&ved=1t:8290&ictx=111" target="_blank" class="direccion-link icono-link">
                                     <div class="location-icon">
@@ -44,12 +41,12 @@ include 'CabeceraFooter.php';
                                             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                                         </svg>
                                     </div>
-                                    Extrarradio Cortijo la Purisima, 2P, 18004 Granada
+                                    <?php echo $lang['direccion']; ?>
                                 </a>
                             </div>
 
                             <div class="contacto-info">
-                                <p>Si tiene problemas para encontrarnos llame a este número:</p>
+                                <p><?php echo $lang['problemas_encontrar']; ?></p>
                                 <a href="tel:652921960" class="telefono-btn">652 921 960</a>
                             </div>
                         </div>
@@ -61,10 +58,9 @@ include 'CabeceraFooter.php';
                 </div>
             </section>
 
-            <!-- Nuestros Productos -->
             <section class="nuestros-productos">
                 <div class="productos-container">
-                    <h2>Nuestros Productos</h2>
+                    <h2><?php echo $lang['nuestros_productos']; ?></h2>
 
                     <div class="productos-grid">
                         <div class="producto-card">
@@ -78,64 +74,56 @@ include 'CabeceraFooter.php';
                         </div>
                     </div>
 
-                    <button class="ver-mas-btn">Ver más</button>
+                    <button class="ver-mas-btn"><?php echo $lang['ver_mas']; ?></button>
                 </div>
             </section>
 
-            <!-- Preguntas Frecuentes -->
             <section class="preguntas-frecuentes">
                 <div class="container">
 
-                    
-
                     <div class="faq-content">
-                        <h2>Preguntas Frecuentes</h2>
+                        <h2><?php echo $lang['faq_titulo']; ?></h2>
 
-                        <!-- IMÁGENES -->
                         <div class="faq-images">
                             <img src="imagenes/rojo.png" alt="Trabajo metálico" class="faq-img-1">
                             <img src="imagenes/blanco.png" alt="Detalle metálico" class="faq-img-2">
                         </div>
 
-                        <!-- PREGUNTAS -->
                         <div class="faq-questions">
 
-                            <!-- ITEM 1 -->
                             <div class="faq-item">
                                 <div class="faq-question">
-                                    <span>¿Cuánto tarda el producto en llegar?</span>
+                                    <span><?php echo $lang['faq_q1']; ?></span>
                                     <svg class="arrow-icon" viewBox="0 0 47 40">
                                         <path d="M11.75 15L23.5 26.75L35.25 15L11.75 15Z" fill="currentColor" />
                                     </svg>
                                 </div>
                                 <div class="faq-answer">
-                                    <p>El tiempo de entrega suele ser entre 3 y 7 días según el tipo de producto.</p>
+                                    <p><?php echo $lang['faq_a1']; ?></p>
                                 </div>
                             </div>
 
-                            <!-- ITEM 2 -->
                             <div class="faq-item">
                                 <div class="faq-question">
-                                    <span>¿Cuál es el rango de distribución de los productos?</span>
+                                    <span><?php echo $lang['faq_q2']; ?></span>
                                     <svg class="arrow-icon" viewBox="0 0 47 40">
                                         <path d="M11.75 15L23.5 26.75L35.25 15L11.75 15Z" fill="currentColor" />
                                     </svg>
                                 </div>
                                 <div class="faq-answer">
-                                    <p>Hacemos entregas en toda la provincia de Granada y zonas cercanas.</p>
+                                    <p><?php echo $lang['faq_a2']; ?></p>
                                 </div>
                             </div>
 
-                            <!-- ITEM 3 -->
                             <div class="faq-item">
                                 <div class="faq-question">
-                                    <span>¿Cómo puede contactarnos?</span>
+                                    <span><?php echo $lang['faq_q3']; ?></span>
                                     <svg class="arrow-icon" viewBox="0 0 47 40">
                                         <path d="M11.75 15L23.5 26.75L35.25 15L11.75 15Z" fill="currentColor" />
                                     </svg>
                                 </div>
                                 <div class="faq-answer">
-                                    <p>Puede llamarnos al 652 921 960 o escribirnos a metalfulsan@gmail.com.</p>
+                                    <p><?php echo $lang['faq_a3']; ?></p>
                                 </div>
                             </div>
 

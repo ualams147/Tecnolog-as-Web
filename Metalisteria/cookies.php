@@ -5,11 +5,11 @@
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo isset($_SESSION['idioma']) ? $_SESSION['idioma'] : 'es'; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Política de Cookies - Metalistería Fulsan</title>
+    <title><?php echo $lang['cookies_titulo_pag']; ?></title>
     <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,29 +22,29 @@
 
         <main class="legal-main">
             <div class="legal-document">
-                <h1 class="legal-title">Política de Cookies</h1>
-                <span class="legal-date">Última actualización: 15 de Marzo de 2024</span>
+                <h1 class="legal-title"><?php echo $lang['cookies_h1']; ?></h1>
+                <span class="legal-date"><?php echo $lang['cookies_fecha']; ?></span>
 
                 <div class="legal-body">
-                    <p>Este sitio web utiliza cookies propias y de terceros para mejorar la experiencia del usuario y analizar nuestros servicios.</p>
+                    <p><?php echo $lang['cookies_intro']; ?></p>
 
-                    <h2>1. ¿Qué son las cookies?</h2>
-                    <p>Las cookies son pequeños archivos de texto que se descargan en su navegador cuando accede a determinados sitios web. Permiten almacenar y recuperar información sobre los hábitos de navegación de un usuario o de su equipo.</p>
+                    <h2><?php echo $lang['cookies_h2_1']; ?></h2>
+                    <p><?php echo $lang['cookies_p_1']; ?></p>
 
-                    <h2>2. Tipos de Cookies que utilizamos</h2>
+                    <h2><?php echo $lang['cookies_h2_2']; ?></h2>
                     <ul>
-                        <li><strong>Cookies técnicas:</strong> Son necesarias para el correcto funcionamiento de la web (ej. mantener la sesión o el carrito de compra).</li>
+                        <li><?php echo $lang['cookies_li_1']; ?></li>
                     </ul>
 
-                    <h2>3. Gestión de Cookies</h2>
-                    <p>Puede usted permitir, bloquear o eliminar las cookies instaladas en su equipo mediante la configuración de las opciones del navegador instalado en su ordenador:</p>
+                    <h2><?php echo $lang['cookies_h2_3']; ?></h2>
+                    <p><?php echo $lang['cookies_p_2']; ?></p>
                     <ul>
                         <li>Chrome</li>
                         <li>Firefox</li>
                         <li>Safari</li>
                         <li>Microsoft Edge</li>
                     </ul>
-                    <p>Si decide desactivar las cookies, es posible que algunas funciones del sitio web no funcionen correctamente.</p>
+                    <p><?php echo $lang['cookies_p_3']; ?></p>
                 </div>
             </div>
         </main>

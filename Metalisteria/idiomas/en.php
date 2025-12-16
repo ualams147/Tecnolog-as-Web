@@ -1,5 +1,6 @@
 <?php
 $lang = array(
+    // MENU & FOOTER
     "conocenos" => "About Us",
     "productos" => "Products",
     "carrito" => "Cart",
@@ -11,6 +12,196 @@ $lang = array(
     "contacto" => "Contact",
     "aviso" => "Legal Notice",
     "privacidad" => "Privacy Policy",
-    "cookies" => "Cookie Policy"
+    "cookies" => "Cookie Policy",
+
+    // HOME PAGE (INDEX)
+    "index_titulo" => "Visitor Home - Metalful",
+    "hero_titulo" => "Metalwork with over 30 years of experience in the sector",
+    "donde_estamos" => "Where to find us",
+    "direccion" => "Extrarradio Cortijo la Purisima, 2P, 18004 Granada",
+    "problemas_encontrar" => "If you have trouble finding us, call this number:",
+    "nuestros_productos" => "Our Products",
+    "ver_mas" => "See more",
+    "faq_titulo" => "Frequently Asked Questions",
+    "faq_q1" => "How long does the product take to arrive?",
+    "faq_a1" => "Delivery time is usually between 3 and 7 days depending on the product type.",
+    "faq_q2" => "What is the distribution range of the products?",
+    "faq_a2" => "We deliver throughout the province of Granada and nearby areas.",
+    "faq_q3" => "How can you contact us?",
+    "faq_a3" => "You can call us at 652 921 960 or write to us at metalfulsan@gmail.com.",
+
+    // COOKIES BANNER
+    "cookie_titulo" => "Privacy and Cookies.",
+    "cookie_desc" => "We use our own cookies to improve your experience. You can accept or reject them. Read our",
+    "cookie_link" => "cookie policy",
+    "cookie_rechazar" => "Reject",
+    "cookie_aceptar" => "Accept all",
+
+
+    // LEGAL NOTICE
+    "legal_titulo_pag" => "Legal Notice - Metalistería Fulsan",
+    "legal_h1" => "Legal Notice",
+    "legal_fecha" => "Last updated: March 15, 2024",
+    "legal_intro" => "In compliance with Article 10 of Law 34/2002, of July 11, on Information Society Services and Electronic Commerce (LSSICE), the identifying data of the entity are set out below:",
+    "legal_datos_t" => "1. Identifying Data",
+    "legal_nombre_com" => "Trade name:",
+    "legal_denom_soc" => "Corporate name:",
+    "legal_domicilio" => "Registered office:",
+    "legal_correo" => "Email:",
+    "legal_tel" => "Phone:",
+    "legal_prop_t" => "2. Intellectual Property",
+    "legal_prop_desc" => "The source code, graphic designs, images, photographs, sounds, animations, software, texts, as well as the information and contents collected on this website are protected by Spanish legislation on intellectual and industrial property rights in favor of Metalistería Fulsan S.L.",
+    "legal_prot_t" => "3. Personal Data Protection",
+    "legal_prot_desc" => "Within the framework of compliance with current legislation, contained in Organic Law 15/1999, of December 13, on the Protection of Personal Data (LOPD), whose object is to guarantee and protect, with regard to the processing of personal data, the fundamental freedoms and rights of natural persons, Metalistería Fulsan informs users that the data entered in the contact forms will be stored in an automated file owned by the company.",
+    "legal_ley_t" => "4. Applicable Law",
+    "legal_ley_desc" => "The applicable law in case of dispute or conflict of interpretation of the terms that make up this legal notice, as well as any matter related to the services of this portal, shall be Spanish law.",
+
+
+    // CART
+    "carrito_titulo_pag" => "My Cart - Metalistería Fulsan",
+    "carrito_h1" => "My Cart",
+    "carrito_vacio_msg" => "Your cart is empty.",
+    "carrito_ver_productos" => "View Products",
+    "carrito_producto_lbl" => "Product:",
+    "carrito_detalles_lbl" => "Details:",
+    "carrito_precio_lbl" => "Price:",
+    "carrito_eliminar_title" => "Remove product",
+    "carrito_total" => "Total:",
+    "carrito_btn_vaciar" => "Empty Cart",
+    "carrito_btn_tramitar" => "Checkout",
+    "carrito_btn_comprar" => "Buy",
+
+    // SWEETALERT
+    "swal_borrar_titulo" => "Are you sure?",
+    "swal_borrar_texto" => "You are about to remove this product from your cart.",
+    "swal_borrar_si" => "Yes, remove",
+    "swal_cancelar" => "Cancel",
+    "swal_vaciar_titulo" => "Empty cart?",
+    "swal_vaciar_texto" => "All products will be removed.",
+    "swal_vaciar_si" => "Yes, empty all",
+
+
+    // ABOUT US
+    "conocenos_titulo_pag" => "Metalistería Fulsan - About Us",
+    "empresa_titulo" => "Our Company",
+    "empresa_desc1" => "We offer a wide range of services in both manufacturing and metal carpentry, allowing our clients to customize their products to adapt to their needs.",
+    "empresa_desc2" => "We work for clients locally, with our headquarters in Extrarradio Cortijo la Purisima, 2P, 18004 Granada, although we have also worked nationally and internationally.",
+    "nosotros_titulo" => "About Us",
+    "nosotros_intro" => "Metalwork with over 30 years of experience in the sector, distinguished by the quality of our products and the personalized attention we offer to each client.",
+    "nosotros_historia" => "Founded in 1985, formerly called Metalistería Aisan. In 2014 it was inherited by Fulgencio Sánchez under the name Metalistería Fulsan.",
+    "nosotros_servicios" => "Our clients belong to very diverse sectors, such as construction, industry, services, and the residential sector, for whom we make all kinds of structures, railings, doors, grilles, and custom metal work.",
+
+
+    // COOKIE POLICY
+    "cookies_titulo_pag" => "Cookie Policy - Metalistería Fulsan",
+    "cookies_h1" => "Cookie Policy",
+    "cookies_fecha" => "Last updated: March 15, 2024",
+    "cookies_intro" => "This website uses its own and third-party cookies to improve the user experience and analyze our services.",
+    "cookies_h2_1" => "1. What are cookies?",
+    "cookies_p_1" => "Cookies are small text files that are downloaded to your browser when you access certain websites. They allow storing and retrieving information about the browsing habits of a user or their equipment.",
+    "cookies_h2_2" => "2. Types of Cookies we use",
+    "cookies_li_1" => "<strong>Technical cookies:</strong> They are necessary for the correct functioning of the website (e.g. maintaining the session or the shopping cart).",
+    "cookies_h2_3" => "3. Cookie Management",
+    "cookies_p_2" => "You can allow, block or delete the cookies installed on your computer by configuring the browser options installed on your computer:",
+    "cookies_p_3" => "If you decide to deactivate cookies, some functions of the website may not work properly.",
+
+
+    // SHIPPING DATA
+    "envio_titulo_pag" => "Shipping Data - Metalistería Fulsan",
+    "envio_paso" => "Step",
+    "envio_step_1" => "Shipping Data",
+    "envio_step_2" => "Payment Method",
+    "envio_step_3" => "Purchase Invoice",
+    "envio_h1" => "Shipping Data",
+    "envio_lbl_nombre" => "Full Name:",
+    "envio_title_nombre" => "Only letters and spaces are allowed",
+    "envio_lbl_email" => "Email:",
+    "envio_lbl_telefono" => "Phone:",
+    "envio_title_telefono" => "Please enter a valid phone number",
+    "envio_lbl_calle" => "Street / Address:",
+    "envio_ph_calle" => "Ex: Oxford Street",
+    "envio_lbl_num" => "No. / Floor:",
+    "envio_ph_num" => "Ex: 12",
+    "envio_ph_piso" => "Ex: 3rd Floor",
+    "envio_lbl_cp" => "Zip Code / City:",
+    "envio_title_cp" => "The zip code must be numeric",
+    "envio_ph_cp" => "Ex: 18001",
+    "envio_lbl_notas" => "Delivery Notes (Optional):",
+    "envio_ph_notas" => "Ex: Call the blue buzzer...",
+    "envio_btn_volver" => "Go back",
+    "envio_btn_continuar" => "Continue to payment",
+
+
+    // ADMIN - SALE DETAILS
+    "admin_detalles_titulo" => "Sale Details #",
+    "admin_venta_no_encontrada" => "Sale not found.",
+    "admin_detalles_h1" => "Sale #",
+    "admin_lbl_cliente" => "Client:",
+    "admin_lbl_productos_pedido" => "Order Products:",
+    "admin_lbl_prod_nombre" => "Product Name:",
+    "admin_lbl_prod_precio" => "Unit Price:",
+    "admin_lbl_prod_unidades" => "Units:",
+    "admin_lbl_prod_subtotal" => "Subtotal:",
+    "admin_lbl_importe_total" => "Total Amount:",
+    "admin_btn_ir_usuario" => "Go to user",
+    "admin_swal_salir_guardar_tit" => "Exit without saving?",
+    "admin_swal_salir_guardar_txt" => "Unsaved changes will be lost.",
+
+
+    // EDIT PROFILE
+    "profile_edit_title" => "Edit Profile - Metalistería Fulsan",
+    "profile_my_data" => "My Data",
+    "profile_swal_success_tit" => "Data Updated",
+    "profile_swal_success_txt" => "Your profile has been saved successfully.",
+    "profile_personal_data" => "Personal Data",
+    "profile_lbl_name" => "Name:",
+    "profile_lbl_surname" => "Surnames:",
+    "profile_lbl_email" => "Email:",
+    "profile_lbl_dni" => "ID/Tax ID:",
+    "profile_lbl_phone" => "Phone:",
+    
+    // PASSWORD CHANGE
+    "profile_btn_change_pass" => "Change Password",
+    "profile_pass_instruction" => "To set a new password, verify your identity.",
+    "profile_lbl_current_pass" => "Current Password:",
+    "profile_btn_check" => "Verify",
+    "profile_identity_verified" => "Identity verified.",
+    "profile_lbl_new_pass" => "New Password:",
+    "profile_ph_min_chars" => "Minimum 4 characters",
+    "profile_lbl_confirm_pass" => "Confirm New:",
+    "profile_ph_repeat_pass" => "Repeat password",
+    "profile_btn_update_pass" => "Update Password",
+    
+    // ADDRESS
+    "profile_address_title" => "Home Address",
+    "profile_lbl_street" => "Street:",
+    "profile_lbl_num" => "Number:",
+    "profile_lbl_floor" => "Floor / Door:",
+    "profile_lbl_cp" => "Zip Code:",
+    "profile_lbl_city" => "City / Town:",
+    "profile_lbl_province" => "Province:",
+    
+    // BUTTONS AND JS
+    "profile_btn_exit" => "Exit",
+    "profile_btn_save" => "Save Changes",
+    "profile_js_err_dni_tit" => "Invalid Document",
+    "profile_js_err_dni_txt" => "The ID format is invalid. Please correct it to save.",
+    "profile_js_save_tit" => "Save changes?",
+    "profile_js_save_txt" => "Are you sure you want to update your data?",
+    "profile_js_btn_yes" => "Yes, save",
+    "profile_js_btn_cancel" => "Cancel",
+    "profile_js_exit_tit" => "Exit without saving?",
+    "profile_js_exit_txt" => "Unsaved changes will be lost.",
+    "profile_js_btn_exit" => "Yes, exit",
+    
+    // JS PASSWORD
+    "profile_js_pass_correct" => "Password correct",
+    "profile_js_pass_incorrect" => "Incorrect password.",
+    "profile_js_pass_updated_tit" => "Updated!",
+    "profile_js_pass_updated_txt" => "New password saved successfully.",
+    "profile_js_attention" => "Attention",
+    "profile_js_err_short" => "Password must be at least 4 characters long.",
+    "profile_js_err_match" => "Passwords do not match.",
+    "profile_js_err_empty" => "Please enter your current password.",
 );
 ?>

@@ -98,11 +98,11 @@ foreach ($_SESSION['carrito'] as $item) {
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo isset($_SESSION['idioma']) ? $_SESSION['idioma'] : 'es'; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Compra - Metalistería Fulsan</title>
+    <title><?php echo $lang['carrito_titulo_pag']; ?></title>
     <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -123,17 +123,15 @@ foreach ($_SESSION['carrito'] as $item) {
             font-weight: 600;
             border-radius: 12px;
             transition: all 0.3s ease;
-            /* CAMBIOS AQUÍ PARA CENTRAR */
-            display: inline-flex;    /* Usamos Flexbox */
-            align-items: center;     /* Centrado vertical */
-            justify-content: center; /* Centrado horizontal */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
         }
 
-        /* EFECTO AL PASAR EL RATÓN (HOVER) */
         .btn-vaciar-custom:hover {
-            background-color: #dc3545; /* Fondo rojo */
-            color: #ffffff;            /* Texto blanco */
+            background-color: #dc3545;
+            color: #ffffff;
             box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
         }
     </style>
@@ -144,7 +142,7 @@ foreach ($_SESSION['carrito'] as $item) {
         <?php sectionheader(4); ?>
 
         <main class="carrito-section">
-            <h1 class="carrito-title">Mi Compra</h1>
+            <h1 class="carrito-title"><?php echo $lang['carrito_h1']; ?></h1>
 
             <div class="carrito-container">
                 
@@ -153,8 +151,8 @@ foreach ($_SESSION['carrito'] as $item) {
                         <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#ccc" viewBox="0 0 16 16">
                         <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
                         </svg>
-                        <p style="color: #666; margin-top: 20px; font-size: 18px;">Tu carrito está vacío.</p>
-                        <a href="productos.php" class="btn-comprar" style="display: inline-block; margin-top: 20px; text-decoration: none;">Ver Productos</a>
+                        <p style="color: #666; margin-top: 20px; font-size: 18px;"><?php echo $lang['carrito_vacio_msg']; ?></p>
+                        <a href="productos.php" class="btn-comprar" style="display: inline-block; margin-top: 20px; text-decoration: none;"><?php echo $lang['carrito_ver_productos']; ?></a>
                     </div>
 
                 <?php else: ?>
@@ -162,7 +160,6 @@ foreach ($_SESSION['carrito'] as $item) {
                         
                         <?php foreach ($_SESSION['carrito'] as $id => $item): ?>
                             <?php 
-                                // Corrección de ruta de imagen
                                 $ruta_img = str_replace('../', '', $item['imagen']);
                                 if(empty($ruta_img)) $ruta_img = "imagenes/producto-sin-imagen.png";
                             ?>
@@ -175,15 +172,15 @@ foreach ($_SESSION['carrito'] as $item) {
                                 
                                 <div class="item-details">
                                     <div class="item-info">
-                                        <p class="item-label">Producto:</p>
+                                        <p class="item-label"><?php echo $lang['carrito_producto_lbl']; ?></p>
                                         <p class="item-value"><?php echo htmlspecialchars($item['nombre']); ?></p>
                                         
-                                        <p class="item-label" style="font-size: 0.85em; margin-top:5px;">Detalles:</p>
+                                        <p class="item-label" style="font-size: 0.85em; margin-top:5px;"><?php echo $lang['carrito_detalles_lbl']; ?></p>
                                         <p class="item-value" style="font-size: 0.85em; color: #555;">
                                             <?php echo htmlspecialchars($item['color'] ?? 'N/A'); ?> - <?php echo htmlspecialchars($item['medidas'] ?? 'N/A'); ?>
                                         </p>
 
-                                        <p class="item-label">Precio:</p>
+                                        <p class="item-label"><?php echo $lang['carrito_precio_lbl']; ?></p>
                                         <p class="item-value"><?php echo number_format($item['precio'], 2); ?>€</p>
                                     </div>
 
@@ -199,7 +196,7 @@ foreach ($_SESSION['carrito'] as $item) {
                                             <button type="button" class="qty-btn" onclick="actualizarCantidad(<?php echo $id; ?>, 'sumar')">+</button>
                                         </div>
 
-                                        <a href="javascript:void(0);" onclick="confirmarBorrado(<?php echo $id; ?>)" class="btn-eliminar" title="Eliminar producto" style="text-decoration: none; display: flex; align-items: center;">
+                                        <a href="javascript:void(0);" onclick="confirmarBorrado(<?php echo $id; ?>)" class="btn-eliminar" title="<?php echo $lang['carrito_eliminar_title']; ?>" style="text-decoration: none; display: flex; align-items: center;">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                                                 <path d="M17 6h5v2h-2v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8H2V6h5V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v3zm1 2H6v12h12V8zm-9 3h2v6H9v-6zm4 0h2v6h-2v-6zM9 4v2h6V4H9z"/>
                                             </svg>
@@ -213,21 +210,21 @@ foreach ($_SESSION['carrito'] as $item) {
                     </div>
 
                     <div class="carrito-summary">
-                        <h2 class="total-text">Total: <span class="total-amount" id="precio-total-carrito"><?php echo number_format($total_carrito, 2); ?>€</span></h2>
+                        <h2 class="total-text"><?php echo $lang['carrito_total']; ?> <span class="total-amount" id="precio-total-carrito"><?php echo number_format($total_carrito, 2); ?>€</span></h2>
                         
                         <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap;">
                             
                             <a href="javascript:void(0);" onclick="confirmarVaciar()" class="btn-vaciar-custom">
-                                Vaciar Carrito
+                                <?php echo $lang['carrito_btn_vaciar']; ?>
                             </a>
 
                             <?php if ($uid > 0): ?>
                                 <a href="datosenvio.php" class="btn-comprar" style="text-align:center; text-decoration:none; display:block;">
-                                    Tramitar Pedido
+                                    <?php echo $lang['carrito_btn_tramitar']; ?>
                                 </a>
                             <?php else: ?>
                                 <a href="iniciarsesion.php?origen=compra" class="btn-comprar" style="text-align:center; text-decoration:none; display:block;">
-                                    Comprar
+                                    <?php echo $lang['carrito_btn_comprar']; ?>
                                 </a>
                             <?php endif; ?>
                         </div>
@@ -279,17 +276,17 @@ foreach ($_SESSION['carrito'] as $item) {
         .catch(error => console.error('Error:', error));
     }
 
-    // 2. FUNCIÓN PARA ELIMINAR UN PRODUCTO (SWEETALERT)
+    // 2. FUNCIÓN PARA ELIMINAR UN PRODUCTO (SWEETALERT TRADUCIDO)
     function confirmarBorrado(id) {
         Swal.fire({
-            title: '¿Estás seguro?',
-            text: "Vas a quitar este producto de tu compra.",
+            title: '<?php echo $lang['swal_borrar_titulo']; ?>',
+            text: "<?php echo $lang['swal_borrar_texto']; ?>",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#dc3545',
             cancelButtonColor: '#293661',
-            confirmButtonText: 'Sí, quitar',
-            cancelButtonText: 'Cancelar',
+            confirmButtonText: '<?php echo $lang['swal_borrar_si']; ?>',
+            cancelButtonText: '<?php echo $lang['swal_cancelar']; ?>',
             background: '#f4f4f4',
             color: '#333'
         }).then((result) => {
@@ -299,17 +296,17 @@ foreach ($_SESSION['carrito'] as $item) {
         })
     }
 
-    // 3. FUNCIÓN PARA VACIAR TODO (SWEETALERT)
+    // 3. FUNCIÓN PARA VACIAR TODO (SWEETALERT TRADUCIDO)
     function confirmarVaciar() {
         Swal.fire({
-            title: '¿Vaciar carrito?',
-            text: "Se eliminarán todos los productos.",
+            title: '<?php echo $lang['swal_vaciar_titulo']; ?>',
+            text: "<?php echo $lang['swal_vaciar_texto']; ?>",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#dc3545',
             cancelButtonColor: '#293661',
-            confirmButtonText: 'Sí, vaciar todo',
-            cancelButtonText: 'Cancelar'
+            confirmButtonText: '<?php echo $lang['swal_vaciar_si']; ?>',
+            cancelButtonText: '<?php echo $lang['swal_cancelar']; ?>'
         }).then((result) => {
             if (result.isConfirmed) {
                 window.location.href = "carrito.php?vaciar=true";

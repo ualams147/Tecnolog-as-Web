@@ -3,8 +3,20 @@
 session_start();
 ob_start(); 
 
+// 0. CARGAR IDIOMA
+// Como hay AJAX en este archivo, necesitamos cargar el idioma ANTES del bloque AJAX
+if (!isset($_SESSION['idioma'])) {
+    $_SESSION['idioma'] = 'es';
+}
+$archivo_lang = "idiomas/" . $_SESSION['idioma'] . ".php";
+if (file_exists($archivo_lang)) {
+    include $archivo_lang;
+} else {
+    include "idiomas/es.php";
+}
+
 include 'conexion.php'; 
-include 'CabeceraFooter.php'; // Incluimos funciones de cabecera
+include 'CabeceraFooter.php'; 
 
 // 2. SEGURIDAD DE SESIÓN
 if (!isset($_SESSION['usuario_id'])) {
@@ -16,10 +28,10 @@ $id_user = $_SESSION['usuario_id'];
 $mensaje = "";
 
 // =======================================================================
-// BLOQUE 1 Y 2: AJAX (CONTRASEÑA) - SE MANTIENE IGUAL
+// BLOQUE 1 Y 2: AJAX (CONTRASEÑA)
 // =======================================================================
 if (isset($_POST['ajax_verificar']) || isset($_POST['ajax_guardar_password'])) {
-    ob_clean(); // Limpiar cualquier HTML previo (incluida la cabecera si se coló)
+    ob_clean(); 
     header('Content-Type: application/json');
     $response = ['status' => 'error', 'message' => 'Error desconocido'];
 
@@ -36,14 +48,17 @@ if (isset($_POST['ajax_verificar']) || isset($_POST['ajax_guardar_password'])) {
                     $es_correcta = true;
                 }
             }
-            $response = $es_correcta ? ['status' => 'success'] : ['status' => 'error', 'message' => 'Contraseña incorrecta'];
+            // Mensaje traducido
+            $msg_error = isset($lang['profile_js_pass_incorrect']) ? $lang['profile_js_pass_incorrect'] : 'Contraseña incorrecta';
+            $response = $es_correcta ? ['status' => 'success'] : ['status' => 'error', 'message' => $msg_error];
         
         } elseif (isset($_POST['ajax_guardar_password'])) {
             $pass_nueva = $_POST['pass_nueva'] ?? '';
             $pass_confirm = $_POST['pass_confirm'] ?? '';
 
-            if (strlen($pass_nueva) < 4) throw new Exception('La contraseña es muy corta.');
-            if ($pass_nueva !== $pass_confirm) throw new Exception('Las contraseñas no coinciden.');
+            // Mensajes traducidos para excepciones
+            if (strlen($pass_nueva) < 4) throw new Exception($lang['profile_js_err_short']);
+            if ($pass_nueva !== $pass_confirm) throw new Exception($lang['profile_js_err_match']);
 
             $hash_nueva = password_hash($pass_nueva, PASSWORD_DEFAULT);
             $stmt = $conn->prepare("UPDATE clientes SET password = ? WHERE id = ?");
@@ -65,7 +80,6 @@ if (isset($_POST['ajax_verificar']) || isset($_POST['ajax_guardar_password'])) {
 // =======================================================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['ajax_verificar']) && !isset($_POST['ajax_guardar_password'])) {
     
-    // Recogemos datos usando el operador ?? '' para evitar errores si algo falta
     $nombre    = $_POST['nombre'] ?? '';
     $apellidos = $_POST['apellidos'] ?? '';
     $email     = $_POST['correo'] ?? '';
@@ -92,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['ajax_verificar']) &&
         ]);
         
         // Recargar la página para ver cambios
-        header("Location: perfil.php?actualizado=1"); 
+        header("Location: modificardatoscliente.php?actualizado=1"); 
         exit;
         
     } catch(Exception $e) {
@@ -112,18 +126,17 @@ if (!$cliente) {
     exit;
 }
 
-// Función auxiliar para rellenar los values sin errores
 function val($dato) {
     return htmlspecialchars($dato ?? '', ENT_QUOTES, 'UTF-8');
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo $_SESSION['idioma']; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Datos - Metalistería Fulsan</title>
+    <title><?php echo $lang['profile_edit_title']; ?></title>
     
     <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -140,7 +153,7 @@ function val($dato) {
         <section class="address-hero">
             <div class="container hero-content">
                 <a href="perfil.php" class="flecha-circular">&#8592;</a>
-                <h1 class="address-title-main">Mis datos</h1>
+                <h1 class="address-title-main"><?php echo $lang['profile_my_data']; ?></h1>
             </div>
         </section>
 
@@ -151,11 +164,10 @@ function val($dato) {
                     document.addEventListener('DOMContentLoaded', function() {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Datos actualizados',
-                            text: 'Tu perfil se ha guardado correctamente.',
+                            title: '<?php echo $lang['profile_swal_success_tit']; ?>',
+                            text: '<?php echo $lang['profile_swal_success_txt']; ?>',
                             confirmButtonColor: '#293661'
                         });
-                        // Limpiar la URL
                         window.history.replaceState({}, document.title, window.location.pathname);
                     });
                 </script>
@@ -169,70 +181,70 @@ function val($dato) {
             
             <div class="details-card">
                 
-                <h2 class="form-section-title">Datos Personales</h2>
+                <h2 class="form-section-title"><?php echo $lang['profile_personal_data']; ?></h2>
 
                 <form id="form-modificar" class="formulario-cliente" method="POST">
                     
                     <div class="form-group">
-                        <label class="label-icon"><i class="far fa-user"></i> Nombre:</label>
+                        <label class="label-icon"><i class="far fa-user"></i> <?php echo $lang['profile_lbl_name']; ?></label>
                         <input type="text" id="nombre" class="input-display" name="nombre" 
                                value="<?php echo val($cliente['nombre']); ?>" required />
                     </div>
 
                     <div class="form-group">
-                        <label class="label-icon"><i class="far fa-user"></i> Apellidos:</label>
+                        <label class="label-icon"><i class="far fa-user"></i> <?php echo $lang['profile_lbl_surname']; ?></label>
                         <input type="text" id="apellidos" class="input-display" name="apellidos" 
                                value="<?php echo val($cliente['apellidos']); ?>" required />
                     </div>
 
                     <div class="form-group full-width">
-                        <label class="label-icon"><i class="far fa-envelope"></i> Correo electrónico:</label>
+                        <label class="label-icon"><i class="far fa-envelope"></i> <?php echo $lang['profile_lbl_email']; ?></label>
                         <input type="email" id="correo" class="input-display" name="correo" 
                                value="<?php echo val($cliente['email']); ?>" required />
                     </div>
 
                     <div class="form-group">
-                        <label class="label-icon"><i class="far fa-id-card"></i> DNI/NIF/NIE:</label>
+                        <label class="label-icon"><i class="far fa-id-card"></i> <?php echo $lang['profile_lbl_dni']; ?></label>
                         <input type="text" id="dni" class="input-display" name="dni" 
                                value="<?php echo val($cliente['dni']); ?>" placeholder="Ej: 12345678Z" required />
                     </div>
 
                     <div class="form-group">
-                        <label class="label-icon"><i class="fas fa-phone-alt"></i> Teléfono:</label>
+                        <label class="label-icon"><i class="fas fa-phone-alt"></i> <?php echo $lang['profile_lbl_phone']; ?></label>
                         <input type="tel" id="telefono" class="input-display" name="telefono" 
                                value="<?php echo val($cliente['telefono']); ?>" required />
                     </div>
 
                     <div class="full-width" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; margin-top: 30px;">
                         <button type="button" onclick="toggleSeguridad()" style="background: none; border: 2px solid #293661; color: #293661; padding: 5px 15px; border-radius: 20px; cursor: pointer; font-weight: 600; font-family: 'Poppins', sans-serif;">
-                            Cambiar Contraseña 
+                            <?php echo $lang['profile_btn_change_pass']; ?> 
                         </button>
                     </div>
 
                     <div id="contenedor-seguridad" class="full-width" style="display: none; background: #f8f9fa; padding: 20px; border-radius: 10px; border: 1px solid #e9ecef;">
                         <div id="paso-verificacion" style="display: block;">
-                            <p style="margin-bottom: 15px; color: #666;">Para establecer una nueva contraseña, verifica tu identidad.</p>
+                            <p style="margin-bottom: 15px; color: #666;"><?php echo $lang['profile_pass_instruction']; ?></p>
                             <div class="form-group full-width">
-                                <label>Contraseña actual:</label>
+                                <label><?php echo $lang['profile_lbl_current_pass']; ?></label>
                                 <div style="display: flex; gap: 10px;">
                                     <div style="position: relative; flex: 1;">
-                                        <input type="password" id="password_actual_check" class="input-display" placeholder="Contraseña actual" style="width: 100%; padding-right: 40px;" />
+                                        <input type="password" id="password_actual_check" class="input-display" style="width: 100%; padding-right: 40px;" />
                                         <i class="fas fa-eye" id="ojo_actual" onclick="mostrarOcultar('password_actual_check', 'ojo_actual')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #293661;"></i>
                                     </div>
-                                    <button type="button" onclick="verificarPasswordAJAX()" style="background: #293661; color: white; border: none; padding: 0 20px; border-radius: 6px; cursor: pointer;">Comprobar</button>
+                                    <button type="button" onclick="verificarPasswordAJAX()" style="background: #293661; color: white; border: none; padding: 0 20px; border-radius: 6px; cursor: pointer;"><?php echo $lang['profile_btn_check']; ?></button>
                                 </div>
                             </div>
                         </div>
 
                         <div id="paso-cambio" style="display: none;">
                             <div style="background: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
-                                <i class="fas fa-check-circle"></i> Identidad verificada.
+                                <i class="fas fa-check-circle"></i> <?php echo $lang['profile_identity_verified']; ?>
                             </div>
                             <div class="formulario-cliente" style="padding: 0;"> 
                                 <div class="form-group">
-                                    <label>Nueva Contraseña:</label>
+                                    <label><?php echo $lang['profile_lbl_new_pass']; ?></label>
                                     <div style="position: relative;">
-                                        <input type="password" id="pass_nueva_input" class="input-display" placeholder="Mínimo 8 caracteres" style="padding-right: 40px;" />
+                                        <input type="password" id="pass_nueva_input" class="input-display" placeholder="<?php echo $lang['profile_ph_min_chars']; ?>" style="padding-right: 40px;" />
                                         <i class="fas fa-eye" id="ojo_nueva" onclick="mostrarOcultar('pass_nueva_input', 'ojo_nueva')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #293661;"></i>
                                     </div>
                                     
@@ -240,9 +252,9 @@ function val($dato) {
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Confirmar Nueva:</label>
+                                    <label><?php echo $lang['profile_lbl_confirm_pass']; ?></label>
                                     <div style="position: relative;">
-                                        <input type="password" id="pass_confirm_input" class="input-display" placeholder="Repite la contraseña" style="padding-right: 40px;" />
+                                        <input type="password" id="pass_confirm_input" class="input-display" placeholder="<?php echo $lang['profile_ph_repeat_pass']; ?>" style="padding-right: 40px;" />
                                         <i class="fas fa-eye" id="ojo_confirmar" onclick="mostrarOcultar('pass_confirm_input', 'ojo_confirmar')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #293661;"></i>
                                     </div>
                                 </div>
@@ -251,7 +263,7 @@ function val($dato) {
                             <div style="margin-top: 20px; text-align: right;">
                                 <button type="button" id="btn-guardar-pass" onclick="guardarPasswordAJAX()" 
                                         style="background-color: #293661; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
-                                    Actualizar Contraseña
+                                    <?php echo $lang['profile_btn_update_pass']; ?>
                                 </button>
                             </div>
                         </div>
@@ -259,40 +271,40 @@ function val($dato) {
 
 
                     <div class="separator-line full-width"></div>
-                    <h2 class="form-section-title full-width">Dirección del domicilio</h2>
+                    <h2 class="form-section-title full-width"><?php echo $lang['profile_address_title']; ?></h2>
 
                     <div class="form-group full-width">
-                        <label for="calle" class="label-icon"><i class="fas fa-map-marker-alt"></i> Calle:</label>
+                        <label for="calle" class="label-icon"><i class="fas fa-map-marker-alt"></i> <?php echo $lang['profile_lbl_street']; ?></label>
                         <input type="text" id="calle" class="input-display" name="calle" 
                                value="<?php echo val($cliente['direccion']); ?>" required />
                     </div>
                     
                     <div class="form-group">
-                        <label for="numero" class="label-icon"><i class="fas fa-hashtag"></i> Número:</label>
+                        <label for="numero" class="label-icon"><i class="fas fa-hashtag"></i> <?php echo $lang['profile_lbl_num']; ?></label>
                         <input type="text" id="numero" class="input-display" name="numero" 
                                value="<?php echo val($cliente['numero']); ?>" placeholder="Ej: 12" required />
                     </div>
 
                     <div class="form-group">
-                        <label for="piso" class="label-icon"><i class="fas fa-building"></i> Piso / Puerta:</label>
+                        <label for="piso" class="label-icon"><i class="fas fa-building"></i> <?php echo $lang['profile_lbl_floor']; ?></label>
                         <input type="text" id="piso" class="input-display" name="piso" 
                                value="<?php echo val($cliente['piso']); ?>" placeholder="Ej: 3º A" />
                     </div>
 
                     <div class="form-group">
-                        <label for="cp" class="label-icon"><i class="fas fa-envelope-open-text"></i> Código Postal:</label>
+                        <label for="cp" class="label-icon"><i class="fas fa-envelope-open-text"></i> <?php echo $lang['profile_lbl_cp']; ?></label>
                         <input type="text" id="cp" class="input-display" name="cp" 
                                value="<?php echo val($cliente['codigo_postal']); ?>" required />
                     </div>
 
                     <div class="form-group">
-                        <label for="poblacion" class="label-icon"><i class="fas fa-city"></i> Población / Ciudad:</label>
+                        <label for="poblacion" class="label-icon"><i class="fas fa-city"></i> <?php echo $lang['profile_lbl_city']; ?></label>
                         <input type="text" id="poblacion" class="input-display" name="poblacion" 
                                value="<?php echo val($cliente['ciudad']); ?>" required />
                     </div>
 
                     <div class="form-group full-width">
-                        <label for="provincia" class="label-icon"><i class="fas fa-map"></i> Provincia:</label>
+                        <label for="provincia" class="label-icon"><i class="fas fa-map"></i> <?php echo $lang['profile_lbl_province']; ?></label>
                         <input type="text" id="provincia" class="input-display" name="provincia" 
                                value="<?php echo val($cliente['provincia']); ?>" placeholder="Granada" required />
                     </div>
@@ -300,12 +312,12 @@ function val($dato) {
                     
                     <div class="botones-finales" style="grid-column: span 2;">
                         <div class="boton-salir">
-                            <a href="javascript:void(0);" onclick="confirmarSalida()">Salir</a>
+                            <a href="javascript:void(0);" onclick="confirmarSalida()"><?php echo $lang['profile_btn_exit']; ?></a>
                         </div>
                         
                         <div class="boton-modificar">
                             <button type="button" name="actualizar" onclick="confirmarModificacion()">
-                                Guardar cambios
+                                <?php echo $lang['profile_btn_save']; ?>
                             </button>
                         </div>
                     </div>
@@ -344,45 +356,38 @@ function val($dato) {
             }
 
             // 2. VALIDAR DNI (CON SEGURIDAD)
-            // Primero comprobamos si la función existe
             if (typeof validarDocumento === 'function') {
-                
-                // Ejecutamos validación
                 const esValido = validarDocumento(inputDNI);
 
                 if (esValido === false) {
-                    // SI ESTÁ MAL EL DNI:
                     Swal.fire({
                         icon: 'error',
-                        title: 'Documento Incorrecto',
-                        text: 'El DNI/NIE tiene un formato o letra inválida. Corrígelo para guardar.',
+                        title: '<?php echo $lang['profile_js_err_dni_tit']; ?>',
+                        text: '<?php echo $lang['profile_js_err_dni_txt']; ?>',
                         confirmButtonColor: '#293661'
                     });
-                    inputDNI.focus(); // Llevamos al usuario al campo DNI
-                    return; // <--- ¡STOP! AQUÍ PARAMOS EL PROCESO
+                    inputDNI.focus(); 
+                    return; 
                 }
 
             } else {
-                // SI NO ENCUENTRA LA FUNCIÓN (ERROR TÉCNICO)
-                // Antes esto dejaba pasar, AHORA NO.
                 Swal.fire({
                     icon: 'warning',
                     title: 'Error de carga',
                     text: 'No se ha cargado el validador de DNI. Prueba a recargar la página (Ctrl + F5).',
                 });
-                console.error("CRÍTICO: La función 'validarDocumento' no existe. Revisa js/AlgoritmoDNIs.js");
-                return; // <--- ¡STOP! NO DEJAMOS GUARDAR SI NO PODEMOS VALIDAR
+                return; 
             }
 
             // 3. SI LLEGAMOS AQUÍ, TODO ESTÁ BIEN -> GUARDAMOS
             Swal.fire({
-                title: '¿Guardar cambios?',
-                text: "¿Estás seguro de que quieres actualizar tus datos?",
+                title: '<?php echo $lang['profile_js_save_tit']; ?>',
+                text: "<?php echo $lang['profile_js_save_txt']; ?>",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#293661',
-                confirmButtonText: 'Sí, guardar',
-                cancelButtonText: 'Cancelar'
+                confirmButtonText: '<?php echo $lang['profile_js_btn_yes']; ?>',
+                cancelButtonText: '<?php echo $lang['profile_js_btn_cancel']; ?>'
             }).then((result) => {
                 if (result.isConfirmed) {
                     formulario.submit();
@@ -392,14 +397,14 @@ function val($dato) {
 
         function confirmarSalida() {
             Swal.fire({
-                title: '¿Salir sin guardar?',
-                text: "Se perderán los cambios que no haya guardado.",
+                title: '<?php echo $lang['profile_js_exit_tit']; ?>',
+                text: "<?php echo $lang['profile_js_exit_txt']; ?>",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#293661',
-                confirmButtonText: 'Sí, salir',
-                cancelButtonText: 'Cancelar',
+                confirmButtonText: '<?php echo $lang['profile_js_btn_exit']; ?>',
+                cancelButtonText: '<?php echo $lang['profile_js_btn_cancel']; ?>',
                 customClass: {
                     popup: 'swal2-popup'
                 }
@@ -412,7 +417,6 @@ function val($dato) {
 
         function toggleSeguridad() {
         const contenedor = document.getElementById('contenedor-seguridad');
-        // Alternar visibilidad
         if (contenedor.style.display === 'none') {
             contenedor.style.display = 'block';
         } else {
@@ -421,11 +425,8 @@ function val($dato) {
     }
 
     function verificarPasswordAJAX() {
-        console.log("Iniciando comprobación..."); // CHIVATO 1
-
-        // Verificamos si SweetAlert está cargado
         if (typeof Swal === 'undefined') {
-            alert("Error: La librería SweetAlert no está cargada. Revisa el CabeceraFooter.");
+            alert("Error: La librería SweetAlert no está cargada.");
             return;
         }
 
@@ -433,7 +434,7 @@ function val($dato) {
         const pass = passInput.value;
 
         if (!pass) {
-            Swal.fire('Atención', 'Por favor, escribe tu contraseña actual.', 'warning');
+            Swal.fire('<?php echo $lang['profile_js_attention']; ?>', '<?php echo $lang['profile_js_err_empty']; ?>', 'warning');
             return;
         }
 
@@ -441,75 +442,61 @@ function val($dato) {
         formData.append('ajax_verificar', '1');
         formData.append('password_check', pass);
 
-        // Fetch a la misma página
-        fetch(window.location.href, { // Usamos window.location.href para mayor seguridad
+        fetch(window.location.href, { 
             method: 'POST',
             body: formData
         })
-        .then(response => response.text()) // <--- IMPORTANTE: Leemos como TEXTO primero para ver errores
+        .then(response => response.text()) 
         .then(text => {
-            console.log("Respuesta cruda del servidor:", text); // CHIVATO 2: Aquí verás si hay errores PHP
-
             try {
-                return JSON.parse(text); // Intentamos convertir a JSON
+                return JSON.parse(text); 
             } catch (e) {
-                console.error("No es un JSON válido");
-                throw new Error("El servidor devolvió algo que no es JSON. Mira la consola.");
+                console.error("No es un JSON válido", text);
+                throw new Error("Error en servidor.");
             }
         })
         .then(data => {
-            console.log("Datos JSON:", data); // CHIVATO 3
-
             if (data.status === 'success') {
-                // 1. Ocultar paso verificación
                 document.getElementById('paso-verificacion').style.display = 'none';
-                
-                // 2. Mostrar formulario de cambio
                 document.getElementById('paso-cambio').style.display = 'block';
-                
-                // 3. Copiar la contraseña válida
-                document.getElementById('password_actual_final').value = pass;
                 
                 const Toast = Swal.mixin({
                     toast: true, position: 'top-end', showConfirmButton: false, timer: 3000
                 });
-                Toast.fire({ icon: 'success', title: 'Contraseña correcta' });
+                Toast.fire({ icon: 'success', title: '<?php echo $lang['profile_js_pass_correct']; ?>' });
 
             } else {
-                Swal.fire('Error', 'La contraseña no es correcta.', 'error');
+                Swal.fire('Error', data.message, 'error');
                 passInput.value = ''; 
             }
         });
     }
 
     function guardarPasswordAJAX() {
-        console.log("Botón pulsado: Intentando guardar contraseña...");
-
-        const passNueva = document.getElementById('password_nueva').value;
-        const passConfirm = document.getElementById('password_confirmar').value;
+        // CORRECCIÓN: Usamos los IDs correctos que están en el HTML
+        const passNueva = document.getElementById('pass_nueva_input').value;
+        const passConfirm = document.getElementById('pass_confirm_input').value;
 
         if (passNueva.length < 4) {
-            Swal.fire('Atención', 'La contraseña debe tener al menos 4 caracteres.', 'warning');
+            Swal.fire('<?php echo $lang['profile_js_attention']; ?>', '<?php echo $lang['profile_js_err_short']; ?>', 'warning');
             return;
         }
         if (passNueva !== passConfirm) {
-            Swal.fire('Atención', 'Las contraseñas no coinciden.', 'warning');
+            Swal.fire('<?php echo $lang['profile_js_attention']; ?>', '<?php echo $lang['profile_js_err_match']; ?>', 'warning');
             return;
         }
 
         const formData = new FormData();
-        formData.append('ajax_guardar_password', '1'); // Clave para el PHP
+        formData.append('ajax_guardar_password', '1'); 
         formData.append('pass_nueva', passNueva);
         formData.append('pass_confirm', passConfirm);
 
-        // Fetch
         fetch(window.location.href, {
             method: 'POST',
             body: formData
         })
         .then(response => response.text()) 
         .then(text => {
-            console.log("Respuesta del servidor:", text); 
             try {
                 return JSON.parse(text);
             } catch (e) {
@@ -519,17 +506,15 @@ function val($dato) {
         .then(data => {
             if (data.status === 'success') {
                 Swal.fire({
-                    title: '¡Actualizado!',
-                    text: 'Nueva contraseña guardada correctamente.',
+                    title: '<?php echo $lang['profile_js_pass_updated_tit']; ?>',
+                    text: '<?php echo $lang['profile_js_pass_updated_txt']; ?>',
                     icon: 'success',
                     confirmButtonColor: '#28a745'
                 }).then(() => {
-                    // Limpiar y cerrar
-                    document.getElementById('password_nueva').value = '';
-                    document.getElementById('password_confirmar').value = '';
+                    document.getElementById('pass_nueva_input').value = '';
+                    document.getElementById('pass_confirm_input').value = '';
                     document.getElementById('password_actual_check').value = '';
                     document.getElementById('contenedor-seguridad').style.display = 'none';
-                    // Reiniciar el flujo por si quiere cambiarla de nuevo
                     document.getElementById('paso-verificacion').style.display = 'block';
                     document.getElementById('paso-cambio').style.display = 'none';
                 });
@@ -539,7 +524,7 @@ function val($dato) {
         })
         .catch(error => {
             console.error("Error JS:", error);
-            Swal.fire('Error Técnico', 'Revisa la consola (F12) para más detalles.', 'error');
+            Swal.fire('Error Técnico', 'Revisa la consola.', 'error');
         });
     }
 
@@ -548,17 +533,15 @@ function val($dato) {
         const icono = document.getElementById(idIcono);
 
         if (input.type === "password") {
-            input.type = "text"; // Muestra el texto
+            input.type = "text"; 
             icono.classList.remove("fa-eye");
-            icono.classList.add("fa-eye-slash"); // Cambia icono a ojo tachado
+            icono.classList.add("fa-eye-slash"); 
         } else {
-            input.type = "password"; // Oculta el texto
+            input.type = "password"; 
             icono.classList.remove("fa-eye-slash");
-            icono.classList.add("fa-eye"); // Vuelve al icono normal
+            icono.classList.add("fa-eye"); 
         }
     }
-
-
     </script>
 
 </body>

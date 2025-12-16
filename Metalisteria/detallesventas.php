@@ -1,4 +1,22 @@
 <?php
+// 0. CARGAR IDIOMA (Lógica manual para admin)
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+// Por defecto español si no hay sesión
+if (!isset($_SESSION['idioma'])) {
+    $_SESSION['idioma'] = 'es';
+}
+// Intentar cargar el archivo de idioma
+$archivo_lang = "idiomas/" . $_SESSION['idioma'] . ".php";
+if (file_exists($archivo_lang)) {
+    include $archivo_lang;
+} else {
+    include "idiomas/es.php";
+}
+
+// ----------------------------------------------------
+
 include 'conexion.php';
 
 // 1. VERIFICAR ID DE VENTA
@@ -19,7 +37,7 @@ $stmt->execute([$id_venta]);
 $venta = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$venta) {
-    echo "Venta no encontrada.";
+    echo $lang['admin_venta_no_encontrada'];
     exit;
 }
 
@@ -34,11 +52,11 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo $_SESSION['idioma']; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles Venta #<?php echo $venta['id']; ?> - Metalisteria Fulsan</title>
+    <title><?php echo $lang['admin_detalles_titulo'] . $venta['id']; ?> - Metalisteria Fulsan</title>
     <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,13 +79,13 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     
                     <nav class="nav-bar">
-                        <a href="listadoventasadmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Ventas</a>
-                        <a href="listadoproductosadmin.php" >Productos</a>
-                        <a href="listadoclientesadmin.php">Clientes</a>
+                        <a href="listadoventasadmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;"><?php echo $lang['admin_nav_ventas']; ?></a>
+                        <a href="listadoproductosadmin.php" ><?php echo $lang['admin_nav_productos']; ?></a>
+                        <a href="listadoclientesadmin.php"><?php echo $lang['admin_nav_clientes']; ?></a>
                     </nav>
 
                     <div class="log-out">
-                        <a href="index.php">Cerrar Sesión</a>
+                        <a href="index.php"><?php echo $lang['admin_nav_logout']; ?></a>
                     </div>
 
                 </div>
@@ -77,38 +95,38 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
             <div class="degradado"></div>
             <div class="recuadro-fondo"></div> 
             <a href="listadoventasadmin.php" class="flecha-circular">←</a>
-            <h1 class="titulo-principal">Venta #<?php echo str_pad($venta['id'], 4, '0', STR_PAD_LEFT); ?></h1>
+            <h1 class="titulo-principal"><?php echo $lang['admin_detalles_h1'] . str_pad($venta['id'], 4, '0', STR_PAD_LEFT); ?></h1>
         </div>
 
         <div class="container main-container">
             <div class="details-card">
                 
                 <div class="client-row">
-                    <span class="label-text">Cliente:</span>
+                    <span class="label-text"><?php echo $lang['admin_lbl_cliente']; ?></span>
                     <input type="text" class="input-display" readonly value="<?php echo $venta['nombre_cli'] . ' ' . $venta['apellidos_cli']; ?>">
                 </div>
 
                 <div class="products-section">
-                    <span class="label-text">Productos del pedido:</span>
+                    <span class="label-text"><?php echo $lang['admin_lbl_productos_pedido']; ?></span>
                     
                     <div class="products-list-box">
                         
                         <?php foreach($productos_venta as $item): ?>
                             <div class="product-item-card">
                                 <div class="product-info-line">
-                                    <span class="product-info-label">Nombre Producto:</span>
+                                    <span class="product-info-label"><?php echo $lang['admin_lbl_prod_nombre']; ?></span>
                                     <span class="product-info-value"><?php echo $item['nombre_prod']; ?></span>
                                 </div>
                                 <div class="product-info-line">
-                                    <span class="product-info-label">Precio Unitario:</span>
+                                    <span class="product-info-label"><?php echo $lang['admin_lbl_prod_precio']; ?></span>
                                     <span class="product-info-value"><?php echo number_format($item['precio_unitario'], 2); ?> €</span>
                                 </div>
                                 <div class="product-info-line">
-                                    <span class="product-info-label">Unidades:</span>
+                                    <span class="product-info-label"><?php echo $lang['admin_lbl_prod_unidades']; ?></span>
                                     <span class="product-info-value"><?php echo $item['cantidad']; ?></span>
                                 </div>
                                 <div class="product-info-line">
-                                    <span class="product-info-label">Subtotal:</span>
+                                    <span class="product-info-label"><?php echo $lang['admin_lbl_prod_subtotal']; ?></span>
                                     <span class="product-info-value" style="font-weight:bold;"><?php echo number_format($item['subtotal'], 2); ?> €</span>
                                 </div>
                             </div>
@@ -118,17 +136,17 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
                 </div>
 
                 <div class="total-row">
-                    <span class="total-label">Importe Total: <?php echo number_format($venta['total'], 2); ?> €</span>
+                    <span class="total-label"><?php echo $lang['admin_lbl_importe_total']; ?> <?php echo number_format($venta['total'], 2); ?> €</span>
                 </div>
 
             </div>
 
             <div class="botones-finales">
                 <div class="boton-salir">
-                    <a href="javascript:void(0);" onclick="confirmarSalida()">Salir</a>
+                    <a href="javascript:void(0);" onclick="confirmarSalida()"><?php echo $lang['admin_btn_salir']; ?></a>
                 </div>
                 <div class="boton-usuario">
-                    <a href="modificardatoscliente.php?id=<?php echo $venta['id_cliente']; ?>">Ir al usuario</a>
+                    <a href="modificardatoscliente.php?id=<?php echo $venta['id_cliente']; ?>"><?php echo $lang['admin_btn_ir_usuario']; ?></a>
                 </div>
             </div>
         </div>
@@ -151,7 +169,7 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
 
                         <div class="footer-links">
                             <div class="contacto-footer">
-                                <h3>Contacto</h3>
+                                <h3><?php echo $lang['contacto']; ?></h3>
                                 <div class="contacto-item">
                                     <svg viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
@@ -178,11 +196,11 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
 
                     <div class="footer-bottom">
                         <div class="politica-legal">
-                            <a href="#aviso-legal">Aviso Legal</a>
+                            <a href="#aviso-legal"><?php echo $lang['aviso']; ?></a>
                             <span>•</span>
-                            <a href="#privacidad">Política de Privacidad</a>
+                            <a href="#privacidad"><?php echo $lang['privacidad']; ?></a>
                             <span>•</span>
-                            <a href="#cookies">Política de Cookies</a>
+                            <a href="#cookies"><?php echo $lang['cookies']; ?></a>
                         </div>
                     </div>
                 </div>
@@ -192,14 +210,14 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
     <script>
          function confirmarSalida() {
             Swal.fire({
-                title: '¿Salir sin guardar?',
-                text: "Se perderán los cambios que no hayas guardado.",
+                title: '<?php echo $lang['admin_swal_salir_guardar_tit']; ?>',
+                text: "<?php echo $lang['admin_swal_salir_guardar_txt']; ?>",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',     // Rojo para indicar "Salir/Peligro"
                 cancelButtonColor: '#293661',   // Azul para "Me quedo"
-                confirmButtonText: 'Sí, salir',
-                cancelButtonText: 'Cancelar',
+                confirmButtonText: '<?php echo $lang['admin_swal_salir_si']; ?>',
+                cancelButtonText: '<?php echo $lang['swal_cancelar']; ?>',
                 customClass: {
                     popup: 'swal2-popup'
                 }
