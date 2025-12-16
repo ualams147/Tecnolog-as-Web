@@ -1,32 +1,38 @@
 <?php
-// 1. INCLUIR FUNCIONES (Inicia sesión automáticamente)
-// ESTO DEBE IR EN LA LÍNEA 1
+// 1. INCLUIR FUNCIONES (Esto inicia la sesión si no está iniciada)
 include 'CabeceraFooter.php'; 
 
 // 2. CONEXIÓN A BD
 include 'conexion.php'; 
 
 // =======================================================================
-// LÓGICA PHP (TU CÓDIGO ORIGINAL)
+// LÓGICA PHP (BACKEND)
 // =======================================================================
+
+// --- Determinar ID de Usuario (Compatible con array o variable directa) ---
+$uid = 0;
+if (isset($_SESSION['usuario'])) {
+    if (is_array($_SESSION['usuario'])) {
+        $uid = $_SESSION['usuario']['id'] ?? 0;
+    } else {
+        $uid = $_SESSION['usuario_id'] ?? 0; // Por si acaso usas la otra forma
+    }
+}
 
 // A) ELIMINAR PRODUCTO INDIVIDUAL
 if (isset($_GET['remove'])) {
     $id_borrar = $_GET['remove'];
     
-    // 1. Borrar de la BD (si es cliente)
-    if (isset($_SESSION['usuario']['id'])) { // Ojo: verifica si guardas el ID como ['usuario']['id'] o ['usuario_id']
-        // Ajustamos para asegurar compatibilidad con tu login habitual
-        $uid = $_SESSION['usuario']['id'] ?? $_SESSION['usuario_id'] ?? 0;
-        
-        if ($uid > 0) {
-            $stmtDel = $conn->prepare("DELETE FROM carrito WHERE cliente_id = ? AND producto_id = ?");
-            $stmtDel->execute([$uid, $id_borrar]);
-        }
+    // 1. Borrar de la BD (si es cliente logueado)
+    if ($uid > 0) {
+        $stmtDel = $conn->prepare("DELETE FROM carrito WHERE cliente_id = ? AND producto_id = ?");
+        $stmtDel->execute([$uid, $id_borrar]);
     }
     
-    // 2. Borrar de la sesión
-    unset($_SESSION['carrito'][$id_borrar]);
+    // 2. Borrar de la sesión (siempre)
+    if(isset($_SESSION['carrito'][$id_borrar])){
+        unset($_SESSION['carrito'][$id_borrar]);
+    }
     
     header("Location: carrito.php");
     exit;
@@ -34,9 +40,8 @@ if (isset($_GET['remove'])) {
 
 // B) VACIAR CARRITO COMPLETO
 if (isset($_GET['vaciar'])) {
-    // 1. Vaciar BD (si es cliente)
-    if (isset($_SESSION['usuario']['id']) || isset($_SESSION['usuario_id'])) {
-        $uid = $_SESSION['usuario']['id'] ?? $_SESSION['usuario_id'];
+    // 1. Vaciar BD (si es cliente logueado)
+    if ($uid > 0) {
         $stmtVaciar = $conn->prepare("DELETE FROM carrito WHERE cliente_id = ?");
         $stmtVaciar->execute([$uid]);
     }
@@ -52,41 +57,35 @@ if (isset($_GET['vaciar'])) {
 // 2. SINCRONIZACIÓN (Cargar datos reales al entrar)
 // =======================================================================
 
-// Comprobamos si hay usuario logueado (ajusta la clave según tu login: 'usuario' array o 'usuario_id')
-$usuario_logueado = isset($_SESSION['usuario']);
-$uid = 0;
+if ($uid > 0) {
+    // Si el usuario está logueado, la BD manda.
+    // Traemos todo de la BD para asegurar que la sesión está actualizada.
+    $sql = "SELECT c.producto_id, c.cantidad, p.nombre, p.precio, p.imagen_url, p.referencia, p.color, p.medidas 
+            FROM carrito c 
+            JOIN productos p ON c.producto_id = p.id 
+            WHERE c.cliente_id = :uid";
+            
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([':uid' => $uid]);
+    $items_bd = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-if ($usuario_logueado) {
-    // Si tu login guarda $_SESSION['usuario'] como array:
-    $uid = $_SESSION['usuario']['id'] ?? $_SESSION['usuario_id'] ?? 0;
-
-    if ($uid > 0) {
-        // Traemos todo de la BD
-        $sql = "SELECT c.producto_id, c.cantidad, p.nombre, p.precio, p.imagen, p.referencia 
-                FROM carrito c 
-                JOIN productos p ON c.producto_id = p.id 
-                WHERE c.cliente_id = :uid";
-                
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([':uid' => $uid]);
-        $items_bd = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // Reconstruimos la sesión para que coincida con la BD
-        $_SESSION['carrito'] = []; 
-        foreach ($items_bd as $item) {
-            $_SESSION['carrito'][$item['producto_id']] = [
-                'id' => $item['producto_id'],
-                'nombre' => $item['nombre'],
-                'precio' => $item['precio'],
-                // Asegúrate que en la BD se llame 'imagen' o 'imagen_url' y úsalo aquí
-                'imagen' => $item['imagen'] ?? $item['imagen_url'] ?? 'sin_imagen.jpg', 
-                'referencia' => $item['referencia'],
-                'cantidad' => $item['cantidad']
-            ];
-        }
+    // Reconstruimos la sesión para que coincida exactamente con la BD
+    $_SESSION['carrito'] = []; 
+    foreach ($items_bd as $item) {
+        $_SESSION['carrito'][$item['producto_id']] = [
+            'id' => $item['producto_id'],
+            'nombre' => $item['nombre'],
+            'precio' => $item['precio'],
+            'imagen' => $item['imagen_url'], 
+            'referencia' => $item['referencia'],
+            'color' => $item['color'],
+            'medidas' => $item['medidas'],
+            'cantidad' => $item['cantidad']
+        ];
     }
 }
 
+// Inicializar carrito vacío si no existe
 if (!isset($_SESSION['carrito'])) {
     $_SESSION['carrito'] = [];
 }
@@ -112,6 +111,32 @@ foreach ($_SESSION['carrito'] as $item) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <script src="js/auth.js"></script>
+
+    <style>
+        /* ESTILO PERSONALIZADO PARA EL BOTÓN VACIAR */
+        .btn-vaciar-custom {
+            text-decoration: none;
+            padding: 15px;
+            border: 1px solid #dc3545;
+            background: transparent;
+            color: #dc3545;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            /* CAMBIOS AQUÍ PARA CENTRAR */
+            display: inline-flex;    /* Usamos Flexbox */
+            align-items: center;     /* Centrado vertical */
+            justify-content: center; /* Centrado horizontal */
+            cursor: pointer;
+        }
+
+        /* EFECTO AL PASAR EL RATÓN (HOVER) */
+        .btn-vaciar-custom:hover {
+            background-color: #dc3545; /* Fondo rojo */
+            color: #ffffff;            /* Texto blanco */
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+        }
+    </style>
 </head>
 <body>
     <div class="visitante-carrito">
@@ -126,7 +151,7 @@ foreach ($_SESSION['carrito'] as $item) {
                 <?php if (empty($_SESSION['carrito'])): ?>
                     <div style="text-align: center; padding: 60px;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#ccc" viewBox="0 0 16 16">
-                          <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
                         </svg>
                         <p style="color: #666; margin-top: 20px; font-size: 18px;">Tu carrito está vacío.</p>
                         <a href="productos.php" class="btn-comprar" style="display: inline-block; margin-top: 20px; text-decoration: none;">Ver Productos</a>
@@ -136,12 +161,17 @@ foreach ($_SESSION['carrito'] as $item) {
                     <div class="carrito-items">
                         
                         <?php foreach ($_SESSION['carrito'] as $id => $item): ?>
+                            <?php 
+                                // Corrección de ruta de imagen
+                                $ruta_img = str_replace('../', '', $item['imagen']);
+                                if(empty($ruta_img)) $ruta_img = "imagenes/producto-sin-imagen.png";
+                            ?>
                             <article class="item-card">
-                                <img src="<?php echo htmlspecialchars($item['imagen']); ?>" 
+                                <img src="<?php echo htmlspecialchars($ruta_img); ?>" 
                                      alt="<?php echo htmlspecialchars($item['nombre']); ?>" 
                                      class="item-image-placeholder" 
                                      style="object-fit: contain; height: 200px; padding: 10px;"
-                                     onerror="this.src='https://via.placeholder.com/200?text=Sin+Imagen'">
+                                     onerror="this.src='imagenes/producto-sin-imagen.png'">
                                 
                                 <div class="item-details">
                                     <div class="item-info">
@@ -150,7 +180,7 @@ foreach ($_SESSION['carrito'] as $item) {
                                         
                                         <p class="item-label" style="font-size: 0.85em; margin-top:5px;">Detalles:</p>
                                         <p class="item-value" style="font-size: 0.85em; color: #555;">
-                                            <?php echo htmlspecialchars($item['color']); ?> - <?php echo htmlspecialchars($item['medidas']); ?>
+                                            <?php echo htmlspecialchars($item['color'] ?? 'N/A'); ?> - <?php echo htmlspecialchars($item['medidas'] ?? 'N/A'); ?>
                                         </p>
 
                                         <p class="item-label">Precio:</p>
@@ -187,16 +217,16 @@ foreach ($_SESSION['carrito'] as $item) {
                         
                         <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap;">
                             
-                            <a href="javascript:void(0);" onclick="confirmarVaciar()" class="btn-eliminar" style="text-decoration:none; padding: 15px; border:1px solid #dc3545; background:transparent; color:#dc3545; font-weight:600; border-radius: 12px;">
+                            <a href="javascript:void(0);" onclick="confirmarVaciar()" class="btn-vaciar-custom">
                                 Vaciar Carrito
                             </a>
 
-                            <?php if (isset($_SESSION['usuario_id'])): ?>
+                            <?php if ($uid > 0): ?>
                                 <a href="datosenvio.php" class="btn-comprar" style="text-align:center; text-decoration:none; display:block;">
                                     Tramitar Pedido
                                 </a>
                             <?php else: ?>
-                                <a href="erescliente.php" class="btn-comprar" style="text-align:center; text-decoration:none; display:block;">
+                                <a href="iniciarsesion.php?origen=compra" class="btn-comprar" style="text-align:center; text-decoration:none; display:block;">
                                     Comprar
                                 </a>
                             <?php endif; ?>
@@ -233,15 +263,17 @@ foreach ($_SESSION['carrito'] as $item) {
 
                 // B. Actualizar precio total
                 const spanTotal = document.getElementById('precio-total-carrito');
-                if (spanTotal) spanTotal.innerText = data.nuevoTotal + '€';
+                if (spanTotal) spanTotal.innerText = parseFloat(data.nuevoTotal).toFixed(2) + '€';
 
-                // C. Actualizar badge del menú
-                const menuBadge = document.getElementById('badge-menu');
-                if (menuBadge) {
-                    menuBadge.innerText = data.totalItems;
-                    // Si es 0, ocultarlo, si no, mostrarlo
-                    menuBadge.style.display = (data.totalItems > 0) ? 'inline-block' : 'none';
+                // C. Actualizar badge del menú (Opcional, si tienes badge en CabeceraFooter)
+                const cartCount = document.getElementById('cart-count');
+                if (cartCount) {
+                    cartCount.innerText = data.totalItems;
+                    cartCount.style.display = (data.totalItems > 0) ? 'inline-block' : 'none';
                 }
+            } else {
+                // Si la cantidad llega a 0, recargamos para que se borre visualmente
+                if(data.reload) location.reload();
             }
         })
         .catch(error => console.error('Error:', error));

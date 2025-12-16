@@ -1,6 +1,8 @@
 <?php
 // 1. INICIAR SESIÓN (Necesario para poder establecer variables $_SESSION después)
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 include 'CabeceraFooter.php'; 
 include 'conexion.php'; 
@@ -9,6 +11,14 @@ $error = '';
 $error_email = '';
 $error_dni = '';
 $success = '';
+
+// --- NUEVO: CAPTURAR EL ORIGEN (IGUAL QUE EN LOGIN) ---
+$origen = '';
+if (isset($_GET['origen'])) {
+    $origen = $_GET['origen'];
+} elseif (isset($_POST['origen'])) {
+    $origen = $_POST['origen'];
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre = $_POST['nombre'];
@@ -67,20 +77,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // --- LOGIN AUTOMÁTICO ---
                 $nuevo_id = $conn->lastInsertId();
                 
-                // Recuperamos el usuario completo para guardarlo bien en sesión
+                // Recuperamos el usuario completo
                 $stmtUser = $conn->prepare("SELECT * FROM clientes WHERE id = ?");
                 $stmtUser->execute([$nuevo_id]);
                 $nuevo_usuario = $stmtUser->fetch(PDO::FETCH_ASSOC);
 
                 // Establecemos las variables de sesión
-                $_SESSION['usuario'] = $nuevo_usuario; // ESTA ACTIVA LA CABECERA
+                $_SESSION['usuario'] = $nuevo_usuario; 
                 $_SESSION['usuario_id'] = $nuevo_usuario['id'];
                 $_SESSION['usuario_nombre'] = $nuevo_usuario['nombre'];
                 $_SESSION['usuario_rol'] = 'cliente';
 
+                // --- AHORA AQUÍ: FUSIÓN DE CARRITO (IMPORTANTE PARA NO PERDER LA COMPRA) ---
+                if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])) {
+                    foreach ($_SESSION['carrito'] as $item_sess) {
+                        $pid = $item_sess['id']; 
+                        $cantidad_nueva = $item_sess['cantidad'];
+                        
+                        $stmtIns = $conn->prepare("INSERT INTO carrito (cliente_id, producto_id, cantidad) VALUES (?, ?, ?)");
+                        $stmtIns->execute([$nuevo_id, $pid, $cantidad_nueva]);
+                    }
+                }
+
+                // --- DECISIÓN DE REDIRECCIÓN ---
+                $destino = 'index.php'; // Por defecto
+                if ($origen === 'compra') {
+                    $destino = 'datosenvio.php'; // Si viene de comprar, va a pagar
+                }
+
                 echo "<script>
                     localStorage.setItem('usuarioLogueado', 'true');
-                    window.location.href = 'index.php';
+                    window.location.href = '$destino';
                   </script>";
                 exit;
 
@@ -122,6 +149,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <form class="registro-form" method="POST" action="">
                     
+                    <?php if(!empty($origen)): ?>
+                        <input type="hidden" name="origen" value="<?php echo htmlspecialchars($origen); ?>">
+                    <?php endif; ?>
+
                     <div class="form-row">
                         <label for="nombre" class="label-icon">
                             <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
@@ -231,7 +262,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <button type="submit" class="btn-register-submit">Registrarme</button>
 
                     <p class="register-text">
-                        ¿Ya tienes cuenta? <a href="IniciarSesion.php"><em>Inicia sesión aquí</em></a>
+                        ¿Ya tienes cuenta? 
+                        <a href="iniciarsesion.php<?php echo (!empty($origen)) ? '?origen='.$origen : ''; ?>">
+                            <em>Inicia sesión aquí</em>
+                        </a>
                     </p>
 
                 </form>

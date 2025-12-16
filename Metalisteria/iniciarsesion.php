@@ -4,13 +4,13 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// 2. INCLUIR ARCHIVOS NECESARIOS
-include 'conexion.php'; 
+// 2. INCLUIR ARCHIVOS
 include 'CabeceraFooter.php'; 
+include 'conexion.php'; 
 
 $error = '';
 
-// 3. RECUPERAR EL ORIGEN
+// 3. RECUPERAR EL ORIGEN (La clave para saber a dónde ir)
 $origen = '';
 if (isset($_GET['origen'])) {
     $origen = $_GET['origen'];
@@ -18,7 +18,7 @@ if (isset($_GET['origen'])) {
     $origen = $_POST['origen'];
 }
 
-// 4. PROCESAR FORMULARIO DE LOGIN
+// 4. PROCESAR LOGIN
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -33,13 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $login_valido = false;
     
     if ($usuario) {
-        // CORRECCIÓN AQUÍ: Usamos 'password' en lugar de 'pass'
-        // Opción 1: Contraseña encriptada
+        // Usamos 'password' (tu columna correcta en la BD)
         if (password_verify($password, $usuario['password'])) { 
             $login_valido = true;
-        } 
-        // Opción 2: Texto plano (por si acaso)
-        elseif ($password === $usuario['password']) {
+        } elseif ($password === $usuario['password']) { // Fallback texto plano
             $login_valido = true;
         }
     }
@@ -47,26 +44,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($login_valido) {
         // --- LOGIN CORRECTO ---
         
-        // 1. Guardar datos en SESIÓN
-        $_SESSION['usuario'] = $usuario; 
+        // 1. Guardar variables de sesión
+        $_SESSION['usuario'] = $usuario; // Activa la cabecera
         $_SESSION['usuario_id'] = $usuario['id'];
         $_SESSION['usuario_nombre'] = $usuario['nombre'];
         $_SESSION['usuario_rol'] = $usuario['rol'];
 
-        // 2. FUSIÓN DE CARRITOS
+        // 2. FUSIÓN DE CARRITOS (Sesión + BD)
         if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])) {
             foreach ($_SESSION['carrito'] as $item_sess) {
                 $pid = $item_sess['id']; 
                 $cantidad_nueva = $item_sess['cantidad'];
                 
+                // Verificar si ya existe en BD
                 $stmtCheck = $conn->prepare("SELECT id, cantidad FROM carrito WHERE cliente_id = ? AND producto_id = ?");
                 $stmtCheck->execute([$usuario['id'], $pid]);
                 $row = $stmtCheck->fetch();
 
                 if ($row) {
-                    $nueva_cantidad_total = $row['cantidad'] + $cantidad_nueva;
                     $stmtUpd = $conn->prepare("UPDATE carrito SET cantidad = ? WHERE id = ?");
-                    $stmtUpd->execute([$nueva_cantidad_total, $row['id']]);
+                    $stmtUpd->execute([$row['cantidad'] + $cantidad_nueva, $row['id']]);
                 } else {
                     $stmtIns = $conn->prepare("INSERT INTO carrito (cliente_id, producto_id, cantidad) VALUES (?, ?, ?)");
                     $stmtIns->execute([$usuario['id'], $pid, $cantidad_nueva]);
@@ -74,13 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // 3. RECARGAR CARRITO DESDE BD
+        // 3. RECARGAR CARRITO DESDE BD (Para tenerlo actualizado en sesión)
         $_SESSION['carrito'] = []; 
-        $sqlRecuperar = "SELECT c.producto_id, c.cantidad, p.nombre, p.precio, p.imagen_url, p.referencia, p.color, p.medidas 
-                         FROM carrito c 
-                         JOIN productos p ON c.producto_id = p.id 
-                         WHERE c.cliente_id = ?";
-        $stmtRec = $conn->prepare($sqlRecuperar);
+        $sqlRec = "SELECT c.producto_id, c.cantidad, p.nombre, p.precio, p.imagen_url, p.referencia, p.color, p.medidas 
+                   FROM carrito c JOIN productos p ON c.producto_id = p.id WHERE c.cliente_id = ?";
+        $stmtRec = $conn->prepare($sqlRec);
         $stmtRec->execute([$usuario['id']]);
         $productosBD = $stmtRec->fetchAll(PDO::FETCH_ASSOC);
 
@@ -97,14 +92,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
         }
 
-        // 4. REDIRECCIÓN
+        // 4. REDIRECCIÓN SEGÚN ORIGEN
         if ($usuario['rol'] === 'admin') {
             $destino = 'indexAdmin.php'; 
         } else {
+            // AQUI ESTÁ LA MAGIA:
             if ($origen === 'compra') {
-                $destino = 'datosenvio.php';
+                $destino = 'datosenvio.php'; // Continúa la compra
             } else {
-                $destino = 'index.php';
+                $destino = 'index.php'; // Login normal
             }
         }
         
@@ -129,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/IniciarSesion.css"> 
-    <script src="auth.js"></script>
+    <script src="js/auth.js"></script>
 </head>
 <body>
     <div class="visitante-login">
@@ -153,6 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif; ?>
 
                 <form class="login-form" method="POST" action="">
+                    
                     <?php if(!empty($origen)): ?>
                         <input type="hidden" name="origen" value="<?php echo htmlspecialchars($origen); ?>">
                     <?php endif; ?>
@@ -171,9 +168,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </label>
                         <input type="password" id="password" name="password" class="form-input" required>
                     </div>
+                    
                     <button type="submit" class="btn-login-submit">Iniciar Sesión</button>
+                    
                     <p class="register-text">
-                        ¿Aún no tienes cuenta? <a href="registro.php"><em>Regístrate aquí</em></a>
+                        ¿Aún no tienes cuenta? 
+                        <a href="registro.php<?php echo (!empty($origen)) ? '?origen='.$origen : ''; ?>">
+                            <em>Regístrate aquí</em>
+                        </a>
                     </p>
                 </form>
             </div>
