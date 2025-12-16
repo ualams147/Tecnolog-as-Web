@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // 4. REDIRECCIÓN SEGÚN ORIGEN
         if ($usuario['rol'] === 'admin') {
-            $destino = 'indexAdmin.php'; 
+            $destino = 'indexadmin.php'; 
         } else {
             // AQUI ESTÁ LA MAGIA:
             if ($origen === 'compra') {
