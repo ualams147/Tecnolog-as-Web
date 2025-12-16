@@ -4,6 +4,19 @@
    ========================================= */
 
 /* ===== RESET GENERAL & LAYOUT ===== */
+/* ===== RESET OBLIGATORIO (Para quitar bordes blancos) ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
 body {
     background-color: #f4f6f9;
     overflow-x: hidden;
@@ -303,3 +316,4 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     top: 0;
     width: auto;
 }
+
