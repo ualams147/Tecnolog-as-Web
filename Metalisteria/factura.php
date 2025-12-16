@@ -21,10 +21,8 @@ $total_pagado = isset($_SESSION['total_carrito']) ? $_SESSION['total_carrito'] :
 $usuario_id = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : 0;
 
 // -----------------------------------------------------------------------
-// [MODIFICACIÓN] SEGURIDAD ANTI-REFRESH
+// [SEGURIDAD] ANTI-REFRESH
 // -----------------------------------------------------------------------
-// Si el carrito está vacío, significa que el pedido ya se procesó (se borró la sesión al final)
-// o que el usuario entró directo sin comprar. Lo echamos al inicio.
 if (empty($productos_compra)) {
     header("Location: index.php");
     exit;
@@ -32,13 +30,15 @@ if (empty($productos_compra)) {
 // -----------------------------------------------------------------------
 
 // --- LÓGICA DE DETECCIÓN DE PAGO ---
+$metodo_pago_texto = "Tarjeta de Crédito/Débito"; // Valor por defecto
+
 $origen = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 if (strpos($origen, 'fake_bizum.php') !== false) {
     $metodo_pago_texto = "Bizum";
-} else {
-    // Si viene de Stripe o metodopago.php directo
-    $metodo_pago_texto = "Tarjeta de Crédito/Débito";
+} elseif (isset($_SESSION['metodo_pago_final'])) {
+    $metodo_pago_texto = $_SESSION['metodo_pago_final'];
 }
+
 $_SESSION['metodo_pago_final'] = $metodo_pago_texto;
 
 
@@ -46,7 +46,7 @@ $numero_pedido_visual = "PED-" . date('dmY') . "-" . rand(100, 999);
 $fecha_visual = date('d/m/Y H:i');
 
 // ====================================================
-// 4. DATOS DEL CLIENTE (LÓGICA PRIORITARIA)
+// 4. DATOS DEL CLIENTE (LÓGICA DE PRIORIDAD)
 // ====================================================
 
 $cliente = [
@@ -55,36 +55,67 @@ $cliente = [
     'direccion_completa' => 'Recogida en tienda'
 ]; 
 
-// A) INTENTAMOS COGER DATOS DEL FORMULARIO DE ENVÍO (Si existen en sesión)
+$nombre_envio = ''; 
+$email_envio  = '';
+$tel_envio    = '';
+$calle        = '';
+$numero       = '';
+$piso         = '';
+$cp           = '';
+$localidad    = '';
+$notas        = '';
+
+// CASO A: DATOS DE SESIÓN (FORMULARIO)
 if (isset($_SESSION['datos_envio']) && !empty($_SESSION['datos_envio'])) {
     $d = $_SESSION['datos_envio']; 
     
-    $cliente['nombre_completo'] = $d['nombre']; 
-    $cliente['email'] = $d['email'];
+    $nombre_envio = $d['nombre']; 
+    $email_envio  = $d['email'];
+    $tel_envio    = $d['telefono'];
+    $calle        = $d['calle'];
+    $numero       = $d['numero'];
+    $piso         = $d['piso'];
+    $cp           = $d['cp'];
+    $localidad    = $d['localidad'];
+    $notas        = isset($d['notas']) ? $d['notas'] : '';
+
+    $cliente['nombre_completo'] = $nombre_envio;
+    $cliente['email'] = $email_envio;
     
-    $dir = $d['calle'];
-    if(!empty($d['numero'])) $dir .= ", Nº " . $d['numero'];
-    if(!empty($d['piso']))   $dir .= ", Piso " . $d['piso'];
-    if(!empty($d['cp']))     $dir .= ", CP: " . $d['cp'];
-    if(!empty($d['localidad'])) $dir .= " (" . $d['localidad'] . ")";
+    $dir = $calle;
+    if(!empty($numero)) $dir .= ", Nº " . $numero;
+    if(!empty($piso))   $dir .= ", Piso " . $piso;
+    if(!empty($cp))     $dir .= ", CP: " . $cp;
+    if(!empty($localidad)) $dir .= " (" . $localidad . ")";
     
     $cliente['direccion_completa'] = $dir;
 
 } 
-// B) SI NO HAY DATOS DE FORMULARIO, USAMOS LA BASE DE DATOS
+// CASO B: BASE DE DATOS (FALLBACK)
 elseif ($usuario_id > 0 && isset($conn)) {
     try {
-        $stmt = $conn->prepare("SELECT nombre, apellidos, email, direccion, numero, piso, ciudad FROM clientes WHERE id = ?");
+        $stmt = $conn->prepare("SELECT nombre, apellidos, email, telefono, direccion, numero, piso, codigo_postal, ciudad FROM clientes WHERE id = ?");
         $stmt->execute([$usuario_id]);
         $datos_bd = $stmt->fetch(PDO::FETCH_ASSOC);
+        
         if ($datos_bd) {
-            $cliente['nombre_completo'] = $datos_bd['nombre'] . ' ' . $datos_bd['apellidos'];
-            $cliente['email'] = $datos_bd['email'];
+            $nombre_envio = $datos_bd['nombre'] . ' ' . $datos_bd['apellidos'];
+            $email_envio  = $datos_bd['email'];
+            $tel_envio    = $datos_bd['telefono'];
+            $calle        = $datos_bd['direccion'];
+            $numero       = $datos_bd['numero'];
+            $piso         = $datos_bd['piso'];
+            $cp           = $datos_bd['codigo_postal'];
+            $localidad    = $datos_bd['ciudad'];
             
-            $dir = $datos_bd['direccion'];
-            if(!empty($datos_bd['numero'])) $dir .= ", Nº " . $datos_bd['numero'];
-            if(!empty($datos_bd['piso']))   $dir .= ", Piso " . $datos_bd['piso'];
-            if(!empty($datos_bd['ciudad'])) $dir .= " (" . $datos_bd['ciudad'] . ")";
+            $cliente['nombre_completo'] = $nombre_envio;
+            $cliente['email'] = $email_envio;
+            
+            $dir = $calle;
+            if(!empty($numero)) $dir .= ", Nº " . $numero;
+            if(!empty($piso))   $dir .= ", Piso " . $piso;
+            if(!empty($cp))     $dir .= ", CP: " . $cp;
+            if(!empty($localidad)) $dir .= " (" . $localidad . ")";
             
             $cliente['direccion_completa'] = $dir;
         }
@@ -92,21 +123,45 @@ elseif ($usuario_id > 0 && isset($conn)) {
 }
 
 // ====================================================
-// 5. GUARDAR EN BASE DE DATOS Y VACIAR CARRITO
+// 5. GUARDAR EN BASE DE DATOS
 // ====================================================
-// Nota: Quitamos la comprobación de $es_recarga porque si llegamos aquí, NO es recarga.
 if (isset($conn) && $usuario_id > 0) {
     try {
         $conn->beginTransaction();
 
-        // A) INSERTAR VENTA
-        $sql_venta = "INSERT INTO ventas (fecha, id_cliente, total) VALUES (NOW(), ?, ?)";
+        $sql_venta = "INSERT INTO ventas (
+                        fecha, 
+                        id_cliente, 
+                        total, 
+                        nombre_completo, 
+                        email, 
+                        telefono, 
+                        calle, 
+                        numero, 
+                        piso, 
+                        codigo_postal, 
+                        localidad, 
+                        notas
+                      ) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
         $stmt_venta = $conn->prepare($sql_venta);
-        $stmt_venta->execute([$usuario_id, $total_pagado]);
+        
+        $stmt_venta->execute([
+            $usuario_id, 
+            $total_pagado,
+            $nombre_envio,
+            $email_envio,
+            $tel_envio,
+            $calle,
+            $numero,
+            $piso,
+            $cp,
+            $localidad,
+            $notas
+        ]);
         
         $id_venta_generada = $conn->lastInsertId();
 
-        // B) INSERTAR DETALLES
         $sql_detalle = "INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario, subtotal) VALUES (?, ?, ?, ?, ?)";
         $stmt_detalle = $conn->prepare($sql_detalle);
 
@@ -123,7 +178,6 @@ if (isset($conn) && $usuario_id > 0) {
             ]);
         }
 
-        // C) BORRAR CARRITO DE LA BASE DE DATOS
         $sql_borrar_carrito = "DELETE FROM carrito WHERE cliente_id = ?";
         $stmt_borrar = $conn->prepare($sql_borrar_carrito);
         $stmt_borrar->execute([$usuario_id]);
@@ -135,13 +189,14 @@ if (isset($conn) && $usuario_id > 0) {
 }
 
 // ====================================================
-// 6. LIMPIEZA DE SESIÓN (Browser)
+// 6. LIMPIEZA DE SESIÓN
 // ====================================================
-// Esto borra el carrito de la memoria. Si refrescan después de esto,
-// $productos_compra estará vacío y saltará el "header" del principio.
 if(isset($_SESSION['carrito'])) {
     unset($_SESSION['carrito']);
     unset($_SESSION['total_carrito']);
+}
+if(isset($_SESSION['datos_envio'])) {
+    unset($_SESSION['datos_envio']);
 }
 ?>
 
@@ -189,15 +244,7 @@ if(isset($_SESSION['carrito'])) {
             print-color-adjust: exact;
         }
         
-        .invoice-header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 6px;
-            background: repeating-linear-gradient(45deg, var(--accent), var(--accent) 10px, transparent 10px, transparent 20px);
-        }
+        /* HE ELIMINADO EL ::after QUE CONTENÍA LA LÍNEA DE COLORES */
 
         .brand-section h1 { margin: 0; font-size: 28px; font-weight: 800; letter-spacing: 1px; font-family: 'Poppins', sans-serif; }
         .brand-section p { opacity: 0.8; margin: 5px 0 0; font-size: 14px; }
@@ -333,7 +380,7 @@ if(isset($_SESSION['carrito'])) {
                                 <p><strong>Moneda:</strong> EUR (€)</p>
                                 <br>
                                 <div style="background: #f0f8ff; padding: 10px; border-radius: 8px; font-size: 13px; color: #293661;">
-                                    Gracias por tu compra. Tienes la factura y los detalles del pedido disponibles <strong>en tu perfil</strong>.
+                                    Gracias por tu compra. Tienes la factura y los detalles del pedido disponibles <strong>Mi Perfil</strong>.
                                 </div>
                             </div>
                         </div>
