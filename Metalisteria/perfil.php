@@ -6,7 +6,7 @@ include 'conexion.php';
 
 // 2. SEGURIDAD: Si no hay sesión iniciada, lo mandamos al login
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: iniciarsesion.php");
+    header("Location: perfil.php");
     exit;
 }
 
@@ -17,7 +17,6 @@ $stmt = $conn->prepare($sql);
 $stmt->execute([':id' => $id_usuario]);
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Si por lo que sea no existe el usuario (raro), cerramos sesión
 
 ?>
 
@@ -32,6 +31,7 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/perfil.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="visitante-perfil">
@@ -53,7 +53,7 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
             <div class="profile-card">
                 
                 <h1 class="profile-title">Mi Perfil</h1>
-                <p style="text-align:center; color:#666;">Bienvenido, <?php echo htmlspecialchars($usuario['nombre']); ?></p>
+                
 
                 <form class="profile-form">
                     
@@ -105,23 +105,13 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
                     </div>
 
                     <div class="edit-buttons-container">
-                        <a href="editarpago.php" class="btn-edit" style="text-decoration: none; text-align: center; display: block;">
-                            Editar Información de Pago
-                        </a>
-                        <a href="editardomicilio.php" class="btn-edit" style="text-decoration: none; text-align: center; display: block;">
-                            Editar Información de Domicilio
+                        <a href="editarinformacionperfil.php" class="btn-edit" style="text-decoration: none; text-align: center; display: block;">
+                            Editar Información
                         </a>
                     </div>
 
                 </form>
 
-            </div>
-
-            <div class="logout-container">
-                <button id="btn-logout-page" class="btn-logout">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
-                    Cerrar Sesión
-                </button>
             </div>
 
         </main>
@@ -131,6 +121,7 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
     <!-- MANTENEMOS auth.js -->
     <script src="js/auth.js"></script>
+    
     
     <script>
         // Cierre de sesión HÍBRIDO (JS + PHP)
@@ -142,8 +133,31 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
             
             // 2. Redirigimos al destructor de sesión PHP para limpiar el servidor
             // Asumo que tu archivo CerrarSesion.php está en admin
-            window.location.href = 'admin/CerrarSesion.php';
+            window.location.href = 'CerrarSesion.php';
+        });
+
+        
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Detectar si la URL tiene ?actualizado=1
+            const params = new URLSearchParams(window.location.search);
+            
+            if (params.get('actualizado') === '1') {
+                Swal.fire({
+                    title: '¡Datos actualizados!',
+                    text: 'Tu perfil se ha guardado correctamente.',
+                    icon: 'success',
+                    confirmButtonColor: '#293661',
+                    confirmButtonText: 'Genial'
+                }).then(() => {
+                    // Limpia la URL para que no salga la alerta si el usuario recarga
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                });
+            }
         });
     </script>
+    
 </body>
 </html>

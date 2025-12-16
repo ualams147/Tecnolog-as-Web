@@ -1,0 +1,328 @@
+/* ===== Reditarinforacionperfil.css ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: white;
+    overflow-x: hidden;
+}
+
+.visitante-domicilio-edit {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+    width: 100%;
+}
+
+/* ========================== HERO & FONDO ========================== */
+.address-hero {
+    background: linear-gradient(180deg, #FFFFFF 0%, #dfe4f1 10%, #293661 25%, #293661 100%);
+    padding: 60px 0 320px 0; 
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.address-hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 350px; 
+    background: linear-gradient(180deg, #ffffff 0%, #e4e4e4 26.923%, rgba(153,153,153,0) 100%);
+    opacity: 0.9;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    z-index: 2;
+}
+
+.btn-back {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    color: white;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+.btn-back:hover { opacity: 1; }
+
+.address-title-main {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 55px;
+    color: white;
+    text-shadow: 0px 4px 4px rgba(0,0,0,0.25); 
+    text-align: center;
+}
+
+.flecha-circular {
+    display: inline-flex; align-items: center; justify-content: center; width: 60px; height: 60px;
+    border-radius: 50%; color: white; font-size: 30px; text-decoration: none; position: absolute;
+    top: 20px; left: 40px; z-index: 4; transition: 0.2s ease;
+}
+.flecha-circular:hover { transform: scale(1.5); }
+
+/* ========================== CUERPO PRINCIPAL ========================== */
+.main-container {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    margin-top: -200px !important; 
+    padding-bottom: 60px; 
+    position: relative; 
+    z-index: 10;
+}
+
+.details-card {
+    background: white; 
+    width: 100%; 
+    max-width: 1200px; 
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
+    padding: 50px; 
+    display: flex; 
+    flex-direction: column; /* Organiza título y formulario uno debajo de otro */
+    gap: 30px; 
+    min-height: 500px;
+}
+
+/* ESTILOS DEL FORMULARIO GRID (2 COLUMNAS) */
+.formulario-cliente {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 50% - 50% */
+    column-gap: 40px;
+    row-gap: 20px;
+    width: 100%;
+}
+
+/* Inputs y Labels */
+.form-group {
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+    margin-bottom: 0; /* El margen lo controla el row-gap del grid */
+}
+
+/* --- ESTILOS PERSONALIZADOS PARA SWEETALERT2 --- */
+.swal2-popup {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+/* Opcional: Si quieres ajustar el peso de la fuente de los botones */
+.swal2-confirm, .swal2-cancel {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important; /* O 600 si los quieres más gruesos */
+    font-size: 15px !important;
+}
+
+    .form-group label {
+        /* 1. Mantiene los inputs alineados (reserva hueco de 2 líneas) */
+        min-height: 52px; 
+        
+        /* 2. Alinea el texto abajo (pegado al input) */
+        display: flex;
+        align-items: flex-end; 
+        
+        /* 3. RECUPERA TU FORMATO ORIGINAL */
+        font-weight: 500 !important; /* Fuerza la negrita original */
+        font-size: 18px;             /* Tamaño estándar */
+        color:#293661;                 /* Negro puro */
+        line-height: 1.2;            /* Interlineado natural */
+        
+        padding-bottom: 8px;         /* Espacio justo antes del recuadro */
+        margin-bottom: 0;            /* Quitamos margen extra para controlar la altura */
+    }
+
+    /* Ajuste del icono para que quede perfecto al lado del texto */
+    /* AJUSTE CLAVE: Eliminamos el margin-bottom que lo desalineaba */
+    .form-group label i {
+        margin-right: 8px;
+        margin-bottom: 0;   /* ¡CLAVE! Lo quitamos para que el centrado funcione */
+        font-size: 1.1em; 
+    }
+
+/* NUEVA DEFINICIÓN: Usamos Flexbox para centrar ICONO y TEXTO */
+.label-icon {
+    display: flex;         /* Habilita la alineación */
+    align-items: center;   /* Centra verticalmente el icono y el texto del label */
+    gap: 8px;              /* Espacio entre el icono y la palabra (opcional, si quieres más separación) */
+    
+    font-weight: 600; 
+    font-size: 16px; 
+    color: #293661; 
+    margin-left: 5px;
+}
+
+.input-display {
+    width: 100%; 
+    padding: 12px 15px; 
+    border: 1px solid #ddd; 
+    border-radius: 6px;
+    font-size: 16px; 
+    font-family: 'Poppins', sans-serif; 
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02); 
+    color: #333;
+}
+.input-display:focus {
+    outline: none; 
+    border-color: #293661; 
+    box-shadow: 0 0 0 2px rgba(41, 54, 97, 0.1);
+}
+
+.form-section-title {
+    font-family: 'Poppins', sans-serif; 
+    font-size: 20px; 
+    font-weight: 600; 
+    color: #293661; 
+    margin: 10px 0;
+}
+
+.separator-line {
+    height: 1px; 
+    background-color: #e0e0e0; 
+    margin: 20px 0; 
+    width: 100%;
+}
+
+/* Elementos que ocupan todo el ancho (Grid Span) */
+.full-width, 
+.form-section-title, 
+.separator-line, 
+.botones-finales {
+    grid-column: 1 / -1; 
+}
+
+/* BOTONES */
+.botones-finales {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.boton-salir, .boton-modificar {
+    width: 298px; 
+    height: 72px; 
+    border-radius: 20px; 
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    transition: transform 0.2s ease;
+    border: 2px solid rgba(41, 54, 97, 0.6);
+}
+
+.boton-salir:hover, .boton-modificar:hover { transform: translateY(-5px); }
+.boton-salir { background: rgba(41, 54, 97, 0.9); }
+.boton-modificar { background: #293661; }
+
+.boton-salir a, .boton-modificar button {
+    font-family: 'Poppins', sans-serif; 
+    font-weight: 400; 
+    font-size: 22px !important; 
+    color: white; 
+    text-decoration: none; 
+    background: none; 
+    border: none; 
+    cursor: pointer; 
+    width: 100%; 
+    height: 100%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    outline: none;
+}
+
+/* RESPONSIVE (MÓVIL) */
+@media (max-width: 768px) {
+    .formulario-cliente {
+        grid-template-columns: 1fr; /* 1 columna en móvil */
+    }
+    
+    .full-width, 
+    .form-section-title, 
+    .separator-line, 
+    .botones-finales {
+        grid-column: auto; 
+    }
+    
+    .botones-finales {
+        flex-direction: column;
+    }
+    
+    .boton-salir, .boton-modificar {
+        width: 100%;
+    }
+}
+
+/* ========================== RESPONSIVE ========================== */
+@media (max-width: 1024px) {
+    .nav-bar { gap: 30px; font-size: 16px; }
+    .footer-content { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+    .footer-logo-section, .footer-links { justify-content: center; }
+    .footer-links { display: flex; flex-direction: column; align-items: center; gap: 40px; }
+    .contacto-footer ul li { justify-content: center; }
+    
+    /* En tablet reducimos la columna de etiquetas */
+    .blue-form-row { grid-template-columns: 150px 1fr; }
+}
+
+@media (max-width: 768px) {
+    .cabecera .container { flex-direction: column; gap: 20px; }
+    .nav-bar { display: flex; flex-direction: column; width: 100%; gap: 15px; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+    .sign-in { width: 100%; text-align: center; }
+
+    .address-card-container { padding: 30px 20px; }
+    
+    /* Formulario Responsive: 1 Columna */
+    .blue-form-row { 
+        grid-template-columns: 1fr; 
+        gap: 5px;
+        justify-content: flex-start;
+    }
+    
+    .blue-form-row label { 
+        margin-bottom: 5px; 
+        text-align: left; /* Etiqueta arriba a la izquierda */
+    }
+    
+    /* Los inputs divididos se apilan y ocupan el 100% */
+    .blue-group { flex-direction: column; align-items: flex-start; gap: 10px; width: 100%; }
+    .blue-group .blue-input { flex: none; width: 100%; }
+
+    .page-actions { flex-direction: column; gap: 20px; }
+    .btn-round-white { width: 100%; }
+
+    .footer-content { display: flex; flex-direction: column; gap: 40px; }
+    .logo-footer img { margin: 0 auto; display: block; }
+    .redes { justify-content: center; margin-top: 20px; }
+    .politica-legal { flex-direction: column; gap: 10px; }
+    .politica-legal span { display: none; }
+}
