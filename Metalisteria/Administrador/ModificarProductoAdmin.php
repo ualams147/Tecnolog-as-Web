@@ -60,6 +60,16 @@ if (!$producto) {
     echo "Producto no encontrado.";
     exit;
 }
+
+// Comprobamos la ruta de la imagen ya tiene "../imagenes/"
+    $ruta_bd = $producto['imagen_url'];
+    
+    // Si la ruta NO empieza por "../", asumimos que es una foto vieja y le añadimos la carpeta
+    if (strpos($ruta_bd, '../') === 0) {
+        $ruta_foto = $ruta_bd;
+    } else {
+        $ruta_foto = '../' . $ruta_bd;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -107,7 +117,7 @@ if (!$producto) {
             <div class="degradado"></div>
             <div class="recuadro-fondo"></div> 
             <a href="ListadoProductosAdmin.php" class="flecha-circular">&#8592;</a>
-            <h1 class="titulo-principal"><?php echo $producto['referencia']; ?></h1>
+            <h1 class="titulo-principal" style="font-weight: bold;">Modificar Producto</h1>
         </div>
 
         <!-- Main Content -->
@@ -129,7 +139,7 @@ if (!$producto) {
                 <div class="image-column">
                     <div class="image-placeholder" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
                         <!-- Mostramos la imagen actual -->
-                        <img id="preview-img" src="<?php echo $producto['imagen_url']; ?>" alt="Producto" style="max-width: 100%; max-height: 100%; object-fit: contain;" onerror="this.src='img/sin-foto.jpg'">
+                        <img id="preview-img" src="<?php echo $ruta_foto; ?>" alt="Producto" style="max-width: 100%; max-height: 100%; object-fit: contain;" onerror="this.src='../imagenes/producto-sin-imagen.png'">
                     </div>
                     
                     <!-- Input oculto para subir archivo -->
