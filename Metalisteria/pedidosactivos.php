@@ -38,9 +38,11 @@ if (!empty($filtro_fecha)) {
 
 // Filtro Estado (Mantenemos lógica interna en español para BD)
 if ($filtro_estado === 'activos') {
-    $where .= " AND v.estado NOT IN ('Entregado', 'Cancelado')";
+    // Añadimos 'Realizado' a los NO permitidos, para que NO salga en activos
+    $where .= " AND v.estado NOT IN ('Entregado', 'Cancelado', 'Realizado')";
 } elseif ($filtro_estado === 'historial') {
-    $where .= " AND v.estado IN ('Entregado', 'Cancelado')";
+    // Añadimos 'Realizado' a los permitidos en el historial
+    $where .= " AND v.estado IN ('Entregado', 'Cancelado', 'Realizado')";
 }
 
 // --- FILTRO CATEGORÍA ---
