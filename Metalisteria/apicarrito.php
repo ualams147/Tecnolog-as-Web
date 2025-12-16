@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../conexion.php';
+include 'conexion.php';
 header('Content-Type: application/json'); // Importante: Respondemos con JSON
 
 // Leer los datos que vienen del Javascript

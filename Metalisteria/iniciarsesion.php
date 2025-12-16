@@ -1,10 +1,10 @@
 <?php
 session_start();
 // 1. INCLUIR FUNCIONES (Esto inicia la sesión)
-include '../CabeceraFooter.php'; 
+include 'CabeceraFooter.php'; 
 
 // 2. CONEXIÓN
-include '../conexion.php'; 
+include 'conexion.php'; 
 
 $error = '';
 
@@ -93,14 +93,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // ============================================================
         
         if ($usuario['rol'] === 'admin') {
-            $destino = '../Administrador/indexAdmin.php';
+            $destino = 'indexAdmin.php';
         } else {
             // Si venimos de comprar -> Datos Envio
             if ($origen === 'compra') {
-                $destino = '../cliente/datosEnvio.php';
+                $destino = 'datosEnvio.php';
             } else {
                 // Si venimos de la cabecera -> Inicio Cliente
-                $destino = '../cliente/index.php';
+                $destino = 'index.php';
             }
         }
         
@@ -123,13 +123,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio de Sesión - Metalistería Fulsan</title>
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/IniciarSesion.css">
+    <link rel="stylesheet" href="css/IniciarSesion.css">
     
-    <script src="../js/auth.js"></script>
+    <script src="auth.js"></script>
 </head>
 <body>
     <div class="visitante-login">

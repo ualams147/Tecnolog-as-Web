@@ -1,9 +1,9 @@
 <?php
 // 1. PRIMERO LAS FUNCIONES (Inicia la sesión y carga los estilos)
-include '../CabeceraFooter.php'; 
+include 'CabeceraFooter.php'; 
 
 // 2. LUEGO LA CONEXIÓN (Por si necesitas guardar el pedido más tarde)
-include '../conexion.php';
+include 'conexion.php';
 
 // =======================================================================
 // CALCULAR EL TOTAL REAL DEL CARRITO
@@ -32,8 +32,8 @@ $_SESSION['total_carrito'] = $total_a_pagar;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Método de Pago - Metalistería Fulsan</title>
     
-    <link rel="stylesheet" href="../css/datosEnvio.css">
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
+    <link rel="stylesheet" href="css/datosEnvio.css">
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
@@ -145,7 +145,7 @@ $_SESSION['total_carrito'] = $total_a_pagar;
         <div class="processing-subtext">Por favor espere</div>
     </div>
     
-    <script src="../js/auth.js"></script>
+    <script src="js/auth.js"></script>
 
     <script>
         function selectOption(label) {

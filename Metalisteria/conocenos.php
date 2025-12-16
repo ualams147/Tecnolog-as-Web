@@ -1,5 +1,5 @@
 <?php
-include '../CabeceraFooter.php'; 
+include 'CabeceraFooter.php'; 
 ?>
 
 <!DOCTYPE html>
@@ -8,8 +8,8 @@ include '../CabeceraFooter.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Metalistería Fulsan - Conócenos</title>
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
-    <link rel="stylesheet" href="../css/conocenos.css">
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
+    <link rel="stylesheet" href="css/conocenos.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
@@ -27,7 +27,7 @@ include '../CabeceraFooter.php';
                     <p>Trabajamos para clientes a nivel local, con nuestra sede en Extrarradio Cortijo la Purisima, 2P, 18004 Granada, aunque también hemos trabajado a nivel nacional e internacional.</p>
                 </div>
                 <div class="foto-taller">
-                    <img src="../imagenes/fotos taller0001.jpg" alt="Foto del taller">
+                    <img src="imagenes/fotos taller0001.jpg" alt="Foto del taller">
                 </div>
             </div>
         </section>
@@ -36,7 +36,7 @@ include '../CabeceraFooter.php';
             <div class="container">
                 <div class="content-grid">
                     <div class="image-container">
-                        <img src="../imagenes/memento_mori.png" alt="Nosotros">
+                        <img src="imagenes/memento_mori.png" alt="Nosotros">
                     </div>
                     <div class="text-container">
                         <h2 class="heading">Nosotros</h2>
@@ -52,6 +52,6 @@ include '../CabeceraFooter.php';
         
     </div>
     
-    <script src="../js/auth.js"></script>
+    <script src="js/auth.js"></script>
 </body>
 </html>

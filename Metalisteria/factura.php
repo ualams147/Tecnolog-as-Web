@@ -1,9 +1,9 @@
 <?php
 // 1. CARGAMOS LA CABECERA Y FUNCIONES COMUNES
-include '../CabeceraFooter.php'; 
+include 'CabeceraFooter.php'; 
 
 // 2. CONEXIÓN A BASE DE DATOS
-include '../conexion.php';
+include 'conexion.php';
 
 // ====================================================
 // 3. RECUPERAR DATOS DEL PEDIDO (ANTES DE BORRARLOS)
@@ -61,8 +61,8 @@ if(isset($_SESSION['carrito'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Factura - Metalistería Fulsan</title>
     
-    <link rel="stylesheet" href="../css/datosEnvio.css">
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
+    <link rel="stylesheet" href="css/datosEnvio.css">
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
@@ -237,6 +237,6 @@ if(isset($_SESSION['carrito'])) {
         <?php sectionfooter(); ?>
     </div>
     
-    <script src="../js/auth.js"></script>
+    <script src="js/auth.js"></script>
 </body>
 </html>

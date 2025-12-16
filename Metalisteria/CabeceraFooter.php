@@ -314,7 +314,7 @@ function sectionheader($active = 0) {
         <div class="container">
             <div class="logo-main">
                 <a href="index.php" class="logo-link">
-                    <img src="../imagenes/logo.png" alt="Logo Metalful">
+                    <img src="imagenes/logo.png" alt="Logo Metalful">
                     <div class="logo-text">
                         <span>Metalistería</span>
                         <strong>Fulsan</strong>
@@ -367,7 +367,7 @@ function sectionfooter() {
             <div class="footer-content">
                 <div class="footer-logo-section">
                     <div class="logo-footer">
-                        <img src="../imagenes/footer.png" alt="Logo Metalful">
+                        <img src="imagenes/footer.png" alt="Logo Metalful">
                     </div>
                     <div class="redes">
                         <a href="https://www.instagram.com/metalfulsansl/" target="_blank" class="instagram-link">
@@ -417,9 +417,9 @@ function sectionfooter() {
 
             <div class="footer-bottom">
                 <div class="politica-legal">
-                    <a href="../aviso-legal.php">Aviso Legal</a><span>•</span>
-                    <a href="../privacidad.php">Política de Privacidad</a><span>•</span>
-                    <a href="../cookies.php">Política de Cookies</a>
+                    <a href="aviso-legal.php">Aviso Legal</a><span>•</span>
+                    <a href="privacidad.php">Política de Privacidad</a><span>•</span>
+                    <a href="cookies.php">Política de Cookies</a>
                 </div>
             </div>
         </div>

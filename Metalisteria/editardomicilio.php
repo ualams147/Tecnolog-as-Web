@@ -1,13 +1,13 @@
 <?php
 // 1. PRIMERO LA CABECERA (Inicia la sesión automáticamente)
-include '../CabeceraFooter.php'; 
+include 'CabeceraFooter.php'; 
 
-include '../conexion.php'; 
+include 'conexion.php'; 
 
 // 1. SEGURIDAD: Si no estás logueado, fuera.
 // (Esto funciona bien porque en el Login guardamos 'usuario_id')
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: ../Visitante/IniciarSesion.php");
+    header("Location: IniciarSesion.php");
     exit;
 }
 
@@ -59,7 +59,7 @@ $stmt->execute([':id' => $id_usuario]);
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$usuario) {
-    header("Location: ../admin/CerrarSesion.php");
+    header("Location: admin/CerrarSesion.php");
     exit;
 }
 ?>
@@ -70,13 +70,13 @@ if (!$usuario) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Domicilio - Metalistería Fulsan</title>
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/editarDomicilio.css">
+    <link rel="stylesheet" href="css/editarDomicilio.css">
     <!-- MANTENEMOS auth.js -->
-    <script src="../js/auth.js"></script>
+    <script src="js/auth.js"></script>
 </head>
 <body>
     <div class="visitante-domicilio-edit">

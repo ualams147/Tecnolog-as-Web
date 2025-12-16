@@ -1,10 +1,10 @@
 <?php
 // 1. IMPORTANTE: Primero incluimos el archivo de funciones (que inicia la sesión)
 // Asegúrate de que el nombre del archivo es correcto (funciones.php o CabeceraFooter.php)
-include '../CabeceraFooter.php'; 
+include 'CabeceraFooter.php'; 
 
 // 2. Luego la conexión a la base de datos
-include '../conexion.php'; 
+include 'conexion.php'; 
 
 // 3. LÓGICA DE PRODUCTOS
 try {
@@ -24,11 +24,11 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Productos - Metalistería Fulsan</title>
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/productos.css">
+    <link rel="stylesheet" href="css/productos.css">
     
     <style>
         .item-producto { display: none; }
@@ -61,22 +61,22 @@ try {
             
             <div class="categorias-container">
                 <div class="cat-card" onclick="filtrar('2')" id="cat-2">
-                    <div class="cat-frame"><img src="../imagenes/p1.png" alt="Puertas"></div>
+                    <div class="cat-frame"><img src="imagenes/p1.png" alt="Puertas"></div>
                     <span class="cat-name">PUERTAS</span>
                 </div>
 
                 <div class="cat-card" onclick="filtrar('1')" id="cat-1">
-                    <div class="cat-frame"><img src="../imagenes/v1.png" alt="Ventanas"></div>
+                    <div class="cat-frame"><img src="imagenes/v1.png" alt="Ventanas"></div>
                     <span class="cat-name">VENTANAS</span>
                 </div>
 
                 <div class="cat-card" onclick="filtrar('5')" id="cat-5">
-                    <div class="cat-frame"><img src="../imagenes/b1.png" alt="Barandillas"></div>
+                    <div class="cat-frame"><img src="imagenes/b1.png" alt="Barandillas"></div>
                     <span class="cat-name">BARANDILLAS</span>
                 </div>
 
                 <div class="cat-card" onclick="filtrar('otros')" id="cat-otros">
-                    <div class="cat-frame"><img src="../imagenes/otro.png" alt="Otras"></div>
+                    <div class="cat-frame"><img src="imagenes/otro.png" alt="Otras"></div>
                     <span class="cat-name">OTRAS<br>ESTRUCTURAS</span>
                 </div>
             </div>
@@ -101,7 +101,7 @@ try {
                             <div class="prod-card-inner">
                                 <div class="prod-img-box">
                                     <a href="infoProducto.php?id=<?php echo $producto['id']; ?>">
-                                        <img src="../<?php echo htmlspecialchars($producto['imagen_url']); ?>" 
+                                        <img src="<?php echo htmlspecialchars($producto['imagen_url']); ?>" 
                                              alt="<?php echo htmlspecialchars($producto['nombre']); ?>"
                                              onerror="this.src='https://via.placeholder.com/300x300?text=Sin+Imagen'">
                                     </a>
@@ -134,7 +134,7 @@ try {
         <?php sectionfooter(); ?>
     </div>
     
-    <script src="../js/auth.js"></script>
+    <script src="js/auth.js"></script>
 
     <script>
         let filtrosActivos = [];

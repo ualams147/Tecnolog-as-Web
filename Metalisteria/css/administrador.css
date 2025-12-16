@@ -605,7 +605,7 @@ input[type="date"]::-webkit-calendar-picker-indicator { background: transparent;
     
     .inicio-administrador .titulo-principal { margin-bottom: 80px; }
 
-    /* Filtros Inputs (Ventas/Clientes) */
+    /* Filtros Inputs (Ventass) */
     .filtros-en-titulo {
         position: relative;
         bottom: auto; left: auto; transform: none;

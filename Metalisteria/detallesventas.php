@@ -1,9 +1,9 @@
 <?php
-include '../conexion.php';
+include 'conexion.php';
 
 // 1. VERIFICAR ID DE VENTA
 if (!isset($_GET['id'])) {
-    header("Location: ../Administrador/ListadoVentasAdmin.php");
+    header("Location: ListadoVentasAdmin.php");
     exit;
 }
 
@@ -39,21 +39,20 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles Venta #<?php echo $venta['id']; ?> - Metalisteria Fulsan</title>
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/administrador.css">
+    <link rel="stylesheet" href="css/administrador.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="DetallesVentas">
-        <!-- Cabecera -->
         <header class="cabecera">
                 <div class="container">
                     <div class="logo-main">
-                        <a href="../Administrador/indexAdmin.php" class="logo-main">
-                            <img src="../imagenes/logo.png" alt="Logo Metalful">
+                        <a href="indexAdmin.php" class="logo-main">
+                            <img src="imagenes/logo.png" alt="Logo Metalful">
                             <div class="logo-text">
                                 <span> Metalisteria</span>
                                 <strong>Fulsan</strong>
@@ -62,19 +61,18 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     
                     <nav class="nav-bar">
-                        <a href="../Administrador/ListadoVentasAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Ventas</a>
-                        <a href="../Administrador/ListadoProductosAdmin.php" >Productos</a>
-                        <a href="../Administrador/ListadoClientesAdmin.php">Clientes</a>
+                        <a href="ListadoVentasAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Ventas</a>
+                        <a href="ListadoProductosAdmin.php" >Productos</a>
+                        <a href="ListadoClientesAdmin.php">Clientes</a>
                     </nav>
 
                     <div class="log-out">
-                        <a href="../Cliente/index.php">Cerrar Sesión</a>
+                        <a href="index.php">Cerrar Sesión</a>
                     </div>
 
                 </div>
         </header>
 
-        <!-- Título -->
         <div class="titulo-section">
             <div class="degradado"></div>
             <div class="recuadro-fondo"></div> 
@@ -82,26 +80,19 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
             <h1 class="titulo-principal">Venta #<?php echo str_pad($venta['id'], 4, '0', STR_PAD_LEFT); ?></h1>
         </div>
 
-        <!-- Main Content -->
         <div class="container main-container">
-            <!-- Tarjeta Principal Blanca -->
             <div class="details-card">
                 
-                <!-- Fila Cliente -->
                 <div class="client-row">
                     <span class="label-text">Cliente:</span>
-                    <!-- Mostramos el nombre completo del cliente -->
                     <input type="text" class="input-display" readonly value="<?php echo $venta['nombre_cli'] . ' ' . $venta['apellidos_cli']; ?>">
                 </div>
 
-                <!-- Sección Productos -->
                 <div class="products-section">
                     <span class="label-text">Productos del pedido:</span>
                     
-                    <!-- Caja contenedora de tarjetas azules -->
                     <div class="products-list-box">
                         
-                        <!-- BUCLE: Generamos una tarjeta por cada producto comprado -->
                         <?php foreach($productos_venta as $item): ?>
                             <div class="product-item-card">
                                 <div class="product-info-line">
@@ -126,32 +117,28 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </div>
 
-                <!-- Importe Total -->
                 <div class="total-row">
                     <span class="total-label">Importe Total: <?php echo number_format($venta['total'], 2); ?> €</span>
                 </div>
 
             </div>
 
-            <!-- Botones de acción -->
             <div class="botones-finales">
                 <div class="boton-salir">
                     <a href="javascript:void(0);" onclick="confirmarSalida()">Salir</a>
                 </div>
                 <div class="boton-usuario">
-                    <!-- Enlace dinámico al perfil del cliente -->
-                    <a href="../Administrador/ModificarDatosCliente.php?id=<?php echo $venta['id_cliente']; ?>">Ir al usuario</a>
+                    <a href="ModificarDatosCliente.php?id=<?php echo $venta['id_cliente']; ?>">Ir al usuario</a>
                 </div>
             </div>
         </div>
 
-        <!-- Footer -->
         <footer class="footer">
                 <div class="container">
                     <div class="footer-content">
                         <div class="footer-logo-section">
                             <div class="logo-footer">
-                                <img src="../imagenes/footer.png" alt="Logo Metalful">
+                                <img src="imagenes/footer.png" alt="Logo Metalful">
                             </div>
                             <div class="redes">
                                 <a href="https://www.instagram.com/metalfulsansl/" target="_blank" class="instagram-link">
@@ -219,12 +206,11 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Si confirma, entonces sí redirigimos manualmente
-                    window.location.href = '../Administrador/ListadoVentasAdmin.php';
+                    window.location.href = 'ListadoVentasAdmin.php';
                 }
             });
         }
     </script>
-
 
 </body>
 </html>

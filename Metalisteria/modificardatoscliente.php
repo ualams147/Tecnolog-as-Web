@@ -1,10 +1,9 @@
-
 <?php
-include '../conexion.php';
+include 'conexion.php';
 
 // 1. VERIFICAR ID
 if (!isset($_GET['id'])) {
-    header("Location: ../Administrador/ListadoClientesAdmin.php");
+    header("Location: ListadoClientesAdmin.php");
     exit;
 }
 
@@ -24,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Recogemos dirección DESGLOSADA
     $calle = $_POST['calle'];     
     $numero = $_POST['numero'];   
-    $piso = $_POST['piso'];       
+    $piso = $_POST['piso'];        
     
     $cp = $_POST['cp'];
     $ciudad = $_POST['poblacion'];
@@ -52,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email, 
             $dni, 
             $telefono, 
-            $calle,   
+            $calle,    
             $numero,  
             $piso,    
             $cp, 
@@ -61,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
         
         // --- CAMBIO CLAVE AQUÍ: REDIRECCIÓN DIRECTA COMO EN PRODUCTOS ---
-        header("Location: ../Administrador/ListadoClientesAdmin.php"); 
+        header("Location: ListadoClientesAdmin.php"); 
         exit;
         
     } catch(PDOException $e) {
@@ -88,15 +87,14 @@ if (!$cliente) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modificar Cliente - Metalistería Fulsán</title>
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
-    <link rel="stylesheet" href="../css/administrador.css">
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
+    <link rel="stylesheet" href="css/administrador.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
-    <!-- Estilos necesarios para que el script JS muestre los errores visualmente -->
     <style>
         .boton-modificar button {
             background: none; border: none; color: white; font-family: inherit; font-size: inherit; font-weight: inherit; cursor: pointer; width: 100%; height: 100%;
@@ -113,8 +111,8 @@ if (!$cliente) {
     <header class="cabecera">
             <div class="container">
                 <div class="logo-main">
-                    <a href="../Administrador/indexAdmin.php" class="logo-main">
-                        <img src="../imagenes/logo.png" alt="Logo Metalful">
+                    <a href="indexAdmin.php" class="logo-main">
+                        <img src="imagenes/logo.png" alt="Logo Metalful">
                         <div class="logo-text">
                             <span> Metalisteria</span>
                             <strong>Fulsan</strong>
@@ -123,22 +121,22 @@ if (!$cliente) {
                 </div>
                 
                 <nav class="nav-bar">
-                    <a href="../Administrador/ListadoVentasAdmin.php">Ventas</a>
-                    <a href="../Administrador/ListadoProductosAdmin.php">Productos</a>
-                    <a href="../Administrador/ListadoClientesAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Clientes</a> 
+                    <a href="ListadoVentasAdmin.php">Ventas</a>
+                    <a href="ListadoProductosAdmin.php">Productos</a>
+                    <a href="ListadoClientesAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Clientes</a> 
                 </nav>
 
                 <div class="log-out">
-                    <a href="../Cliente/index.php">Cerrar Sesión</a>
+                    <a href="index.php">Cerrar Sesión</a>
                 </div>
 
             </div>
-        </header>
+    </header>
 
         <div class="titulo-section">
             <div class="degradado"></div>
             <div class="recuadro-fondo"></div> 
-            <a href="../Administrador/ListadoClientesAdmin.php" class="flecha-circular">&#8592;</a>
+            <a href="ListadoClientesAdmin.php" class="flecha-circular">&#8592;</a>
             
             <h1 class="titulo-principal"><?php echo htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']); ?></h1>
         </div>
@@ -215,7 +213,6 @@ if (!$cliente) {
                         <input type="text" id="provincia" class="input-display" name="provincia" placeholder="Granada" />
                     </div>
 
-                    <!-- Botones -->
                     <div class="botones-finales full-width" style="grid-column: span 2;">
                         <div class="boton-salir">
                             <a href="javascript:void(0);" onclick="confirmarSalida()">Salir</a>
@@ -232,13 +229,12 @@ if (!$cliente) {
             </div>
         </div>
 
-        <!-- Footer -->
         <footer class="footer">
             <div class="container">
                 <div class="footer-content">
                     <div class="footer-logo-section">
                         <div class="logo-footer">
-                            <img src="../imagenes/footer.png" alt="Logo Metalful">
+                            <img src="imagenes/footer.png" alt="Logo Metalful">
                         </div>
                         <div class="redes">
                             <a href="#" class="instagram-link">
@@ -265,15 +261,13 @@ if (!$cliente) {
 
                 <div class="footer-bottom">
                     <div class="politica-legal">
-                        <a href="#">Aviso Legal</a> • <a href="#">Privacidad</a> • <a href="#">Cookies</a>
+                        <a href="#aviso-legal">Aviso Legal</a> • <a href="#privacidad">Privacidad</a> • <a href="#cookies">Cookies</a>
                     </div>
                 </div>
             </div>
         </footer>
-    </div>
     
-    <!-- Cargamos tu script de validación -->
-    <script src="../js/AlgoritmoDNIs.js"></script>
+    <script src="js/AlgoritmoDNIs.js"></script>
 
     <script>
         function confirmarModificacion() {
@@ -323,7 +317,7 @@ if (!$cliente) {
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = '../Administrador/ListadoClientesAdmin.php';
+                    window.location.href = 'ListadoClientesAdmin.php';
                 }
             });
         }

@@ -1,12 +1,12 @@
 <?php
 // 1. CABECERA Y SESIÓN (Siempre lo primero)
-include '../CabeceraFooter.php'; 
+include 'CabeceraFooter.php'; 
 
-include '../conexion.php'; 
+include 'conexion.php'; 
 
 // 2. SEGURIDAD: Si no hay sesión iniciada, lo mandamos al login
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: ../Visitante/IniciarSesion.php");
+    header("Location: IniciarSesion.php");
     exit;
 }
 
@@ -19,7 +19,7 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Si por lo que sea no existe el usuario (raro), cerramos sesión
 if (!$usuario) {
-    header("Location: ../admin/CerrarSesion.php");
+    header("Location: admin/CerrarSesion.php");
     exit;
 }
 ?>
@@ -30,11 +30,11 @@ if (!$usuario) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil - Metalistería Fulsan</title>
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/perfil.css">
+    <link rel="stylesheet" href="css/perfil.css">
 </head>
 <body>
     <div class="visitante-perfil">
@@ -133,7 +133,7 @@ if (!$usuario) {
     </div>
 
     <!-- MANTENEMOS auth.js -->
-    <script src="../js/auth.js"></script>
+    <script src="js/auth.js"></script>
     
     <script>
         // Cierre de sesión HÍBRIDO (JS + PHP)
@@ -145,7 +145,7 @@ if (!$usuario) {
             
             // 2. Redirigimos al destructor de sesión PHP para limpiar el servidor
             // Asumo que tu archivo CerrarSesion.php está en admin
-            window.location.href = '../admin/CerrarSesion.php';
+            window.location.href = 'admin/CerrarSesion.php';
         });
     </script>
 </body>

@@ -1,75 +1,53 @@
 <?php
-include '../conexion.php';
+include 'conexion.php';
 
-// 1. VERIFICAR QUE RECIBIMOS UN ID
-if (!isset($_GET['id'])) {
-    // Si no hay ID, redirigimos al listado para evitar errores
-    header("Location: ../Administrador/ListadoProductosAdmin.php"); // O admin.php si usas PHP
-    exit;
-}
-
-$id = $_GET['id'];
-$mensaje = "";
-
-// 2. PROCESAR EL FORMULARIO (CUANDO SE PULSA "MODIFICAR")
+// 1. PROCESAR EL FORMULARIO
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    // Recoger datos del formulario
     $nombre = $_POST['nombre'];
     $precio = $_POST['precio'];
     $descripcion = $_POST['detalles'];
     $medidas = $_POST['tamanos'];
+    $id_categoria = $_POST['categoria']; 
     
-    // Recogemos el color (puede venir vacío si no marcan nada)
+    // NUEVO: Recoger el stock (si está vacío ponemos 0)
+    $stock = isset($_POST['stock']) ? intval($_POST['stock']) : 0;
+    
     $color = isset($_POST['colores']) ? $_POST['colores'] : '';
 
-    // Lógica para la imagen
-    $ruta_imagen = $_POST['imagen_actual']; // Por defecto, mantenemos la antigua
+    // Valores por defecto
+    $referencia = 'REF-' . rand(1000, 9999); 
+    $id_material = 1; // 1 = Aluminio (Por defecto)
 
-    // Si suben una nueva foto...
+    // Lógica de Imagen
+    $ruta_imagen = 'imagenes/producto-sin-imagen.png'; 
+    
     if (isset($_FILES['nueva_imagen']) && $_FILES['nueva_imagen']['error'] === UPLOAD_ERR_OK) {
         $nombre_archivo = basename($_FILES['nueva_imagen']['name']);
-        $ruta_destino = "../imagenes/" . $nombre_archivo; // Asegúrate de que la carpeta 'img' existe
+        $ruta_destino = "imagenes/" . $nombre_archivo;
         
         if (move_uploaded_file($_FILES['nueva_imagen']['tmp_name'], $ruta_destino)) {
             $ruta_imagen = $ruta_destino;
         }
     }
 
-    // Actualizamos la base de datos
     try {
-        $sql = "UPDATE productos SET nombre=?, precio=?, descripcion=?, medidas=?, color=?, imagen_url=? WHERE id=?";
+        // Insertar en la Base de Datos
+        $sql = "INSERT INTO productos (referencia, nombre, descripcion, precio, color, medidas, imagen_url, id_material, id_categoria, stock) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->execute([$nombre, $precio, $descripcion, $medidas, $color, $ruta_imagen, $id]);
+        // Fíjate que $stock es la última variable del array
+        $stmt->execute([$referencia, $nombre, $descripcion, $precio, $color, $medidas, $ruta_imagen, $id_material, $id_categoria, $stock]);
         
-        $mensaje = "¡Producto actualizado correctamente!";
-        
-        // Opcional: Redirigir tras guardar
-        header("Location: ../Administrador/ListadoProductosAdmin.php"); 
+        // Redirigir al listado si todo sale bien
+        header("Location: ListadoProductosAdmin.php");
+        exit;
         
     } catch(PDOException $e) {
-        $mensaje = "Error al guardar: " . $e->getMessage();
+        echo "<script>alert('Error al guardar: " . $e->getMessage() . "');</script>";
     }
 }
-
-// 3. OBTENER LOS DATOS ACTUALES DEL PRODUCTO
-$sql = "SELECT * FROM productos WHERE id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->execute([$id]);
-$producto = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$producto) {
-    echo "Producto no encontrado.";
-    exit;
-}
-
-// Comprobamos la ruta de la imagen ya tiene "../imagenes/"
-    $ruta_bd = $producto['imagen_url'];
-    
-    // Si la ruta NO empieza por "../", asumimos que es una foto vieja y le añadimos la carpeta
-    if (strpos($ruta_bd, '../') === 0) {
-        $ruta_foto = $ruta_bd;
-    } else {
-        $ruta_foto = '../' . $ruta_bd;
-    }
 ?>
 
 <!DOCTYPE html>
@@ -77,22 +55,21 @@ if (!$producto) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modificar Producto - Metalistería Fulsan</title>
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
-    <link rel="stylesheet" href="../css/administrador.css">
+    <title>Crear Producto - Metalistería Fulsan</title>
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/administrador.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    <div class="ModificarProductoAdmin">
-        <!-- Header -->
+    <div class="CrearProductoAdmin">
         <header class="cabecera">
             <div class="container">
                 <div class="logo-main">
-                    <a href="../Administrador/indexAdmin.php" class="logo-main">
-                        <img src="../imagenes/logo.png" alt="Logo Metalful">
+                    <a href="indexAdmin.php" class="logo-main">
+                        <img src="imagenes/logo.png" alt="Logo Metalful">
                         <div class="logo-text">
                             <span> Metalisteria</span>
                             <strong>Fulsan</strong>
@@ -101,93 +78,68 @@ if (!$producto) {
                 </div>
                 
                 <nav class="nav-bar">
-                    <a href="../Administrador/ListadoVentasAdmin.php">Ventas</a>
-                    <a href="../Administrador/ListadoProductosAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
-                    <a href="../Administrador/ListadoClientesAdmin.php">Clientes</a>
+                    <a href="ListadoVentasAdmin.php">Ventas</a>
+                    <a href="ListadoProductosAdmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
+                    <a href="ListadoClientesAdmin.php">Clientes</a>
                 </nav>
 
                 <div class="log-out">
-                    <a href="../Cliente/index.php">Cerrar Sesión</a>
+                    <a href="index.php">Cerrar Sesión</a>
                 </div>
             </div>
         </header>
 
-        <!-- Título -->
         <div class="titulo-section">
             <div class="degradado"></div>
             <div class="recuadro-fondo"></div> 
             <a href="ListadoProductosAdmin.php" class="flecha-circular">&#8592;</a>
-            <h1 class="titulo-principal" style="font-weight: bold;">Modificar Producto</h1>
+            <h1 class="titulo-principal">Nuevo Producto</h1>
         </div>
 
-        <!-- Main Content -->
         <div class="container main-container">
             
-            <!-- Mensaje de confirmación (si existe) -->
-            <?php if(!empty($mensaje)): ?>
-                <div style="background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px; width: 100%; text-align: center;">
-                    <?php echo $mensaje; ?>
-                </div>
-                
-            <?php endif; ?>
             <div id="mensaje-error-js" class="alerta-error" style="display: none;"></div>
-
-            <!-- INICIO FORMULARIO (Importante: method="POST" y enctype para imágenes) -->
-            <form id="form-modificar" method="POST" enctype="multipart/form-data" class="product-card">
+            <input type="hidden" name="accion" value="crear">
+            <form id="form-crear" method="POST" enctype="multipart/form-data" class="product-card">
                 
-                <!-- Columna Imagen -->
                 <div class="image-column">
                     <div class="image-placeholder" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                        <!-- Mostramos la imagen actual -->
-                        <img id="preview-img" src="<?php echo $ruta_foto; ?>" alt="Producto" style="max-width: 100%; max-height: 100%; object-fit: contain;" onerror="this.src='../imagenes/producto-sin-imagen.png'">
+                        <img id="preview-img" src="" style="display: none; max-width: 100%; max-height: 100%;">
                     </div>
                     
-                    <!-- Input oculto para subir archivo -->
-                    <input type="file" id="input-imagen" name="nueva_imagen" style="display: none;" accept="image/*" onchange="mostrarPrevisualizacion(event)">
+                    <input type="file" id="input-imagen" name="nueva_imagen" accept="image/*" style="display: none;" onchange="verImagen(event)">
                     
-                    <!-- Input oculto para mantener la ruta vieja si no se cambia -->
-                    <input type="hidden" name="imagen_actual" value="<?php echo $producto['imagen_url']; ?>">
-
-                    <!-- Botón visual que activa el input -->
                     <div class="boton-cambiar-imagen" onclick="document.getElementById('input-imagen').click()">
-                        <p>Cambiar Imagen</p>
+                        <p>Establecer Imagen</p>
                     </div>
                 </div>
 
-                <!-- Columna Formulario -->
                 <div class="form-column">
                     
                     <div class="form-group">
                         <label class="form-label" for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" name="nombre" class="form-input" value="<?php echo $producto['nombre']; ?>" required>
+                        <input type="text" id="nombre" name="nombre" class="form-input" required>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label" for="precio">Precio:</label>
                         <div class="price-wrapper">
-                            <input type="number" step="0.01" id="precio" name="precio" class="form-input" value="<?php echo $producto['precio']; ?>">
+                            <input type="number" step="0.01" id="precio" name="precio" class="form-input">
                             <span class="currency-symbol">€</span>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label" for="detalles">Detalles:</label>
-                        <textarea id="detalles" name="detalles" class="form-input" rows="4"><?php echo $producto['descripcion']; ?></textarea>
+                        <input type="text" id="detalles" name="detalles" class="form-input">
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Color:</label>
+                        <label class="form-label">Colores disponibles:</label>
                         <div class="checkbox-group">
-                            <!-- PHP comprueba si el color en BD es 'Blanco', 'Plata' o 'Marrón' y marca la casilla -->
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="colores" value="Blanco" <?php if($producto['color'] == 'Blanco') echo 'checked'; ?>> Blanco
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="colores" value="Plata" <?php if($producto['color'] == 'Plata') echo 'checked'; ?>> Plata
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="colores" value="Marrón" <?php if($producto['color'] == 'Marrón') echo 'checked'; ?>> Marrón
-                            </label>
+                            <label class="checkbox-label"><input type="checkbox" name="colores" value="Blanco"> Blanco</label>
+                            <label class="checkbox-label"><input type="checkbox" name="colores" value="Plata"> Plata</label>
+                            <label class="checkbox-label"><input type="checkbox" name="colores" value="Marrón"> Marrón</label>
                         </div>
                     </div>
 
@@ -221,34 +173,46 @@ if (!$producto) {
                         <input type="hidden" id="tamanos-final" name="tamanos" value="<?php echo htmlspecialchars($producto['medidas'] ?? ''); ?>">
                     </div>
 
-                    <!-- Botones de acción DENTRO del formulario -->
+                    <div class="form-group">
+                        <label class="form-label" for="categoria">Categoría:</label>
+                        <select id="categoria" name="categoria" class="form-input" style="cursor: pointer;" required>
+                            <option value="" selected disabled hidden>Selecciona una categoría</option>
+                            
+                            <option value="1">Ventanas</option>
+                            <option value="2">Balcones</option>
+                            <option value="3">Rejas</option>
+                            <option value="4">Escaleras</option>
+                            <option value="5">Barandillas</option>
+                            <option value="6">Pérgolas</option>
+                        </select>
+                    </div>
+
                     <div class="botones-finales">
+    
                         <div class="boton-salir">
                             <a href="javascript:void(0);" onclick="confirmarSalida()">Salir</a>
                         </div>
                         
-                        <div class="boton-modificar">
-                            <button type="button" name="actualizar" onclick="confirmarModificacion()">
-                                Guardar cambios
+                        <div class="boton-modificar"> <button type="button" name="crear" onclick="confirmarCreacion()" style="border: 2px solid rgba(41, 54, 97, 0.6); font-family: inherit;">
+                                <p>Crear producto</p>
                             </button>
                         </div>
+
                     </div>
 
                 </div>
             </form>
         </div>
 
-        <!-- Footer -->
         <footer class="footer">
             <div class="container">
                 <div class="footer-content">
                     <div class="footer-logo-section">
                         <div class="logo-footer">
-                            <img src="../imagenes/footer.png" alt="Logo Metalful">
+                            <img src="imagenes/footer.png" alt="Logo Metalful">
                         </div>
                         <div class="redes">
                             <a href="#" class="instagram-link">
-                                <!-- SVG Instagram -->
                                 <svg viewBox="0 0 24 24" fill="white"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/></svg>
                             </a>
                         </div>
@@ -272,17 +236,30 @@ if (!$producto) {
 
                 <div class="footer-bottom">
                     <div class="politica-legal">
-                        <a href="#">Aviso Legal</a> • <a href="#">Privacidad</a> • <a href="#">Cookies</a>
+                        <a href="#aviso-legal">Aviso Legal</a> • <a href="#privacidad">Privacidad</a> • <a href="#cookies">Cookies</a>
                     </div>
                 </div>
             </div>
         </footer>
     </div>
 
-    <!-- Script para selección única de Checkboxes y Previsualización -->
     <script>
+        // 1. Previsualización de imagen
+        function verImagen(event) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('preview-img');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
-            // --- 1. Lógica de Checkboxes de Color (Igual que antes) ---
+            // --- 2. Lógica de Checkboxes (Colores) ---
             const checkboxes = document.querySelectorAll('input[name="colores"]');
             checkboxes.forEach(box => {
                 box.addEventListener('change', function() {
@@ -294,12 +271,13 @@ if (!$producto) {
                 });
             });
 
-            // --- LÓGICA DE MEDIDAS (Actualizada) ---
+            // --- 3. LÓGICA DE MEDIDAS (Corregida) ---
             const tamanosContainer = document.getElementById('tamanos-container');
             const inputAncho = document.getElementById('input-ancho');
             const inputAlto = document.getElementById('input-alto');
             const btnAdd = document.getElementById('btn-add-tamano');
             const hiddenInput = document.getElementById('tamanos-final');
+            const errorDiv = document.getElementById('mensaje-error-js');
 
             // Función crear etiqueta
             function createTag(text) {
@@ -314,62 +292,55 @@ if (!$producto) {
                 tamanosContainer.appendChild(tag);
             }
 
-            // Actualizar el input oculto para la BD
+            // Actualizar el input oculto
             function updateHiddenInput() {
                 const tags = Array.from(tamanosContainer.querySelectorAll('.tamano-chip'))
-                                .map(t => t.innerText.replace('✕', '').trim());
+                                        .map(t => t.innerText.replace('✕', '').trim());
                 hiddenInput.value = tags.join(', ');
             }
 
-            // VALIDACIÓN Y AÑADIDO
-            // --- 3. Lógica VALIDACIÓN Y AÑADIDO (Modificada) ---
+            // Funciones de Error
+            function mostrarError(mensaje) {
+                if(errorDiv) {
+                    errorDiv.textContent = mensaje;
+                    errorDiv.style.display = 'block';
+                    errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => { errorDiv.style.display = 'none'; }, 5000);
+                } else {
+                    alert(mensaje);
+                }
+            }
+
+            function ocultarError() {
+                if(errorDiv) errorDiv.style.display = 'none';
+            }
+
+            // Función Añadir Medida
             function addMedida() {
                 const ancho = parseInt(inputAncho.value);
                 const alto = parseInt(inputAlto.value);
-                const errorDiv = document.getElementById('mensaje-error-js');
 
-                // Función auxiliar para mostrar el error
-                function mostrarError(mensaje) {
-                    errorDiv.textContent = mensaje;
-                    errorDiv.style.display = 'block';
-                    // Opcional: Hacer scroll hacia arriba para ver el mensaje si la pantalla es pequeña
-                    errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    
-                    // Opcional: Ocultar automáticamente tras 5 segundos
-                    setTimeout(() => {
-                        errorDiv.style.display = 'none';
-                    }, 5000);
-                }
-
-                // Función para ocultar error (si todo sale bien)
-                function ocultarError() {
-                    errorDiv.style.display = 'none';
-                }
-
-                // 1. Validar que sean números
+                // Validaciones
                 if (isNaN(ancho) || isNaN(alto)) {
                     mostrarError("⚠️ Por favor, introduce números válidos en Ancho y Alto.");
                     return;
                 }
-
-                // 2. RESTRICCIÓN: Mínimo 30cm
                 if (ancho < 30 || alto < 30) {
                     mostrarError("⚠️ Las medidas no pueden ser menores de 30 cm.");
                     return;
                 }
 
-                // 3. Formato estandarizado
                 const nuevaMedida = `${ancho}x${alto}`;
 
-                // 4. Comprobar duplicados
+                // Comprobar duplicados
                 const actuales = hiddenInput.value.split(', ').map(t => t.trim());
                 if (actuales.includes(nuevaMedida)) {
                     mostrarError("⚠️ Esta medida ya existe en la lista.");
                     return;
                 }
 
-                // Si llegamos aquí, todo está BIEN:
-                ocultarError(); // Quitamos el error si lo había
+                // Todo OK
+                ocultarError();
                 createTag(nuevaMedida);
                 updateHiddenInput();
                 inputAncho.value = '';
@@ -377,15 +348,17 @@ if (!$producto) {
                 inputAncho.focus();
             }
 
-            btnAdd.addEventListener('click', addMedida);
+            // Eventos
+            if(btnAdd) btnAdd.addEventListener('click', addMedida);
+            
+            if(inputAlto) {
+                inputAlto.addEventListener('keyup', (e) => {
+                    if (e.key === 'Enter') addMedida();
+                });
+            }
 
-            // Permitir añadir pulsando Enter en el campo de Alto
-            inputAlto.addEventListener('keyup', (e) => {
-                if (e.key === 'Enter') addMedida();
-            });
-
-            // Cargar datos iniciales (desde PHP)
-            if (hiddenInput.value) {
+            // Cargar datos iniciales
+            if (hiddenInput && hiddenInput.value) {
                 const existentes = hiddenInput.value.split(',');
                 existentes.forEach(medida => {
                     if (medida.trim()) createTag(medida.trim());
@@ -393,71 +366,58 @@ if (!$producto) {
             }
         });
 
-        // --- 3. Previsualización de imagen ---
-        function mostrarPrevisualizacion(event) {
-            const input = event.target;
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('preview-img').src = e.target.result;
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
 
-        function confirmarModificacion() {
+        // --- FUNCIONES DE ALERTA (SWEETALERT) ---
+
+        function confirmarCreacion() {
             // 1. Seleccionamos el formulario
-            const formulario = document.getElementById('form-modificar');
+            const formulario = document.getElementById('form-crear');
 
-            // 2. Comprobamos si los campos requeridos están llenos (HTML5 validation)
+            // 2. Validar campos requeridos
             if (!formulario.checkValidity()) {
-                // Si falta algo, dejamos que el navegador muestre los errores rojos
                 formulario.reportValidity();
                 return; 
             }
 
-            // 3. Si todo está relleno, lanzamos la alerta
+            const medidas = document.getElementById('tamanos-final').value;
+            // Si quieres validar medidas descomenta esto:
+            // if (!medidas) {
+            //     Swal.fire('Faltan medidas', 'Por favor, añade al menos un tamaño.', 'warning');
+            //     return;
+            // }
+
+            // 4. Mostrar Alerta
             Swal.fire({
-                title: 'Guardar cambios',
-                text: "¿Estás seguro de que quieres actualizar los datos de este producto?",
+                title: '¿Crear producto?',
+                text: "¿Estás seguro de que quieres añadir este nuevo producto al catálogo?",
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#293661', // Tu azul corporativo para SI
-                cancelButtonColor: '#6c757d', // Gris para NO (seguir editando)
-                confirmButtonText: 'Sí, guardar cambios',
-                cancelButtonText: 'No, seguir editando',
-                background: '#fff',
-                // Estilo opcional para que quede más integrado
-                customClass: {
-                    popup: 'mi-alerta-redondeada'
-                }
+                confirmButtonColor: '#293661',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, crear producto',
+                cancelButtonText: 'Revisar',
+                customClass: { popup: 'swal2-popup' }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // 4. Si dice que SÍ, enviamos el formulario manualmente
                     formulario.submit();
                 }
-                // Si dice que NO, no hacemos nada y el cuadro se cierra solo.
             });
         }
 
-        // --- NUEVA FUNCIÓN PARA EL BOTÓN SALIR ---
         function confirmarSalida() {
             Swal.fire({
-                title: '¿Salir sin guardar?',
-                text: "Se perderán los cambios que no hayas guardado.",
+                title: '¿Salir sin crear?',
+                text: "Se perderán los datos introducidos.",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#d33',     // Rojo para indicar "Salir/Peligro"
-                cancelButtonColor: '#293661',   // Azul para "Me quedo"
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#293661',
                 confirmButtonText: 'Sí, salir',
-                cancelButtonText: 'Cancelar',
-                customClass: {
-                    popup: 'swal2-popup'
-                }
+                cancelButtonText: 'Seguir creando',
+                customClass: { popup: 'swal2-popup' }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Si confirma, entonces sí redirigimos manualmente
-                    window.location.href = '../Administrador/ListadoProductosAdmin.php';
+                    window.location.href = 'ListadoProductosAdmin.php';
                 }
             });
         }

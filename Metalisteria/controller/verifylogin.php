@@ -25,9 +25,9 @@ $pwd = trim($_POST["password"]);
 $error = "";
 
 if (verifylogin($mysqli,$login,$pwd)){
-        header("location: ../index.php");
+        header("location: index.php");
 } else {
-    header("location: ../login.php?error=1");
+    header("location: login.php?error=1");
 }
 
 

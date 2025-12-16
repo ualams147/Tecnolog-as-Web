@@ -8,7 +8,7 @@ if (isset($_SESSION["usercode"])){
 		session_unset();
 		session_destroy();
 		// echo "location: ".$location_logout_expire;
-		header("location: ../index.php");
+		header("location: index.php");
 		exit;
 	}
 	$_SESSION['LAST_ACTIVITY'] = time();

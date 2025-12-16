@@ -1,9 +1,9 @@
 <?php
 // 1. SIEMPRE PRIMERO: Funciones y Sesión
-include '../CabeceraFooter.php'; 
+include 'CabeceraFooter.php'; 
 
 // 2. CONEXIÓN A BD
-include '../conexion.php'; 
+include 'conexion.php'; 
 
 // =================================================================================
 // 3. CARGA DE DATOS DINÁMICA (BASE DE DATOS RELACIONAL)
@@ -71,12 +71,12 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Producto a Medida - Metalistería Fulsan</title>
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/productos.css">
-    <link rel="stylesheet" href="../css/productomedida.css">
+    <link rel="stylesheet" href="css/productos.css">
+    <link rel="stylesheet" href="css/productomedida.css">
 </head>
 <body>
     <div class="page-wrapper">
@@ -182,7 +182,7 @@ try {
         <?php sectionfooter(); ?>
     </div>
 
-    <script src="../js/auth.js"></script>
+    <script src="js/auth.js"></script>
 
     <script>
         // ======================================================
@@ -251,7 +251,7 @@ try {
                 if (matValue) {
                     const nombre = matValue.toLowerCase().trim();
                     if (nombre === 'aluminio' || nombre === 'pvc') {
-                        imgMat.src = '../imagenes/' + nombre + '.png';
+                        imgMat.src = 'imagenes/' + nombre + '.png';
                         imgMat.style.display = 'block'; // Al aparecer, el select se hace pequeño automáticamente
                     }   else {
                         imgMat.style.display = 'none';  // Si es otro material, ocultamos foto y el select crece
@@ -286,7 +286,7 @@ try {
             if (val) {
              // 1. Lógica de la imagen (mantiene lo que ya funcionaba)
                 let nombreLimpio = val.trim(); 
-                imgColor.src = '../imagenes/color' + nombreLimpio + '.png';
+                imgColor.src = 'imagenes/color' + nombreLimpio + '.png';
                 imgColor.style.display = 'block';
 
                 // 2. --- ESTO ES LO QUE FALTABA: ABRIR PASO 4 ---

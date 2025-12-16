@@ -8,6 +8,6 @@ session_unset();
 session_destroy();
 
 // 3. Redirigir al inicio (ajusta la ruta si tu index está en otra carpeta)
-header("Location: ../Visitante/index.php"); 
+header("Location: index.php"); 
 exit();
 ?>

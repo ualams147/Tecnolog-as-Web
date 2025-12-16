@@ -1,5 +1,5 @@
 <?php
-include '../conexion.php';
+include 'conexion.php';
 
 // --- LÓGICA PARA ELIMINAR PRODUCTO ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_eliminar'])) {
@@ -7,7 +7,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_eliminar'])) {
     try {
         $stmtBorrar = $conn->prepare("DELETE FROM productos WHERE id = ?");
         $stmtBorrar->execute([$idBorrar]);
-        header("Location: ../Administrador/ListadoProductosAdmin.php");
+        // Redirección corregida
+        header("Location: ListadoProductosAdmin.php");
         exit;
     } catch(PDOException $e) {
         // Error handling
@@ -31,11 +32,11 @@ $total_productos = count($productos);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listados de Productos Admin - Metalful</title>
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/administrador.css">
+    <link rel="stylesheet" href="css/administrador.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -44,8 +45,8 @@ $total_productos = count($productos);
         <header class="cabecera">
             <div class="container">
                 <div class="logo-main">
-                    <a href="../Administrador/indexAdmin.php" class="logo-main">
-                        <img src="../imagenes/logo.png" alt="Logo Metalful">
+                    <a href="indexAdmin.php" class="logo-main">
+                        <img src="imagenes/logo.png" alt="Logo Metalful">
                         <div class="logo-text">
                             <span> Metalisteria</span>
                             <strong>Fulsan</strong>
@@ -54,13 +55,13 @@ $total_productos = count($productos);
                 </div>
                 
                 <nav class="nav-bar">
-                    <a href="../Administrador/ListadoVentasAdmin.php">Ventas</a>
-                    <a href="../Administrador/ListadoProductosAdmin.php" class="activo" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
-                    <a href="../Administrador/ListadoClientesAdmin.php">Clientes</a>
+                    <a href="ListadoVentasAdmin.php">Ventas</a>
+                    <a href="ListadoProductosAdmin.php" class="activo" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
+                    <a href="ListadoClientesAdmin.php">Clientes</a>
                 </nav>
 
                 <div class="log-out">
-                    <a href="../Cliente/index.php">Cerrar Sesión</a>
+                    <a href="index.php">Cerrar Sesión</a>
                 </div>
             </div>
         </header>
@@ -69,10 +70,8 @@ $total_productos = count($productos);
             <div class="degradado"></div>
             <div class="recuadro-fondo"></div>
     
-            <!-- Título con reset -->
             <h1 class="titulo-principal" onclick="toggleFiltro('todos')" title="Ver todos">Listado Productos</h1>
 
-            <!-- FILTROS ACTIVADOS (IDs de BD: 1=Ventanas, 2=Puertas, 5=Barandillas) -->
             <div class="filtro-productos">
                 <button id="btn-filtro-2" class="filtro-text" onclick="toggleFiltro('2')">Puertas</button>
                 <button id="btn-filtro-1" class="filtro-text" onclick="toggleFiltro('1')">Ventanas</button>
@@ -82,7 +81,7 @@ $total_productos = count($productos);
         </div>
         
         <div class="botones-superiores">
-            <a href="../Administrador/CrearProductoAdmin.php" class="boton-anadir-nuevo">
+            <a href="CrearProductoAdmin.php" class="boton-anadir-nuevo">
                 <p>+ Añadir producto</p>
             </a>
         </div>
@@ -96,17 +95,14 @@ $total_productos = count($productos);
             </button>
             
             <div class="crear-producto" id="menu-lateral">
-                <a href="../Administrador/ListadoProductosAdmin.php" class="menu-item">Productos</a>
-                <a href="../Administrador/crear_producto.php" class="menu-item">Crear Producto</a>
-                <a href="../Administrador/ListadoClientesAdmin.php" class="menu-item">Listado de clientes</a>
-                <a href="../Administrador/ListadoVentasAdmin.php" class="menu-item">Listado de ventas</a>
+                <a href="ListadoProductosAdmin.php" class="menu-item">Productos</a>
+                <a href="CrearProductoAdmin.php" class="menu-item">Crear Producto</a>
+                <a href="ListadoClientesAdmin.php" class="menu-item">Listado de clientes</a>
+                <a href="ListadoVentasAdmin.php" class="menu-item">Listado de ventas</a>
             </div>
             
             <div class="cuadro-fondo">
                 <p class="header-tabla">Catálogo de Productos</p>
-
-                <!-- 1. BOTÓN AÑADIR (SIEMPRE VISIBLE) -->
-                <!-- <div class="add-btn-container"> ... (Ya tienes uno arriba grande, este sobra) ... </div> -->
 
                 <?php if ($total_productos == 0): ?>
                     <div class="empty-state" style="text-align: center; padding: 50px;">
@@ -116,14 +112,12 @@ $total_productos = count($productos);
                     </div>
                 <?php else: ?>
 
-                    <!-- GRID PRODUCTOS -->
                     <div class="grid-productos" id="lista-productos">
                         <?php foreach ($productos as $prod): ?>
                             
-                            <!-- Clase 'item-producto' y 'data-categoria' VITALES para JS -->
                             <div class="producto item-producto" data-categoria="<?php echo $prod['id_categoria']; ?>">
                                 
-                                <form method="POST" action="../Administrador/ListadoProductosAdmin.php" style="display:inline;" onsubmit="return confirm('¿Estás seguro de querer eliminar este producto?');">
+                                <form method="POST" action="ListadoProductosAdmin.php" style="display:inline;" onsubmit="return confirm('¿Estás seguro de querer eliminar este producto?');">
                                     <input type="hidden" name="id_eliminar" value="<?php echo $prod['id']; ?>">
                                     <button type="submit" class="boton-eliminar" title="Eliminar">✖</button>
                                 </form>
@@ -135,19 +129,17 @@ $total_productos = count($productos);
                                     <p><strong>Precio:</strong> <?php echo $prod['precio']; ?>€</p>
                                 </div>
 
-                                <a href="../Administrador/ModificarProductoAdmin.php?id=<?php echo $prod['id']; ?>" class="boton-editar-pequeno">
+                                <a href="ModificarProductoAdmin.php?id=<?php echo $prod['id']; ?>" class="boton-editar-pequeno">
                                     <p>Editar</p>
                                 </a>
                             </div>
                         <?php endforeach; ?>
                     </div>
                     
-                    <!-- Mensaje No Resultados -->
                     <div id="mensaje-no-resultados">
                         <h3>No hay productos con los filtros seleccionados.</h3>
                     </div>
 
-                    <!-- Botón Ver Más -->
                     <div class="contenedor-ver-mas">
                         <button id="btn-cargar-mas" class="btn-ver-mas">Ver más productos</button>
                     </div>
@@ -156,13 +148,12 @@ $total_productos = count($productos);
             </div>
         </div>
 
-        <!-- Footer -->
         <footer class="footer">
             <div class="container">
                 <div class="footer-content">
                     <div class="footer-logo-section">
                         <div class="logo-footer">
-                            <img src="../imagenes/footer.png" alt="Logo Metalful">
+                            <img src="imagenes/footer.png" alt="Logo Metalful">
                         </div>
                         <div class="redes">
                             <a href="https://www.instagram.com/metalfulsansl/" target="_blank" class="instagram-link">
@@ -213,7 +204,6 @@ $total_productos = count($productos);
         </footer>
     </div> 
     
-    <!-- SCRIPT DE FILTRADO Y PAGINACIÓN COMBINADOS -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             // --- VARIABLES ---

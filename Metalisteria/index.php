@@ -1,5 +1,5 @@
 <?php
-include '../CabeceraFooter.php'; 
+include 'CabeceraFooter.php'; 
 ?>
 
 <!DOCTYPE html>
@@ -8,11 +8,11 @@ include '../CabeceraFooter.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio Visitante - Metalful</title>
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <div class="inicio-visitante">
@@ -22,7 +22,7 @@ include '../CabeceraFooter.php';
         <!-- Portada -->
         <section class="portada">
             <div class="portada-image">
-                <img src="../imagenes/principal.png" alt="Taller de metalurgia">
+                <img src="imagenes/principal.png" alt="Taller de metalurgia">
             </div>
             <div class="portada-overlay"></div>
             <h1 class="portada-title">Metalistería con más de 30 años de experiencia en el sector</h1>
@@ -68,13 +68,13 @@ include '../CabeceraFooter.php';
 
                     <div class="productos-grid">
                         <div class="producto-card">
-                            <img src="../imagenes/puertaAzul.png" alt="Producto 1">
+                            <img src="imagenes/puertaAzul.png" alt="Producto 1">
                         </div>
                         <div class="producto-card">
-                            <img src="../imagenes/puertaMetalica.png" alt="Puerta metálica">
+                            <img src="imagenes/puertaMetalica.png" alt="Puerta metálica">
                         </div>
                         <div class="producto-card">
-                            <img src="../imagenes/escalera.png" alt="Barandilla">
+                            <img src="imagenes/escalera.png" alt="Barandilla">
                         </div>
                     </div>
 
@@ -93,8 +93,8 @@ include '../CabeceraFooter.php';
 
                         <!-- IMÁGENES -->
                         <div class="faq-images">
-                            <img src="../imagenes/rojo.png" alt="Trabajo metálico" class="faq-img-1">
-                            <img src="../imagenes/blanco.png" alt="Detalle metálico" class="faq-img-2">
+                            <img src="imagenes/rojo.png" alt="Trabajo metálico" class="faq-img-1">
+                            <img src="imagenes/blanco.png" alt="Detalle metálico" class="faq-img-2">
                         </div>
 
                         <!-- PREGUNTAS -->
@@ -148,7 +148,7 @@ include '../CabeceraFooter.php';
 
     <?php sectionfooter(); ?>
 
-    <script src="../js/faq.js"></script>
-    <script src="../js/auth.js"></script>
+    <script src="js/faq.js"></script>
+    <script src="js/auth.js"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <?php
-include '../CabeceraFooter.php'; 
+include 'CabeceraFooter.php'; 
 ?>
 
 <!DOCTYPE html>
@@ -8,11 +8,11 @@ include '../CabeceraFooter.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>¿Eres Cliente? - Metalistería Fulsan</title>
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/eresCliente.css">
+    <link rel="stylesheet" href="css/eresCliente.css">
 </head>
 <body>
     <div class="visitante-cliente">
@@ -43,6 +43,6 @@ include '../CabeceraFooter.php';
 
         <?php sectionfooter(); ?>
     </div>
-    <script src="../js/auth.js"></script>
+    <script src="js/auth.js"></script>
 </body>
 </html>

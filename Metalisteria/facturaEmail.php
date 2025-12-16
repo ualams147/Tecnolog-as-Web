@@ -1,6 +1,6 @@
 <?php
 // 1. CARGAMOS LIBRERÍAS
-require '../../../vendor/autoload.php'; 
+require 'vendor/autoload.php'; 
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -11,7 +11,7 @@ use PHPMailer\PHPMailer\Exception;
 
 
 session_start();
-include '../conexion.php'; 
+include 'conexion.php'; 
 
 // ====================================================
 // 2. RECUPERAR DATOS
@@ -48,7 +48,7 @@ $fecha_pedido = date('d/m/Y H:i');
 // ====================================================
 // 3. GENERAR PDF (Dompdf)
 // ====================================================
-$pathLogo = '../imagenes/logo.png';
+$pathLogo = 'imagenes/logo.png';
 $base64Logo = '';
 if (file_exists($pathLogo)) {
     $type = pathinfo($pathLogo, PATHINFO_EXTENSION);
@@ -162,7 +162,7 @@ unset($_SESSION['carrito']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pedido Completado</title>
-    <link rel="stylesheet" href="../css/datosEnvio.css">
+    <link rel="stylesheet" href="css/datosEnvio.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         .factura-container { max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
@@ -187,7 +187,7 @@ unset($_SESSION['carrito']);
             <div class="container">
                 <div class="logo-main">
                     <a href="index.php" class="logo-link">
-                        <img src="../imagenes/logo.png" alt="Logo">
+                        <img src="imagenes/logo.png" alt="Logo">
                         <div class="logo-text"><span>Metalistería</span><strong>Fulsan</strong></div>
                     </a>
                 </div>
@@ -256,7 +256,7 @@ unset($_SESSION['carrito']);
         <footer class="footer">
             <div class="container">
                 <div class="footer-content">
-                    <div class="footer-logo-section"><div class="logo-footer"><img src="../imagenes/footer.png" alt="Logo"></div></div>
+                    <div class="footer-logo-section"><div class="logo-footer"><img src="imagenes/footer.png" alt="Logo"></div></div>
                 </div>
             </div>
         </footer>

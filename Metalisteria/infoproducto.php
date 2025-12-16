@@ -1,8 +1,8 @@
 <?php
 // 1. IMPORTANTE: Primero incluimos el archivo de funciones (que inicia la sesión)
-include '../CabeceraFooter.php'; 
+include 'CabeceraFooter.php'; 
 
-include '../conexion.php';
+include 'conexion.php';
 
 // 1. VALIDACIÓN: ¿Nos han pasado un ID?
 if (!isset($_GET['id']) || empty($_GET['id'])) {
@@ -51,16 +51,16 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title><?php echo htmlspecialchars($producto['nombre']); ?> - Metalistería Fulsan</title>
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
 
    
 
-    <link rel="stylesheet" href="../css/infoProducto.css">
+    <link rel="stylesheet" href="css/infoProducto.css">
 
    
 
@@ -156,7 +156,7 @@ try {
 
                     <img id="prod-img"
 
-                         src="../<?php echo htmlspecialchars($producto['imagen_url']); ?>"
+                         src="<?php echo htmlspecialchars($producto['imagen_url']); ?>"
 
                          alt="<?php echo htmlspecialchars($producto['nombre']); ?>"
 
@@ -294,9 +294,9 @@ try {
 
 
 
-    <script src="../js/auth.js"></script>
+    <script src="js/auth.js"></script>
 
-    <script src="../js/infoProductos.js"></script>
+    <script src="js/infoProductos.js"></script>
 
 </body>
 <script>
@@ -309,8 +309,8 @@ try {
             const val = selectColor.value;
             if (val) {
                 // Usamos trim() por si acaso, pero respetamos tildes (Marrón)
-                // Ruta relativa: ../imagenes/colorNombre.png
-                imgPreview.src = '../imagenes/color' + val.trim() + '.png';
+                // Ruta relativa: imagenes/colorNombre.png
+                imgPreview.src = 'imagenes/color' + val.trim() + '.png';
                 imgPreview.style.display = 'block';
             } else {
                 imgPreview.style.display = 'none';

@@ -1,10 +1,10 @@
 <?php
 // 1. INCLUIR FUNCIONES (Inicia sesión automáticamente)
 // ESTO DEBE IR EN LA LÍNEA 1
-include '../CabeceraFooter.php'; 
+include 'CabeceraFooter.php'; 
 
 // 2. CONEXIÓN A BD
-include '../conexion.php'; 
+include 'conexion.php'; 
 
 // =======================================================================
 // LÓGICA PHP (TU CÓDIGO ORIGINAL)
@@ -104,14 +104,14 @@ foreach ($_SESSION['carrito'] as $item) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Compra - Metalistería Fulsan</title>
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/carrito.css">
+    <link rel="stylesheet" href="css/carrito.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
-    <script src="../js/auth.js"></script>
+    <script src="js/auth.js"></script>
 </head>
 <body>
     <div class="visitante-carrito">
@@ -137,7 +137,7 @@ foreach ($_SESSION['carrito'] as $item) {
                         
                         <?php foreach ($_SESSION['carrito'] as $id => $item): ?>
                             <article class="item-card">
-                                <img src="../<?php echo htmlspecialchars($item['imagen']); ?>" 
+                                <img src="<?php echo htmlspecialchars($item['imagen']); ?>" 
                                      alt="<?php echo htmlspecialchars($item['nombre']); ?>" 
                                      class="item-image-placeholder" 
                                      style="object-fit: contain; height: 200px; padding: 10px;"

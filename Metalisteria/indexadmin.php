@@ -1,5 +1,5 @@
 <?php
-include '../conexion.php';  
+include 'conexion.php';  
 // Filtros URL
 $filtro_fecha = isset($_GET['fecha']) ? $_GET['fecha'] : '';
 $filtro_cliente = isset($_GET['cliente']) ? $_GET['cliente'] : '';
@@ -96,11 +96,11 @@ if (isset($conn)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio Administrador - Metalful</title>
-    <link rel="icon" type="image/png" href="../imagenes/logo.png">
+    <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/administrador.css">
+    <link rel="stylesheet" href="css/administrador.css">
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -111,19 +111,21 @@ if (isset($conn)) {
         <header class="cabecera">
             <div class="container">
                 <div class="logo-main">
-                    <img src="../imagenes/logo.png" alt="Logo Metalful">
-                    <div class="logo-text">
-                        <span> Metalisteria</span>
-                        <strong>Fulsan</strong>
+                        <a href="indexAdmin.php" class="logo-main">
+                            <img src="imagenes/logo.png" alt="Logo Metalful">
+                            <div class="logo-text">
+                                <span> Metalisteria</span>
+                                <strong>Fulsan</strong>
+                            </div>
+                        </a>
                     </div>
-                </div>
                 <nav class="nav-bar">
-                    <a href="../Administrador/ListadoVentasAdmin.php">Ventas</a>
-                    <a href="../Administrador/ListadoProductosAdmin.php">Productos</a>
-                    <a href="../Administrador/ListadoClientesAdmin.php">Clientes</a>
+                    <a href="ListadoVentasAdmin.php">Ventas</a>
+                    <a href="ListadoProductosAdmin.php">Productos</a>
+                    <a href="ListadoClientesAdmin.php">Clientes</a>
                 </nav>
                 <div class="log-out">
-                    <a href="../Cliente/index.php">Cerrar Sesión</a>
+                    <a href="index.php">Cerrar Sesión</a>
                 </div>
             </div>
         </header>
@@ -188,20 +190,20 @@ if (isset($conn)) {
         </div>
 
         <div class="cards-grid">
-            <a href="../Administrador/ListadoProductosAdmin.php" class="card">
-                <img src="../imagenes/4.png" alt="Productos" class="card-icon">
+            <a href="ListadoProductosAdmin.php" class="card">
+                <img src="imagenes/4.png" alt="Productos" class="card-icon">
                 <h3>Productos</h3>
             </a>
-            <a href="../Administrador/CrearProductoAdmin.php" class="card">
-                <img src="../imagenes/2.png" alt="Crear Producto" class="card-icon">
+            <a href="CrearProductoAdmin.php" class="card">
+                <img src="imagenes/2.png" alt="Crear Producto" class="card-icon">
                 <h3>Crear Producto</h3>
             </a>
-            <a href="../Administrador/ListadoClientesAdmin.php" class="card">
-                <img src="../imagenes/3.png" alt="Clientes" class="card-icon">
+            <a href="ListadoClientesAdmin.php" class="card">
+                <img src="imagenes/3.png" alt="Clientes" class="card-icon">
                 <h3>Clientes</h3>
             </a>
-            <a href="../Administrador/ListadoVentasAdmin.php" class="card">
-                <img src="../imagenes/5.png" alt="Ventas" class="card-icon">
+            <a href="ListadoVentasAdmin.php" class="card">
+                <img src="imagenes/5.png" alt="Ventas" class="card-icon">
                 <h3>Ventas</h3>
             </a>
         </div>
@@ -211,7 +213,7 @@ if (isset($conn)) {
                 <div class="footer-content">
                     <div class="footer-logo-section">
                         <div class="logo-footer">
-                            <img src="../imagenes/footer.png" alt="Logo Metalful">
+                            <img src="imagenes/footer.png" alt="Logo Metalful">
                         </div>
                         <div class="redes">
                             <a href="https://www.instagram.com/metalfulsansl/" target="_blank" class="instagram-link">
