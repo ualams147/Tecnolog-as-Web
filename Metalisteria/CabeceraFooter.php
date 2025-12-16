@@ -1,16 +1,54 @@
 <?php
-// Evitamos iniciar sesión si ya está iniciada
+// 1. INICIO DE SESIÓN Y LÓGICA DE IDIOMAS
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// 2. IDIOMA POR DEFECTO
+$lang = array(
+    "conocenos" => "Conócenos",
+    "productos" => "Productos",
+    "carrito" => "Carrito",
+    "perfil" => "Mi Perfil",
+    "login" => "Iniciar Sesión",
+    "logout" => "Cerrar Sesión",
+    "registro" => "Registrarse",
+    "enlaces" => "Enlaces rápidos",
+    "contacto" => "Contacto",
+    "aviso" => "Aviso Legal",
+    "privacidad" => "Política de Privacidad",
+    "cookies" => "Política de Cookies"
+);
+
+// 3. CAMBIO DE IDIOMA
+if (isset($_GET['lang'])) {
+    $_SESSION['idioma'] = $_GET['lang'];
+}
+$idioma_actual = isset($_SESSION['idioma']) ? $_SESSION['idioma'] : 'es';
+
+// 4. CARGAR ARCHIVO EXTERNO
+$archivo_lang = "idiomas/" . $idioma_actual . ".php";
+if (file_exists($archivo_lang)) {
+    include $archivo_lang;
+}
+
+// 5. MAPA DE BANDERAS (Usamos imágenes externas para que no tengas que descargar nada)
+// Nota: Para inglés usamos 'gb' (Gran Bretaña) para la bandera
+$flag_urls = [
+    'es' => 'https://flagcdn.com/w80/es.png',
+    'en' => 'https://flagcdn.com/w80/gb.png',
+    'fr' => 'https://flagcdn.com/w80/fr.png'
+];
+
 /**
  * Función para mostrar el encabezado (Header)
- * $active: Número de la opción del menú activa
- * 1 = Inicio, 2 = Conócenos, 3 = Productos, 4 = Carrito, 5 = Login/Perfil
  */
 function sectionheader($active = 0) {
-    // Calculamos cantidad del carrito (si existe)
+    global $lang; 
+    global $idioma_actual; 
+    global $flag_urls;
+    
+    // Calculamos cantidad del carrito
     $cantidad_carrito = 0;
     if (isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])) {
         foreach ($_SESSION['carrito'] as $item) {
@@ -18,20 +56,14 @@ function sectionheader($active = 0) {
         }
     }
     
-    // Verificamos si el usuario está logueado
     $usuario_logueado = isset($_SESSION['usuario']);
     ?>
 
     <style>
-        /* ============================================================
-           ========================== CABECERA ========================
-           ============================================================ */
-        /* ... (Tus estilos originales se mantienen intactos aquí) ... */
-        
+        /* ================= ESTILOS BASE ================= */
         .cabecera { position: relative; width: 100%; background: white; padding: 30px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .cabecera .container { display: flex; align-items: center; justify-content: space-between; gap: 40px; }
         
-        /* LOGO */
         .logo-main { flex-shrink: 0; position: relative; display: flex; align-items: center; }
         .logo-main img { height: 60px; width: auto; }
         .logo-text { display: flex; flex-direction: column; margin-left: 12px; margin-top: 4px; line-height: 1.1; }
@@ -39,19 +71,105 @@ function sectionheader($active = 0) {
         .logo-text strong { font-size: 18px; font-weight: 700; color: #000000; text-align: center; width: 100%; font-family: 'Poppins', sans-serif; }
         .logo-link { display: flex; align-items: center; text-decoration: none; color: inherit; }
 
-        /* NAV BAR */
         .nav-bar { display: flex; align-items: center; justify-content: center; gap: 140px; flex: 1; font-weight: 500; font-size: 18px; color: #2b2b2b; white-space: nowrap; }
         .nav-bar a { font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 18px; color: #2b2b2b; text-decoration: none; transition: color 0.3s ease; }
         .nav-bar a:hover { font-size: 20px; color: #293661; text-shadow: 0 0 4px #aab6e8; }
         .nav-bar a.activo { color: #293661; font-weight: bold; border-bottom: 2px solid #293661; }
 
-        /* SIGN IN */
         .sign-in { background: #293661; border-radius: 40px; padding: 12px 24px; flex-shrink: 0; cursor: pointer; transition: background-color 0.3s ease, transform 0.2s ease; }
         .sign-in:hover { background-color: #1f2849; transform: translateY(-2px); }
         .sign-in:active { transform: translateY(0); }
         .sign-in a { font-family: 'Source Sans Pro', sans-serif; font-weight: 700; font-size: 18px; color: white; text-decoration: none; white-space: nowrap; }
 
-        /* FOOTER (Estilos compactados para ahorrar espacio visual en este chat, son los mismos) */
+        /* ================= BOTÓN FLOTANTE BANDERAS ================= */
+        .lang-widget {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 9999;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* El botón redondo principal con la bandera */
+        .lang-toggle-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid white; /* Borde blanco para resaltar */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            cursor: pointer;
+            overflow: hidden; /* Para que la imagen cuadrada se recorte redonda */
+            background: white;
+            transition: transform 0.3s ease;
+            padding: 0;
+            display: flex;
+        }
+
+        .lang-toggle-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* La bandera cubre todo el botón */
+        }
+
+        .lang-toggle-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Menú Desplegable */
+        .lang-options {
+            position: absolute;
+            bottom: 65px; 
+            left: 0;
+            background: white;
+            border-radius: 12px;
+            padding: 8px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            width: 160px;
+            flex-direction: column;
+            border: 1px solid #eee;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .lang-options.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .lang-options a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 15px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .lang-options a img {
+            width: 24px;
+            height: 18px;
+            border-radius: 2px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .lang-options a:hover {
+            background: #f5f7fa;
+            color: #293661;
+            font-weight: 600;
+        }
+        
+        .lang-options a.selected {
+            background: #eef2ff;
+            color: #293661;
+            font-weight: bold;
+        }
+        
+        /* FOOTER (Compacto) */
         .footer { background: #293661; color: white; padding: 60px 0 30px; }
         .footer-content { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; margin-bottom: 40px; }
         .footer-logo-section { display: flex; align-items: center; justify-content: flex-start; gap: 20px; }
@@ -78,6 +196,41 @@ function sectionheader($active = 0) {
         .politica-legal span { font-size: 14px; opacity: 0.5; }
     </style>
 
+    <div class="lang-widget" id="langWidget">
+        
+        <div class="lang-options" id="langOptions">
+            <a href="?lang=es" class="<?php echo ($idioma_actual == 'es') ? 'selected' : ''; ?>">
+                <img src="<?php echo $flag_urls['es']; ?>" alt="ES"> Español
+            </a>
+            <a href="?lang=en" class="<?php echo ($idioma_actual == 'en') ? 'selected' : ''; ?>">
+                <img src="<?php echo $flag_urls['en']; ?>" alt="EN"> English
+            </a>
+            <a href="?lang=fr" class="<?php echo ($idioma_actual == 'fr') ? 'selected' : ''; ?>">
+                <img src="<?php echo $flag_urls['fr']; ?>" alt="FR"> Français
+            </a>
+        </div>
+
+        <button class="lang-toggle-btn" onclick="toggleLanguageMenu(event)" title="Cambiar idioma">
+            <img src="<?php echo $flag_urls[$idioma_actual]; ?>" alt="Idioma Actual">
+        </button>
+    </div>
+
+    <script>
+        function toggleLanguageMenu(e) {
+            e.stopPropagation(); 
+            var menu = document.getElementById('langOptions');
+            menu.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(event) {
+            var menu = document.getElementById('langOptions');
+            var widget = document.getElementById('langWidget');
+            if (menu.classList.contains('active') && !widget.contains(event.target)) {
+                menu.classList.remove('active');
+            }
+        });
+    </script>
+
     <header class="cabecera">
         <div class="container">
             <div class="logo-main">
@@ -91,11 +244,11 @@ function sectionheader($active = 0) {
             </div>
 
             <nav class="nav-bar">
-                <a href="conocenos.php" class="<?php echo ($active == 2) ? 'activo' : ''; ?>">Conócenos</a>
-                <a href="productos.php" class="<?php echo ($active == 3) ? 'activo' : ''; ?>">Productos</a>
+                <a href="conocenos.php" class="<?php echo ($active == 2) ? 'activo' : ''; ?>"><?php echo $lang['conocenos']; ?></a>
+                <a href="productos.php" class="<?php echo ($active == 3) ? 'activo' : ''; ?>"><?php echo $lang['productos']; ?></a>
                 
                 <a href="carrito.php" class="<?php echo ($active == 4) ? 'activo' : ''; ?>" style="display:flex; align-items:center; gap:5px;">
-                    Carrito
+                    <?php echo $lang['carrito']; ?>
                     <?php if ($cantidad_carrito > 0): ?>
                         <span id="cart-count" style="background:#a0d2ac; color:#293661; padding:2px 6px; border-radius:10px; font-size:12px; font-weight:bold;">
                             <?php echo $cantidad_carrito; ?>
@@ -104,31 +257,28 @@ function sectionheader($active = 0) {
                 </a>
 
                 <?php if ($usuario_logueado): ?>
-                    <a href="perfil.php" class="<?php echo ($active == 6) ? 'activo' : ''; ?>">Mi Perfil</a>
+                    <a href="perfil.php" class="<?php echo ($active == 6) ? 'activo' : ''; ?>"><?php echo $lang['perfil']; ?></a>
                 <?php else: ?>
-                    <a href="iniciarsesion.php" id="link-login" class="<?php echo ($active == 5) ? 'activo' : ''; ?>">Iniciar Sesión</a>
+                    <a href="iniciarsesion.php" id="link-login" class="<?php echo ($active == 5) ? 'activo' : ''; ?>"><?php echo $lang['login']; ?></a>
                 <?php endif; ?>
             </nav>
 
             <div class="sign-in" id="box-registro">
                 <?php if ($usuario_logueado): ?>
-                    <a href="logout.php" id="link-registro">Cerrar Sesión</a>
+                    <a href="logout.php" id="link-registro"><?php echo $lang['logout']; ?></a>
                 <?php else: ?>
-                    <a href="registro.php" id="link-registro">Registrarse</a>
+                    <a href="registro.php" id="link-registro"><?php echo $lang['registro']; ?></a>
                 <?php endif; ?>
             </div>
 
         </div>
     </header>
     
-    <?php // include 'aviso-cookies.php'; ?>
     <?php
 }
 
-/**
- * Función para mostrar el pie de página (Footer)
- */
 function sectionfooter() {
+    global $lang;
     $usuario_logueado = isset($_SESSION['usuario']);
     ?>
     <footer class="footer">
@@ -149,22 +299,22 @@ function sectionfooter() {
 
                 <div class="footer-links">
                     <div class="enlaces-rapidos">
-                        <h3>Enlaces rápidos</h3>
+                        <h3><?php echo $lang['enlaces']; ?></h3>
                         <ul>
                             <?php if ($usuario_logueado): ?>
-                                <li><a href="productos.php">Productos</a></li>
-                                <li><a href="perfil.php">Mi Perfil</a></li>
-                                <li><a href="carrito.php">Carrito</a></li>
+                                <li><a href="productos.php"><?php echo $lang['productos']; ?></a></li>
+                                <li><a href="perfil.php"><?php echo $lang['perfil']; ?></a></li>
+                                <li><a href="carrito.php"><?php echo $lang['carrito']; ?></a></li>
                             <?php else: ?>
-                                <li><a href="conocenos.php">Conócenos</a></li>
-                                <li><a href="productos.php">Productos</a></li>
-                                <li><a href="iniciarsesion.php">Iniciar Sesión</a></li>
+                                <li><a href="conocenos.php"><?php echo $lang['conocenos']; ?></a></li>
+                                <li><a href="productos.php"><?php echo $lang['productos']; ?></a></li>
+                                <li><a href="iniciarsesion.php"><?php echo $lang['login']; ?></a></li>
                             <?php endif; ?>
                         </ul>
                     </div>
 
                     <div class="contacto-footer">
-                        <h3>Contacto</h3>
+                        <h3><?php echo $lang['contacto']; ?></h3>
                         <ul>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
@@ -185,9 +335,9 @@ function sectionfooter() {
 
             <div class="footer-bottom">
                 <div class="politica-legal">
-                    <a href="aviso-legal.php">Aviso Legal</a><span>•</span>
-                    <a href="privacidad.php">Política de Privacidad</a><span>•</span>
-                    <a href="cookies.php">Política de Cookies</a>
+                    <a href="aviso-legal.php"><?php echo $lang['aviso']; ?></a><span>•</span>
+                    <a href="privacidad.php"><?php echo $lang['privacidad']; ?></a><span>•</span>
+                    <a href="cookies.php"><?php echo $lang['cookies']; ?></a>
                 </div>
             </div>
         </div>
