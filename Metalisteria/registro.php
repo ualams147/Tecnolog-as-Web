@@ -1,5 +1,5 @@
 <?php
-// 1. INICIAR SESIÓN (Necesario para poder establecer variables $_SESSION después)
+// 1. INICIAR SESIÓN
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -12,7 +12,20 @@ $error_email = '';
 $error_dni = '';
 $success = '';
 
-// --- NUEVO: CAPTURAR EL ORIGEN (IGUAL QUE EN LOGIN) ---
+// --- 1. INICIALIZAR VARIABLES VACÍAS (Para que el formulario no falle al cargar la primera vez) ---
+$nombre = '';
+$apellidos = '';
+$email = '';
+$email_confirm = '';
+$dni = '';
+$telefono = '';
+$calle = '';
+$numero = '';
+$piso = '';
+$cp = '';
+$localidad = '';
+
+// --- CAPTURAR EL ORIGEN ---
 $origen = '';
 if (isset($_GET['origen'])) {
     $origen = $_GET['origen'];
@@ -21,22 +34,25 @@ if (isset($_GET['origen'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombre = $_POST['nombre'];
-    $apellidos = $_POST['apellidos'];
-    $email = $_POST['email'];
-    $email_confirm = $_POST['email_confirm'];
-    $password = $_POST['password'];
-    $password_confirm = $_POST['password_confirm'];
-    $dni = $_POST['dni'];
-    $telefono = $_POST['telefono'];
-    $calle = $_POST['calle'];
-    $numero = $_POST['numero'];
-    $piso = $_POST['piso'];
-    $cp = $_POST['cp'];
-    $localidad = $_POST['localidad'];
+    // --- 2. RELLENAR VARIABLES CON LO QUE ESCRIBIÓ EL USUARIO ---
+    // Esto asegura que si hay error, las variables tengan el valor que puso el usuario
+    $nombre = $_POST['nombre'] ?? '';
+    $apellidos = $_POST['apellidos'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $email_confirm = $_POST['email_confirm'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $password_confirm = $_POST['password_confirm'] ?? '';
+    $dni = $_POST['dni'] ?? '';
+    $telefono = $_POST['telefono'] ?? '';
+    $calle = $_POST['calle'] ?? '';
+    $numero = $_POST['numero'] ?? '';
+    $piso = $_POST['piso'] ?? '';
+    $cp = $_POST['cp'] ?? '';
+    $localidad = $_POST['localidad'] ?? '';
 
+    // --- VALIDACIONES ---
     if ($email !== $email_confirm) {
-        $error = "Los correos no coinciden.";
+        $error = "Los correos electrónicos no coinciden.";
     } elseif ($password !== $password_confirm) {
         $error = "Las contraseñas no coinciden.";
     } else {
@@ -57,9 +73,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        if (empty($error_email) && empty($error_dni)) {
+        // SI NO HAY ERRORES, PROCESAMOS EL REGISTRO
+        if (empty($error) && empty($error_email) && empty($error_dni)) {
             try {
-                // IMPORTANTE: Encriptar contraseña antes de guardar
                 $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
                 $sql = "INSERT INTO clientes (nombre, apellidos, email, password, dni, telefono, direccion, numero, piso, ciudad, codigo_postal, rol) 
@@ -68,41 +84,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $conn->prepare($sql);
                 $stmt->execute([
                     ':nombre' => $nombre, ':apellidos' => $apellidos, ':email' => $email,
-                    ':password' => $password_hash, // Usamos la encriptada
+                    ':password' => $password_hash,
                     ':dni' => $dni, ':telefono' => $telefono,
                     ':direccion' => $calle, ':numero' => $numero, ':piso' => $piso,
                     ':ciudad' => $localidad, ':codigo_postal' => $cp
                 ]);
 
-                // --- LOGIN AUTOMÁTICO ---
+                // --- LOGIN AUTOMÁTICO Y FUSIÓN DE CARRITO ---
                 $nuevo_id = $conn->lastInsertId();
                 
-                // Recuperamos el usuario completo
                 $stmtUser = $conn->prepare("SELECT * FROM clientes WHERE id = ?");
                 $stmtUser->execute([$nuevo_id]);
                 $nuevo_usuario = $stmtUser->fetch(PDO::FETCH_ASSOC);
 
-                // Establecemos las variables de sesión
                 $_SESSION['usuario'] = $nuevo_usuario; 
                 $_SESSION['usuario_id'] = $nuevo_usuario['id'];
                 $_SESSION['usuario_nombre'] = $nuevo_usuario['nombre'];
                 $_SESSION['usuario_rol'] = 'cliente';
 
-                // --- AHORA AQUÍ: FUSIÓN DE CARRITO (IMPORTANTE PARA NO PERDER LA COMPRA) ---
                 if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])) {
                     foreach ($_SESSION['carrito'] as $item_sess) {
                         $pid = $item_sess['id']; 
                         $cantidad_nueva = $item_sess['cantidad'];
-                        
                         $stmtIns = $conn->prepare("INSERT INTO carrito (cliente_id, producto_id, cantidad) VALUES (?, ?, ?)");
                         $stmtIns->execute([$nuevo_id, $pid, $cantidad_nueva]);
                     }
                 }
 
-                // --- DECISIÓN DE REDIRECCIÓN ---
-                $destino = 'index.php'; // Por defecto
+                $destino = 'index.php';
                 if ($origen === 'compra') {
-                    $destino = 'datosenvio.php'; // Si viene de comprar, va a pagar
+                    $destino = 'datosenvio.php';
                 }
 
                 echo "<script>
@@ -158,7 +169,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                             Nombre:
                         </label>
-                        <input type="text" id="nombre" name="nombre" class="form-input" placeholder="Ej: Juan" required>
+                        <input type="text" id="nombre" name="nombre" class="form-input" 
+                               value="<?php echo htmlspecialchars($nombre); ?>" 
+                               placeholder="Ej: Juan" required>
                     </div>
 
                     <div class="form-row">
@@ -166,7 +179,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                             Apellidos:
                         </label>
-                        <input type="text" id="apellidos" name="apellidos" class="form-input" placeholder="Ej: Pérez García" required>
+                        <input type="text" id="apellidos" name="apellidos" class="form-input" 
+                               value="<?php echo htmlspecialchars($apellidos); ?>" 
+                               placeholder="Ej: Pérez García" required>
                     </div>
 
                     <div class="form-row">
@@ -176,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </label>
                         <input type="email" id="email" name="email" 
                             class="form-input <?php echo !empty($error_email) ? 'error' : ''; ?>" 
-                            value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" 
+                            value="<?php echo htmlspecialchars($email); ?>" 
                             placeholder="ejemplo@gmail.com" required>
                         <?php if(!empty($error_email)): ?>
                             <span class="error-text"><?php echo $error_email; ?></span>
@@ -188,7 +203,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                             Confirmación Correo electrónico:
                         </label>
-                        <input type="email" id="email_confirm" name="email_confirm" class="form-input" placeholder="Repite tu correo" required>
+                        <input type="email" id="email_confirm" name="email_confirm" class="form-input" 
+                               value="<?php echo htmlspecialchars($email_confirm); ?>" 
+                               placeholder="Repite tu correo" required>
                     </div>
 
                     <div class="form-row">
@@ -214,7 +231,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </label>
                         <input type="text" id="dni" name="dni" 
                             class="form-input <?php echo !empty($error_dni) ? 'error' : ''; ?>" 
-                            value="<?php echo isset($_POST['dni']) ? htmlspecialchars($_POST['dni']) : ''; ?>" 
+                            value="<?php echo htmlspecialchars($dni); ?>" 
                             placeholder="Ej: 12345678A">
                         <?php if(!empty($error_dni)): ?>
                             <span class="error-text"><?php echo $error_dni; ?></span>
@@ -226,7 +243,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
                             Teléfono:
                         </label>
-                        <input type="tel" id="telefono" name="telefono" class="form-input" placeholder="Ej: 600 000 000">
+                        <input type="tel" id="telefono" name="telefono" class="form-input" 
+                               value="<?php echo htmlspecialchars($telefono); ?>" 
+                               placeholder="Ej: 600 000 000">
                     </div>
 
                     <div class="form-row">
@@ -234,7 +253,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                             Calle:
                         </label>
-                        <input type="text" id="calle" name="calle" class="form-input" placeholder="Ej: Calle Recogidas" required>
+                        <input type="text" id="calle" name="calle" class="form-input" 
+                               value="<?php echo htmlspecialchars($calle); ?>" 
+                               placeholder="Ej: Calle Recogidas" required>
                     </div>
 
                     <div class="form-row">
@@ -243,8 +264,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             Nº / Piso:
                         </label>
                         <div class="input-group">
-                            <input type="text" id="numero" name="numero" class="form-input" placeholder="Ej: 12" required>
-                            <input type="text" id="piso" name="piso" class="form-input" placeholder="Ej: 3º A">
+                            <input type="text" id="numero" name="numero" class="form-input" 
+                                   value="<?php echo htmlspecialchars($numero); ?>" 
+                                   placeholder="Ej: 12" required>
+                            <input type="text" id="piso" name="piso" class="form-input" 
+                                   value="<?php echo htmlspecialchars($piso); ?>" 
+                                   placeholder="Ej: 3º A">
                         </div>
                     </div>
 
@@ -254,8 +279,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             Código Postal / Localidad:
                         </label>
                         <div class="input-group">
-                            <input type="text" id="cp" name="cp" class="form-input" placeholder="Ej: 18001" required>
-                            <input type="text" id="localidad" name="localidad" class="form-input" value="Granada" placeholder="Ej: Armilla">
+                            <input type="text" id="cp" name="cp" class="form-input" 
+                                   value="<?php echo htmlspecialchars($cp); ?>" 
+                                   placeholder="Ej: 18001" required>
+                            <input type="text" id="localidad" name="localidad" class="form-input" 
+                                   value="<?php echo !empty($localidad) ? htmlspecialchars($localidad) : 'Granada'; ?>" 
+                                   placeholder="Ej: Armilla">
                         </div>
                     </div>
 
@@ -268,7 +297,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </a>
                     </p>
 
-                </form>
+                </form> 
             </div>
         </main>
 
