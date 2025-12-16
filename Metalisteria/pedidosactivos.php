@@ -38,9 +38,11 @@ if (!empty($filtro_fecha)) {
 
 // Filtro Estado (Mantenemos lógica interna en español para BD)
 if ($filtro_estado === 'activos') {
-    $where .= " AND v.estado NOT IN ('Entregado', 'Cancelado')";
+    // Añadimos 'Realizado' a los NO permitidos, para que NO salga en activos
+    $where .= " AND v.estado NOT IN ('Entregado', 'Cancelado', 'Realizado')";
 } elseif ($filtro_estado === 'historial') {
-    $where .= " AND v.estado IN ('Entregado', 'Cancelado')";
+    // Añadimos 'Realizado' a los permitidos en el historial
+    $where .= " AND v.estado IN ('Entregado', 'Cancelado', 'Realizado')";
 }
 
 // --- FILTRO CATEGORÍA ---
@@ -66,8 +68,12 @@ if (!empty($filtro_categoria)) {
     }
 }
 
-// --- 3. CONSULTA ---
-$sql = "SELECT v.* FROM ventas v
+// --- 3. CONSULTA CON CONTADOR DE PEDIDOS ---
+// CAMBIO IMPORTANTE: Añadimos una subconsulta en el SELECT para calcular el número de pedido
+// (Cuenta cuántos pedidos tiene este cliente con ID menor o igual al actual)
+$sql = "SELECT v.*, 
+        (SELECT COUNT(*) FROM ventas v2 WHERE v2.id_cliente = v.id_cliente AND v2.id <= v.id) as numero_personalizado
+        FROM ventas v
         $where
         ORDER BY v.fecha DESC";
 
@@ -199,12 +205,17 @@ try {
                             } elseif(stripos($estado_db, 'Enviado') !== false) {
                                 $clase_estado = 'estado-proceso'; // Reutilizamos estilo proceso para enviado
                                 $texto_estado = $lang['estado_enviado'];
+                            } elseif(stripos($estado_db, 'Realizado') !== false) {
+                                // Agregamos visualización para Realizado (verde como entregado)
+                                $clase_estado = 'estado-entregado';
+                                $texto_estado = isset($lang['estado_realizado']) ? $lang['estado_realizado'] : 'Realizado';
                             }
                         ?>
                             <div class="card-pedido">
                                 <div>
                                     <div class="card-header-pedido">
-                                        <span class="pedido-id">#<?php echo str_pad($pedido['id'], 5, '0', STR_PAD_LEFT); ?></span>
+                                        <span class="pedido-id">Pedido <?php echo $pedido['numero_personalizado']; ?></span>
+                                        
                                         <span class="estado-badge <?php echo $clase_estado; ?>"><?php echo htmlspecialchars($texto_estado); ?></span>
                                     </div>
                                     <div class="card-body-pedido">
