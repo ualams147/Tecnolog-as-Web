@@ -140,6 +140,22 @@ body {
     background-color: #1f2a4d;
 }
 
+/* Clase para marcar el borde en rojo */
+.form-input.error {
+        border: 2px solid #dc3545 !important; /* Rojo intenso */
+        background-color: #fff8f8; /* Un fondo rojizo muy suave */
+        animation: shake 0.3s; /* Efecto de vibración opcional */
+    }
+
+    /* Pequeña animación para que vibre si falla */
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        50% { transform: translateX(5px); }
+        75% { transform: translateX(-5px); }
+        100% { transform: translateX(0); }
+    }
+
 /* === TEXTO "YA TIENES CUENTA" === */
 .register-text {
     font-size: 18px;

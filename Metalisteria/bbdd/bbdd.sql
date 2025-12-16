@@ -1,21 +1,31 @@
+-- ==============================================================================
+-- 1. CONFIGURACIÓN INICIAL Y LIMPIEZA DE BASE DE DATOS
+-- ==============================================================================
 DROP DATABASE IF EXISTS metalisteria;
 CREATE DATABASE metalisteria;
 USE metalisteria;
 
--- 1. TABLA MATERIALES
+-- Desactivamos chequeo de claves foráneas temporalmente para evitar errores al crear tablas
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ==============================================================================
+-- 2. CREACIÓN DE TABLAS (ESTRUCTURA)
+-- ==============================================================================
+
+-- 2.1 TABLA MATERIALES
 CREATE TABLE materiales (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(50) NOT NULL
 );
 
--- 2. TABLA CATEGORIAS
+-- 2.2 TABLA CATEGORIAS
 CREATE TABLE categorias (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(50) NOT NULL
 );
 
--- 3. TABLA PRODUCTOS
-CREATE TABLE IF NOT EXISTS productos (
+-- 2.3 TABLA PRODUCTOS
+CREATE TABLE productos (
   id INT AUTO_INCREMENT PRIMARY KEY,
   referencia VARCHAR(40) NOT NULL,
   nombre VARCHAR(150) NOT NULL,
@@ -30,7 +40,71 @@ CREATE TABLE IF NOT EXISTS productos (
   FOREIGN KEY (id_categoria) REFERENCES categorias(id)
 );
 
--- INSERTS BASE
+-- 2.4 TABLA CLIENTES
+CREATE TABLE clientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellidos VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    dni VARCHAR(20) UNIQUE,
+    telefono VARCHAR(20),
+    rol ENUM('admin', 'cliente') DEFAULT 'cliente',
+    
+    -- Dirección desglosada
+    direccion VARCHAR(255), -- Calle / Vía
+    numero VARCHAR(20),     -- Nº
+    piso VARCHAR(20),       -- Piso/Puerta
+    
+    ciudad VARCHAR(100),
+    provincia VARCHAR(100) DEFAULT 'Granada',
+    codigo_postal VARCHAR(10),
+    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
+    activo TINYINT(1) DEFAULT 1
+);
+
+-- 2.5 TABLA CARRITO
+CREATE TABLE carrito (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT NOT NULL,     -- Quién compra
+    producto_id INT NOT NULL,    -- Qué compra
+    cantidad INT DEFAULT 1,
+    fecha_agregado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE,
+    FOREIGN KEY (producto_id) REFERENCES productos(id) ON DELETE CASCADE
+);
+
+-- 2.6 TABLA VENTAS (Cabecera)
+CREATE TABLE ventas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_cliente INT NOT NULL,
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    total DECIMAL(10, 2) DEFAULT 0.00,
+    FOREIGN KEY (id_cliente) REFERENCES clientes(id) ON DELETE CASCADE
+);
+
+-- 2.7 TABLA DETALLE_VENTAS (Líneas)
+CREATE TABLE detalle_ventas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_venta INT NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10, 2) NOT NULL,
+    -- Cálculo automático del subtotal
+    subtotal DECIMAL(10, 2) GENERATED ALWAYS AS (cantidad * precio_unitario) STORED,
+    
+    FOREIGN KEY (id_venta) REFERENCES ventas(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_producto) REFERENCES productos(id)
+);
+
+-- Reactivamos chequeo de claves foráneas
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- ==============================================================================
+-- 3. INSERCIÓN DE DATOS MAESTROS (Materiales y Categorías)
+-- ==============================================================================
+
 INSERT INTO materiales (nombre) VALUES
 ('Aluminio'),
 ('PVC'),
@@ -44,9 +118,20 @@ INSERT INTO categorias (nombre) VALUES
 ('Barandillas'),  -- id 5
 ('Pérgolas');     -- id 6
 
--- ==========================================
--- INSERTS DE PRODUCTOS (SIN STOCK)
--- ==========================================
+-- ==============================================================================
+-- 4. INSERCIÓN DE CLIENTES
+-- ==============================================================================
+
+INSERT INTO clientes (nombre, apellidos, email, password, dni, telefono, rol, direccion, numero, piso, ciudad, provincia, codigo_postal) VALUES
+('Juan', 'García López', 'juan.garcia@email.com', '1234', '44174833K', '600111222', 'admin', 'Calle Recogidas', '15', '2A', 'Granada', 'Granada', '18005'),
+('María', 'Rodríguez Pérez', 'maria.rod@email.com', '1234', '42615152Q', '611222333', 'cliente', 'Av. Constitución', '20', '1º B', 'Granada', 'Granada', '18012'),
+('Antonio', 'Fernández Ruiz', 'antonio.fer@email.com', '1234', '33569126M', '622333444', 'cliente', 'Calle Real', '45', 'Bajo', 'Armilla', 'Granada', '18100'),
+('Laura', 'Sánchez Mota', 'laura.san@email.com', '1234', '23123455Z', '633444555', 'cliente', 'Camino de Ronda', '100', '3º D', 'Granada', 'Granada', '18003'),
+('Carlos', 'Martínez Gómez', 'carlos.mar@email.com', '1234', '89926046W', '644555666', 'cliente', 'Calle Ancha', '12', '', 'Motril', 'Granada', '18600');
+
+-- ==============================================================================
+-- 5. INSERCIÓN DE TODOS LOS PRODUCTOS
+-- ==============================================================================
 
 -- 1. Ventana corredera de 2 hojas (Aluminio)
 INSERT INTO productos (referencia, nombre, descripcion, precio, imagen_url, id_material, id_categoria, medidas, color) VALUES
@@ -311,3 +396,44 @@ INSERT INTO productos (referencia, nombre, descripcion, precio, imagen_url, id_m
 ('PVC-PERG-RED', 'Pérgola PVC tubo redondo', 'Pérgola clásica de PVC, resistente a la intemperie, tubo redondo en acabado Blanco.', 540.00, 'imagenes/PVC-PERG-RED.jpg', 2, 6, '300x400', 'Blanco'),
 ('PVC-PERG-RED', 'Pérgola PVC tubo redondo', 'Pérgola clásica de PVC, resistente a la intemperie, tubo redondo en acabado Plata.', 570.00, 'imagenes/PVC-PERG-RED.jpg', 2, 6, '300x400', 'Plata'),
 ('PVC-PERG-RED', 'Pérgola PVC tubo redondo', 'Pérgola clásica de PVC, resistente a la intemperie, tubo redondo en acabado Marrón.', 570.00, 'imagenes/PVC-PERG-RED.jpg', 2, 6, '300x400', 'Marrón');
+
+-- ==============================================================================
+-- 6. SIMULACIÓN DE VENTAS DE EJEMPLO
+-- ==============================================================================
+
+-- VENTA 1: Cliente "Juan García"
+-- Buscamos su ID por email
+SET @id_cliente1 = (SELECT id FROM clientes WHERE email = 'juan.garcia@email.com' LIMIT 1);
+
+-- Insertamos la cabecera de la venta
+INSERT INTO ventas (id_cliente, fecha, total) VALUES (@id_cliente1, '2023-11-01 10:30:00', 0);
+SET @id_v1 = LAST_INSERT_ID();
+
+-- Detalles Venta 1:
+-- 2 unidades del Producto 1 (Ventana Corredera Aluminio Blanco) a 120.00€
+INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario) VALUES (@id_v1, 1, 2, 120.00);
+-- 1 unidad del Producto 2 (Ventana Corredera Aluminio Plata) a 130.00€
+INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario) VALUES (@id_v1, 2, 1, 130.00);
+
+-- Calculamos el total de la Venta 1
+UPDATE ventas SET total = (SELECT IFNULL(SUM(subtotal), 0) FROM detalle_ventas WHERE id_venta = @id_v1) WHERE id = @id_v1;
+
+
+-- VENTA 2: Cliente "María Rodríguez"
+-- Buscamos su ID por email
+SET @id_cliente2 = (SELECT id FROM clientes WHERE email = 'maria.rod@email.com' LIMIT 1);
+
+-- Insertamos la cabecera de la venta
+INSERT INTO ventas (id_cliente, fecha, total) VALUES (@id_cliente2, '2023-11-05 16:45:00', 0);
+SET @id_v2 = LAST_INSERT_ID();
+
+-- Detalles Venta 2:
+-- 1 unidad del Producto 171 (Primer producto de la categoría 19: Pérgola Aluminio Redondo Blanco 200x300)
+-- NOTA: El ID 171 es aproximado basándonos en el orden secuencial de inserts anteriores (9 productos por bloque x 18 bloques previos = 162 + margen).
+-- Para asegurar consistencia, haremos una subconsulta para buscar el ID exacto del producto 'ALU-PERG-RED'
+SET @id_prod_pergola = (SELECT id FROM productos WHERE referencia = 'ALU-PERG-RED' LIMIT 1);
+
+INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario) VALUES (@id_v2, @id_prod_pergola, 1, 450.00);
+
+-- Calculamos el total de la Venta 2
+UPDATE ventas SET total = (SELECT IFNULL(SUM(subtotal), 0) FROM detalle_ventas WHERE id_venta = @id_v2) WHERE id = @id_v2;
