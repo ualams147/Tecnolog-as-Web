@@ -181,11 +181,19 @@ try {
 
 
                     <div class="detail-group price-group">
-
                         <h3>Precio:</h3>
+                        
+                        <div style="display: flex; flex-direction: column; justify-content: center;">
+                            
+                            <div>
+                                <span class="price-value" id="prod-price"><?php echo number_format($producto['precio'], 2); ?></span>€
+                            </div>
 
-                        <span class="price-value" id="prod-price"><?php echo number_format($producto['precio'], 2); ?></span>€
+                            <small style="font-size: 14px; color: #777; margin-top: 2px;">
+                                (<span id="prod-price-sin-iva"><?php echo number_format($producto['precio'] / 1.21, 2); ?></span>€ sin IVA)
+                            </small>
 
+                        </div>
                     </div>
 
 
