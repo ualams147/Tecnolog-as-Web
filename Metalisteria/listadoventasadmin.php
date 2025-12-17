@@ -184,11 +184,11 @@ $total_registros = count($ventas);
                     <label for="producto">Categoría</label>
                     <div class="filtro-wrapper" id="wrapper-producto">
                         <select id="producto" name="producto" onchange="checkInput('producto'); aplicarFiltros()"> 
-                            <option value="" selected>Todos</option>
-                            <option value="ventanas">Ventanas</option>
-                            <option value="puertas">Puertas</option>
-                            <option value="barandillas">Barandillas</option>
-                            <option value="otros">Otros</option>
+                            <option value="" <?php echo ($filtro_producto == '') ? 'selected' : ''; ?>>Todos</option>
+                            <option value="ventanas" <?php echo ($filtro_producto == 'ventanas') ? 'selected' : ''; ?>>Ventanas</option>
+                            <option value="puertas" <?php echo ($filtro_producto == 'puertas') ? 'selected' : ''; ?>>Puertas</option>                            
+                            <option value="barandillas" <?php echo ($filtro_producto == 'barandillas') ? 'selected' : ''; ?>>Barandillas</option>
+                            <option value="otros" <?php echo ($filtro_producto == 'otros') ? 'selected' : ''; ?>>Otros</option>
                         </select>
                         <div class="input-icon"><i class="fas fa-filter"></i></div>
                         <button type="button" class="btn-borrar" onclick="borrarFiltro('producto')">×</button>

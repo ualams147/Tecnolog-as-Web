@@ -166,7 +166,7 @@ if (empty($ruta_foto)) {
 
                     <div class="form-group">
                         <label class="form-label" for="categoria">Categoría:</label>
-                        <select name="id_categoria" id="categoria" class="form-input" style="height: 45px; background: white;" required>
+                        <select name="id_categoria" id="categoria" class="custom-select" required>
                             <option value="">-- Seleccione categoría --</option>
                             <?php foreach ($categorias as $cat): ?>
                                 <option value="<?php echo $cat['id']; ?>" 
