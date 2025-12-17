@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title><?php echo $lang['login_titulo_pag']; ?></title>
     <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/IniciarSesion.css"> 
+    <link rel="stylesheet" href="css/iniciarsesion.css"> 
     <script src="js/auth.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>

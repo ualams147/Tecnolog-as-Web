@@ -4,7 +4,6 @@ session_start();
 ob_start(); 
 
 // 0. CARGAR IDIOMA
-// Como hay AJAX en este archivo, necesitamos cargar el idioma ANTES del bloque AJAX
 if (!isset($_SESSION['idioma'])) {
     $_SESSION['idioma'] = 'es';
 }
@@ -57,7 +56,7 @@ if (isset($_POST['ajax_verificar']) || isset($_POST['ajax_guardar_password'])) {
             $pass_confirm = $_POST['pass_confirm'] ?? '';
 
             // Mensajes traducidos para excepciones
-            if (strlen($pass_nueva) < 4) throw new Exception($lang['profile_js_err_short']);
+            if (strlen($pass_nueva) < 8) throw new Exception($lang['profile_js_err_short']);
             if ($pass_nueva !== $pass_confirm) throw new Exception($lang['profile_js_err_match']);
 
             $hash_nueva = password_hash($pass_nueva, PASSWORD_DEFAULT);
@@ -152,6 +151,7 @@ function val($dato) {
 
         <section class="address-hero">
             <div class="container hero-content">
+                <a href="perfil.php" class="flecha-circular">&#8592;</a>
                 <h1 class="address-title-main"><?php echo $lang['profile_my_data']; ?></h1>
             </div>
         </section>
@@ -328,65 +328,105 @@ function val($dato) {
         <?php if(function_exists('sectionfooter')) sectionfooter(); ?>
     </div>
 
-    <script src="js/AlgoritmoDNIs.js"></script>
-    <script src="js/validarpasswd.js"></script>
-
     <script>
+        // =========================================================================
+        // 1. VALIDACIÓN DNI (INCRUSTADA)
+        // =========================================================================
         document.addEventListener("DOMContentLoaded", function() {
-        
-            activarValidacionPassword(
-                'pass_nueva_input',      // ID del input contraseña
-                'pass_confirm_input',    // ID del input confirmar
-                'lista-requisitos-pass', // ID de la lista UL
-                'btn-guardar-pass'       // ID del botón a bloquear
-            );
-
+            const inputDNI = document.getElementById('dni');
+            if (inputDNI) {
+                inputDNI.addEventListener('blur', function() {
+                    validarDocumento(this);
+                });
+                inputDNI.addEventListener('input', function() {
+                    this.style.borderColor = ''; // Limpiar al escribir
+                });
+            }
         });
-        
+
+        function validarDocumento(input) {
+            if (!input) return false;
+            const valor = input.value.toUpperCase().trim();
+            input.style.borderColor = ''; 
+
+            if (valor === '' && input.hasAttribute('required')) return false;
+            if (valor === '') return true;
+
+            // 1. DNI
+            if (/^\d{8}[A-Z]$/.test(valor)) {
+                const letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+                if(letras[valor.substr(0, 8) % 23] === valor.substr(8, 1)) {
+                    input.style.borderColor = 'green';
+                    return true;
+                }
+                input.style.borderColor = 'red';
+                return false;
+            }
+            // 2. NIE
+            else if (/^[XYZ]\d{7}[A-Z]$/.test(valor)) {
+                let num = valor.substr(0, 8).replace('X','0').replace('Y','1').replace('Z','2');
+                const letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+                if(letras[num % 23] === valor.substr(8, 1)){
+                    input.style.borderColor = 'green';
+                    return true;
+                }
+                input.style.borderColor = 'red';
+                return false;
+            }
+            // 3. CIF
+            else if (/^[ABCDEFGHJKLMNPQRSUVW]\d{7}[0-9A-J]$/.test(valor)) {
+                input.style.borderColor = 'green';
+                return true;
+            }
+            // Error
+            input.style.borderColor = 'red';
+            return false;
+        }
+
+        // =========================================================================
+        // 2. LÓGICA PRINCIPAL (FORMULARIO Y ALERTAS)
+        // =========================================================================
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            // Alertas PHP
+            <?php if(isset($_GET['actualizado'])): ?>
+                Swal.fire({
+                    icon: 'success', title: '<?php echo $lang['profile_swal_success_tit']; ?>',
+                    text: '<?php echo $lang['profile_swal_success_txt']; ?>', confirmButtonColor: '#293661'
+                });
+            <?php endif; ?>
+
+            // ACTIVAR VALIDACIÓN PASSWORD
+            activarValidacionPassword(
+                'pass_nueva_input',      
+                'pass_confirm_input',    
+                'lista-requisitos-pass', 
+                'btn-guardar-pass'       
+            );
+        });
         
         function confirmarModificacion() {
             const formulario = document.getElementById('form-modificar');
             const inputDNI = document.getElementById('dni');
 
-            // 1. Validar campos vacíos HTML
             if (!formulario.checkValidity()) {
                 formulario.reportValidity();
                 return; 
             }
 
-            // 2. VALIDAR DNI (CON SEGURIDAD)
-            if (typeof validarDocumento === 'function') {
-                const esValido = validarDocumento(inputDNI);
-
-                if (esValido === false) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: '<?php echo $lang['profile_js_err_dni_tit']; ?>',
-                        text: '<?php echo $lang['profile_js_err_dni_txt']; ?>',
-                        confirmButtonColor: '#293661'
-                    });
-                    inputDNI.focus(); 
-                    return; 
-                }
-
-            } else {
+            if (!validarDocumento(inputDNI)) {
                 Swal.fire({
-                    icon: 'warning',
-                    title: 'Error de carga',
-                    text: 'No se ha cargado el validador de DNI. Prueba a recargar la página (Ctrl + F5).',
+                    icon: 'error', title: '<?php echo $lang['profile_js_err_dni_tit']; ?>',
+                    text: '<?php echo $lang['profile_js_err_dni_txt']; ?>', confirmButtonColor: '#293661'
                 });
+                inputDNI.focus(); 
                 return; 
             }
 
-            // 3. SI LLEGAMOS AQUÍ, TODO ESTÁ BIEN -> GUARDAMOS
             Swal.fire({
-                title: '<?php echo $lang['profile_js_save_tit']; ?>',
-                text: "<?php echo $lang['profile_js_save_txt']; ?>",
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#293661',
-                confirmButtonText: '<?php echo $lang['profile_js_btn_yes']; ?>',
-                cancelButtonText: '<?php echo $lang['profile_js_btn_cancel']; ?>'
+                title: '<?php echo $lang['profile_js_save_tit']; ?>', text: "<?php echo $lang['profile_js_save_txt']; ?>",
+                icon: 'question', showCancelButton: true, confirmButtonColor: '#293661',
+                confirmButtonText: '<?php echo $lang['profile_js_btn_yes']; ?>', cancelButtonText: '<?php echo $lang['profile_js_btn_cancel']; ?>'
             }).then((result) => {
                 if (result.isConfirmed) {
                     formulario.submit();
@@ -396,17 +436,10 @@ function val($dato) {
 
         function confirmarSalida() {
             Swal.fire({
-                title: '<?php echo $lang['profile_js_exit_tit']; ?>',
-                text: "<?php echo $lang['profile_js_exit_txt']; ?>",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#293661',
-                confirmButtonText: '<?php echo $lang['profile_js_btn_exit']; ?>',
-                cancelButtonText: '<?php echo $lang['profile_js_btn_cancel']; ?>',
-                customClass: {
-                    popup: 'swal2-popup'
-                }
+                title: '<?php echo $lang['profile_js_exit_tit']; ?>', text: "<?php echo $lang['profile_js_exit_txt']; ?>",
+                icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33',
+                cancelButtonColor: '#293661', confirmButtonText: '<?php echo $lang['profile_js_btn_exit']; ?>',
+                cancelButtonText: '<?php echo $lang['profile_js_btn_cancel']; ?>'
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = 'perfil.php';
@@ -415,133 +448,156 @@ function val($dato) {
         }
 
         function toggleSeguridad() {
-        const contenedor = document.getElementById('contenedor-seguridad');
-        if (contenedor.style.display === 'none') {
-            contenedor.style.display = 'block';
-        } else {
-            contenedor.style.display = 'none';
-        }
-    }
-
-    function verificarPasswordAJAX() {
-        if (typeof Swal === 'undefined') {
-            alert("Error: La librería SweetAlert no está cargada.");
-            return;
+            const contenedor = document.getElementById('contenedor-seguridad');
+            contenedor.style.display = (contenedor.style.display === 'none') ? 'block' : 'none';
         }
 
-        const passInput = document.getElementById('password_actual_check');
-        const pass = passInput.value;
-
-        if (!pass) {
-            Swal.fire('<?php echo $lang['profile_js_attention']; ?>', '<?php echo $lang['profile_js_err_empty']; ?>', 'warning');
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('ajax_verificar', '1');
-        formData.append('password_check', pass);
-
-        fetch(window.location.href, { 
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text()) 
-        .then(text => {
-            try {
-                return JSON.parse(text); 
-            } catch (e) {
-                console.error("No es un JSON válido", text);
-                throw new Error("Error en servidor.");
+        function verificarPasswordAJAX() {
+            const passInput = document.getElementById('password_actual_check');
+            if (!passInput.value) {
+                Swal.fire('<?php echo $lang['profile_js_attention']; ?>', '<?php echo $lang['profile_js_err_empty']; ?>', 'warning');
+                return;
             }
-        })
-        .then(data => {
-            if (data.status === 'success') {
-                document.getElementById('paso-verificacion').style.display = 'none';
-                document.getElementById('paso-cambio').style.display = 'block';
-                
-                const Toast = Swal.mixin({
-                    toast: true, position: 'top-end', showConfirmButton: false, timer: 3000
-                });
-                Toast.fire({ icon: 'success', title: '<?php echo $lang['profile_js_pass_correct']; ?>' });
 
+            const formData = new FormData();
+            formData.append('ajax_verificar', '1');
+            formData.append('password_check', passInput.value);
+
+            fetch(window.location.href, { method: 'POST', body: formData })
+            .then(r => r.text()).then(text => {
+                try { return JSON.parse(text); } catch(e){ throw new Error("Error Servidor"); }
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    document.getElementById('paso-verificacion').style.display = 'none';
+                    document.getElementById('paso-cambio').style.display = 'block';
+                    Swal.fire({ icon: 'success', title: '<?php echo $lang['profile_js_pass_correct']; ?>', timer: 1500, showConfirmButton: false });
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    passInput.value = ''; 
+                }
+            });
+        }
+
+        function guardarPasswordAJAX() {
+            const passNueva = document.getElementById('pass_nueva_input').value;
+            const passConfirm = document.getElementById('pass_confirm_input').value;
+
+            if (passNueva.length < 8) {
+                Swal.fire('Atención', 'Mínimo 8 caracteres', 'warning');
+                return;
+            }
+            if (passNueva !== passConfirm) {
+                Swal.fire('Atención', 'Las contraseñas no coinciden', 'warning');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('ajax_guardar_password', '1'); 
+            formData.append('pass_nueva', passNueva);
+            formData.append('pass_confirm', passConfirm);
+
+            fetch(window.location.href, { method: 'POST', body: formData })
+            .then(r => r.text()).then(text => {
+                try { return JSON.parse(text); } catch(e){ throw new Error("Error Servidor"); }
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        title: '<?php echo $lang['profile_js_pass_updated_tit']; ?>',
+                        text: '<?php echo $lang['profile_js_pass_updated_txt']; ?>',
+                        icon: 'success', confirmButtonColor: '#28a745'
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            });
+        }
+
+        function mostrarOcultar(idInput, idIcono) {
+            const input = document.getElementById(idInput);
+            const icono = document.getElementById(idIcono);
+            if (input.type === "password") {
+                input.type = "text"; 
+                icono.className = "fas fa-eye-slash"; 
             } else {
-                Swal.fire('Error', data.message, 'error');
-                passInput.value = ''; 
+                input.type = "password"; 
+                icono.className = "fas fa-eye"; 
             }
-        });
-    }
-
-    function guardarPasswordAJAX() {
-        // CORRECCIÓN: Usamos los IDs correctos que están en el HTML
-        const passNueva = document.getElementById('pass_nueva_input').value;
-        const passConfirm = document.getElementById('pass_confirm_input').value;
-
-        if (passNueva.length < 4) {
-            Swal.fire('<?php echo $lang['profile_js_attention']; ?>', '<?php echo $lang['profile_js_err_short']; ?>', 'warning');
-            return;
-        }
-        if (passNueva !== passConfirm) {
-            Swal.fire('<?php echo $lang['profile_js_attention']; ?>', '<?php echo $lang['profile_js_err_match']; ?>', 'warning');
-            return;
         }
 
-        const formData = new FormData();
-        formData.append('ajax_guardar_password', '1'); 
-        formData.append('pass_nueva', passNueva);
-        formData.append('pass_confirm', passConfirm);
+        // =========================================================================
+        // 3. VALIDACIÓN PASSWORD (INCRUSTADA)
+        // =========================================================================
+        function activarValidacionPassword(idInputPass, idInputConfirm, idListaRequisitos, idBotonSubmit) {
+            const inputPass = document.getElementById(idInputPass);
+            const inputConfirm = document.getElementById(idInputConfirm);
+            const listaReq = document.getElementById(idListaRequisitos);
+            const btnSubmit = document.getElementById(idBotonSubmit);
 
-        fetch(window.location.href, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text()) 
-        .then(text => {
-            try {
-                return JSON.parse(text);
-            } catch (e) {
-                throw new Error("El servidor no devolvió JSON válido.");
-            }
-        })
-        .then(data => {
-            if (data.status === 'success') {
-                Swal.fire({
-                    title: '<?php echo $lang['profile_js_pass_updated_tit']; ?>',
-                    text: '<?php echo $lang['profile_js_pass_updated_txt']; ?>',
-                    icon: 'success',
-                    confirmButtonColor: '#28a745'
-                }).then(() => {
-                    document.getElementById('pass_nueva_input').value = '';
-                    document.getElementById('pass_confirm_input').value = '';
-                    document.getElementById('password_actual_check').value = '';
-                    document.getElementById('contenedor-seguridad').style.display = 'none';
-                    document.getElementById('paso-verificacion').style.display = 'block';
-                    document.getElementById('paso-cambio').style.display = 'none';
+            if (!inputPass || !listaReq) return;
+
+            const reglas = [
+                { id: 'req-longitud', regex: /.{8,}/, texto: 'Mínimo 8 caracteres' },
+                { id: 'req-mayus', regex: /[A-Z]/, texto: 'Al menos una mayúscula' },
+                { id: 'req-minus', regex: /[a-z]/, texto: 'Al menos una minúscula' },
+                { id: 'req-num', regex: /[0-9]/, texto: 'Al menos un número' }
+            ];
+
+            listaReq.innerHTML = reglas.map(regla => 
+                `<li id="${regla.id}" class="requisito-pendiente"><i class="fas fa-circle"></i> ${regla.texto}</li>`
+            ).join('') + `<li id="req-coinciden" class="requisito-pendiente"><i class="fas fa-circle"></i> Las contraseñas coinciden</li>`;
+
+            function validar() {
+                const valor = inputPass.value;
+                const valorConfirm = inputConfirm ? inputConfirm.value : '';
+                let todoValido = true;
+
+                reglas.forEach(regla => {
+                    const item = document.getElementById(regla.id);
+                    const cumple = regla.regex.test(valor);
+                    actualizarEstilo(item, cumple);
+                    if (!cumple) todoValido = false;
                 });
-            } else {
-                Swal.fire('Error', data.message, 'error');
+
+                const itemCoinciden = document.getElementById('req-coinciden');
+                if (inputConfirm) {
+                    const coinciden = (valor === valorConfirm) && valor.length > 0;
+                    actualizarEstilo(itemCoinciden, coinciden);
+                    if (!coinciden) todoValido = false;
+                }
+
+                if (btnSubmit) {
+                    if (valor.length === 0 && (!inputConfirm || inputConfirm.value.length === 0)) {
+                        btnSubmit.disabled = false; 
+                        btnSubmit.style.opacity = '1';
+                        btnSubmit.style.cursor = 'pointer';
+                        listaReq.style.display = 'none'; 
+                    } else {
+                        listaReq.style.display = 'block'; 
+                        btnSubmit.disabled = !todoValido;
+                        btnSubmit.style.opacity = todoValido ? '1' : '0.5';
+                        btnSubmit.style.cursor = todoValido ? 'pointer' : 'not-allowed';
+                    }
+                }
             }
-        })
-        .catch(error => {
-            console.error("Error JS:", error);
-            Swal.fire('Error Técnico', 'Revisa la consola.', 'error');
-        });
-    }
 
-    function mostrarOcultar(idInput, idIcono) {
-        const input = document.getElementById(idInput);
-        const icono = document.getElementById(idIcono);
+            function actualizarEstilo(elemento, cumple) {
+                if (cumple) {
+                    elemento.className = 'requisito-bien';
+                    elemento.querySelector('i').className = 'fas fa-check-circle';
+                } else {
+                    elemento.className = 'requisito-pendiente';
+                    elemento.querySelector('i').className = 'far fa-circle';
+                }
+            }
 
-        if (input.type === "password") {
-            input.type = "text"; 
-            icono.classList.remove("fa-eye");
-            icono.classList.add("fa-eye-slash"); 
-        } else {
-            input.type = "password"; 
-            icono.classList.remove("fa-eye-slash");
-            icono.classList.add("fa-eye"); 
+            inputPass.addEventListener('input', validar);
+            if (inputConfirm) inputConfirm.addEventListener('input', validar);
+            listaReq.style.display = 'none';
         }
-    }
     </script>
-
 </body>
 </html>
