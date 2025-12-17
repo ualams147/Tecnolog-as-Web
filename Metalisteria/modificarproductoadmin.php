@@ -107,9 +107,15 @@ if (empty($ruta_foto)) {
                     </a>
                 </div>
                 
+                <button class="menu-toggle" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
                 <nav class="nav-bar">
                     <a href="listadoventasadmin.php">Ventas</a>
-                    <a href="listadoproductosadmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
+                    <a href="listadoproductosadmin.php" class="activo" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
                     <a href="listadoclientesadmin.php">Clientes</a>
                 </nav>
 
@@ -285,7 +291,12 @@ if (empty($ruta_foto)) {
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
+            function toggleMobileMenu() {
+                const navbar = document.querySelector('.nav-bar');
+                if (navbar) {
+                    navbar.classList.toggle('active');
+                }
+            }
             // --- LÓGICA DE MEDIDAS ---
             const tamanosContainer = document.getElementById('tamanos-container');
             const inputAncho = document.getElementById('input-ancho');

@@ -143,15 +143,28 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
                 <div class="logo-main">
                     <a href="indexadmin.php" class="logo-main">
                         <img src="imagenes/logo.png" alt="Logo Metalful">
-                        <div class="logo-text"><span> Metalisteria</span><strong>Fulsan</strong></div>
+                        <div class="logo-text">
+                            <span> Metalisteria</span>
+                            <strong>Fulsan</strong>
+                        </div>
                     </a>
                 </div>
+                
+                <button class="menu-toggle" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
                 <nav class="nav-bar">
-                    <a href="listadoventasadmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Ventas</a>
-                    <a href="listadoproductosadmin.php">Productos</a>
+                    <a href="listadoventasadmin.php">Ventas</a>
+                    <a href="listadoproductosadmin.php" class="activo" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
                     <a href="listadoclientesadmin.php">Clientes</a>
                 </nav>
-                <div class="log-out"><a href="index.php">Cerrar Sesión</a></div>
+
+                <div class="log-out">
+                    <a href="index.php">Cerrar Sesión</a>
+                </div>
             </div>
         </header>
 
@@ -291,6 +304,13 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
 
     <script>
         // Función dinámica según el estado
+        function toggleMobileMenu() {
+            const navbar = document.querySelector('.nav-bar');
+            if (navbar) {
+                navbar.classList.toggle('active');
+            }
+        }
+        
         function confirmarCambio() {
             Swal.fire({
                 title: '<?php echo $texto_confirmacion_js; ?>',

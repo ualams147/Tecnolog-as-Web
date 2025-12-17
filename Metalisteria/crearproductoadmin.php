@@ -89,9 +89,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </a>
                 </div>
                 
+                <button class="menu-toggle" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
                 <nav class="nav-bar">
                     <a href="listadoventasadmin.php">Ventas</a>
-                    <a href="listadoproductosadmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
+                    <a href="listadoproductosadmin.php" class="activo" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
                     <a href="listadoclientesadmin.php">Clientes</a>
                 </nav>
 
@@ -263,7 +269,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 reader.readAsDataURL(input.files[0]);
             }
         }
-
+        function toggleMobileMenu() {
+            const navbar = document.querySelector('.nav-bar');
+            if (navbar) {
+                navbar.classList.toggle('active');
+            }
+        }
         document.addEventListener('DOMContentLoaded', function() {
             
             // --- 2. LÓGICA DE ETIQUETAS DE MEDIDAS (TAGS) ---

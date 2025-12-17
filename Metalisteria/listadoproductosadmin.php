@@ -55,6 +55,12 @@ $total_productos = count($productos);
                     </a>
                 </div>
                 
+                <button class="menu-toggle" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
                 <nav class="nav-bar">
                     <a href="listadoventasadmin.php">Ventas</a>
                     <a href="listadoproductosadmin.php" class="activo" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
@@ -207,6 +213,15 @@ $total_productos = count($productos);
     </div> 
     
     <script>
+        // 1. FUNCIÓN GLOBAL PARA EL MENÚ (Fuera del DOMContentLoaded)
+        function toggleMobileMenu() {
+            const navbar = document.querySelector('.nav-bar');
+            if (navbar) {
+                navbar.classList.toggle('active');
+            }
+        }
+
+        // 2. RESTO DE LA LÓGICA (Dentro del DOMContentLoaded)
         document.addEventListener("DOMContentLoaded", function () {
             // --- VARIABLES ---
             const productos = document.querySelectorAll('.item-producto');
@@ -222,10 +237,9 @@ $total_productos = count($productos);
             let filtrosActivos = [];
 
             // --- INICIALIZACIÓN ---
-            // IMPORTANTE: Al cargar la página, ejecutar la vista para ocultar los sobrantes
             actualizarVista(); 
 
-            // Evento Menú Lateral
+            // Evento Menú Lateral (Filtros laterales)
             if(botonMenu && menuLateral) {
                 botonMenu.addEventListener("click", () => menuLateral.classList.toggle("oculto"));
             }
@@ -234,19 +248,16 @@ $total_productos = count($productos);
             if (btnCargar) {
                 btnCargar.addEventListener('click', function(e) {
                     e.preventDefault();
-                    // Aumentamos el límite de visibles
                     visiblesActuales += porCarga;
-                    // Recalculamos qué se ve
                     actualizarVista();
                 });
             }
 
-            // --- FUNCIONES DE FILTRADO (Globales para onclick) ---
+            // --- FUNCIONES DE FILTRADO (Asignar a window para que funcionen los onclick del HTML) ---
             window.toggleFiltro = function(categoria) {
                 if (categoria === 'todos') {
-                    filtrosActivos = []; // Limpiar filtros
+                    filtrosActivos = []; 
                 } else {
-                    // Lógica Toggle (poner/quitar)
                     if (filtrosActivos.includes(categoria)) {
                         filtrosActivos = filtrosActivos.filter(c => c !== categoria);
                     } else {
@@ -254,17 +265,13 @@ $total_productos = count($productos);
                     }
                 }
                 
-                // IMPORTANTE: Al cambiar filtro, reseteamos la paginación a la página 1 (5 productos)
                 visiblesActuales = iniciales;
-                
                 actualizarEstilosBotones();
                 actualizarVista();
             };
 
             function actualizarEstilosBotones() {
-                // Quitamos activo a todos
                 document.querySelectorAll('.filtro-text').forEach(btn => btn.classList.remove('activo'));
-                // Ponemos activo a los seleccionados
                 filtrosActivos.forEach(cat => {
                     const btn = document.getElementById('btn-filtro-' + cat);
                     if(btn) btn.classList.add('activo');
@@ -273,18 +280,16 @@ $total_productos = count($productos);
 
             // --- FUNCIÓN MAESTRA QUE DECIDE QUÉ SE VE ---
             function actualizarVista() {
-                let productosFiltrados = 0; // Total que coinciden con el filtro activo
-                let productosMostradosAhora = 0; // Total que hemos pintado en pantalla en esta vuelta
+                let productosFiltrados = 0; 
+                let productosMostradosAhora = 0; 
 
                 productos.forEach(prod => {
                     const catProducto = prod.getAttribute('data-categoria');
                     let cumpleFiltro = false;
 
-                    // 1. ¿Cumple el filtro?
                     if (filtrosActivos.length === 0) {
-                        cumpleFiltro = true; // Si no hay filtros, valen todos
+                        cumpleFiltro = true; 
                     } else {
-                        // Lógica OR (si coincide con alguno de los activos)
                         filtrosActivos.forEach(filtro => {
                             if (filtro === 'otros') {
                                 if (['3', '4', '6'].includes(catProducto)) cumpleFiltro = true;
@@ -294,25 +299,20 @@ $total_productos = count($productos);
                         });
                     }
 
-                    // 2. Lógica de visibilidad (Filtro + Paginación)
                     if (cumpleFiltro) {
-                        productosFiltrados++; // Este producto es válido para el filtro actual
-                        
-                        // Solo lo mostramos si está dentro del cupo de paginación actual
+                        productosFiltrados++; 
                         if (productosMostradosAhora < visiblesActuales) {
-                            prod.style.display = 'flex'; // MOSTRAR
+                            prod.style.display = 'flex'; 
                             productosMostradosAhora++;
                         } else {
-                            prod.style.display = 'none'; // OCULTAR (Paginación: está en la página siguiente)
+                            prod.style.display = 'none'; 
                         }
                     } else {
-                        prod.style.display = 'none'; // OCULTAR (No cumple el filtro)
+                        prod.style.display = 'none'; 
                     }
                 });
 
-                // 3. Gestionar botón "Ver Más"
                 if (btnCargar) {
-                    // Si hemos mostrado menos de los que existen filtrados, es que quedan más -> enseñamos botón
                     if (productosMostradosAhora < productosFiltrados) {
                         btnCargar.style.display = 'block';
                     } else {
@@ -320,7 +320,6 @@ $total_productos = count($productos);
                     }
                 }
 
-                // 4. Mensaje "No hay resultados"
                 if (productosFiltrados === 0 && productos.length > 0) {
                     if(mensajeNoResultados) mensajeNoResultados.style.display = 'block';
                 } else {
