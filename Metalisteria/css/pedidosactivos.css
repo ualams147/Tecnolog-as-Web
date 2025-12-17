@@ -4,7 +4,6 @@
    ========================================= */
 
 /* ===== RESET GENERAL & LAYOUT ===== */
-/* ===== RESET OBLIGATORIO (Para quitar bordes blancos) ===== */
 * {
     margin: 0;
     padding: 0;
@@ -20,7 +19,6 @@ html, body {
 body {
     background-color: #f4f6f9;
     overflow-x: hidden;
-    /* La fuente ya se carga en el head del PHP, pero por seguridad: */
     font-family: 'Poppins', sans-serif; 
 }
 
@@ -39,16 +37,15 @@ body {
 
 /* ========================== HERO SECCIÓN ========================== */
 .product-hero {
-    background-color: #293661; /* Azul oscuro corporativo */
+    background-color: #293661; 
     position: relative;
-    padding: 60px 0 180px 0; /* Padding inferior grande para que el contenido pise */
+    padding: 60px 0 180px 0; 
     text-align: center;
     width: 100%;
     overflow: hidden;
     z-index: 1;
 }
 
-/* Capa de degradado superpuesta */
 .product-hero::before {
     content: "";
     position: absolute;
@@ -70,7 +67,7 @@ body {
     z-index: 2;
 }
 
-/* Botón Volver (Flecha blanca simple) */
+/* Botón Volver */
 .btn-back {
     position: absolute;
     left: 20px;
@@ -106,15 +103,14 @@ body {
     margin: 0;
 }
 
-/* ========================== CONTENIDO PRINCIPAL (TARJETA FLOTANTE) ========================== */
+/* ========================== CONTENIDO PRINCIPAL ========================== */
 .product-main {
-    margin-top: -120px; /* Margen negativo para subir sobre el hero */
+    margin-top: -120px;
     position: relative;
     z-index: 10;
     margin-bottom: 80px;
 }
 
-/* Contenedor Blanco estilo tarjeta */
 .orders-container-card {
     background: white;
     border-radius: 20px;
@@ -123,7 +119,7 @@ body {
     min-height: 400px;
 }
 
-/* ========================== FILTROS ========================== */
+/* ========================== FILTROS (CORREGIDO TAMAÑO) ========================== */
 .filtros-container {
     display: flex;
     flex-wrap: wrap;
@@ -135,7 +131,8 @@ body {
 }
 
 .filtro-item {
-    flex: 1;
+    /* CAMBIO: flex: 1 1 0px fuerza a que todos tengan el MISMO ancho exacto */
+    flex: 1 1 0px; 
     min-width: 200px;
 }
 
@@ -151,11 +148,15 @@ body {
     position: relative;
     display: flex;
     align-items: center;
+    width: 100%;
 }
 
 .filtro-wrapper input, .filtro-wrapper select {
     width: 100%;
-    padding: 15px 70px 15px 15px; /* <--- CAMBIADO A 70px */
+    /* CAMBIO: Altura fija para que el Date y el Select sean idénticos al píxel */
+    height: 54px; 
+    
+    padding: 0 40px 0 15px; /* Ajustamos padding para centrar texto verticalmente */
     border: 1px solid #ddd;
     border-radius: 8px;
     background: #f9f9f9;
@@ -165,6 +166,10 @@ body {
     outline: none;
     appearance: none;
     transition: border 0.3s;
+    
+    /* Aseguramos alineación vertical del texto */
+    display: flex;
+    align-items: center;
 }
 
 .filtro-wrapper input:focus, .filtro-wrapper select:focus {
@@ -172,30 +177,44 @@ body {
     background: #fff;
 }
 
+/* --- INTERACCIÓN ICONO / CRUZ --- */
 .input-icon {
     position: absolute;
     right: 15px;
-    top: 50%;  /* NUEVO */
-    transform: translateY(-50%); /* NUEVO: Centrado vertical perfecto */
+    top: 50%;
+    transform: translateY(-50%);
     color: #999;
     pointer-events: none;
     font-size: 16px;
+    transition: all 0.2s ease;
+    opacity: 1;
+    visibility: visible;
 }
 
 .btn-borrar {
     position: absolute;
-    right: 45px; /* <--- SEPARADO MAS A LA IZQUIERDA */
-    top: 50%; /* NUEVO */
-    transform: translateY(-50%); /* NUEVO: Centrado vertical */
+    right: 15px; 
+    top: 50%;
+    transform: translateY(-50%);
     background: none;
     border: none;
     color: #ff4d4d;
     cursor: pointer;
     font-size: 18px;
-    display: none;
-    z-index: 10; /* NUEVO: Para asegurar que se pueda clicar */
+    display: none; 
+    z-index: 10;
 }
-.filtro-wrapper.con-valor .btn-borrar { display: block; }
+
+/* Al tener valor: oculta icono, muestra cruz */
+.filtro-wrapper.con-valor .input-icon {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-50%) scale(0.5);
+}
+
+.filtro-wrapper.con-valor .btn-borrar {
+    display: block;
+}
 
 /* ========================== GRID DE PEDIDOS ========================== */
 .grid-pedidos {
@@ -204,9 +223,8 @@ body {
     gap: 30px;
 }
 
-/* Tarjeta de Pedido */
 .card-pedido {
-    background-color: #293661; /* Azul corporativo */
+    background-color: #293661; 
     border-radius: 15px;
     padding: 25px;
     color: white;
@@ -244,10 +262,8 @@ body {
     font-weight: 700;
     text-transform: uppercase;
 }
-/* Badges sobre fondo oscuro */
 .estado-pendiente { background: #FFC107; color: #333; }
 .estado-proceso { background: #3498db; color: white; }
-/* CAMBIO DE COLOR VERDE REALIZADO */
 .estado-entregado { background: #a0d2ac; color: white; }
 .estado-cancelado { background: #e74c3c; color: white; }
 .estado-default { background: rgba(255,255,255,0.2); color: white; }
@@ -266,7 +282,6 @@ body {
     display: block;
 }
 
-/* Botón Ver Detalles */
 .btn-ver-detalles {
     margin-top: 20px;
     background: white;
@@ -285,7 +300,6 @@ body {
     transform: translateY(-2px);
 }
 
-/* Empty State */
 .empty-state {
     text-align: center;
     padding: 60px;
@@ -300,11 +314,20 @@ body {
     .product-title-main { font-size: 32px; }
     .btn-back { left: 10px; }
     .orders-container-card { padding: 20px; }
+    
+    /* Filtros en columna en móvil */
     .filtros-container { flex-direction: column; align-items: stretch; gap: 15px; }
-    .btn-borrar { top: 50%; transform: translateY(-50%); right: 10px; }
+    .filtro-item { width: 100%; flex: none; } /* En móvil ocupan todo el ancho */
+    
+    .btn-borrar { top: 50%; transform: translateY(-50%); right: 15px; }
+    
+    /* Fuerza los pedidos a una sola columna */
+    .grid-pedidos {
+        grid-template-columns: 1fr;
+    }
 }
 
-/* Fix para ocultar el calendario nativo del navegador */
+/* Fix para ocultar el calendario nativo del navegador y usar el nuestro */
 input[type="date"]::-webkit-calendar-picker-indicator {
     background: transparent;
     bottom: 0;
