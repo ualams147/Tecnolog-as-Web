@@ -6,13 +6,14 @@ include 'CabeceraFooter.php';
 include 'conexion.php'; 
 
 // =================================================================================
-// 3. CARGA DE DATOS DINÁMICA (BASE DE DATOS RELACIONAL)
+// 3. CARGA DE DATOS DINÁMICA (SOLUCIÓN POR IDs PARA IDIOMAS)
 // =================================================================================
 try {
-    // Consulta SQL con JOINS
+    // Consulta SQL: Añadimos m.id para usar identificadores numéricos
     $sql = "SELECT 
                 c.id AS cat_id,
                 c.nombre AS categoria, 
+                m.id AS mat_id,
                 m.nombre AS material, 
                 p.color 
             FROM productos p
@@ -26,39 +27,43 @@ try {
 
     // Arrays para JavaScript
     $datos_dinamicos = [];
-    $lista_categorias = [];
-    $mapa_ids_js = [];
+    $lista_categorias = []; // Para el desplegable inicial
 
     foreach ($resultados as $row) {
-        $cat = trim($row['categoria']); 
-        $mat = trim($row['material']);  
-        $col = trim($row['color']);     
-        $id  = $row['cat_id'];
+        // Datos crudos de la BD
+        $cat_id   = $row['cat_id'];
+        $cat_nombre = trim($row['categoria']);
+        
+        $mat_id   = $row['mat_id'];
+        $mat_nombre = trim($row['material']);
+        
+        $color = trim($row['color']);
 
-        $catKey = strtolower($cat);
-
-        // 1. Lista simple de categorías
-        if (!in_array($cat, $lista_categorias)) {
-            $lista_categorias[] = $cat;
+        // 1. Lista simple para el primer Select (Guardamos ID y Nombre)
+        // Usamos el ID como clave para evitar duplicados
+        if (!isset($lista_categorias[$cat_id])) {
+            $lista_categorias[$cat_id] = $cat_nombre;
         }
 
-        // 2. Mapa de IDs
-        $mapa_ids_js[$id] = $catKey;
+        // 2. Árbol de datos basado en IDs (NO en nombres)
+        if (!isset($datos_dinamicos[$cat_id])) {
+            $datos_dinamicos[$cat_id] = [];
+        }
 
-        // 3. Árbol de datos
-        if (!isset($datos_dinamicos[$catKey])) {
-            $datos_dinamicos[$catKey] = [];
+        if (!isset($datos_dinamicos[$cat_id][$mat_id])) {
+            $datos_dinamicos[$cat_id][$mat_id] = [
+                'nombre_mostrar' => $mat_nombre, // El nombre bonito
+                'nombre_archivo' => strtolower($mat_nombre), // Para la imagen (ej: aluminio)
+                'colores' => []
+            ];
         }
-        if (!isset($datos_dinamicos[$catKey][$mat])) {
-            $datos_dinamicos[$catKey][$mat] = [];
-        }
-        if (!in_array($col, $datos_dinamicos[$catKey][$mat])) {
-            $datos_dinamicos[$catKey][$mat][] = $col;
+
+        if (!in_array($color, $datos_dinamicos[$cat_id][$mat_id]['colores'])) {
+            $datos_dinamicos[$cat_id][$mat_id]['colores'][] = $color;
         }
     }
 
 } catch (PDOException $e) {
-    echo "Error al cargar datos: " . $e->getMessage();
     $datos_dinamicos = []; 
 }
 ?>
@@ -105,9 +110,9 @@ try {
                     <div class="step-content">
                         <select id="select-producto" class="custom-select" onchange="productoSeleccionado()">
                             <option value="" disabled selected><?php echo $lang['medida_ph_sel_tipo']; ?></option>
-                            <?php foreach ($lista_categorias as $cat): ?>
-                                <option value="<?php echo htmlspecialchars(strtolower($cat)); ?>">
-                                    <?php echo htmlspecialchars($cat); ?>
+                            <?php foreach ($lista_categorias as $id => $nombre): ?>
+                                <option value="<?php echo $id; ?>">
+                                    <?php echo htmlspecialchars($nombre); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -130,18 +135,18 @@ try {
 
                 <div class="step-item disabled" id="step-3">
                     <div class="step-header" onclick="toggleStep(3)">
-                    <h3 class="step-title"><?php echo $lang['medida_paso_3']; ?></h3>
-                    <svg class="step-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                </div>
+                        <h3 class="step-title"><?php echo $lang['medida_paso_3']; ?></h3>
+                        <svg class="step-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                    </div>
 
-            <div class="step-content" style="display: flex; align-items: center; gap: 15px;">
-                <select id="select-color" class="custom-select" onchange="colorSeleccionado()" style="flex: 1; width: auto;">
-                    <option value="" disabled selected><?php echo $lang['medida_ph_sel_col']; ?></option>
-                </select>
-        
-                <img id="img-color" src="" onerror="this.style.display='none'" style="width: 60px; height: 60px; object-fit: contain; border: 1px solid #ddd; border-radius: 5px; display: none;">
-            </div>
-        </div> 
+                    <div class="step-content" style="display: flex; align-items: center; gap: 15px;">
+                        <select id="select-color" class="custom-select" onchange="colorSeleccionado()" style="flex: 1; width: auto;">
+                            <option value="" disabled selected><?php echo $lang['medida_ph_sel_col']; ?></option>
+                        </select>
+                
+                        <img id="img-color" src="" onerror="this.style.display='none'" style="width: 60px; height: 60px; object-fit: contain; border: 1px solid #ddd; border-radius: 5px; display: none;">
+                    </div>
+                </div> 
          
                 <div class="step-item disabled" id="step-4">
                     <div class="step-header" onclick="toggleStep(4)">
@@ -188,17 +193,17 @@ try {
         // 1. RECEPCIÓN DE DATOS DESDE PHP
         // ======================================================
         const datosDB = <?php echo json_encode($datos_dinamicos); ?>;
-        const mapaIds = <?php echo json_encode($mapa_ids_js); ?>;
+        const mapaCategorias = <?php echo json_encode($lista_categorias); ?>;
 
         // ======================================================
-        // 2. LÓGICA DE LOS DESPLEGABLES
+        // 2. LÓGICA DE LOS DESPLEGABLES (SIN AUTO-APERTURA)
         // ======================================================
 
         function productoSeleccionado() {
             const prodSelect = document.getElementById('select-producto');
             const matSelect = document.getElementById('select-material');
             const colorSelect = document.getElementById('select-color');
-            const prodValue = prodSelect.value;
+            const prodId = prodSelect.value;
 
             // Reset visual
             const imgMat = document.getElementById('img-material');
@@ -210,54 +215,60 @@ try {
             matSelect.innerHTML = '<option value="" disabled selected><?php echo $lang['medida_js_sel_mat_ok']; ?></option>';
             colorSelect.innerHTML = '<option value="" disabled selected><?php echo $lang['medida_ph_sel_col']; ?></option>';
 
+            // Bloquear pasos siguientes por seguridad
             document.getElementById('step-3').classList.add('disabled');
             document.getElementById('step-3').classList.remove('active');
+            
+            verificarFinal(); 
 
             // 2. Comprobar si hay datos
-            if (prodValue && datosDB[prodValue]) {
-                const materiales = Object.keys(datosDB[prodValue]);
-                if (materiales.length > 0) {
-                materiales.forEach(mat => {
-                    const option = document.createElement('option');
-                    option.value = mat;
-                    option.textContent = mat;
-                    matSelect.appendChild(option);
-                });
-                 } else {
+            if (prodId && datosDB[prodId]) {
+                const materialesObj = datosDB[prodId];
+                const materialesIds = Object.keys(materialesObj);
+
+                if (materialesIds.length > 0) {
+                    materialesIds.forEach(matId => {
+                        const matData = materialesObj[matId];
+                        const option = document.createElement('option');
+                        option.value = matId;
+                        option.textContent = matData.nombre_mostrar;
+                        matSelect.appendChild(option);
+                    });
+                } else {
                     matSelect.innerHTML = '<option><?php echo $lang['medida_js_no_mat']; ?></option>';
                 }
-                // Desbloquear Paso 2
+                
+                // CAMBIO AQUI: Solo desbloqueamos, NO abrimos el paso automáticamente
                 document.getElementById('step-2').classList.remove('disabled');
-                abrirPaso(2);
+                
+                // Actualizamos el título del paso actual para reflejar la selección
                 tituloPaso(1, 'Producto: ' + prodSelect.options[prodSelect.selectedIndex].text);
             }
         }
 
         function materialSeleccionado() {
-            const prodValue = document.getElementById('select-producto').value;
+            const prodId = document.getElementById('select-producto').value;
             const matSelect = document.getElementById('select-material');
             const colorSelect = document.getElementById('select-color');
-            const matValue = matSelect.value;
+            const matId = matSelect.value;
             const imgMat = document.getElementById('img-material');
             
-            if (imgMat) {
-                if (matValue) {
-                    const nombre = matValue.toLowerCase().trim();
-                    if (nombre === 'aluminio' || nombre === 'pvc') {
-                        imgMat.src = 'imagenes/' + nombre + '.png';
+            if (prodId && matId && datosDB[prodId][matId]) {
+                const matData = datosDB[prodId][matId];
+                const nombreImagen = matData.nombre_archivo;
+                
+                if (imgMat) {
+                    if (nombreImagen === 'aluminio' || nombreImagen === 'pvc') {
+                        imgMat.src = 'imagenes/' + nombreImagen + '.png';
                         imgMat.style.display = 'block'; 
-                    }   else {
+                    } else {
                         imgMat.style.display = 'none';  
                     }
-                } else {
-                    imgMat.style.display = 'none';
                 }
-            }
-            // 1. Limpiar colores
-            colorSelect.innerHTML = '<option value="" disabled selected><?php echo $lang['medida_js_sel_col_ok']; ?></option>';
-            // 2. Buscar colores en el array
-            if (prodValue && matValue && datosDB[prodValue][matValue]) {
-                const colores = datosDB[prodValue][matValue];
+
+                // Cargar colores
+                colorSelect.innerHTML = '<option value="" disabled selected><?php echo $lang['medida_js_sel_col_ok']; ?></option>';
+                const colores = matData.colores;
                 colores.forEach(col => {
                     const option = document.createElement('option');
                     option.value = col;
@@ -265,11 +276,13 @@ try {
                     colorSelect.appendChild(option);
                 });
 
-            // Desbloquear Paso 3
-            document.getElementById('step-3').classList.remove('disabled');
-            tituloPaso(2, 'Material: ' + matValue);
+                // CAMBIO AQUI: Desbloqueamos el 3, pero NO lo abrimos
+                document.getElementById('step-3').classList.remove('disabled');
+                
+                tituloPaso(2, 'Material: ' + matSelect.options[matSelect.selectedIndex].text);
+                verificarFinal(); 
+            }
         }
-    }
 
         function colorSeleccionado() {
             const colorSelect = document.getElementById('select-color');
@@ -283,6 +296,7 @@ try {
 
                 const paso4 = document.getElementById('step-4');
                 if (paso4) {
+                    // CAMBIO AQUI: Desbloqueamos el 4, pero NO lo abrimos
                     paso4.classList.remove('disabled'); 
                 }
 
@@ -291,20 +305,32 @@ try {
             }
 
             tituloPaso(3, 'Color: ' + val);
-    }
+            verificarFinal();
+        }
 
         // ======================================================
-        // 3. FUNCIONES VISUALES (ACORDEÓN)
+        // 3. FUNCIONES VISUALES (ACORDEÓN MANUAL)
         // ======================================================
+        
+        // Esta función cierra todos y abre el que digas
         function abrirPaso(numPaso) {
+            // 1. Cierra todos visualmente (quita la clase active)
             document.querySelectorAll('.step-item').forEach(el => el.classList.remove('active'));
+            // 2. Abre solo el que has pedido
             document.getElementById('step-' + numPaso).classList.add('active');
         }
 
+        // Esta función se ejecuta al hacer CLIC en la cabecera
         function toggleStep(stepNum) {
             const step = document.getElementById('step-' + stepNum);
-            if (!step.classList.contains('disabled') && !step.classList.contains('active')) {
-                abrirPaso(stepNum);
+            
+            // Solo si el paso no está bloqueado (disabled)
+            if (!step.classList.contains('disabled')) {
+                // Si no está abierto ya, lo abrimos (y la función abrirPaso cerrará los otros)
+                if (!step.classList.contains('active')) {
+                     abrirPaso(stepNum);
+                }
+                // Si ya estaba abierto y haces clic, no hacemos nada (o podrías querer cerrarlo, pero en acordeón suele quedarse abierto uno)
             }
         }
 
@@ -315,11 +341,12 @@ try {
         }
 
         // ======================================================
-        // 4. VALIDACIONES (MEDIDA Y DETALLES)
+        // 4. VALIDACIONES
         // ======================================================
         function validarInputMedida(input) {
-            let valor = input.value.replace(/[^0-9xX]/g, ''); // Solo números y 'x'
+            let valor = input.value.replace(/[^0-9xX]/g, ''); 
             input.value = valor;
+            verificarFinal();
         }
 
         function validarYFormatearMedida() {
@@ -330,9 +357,8 @@ try {
             input.classList.remove('input-error');
             errorMsg.style.display = 'none';
 
-            if (valor.length === 0) return;
-
-            if (!valor.includes('x')) return;
+            if (valor.length === 0) { verificarFinal(); return; }
+            if (!valor.includes('x')) { verificarFinal(); return; }
 
             const partes = valor.split('x');
             const ancho = parseInt(partes[0]);
@@ -343,6 +369,7 @@ try {
                 errorMsg.textContent = "<?php echo $lang['medida_js_min_30']; ?>";
                 errorMsg.style.display = 'block';
                 input.value = "";
+                verificarFinal();
                 return;
             }
 
@@ -354,40 +381,46 @@ try {
 
         function verificarFinal() {
             const inputMedida = document.getElementById('input-medida');
-            const inputDetalles = document.getElementById('input-detalles');
             const actionDiv = document.getElementById('final-action');
             
-            const medidaValida = inputMedida.value.includes('cm');
+            const medidaValida = inputMedida.value.toLowerCase().includes('x') && inputMedida.value.toLowerCase().includes('cm');
             
             if (medidaValida) {
+                // Desbloqueamos el paso 5 visualmente pero NO lo abrimos
                 document.getElementById('step-5').classList.remove('disabled');
-            } else {
-                document.getElementById('step-5').classList.add('disabled');
-            }
-
-            if (medidaValida && inputDetalles.value.length > 3) {
+                
+                // Mostramos el botón de enviar
                 actionDiv.style.display = 'block';
                 setTimeout(() => actionDiv.style.opacity = '1', 10);
             } else {
+                document.getElementById('step-5').classList.add('disabled');
                 actionDiv.style.opacity = '0';
                 setTimeout(() => actionDiv.style.display = 'none', 300);
             }
         }
 
         function enviarPropuesta() {
-            // Recoger datos
-            const producto = document.getElementById('select-producto').options[document.getElementById('select-producto').selectedIndex].text;
-            const material = document.getElementById('select-material').value;
+            const prodSelect = document.getElementById('select-producto');
+            const productoTexto = prodSelect.options[prodSelect.selectedIndex].text; 
+            
+            const matSelect = document.getElementById('select-material');
+            const materialTexto = matSelect.options[matSelect.selectedIndex].text;
+
             const color = document.getElementById('select-color').value;
             const medida = document.getElementById('input-medida').value;
             const detalles = document.getElementById('input-detalles').value;
 
-            // Enviar a PHP (AJAX)
-            fetch('enviar_presupuesto.php', {
+            if(!productoTexto || !materialTexto || !color || !medida) {
+                 Swal.fire('Error', '<?php echo $lang['medida_js_alert_error']; ?>', 'warning');
+                 return;
+            }
+
+            fetch('agregar_personalizado_carrito.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    producto: producto + " (" + material + ")",
+                    categoria: productoTexto, 
+                    material: materialTexto,
                     color: color,
                     medida: medida,
                     detalles: detalles
@@ -397,15 +430,22 @@ try {
             .then(data => {
                 if (data.success) {
                     Swal.fire({
-                        title: '¡Enviado!',
-                        text: '<?php echo $lang['medida_js_alert_enviada']; ?>',
+                        title: '¡Solicitud Enviada!',
+                        html: 'El producto se ha guardado en tu carrito como <b>Pendiente de Revisión</b>.<br>No podrás comprarlo hasta que le pongamos precio.',
                         icon: 'success',
-                        confirmButtonColor: '#293661'
-                    }).then(() => {
-                        window.location.href = 'productos.php';
+                        confirmButtonText: 'Ir al Carrito',
+                        confirmButtonColor: '#293661',
+                        showCancelButton: true,
+                        cancelButtonText: 'Seguir configurando'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'carrito.php'; 
+                        } else {
+                            location.reload(); 
+                        }
                     });
                 } else {
-                    Swal.fire('Error', '<?php echo $lang['medida_js_alert_error']; ?>', 'error');
+                    Swal.fire('Atención', data.message, 'warning');
                 }
             })
             .catch(error => {
@@ -414,21 +454,18 @@ try {
             });
         }
 
-        // ======================================================
-        // 5. AUTO-SELECCIÓN (AL CARGAR LA PÁGINA)
-        // ======================================================
         document.addEventListener("DOMContentLoaded", function() {
             const urlParams = new URLSearchParams(window.location.search);
             const idCat = urlParams.get('categoria');
 
-            if (idCat && mapaIds[idCat]) {
-                const nombreCat = mapaIds[idCat];
+            if (idCat && datosDB[idCat]) {
                 const select = document.getElementById('select-producto');
-                
-                select.value = nombreCat;
-
-                if (select.value === nombreCat) {
+                select.value = idCat;
+                if (select.value === idCat) {
                     productoSeleccionado();
+                    // Opcional: Si quieres que al venir desde la home SÍ se abra el paso 2 (solo la primera vez),
+                    // descomenta la siguiente línea. Si no, déjalo comentado.
+                    // abrirPaso(2);
                 }
             }
         });

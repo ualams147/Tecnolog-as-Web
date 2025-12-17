@@ -478,5 +478,22 @@ $lang = array(
     'detalle_base_imponible' => 'Tax Base',
     'detalle_iva' => 'VAT',
     'detalle_total' => 'Total',
+
+
+    // CUSTOM CART
+    'carrito_etiqueta_personalizado' => 'Customized',
+    'carrito_pendiente_revision' => 'Pending Review',
+    'carrito_precio_pendiente' => 'To be quoted',
+    'carrito_medidas' => 'Size',
+    'carrito_detalles' => 'Details',
+    'carrito_msg_bloqueo' => 'You have items pending review. You cannot checkout until they are approved.',
+    'carrito_estado_rechazado' => 'Proposal Rejected',
+
+
+    // ADMIN SALES
+    'admin_ventas_titulo_lista' => 'Sales Made',
+    'admin_ventas_btn_propuestas' => 'Proposals',
+    'admin_ventas_sin_ventas' => 'No registered sales',
+    'admin_ventas_filtro_limpiar' => 'Clear Filters',
 );
 ?>

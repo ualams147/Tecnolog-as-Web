@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-12-2025 a las 21:58:36
+-- Tiempo de generación: 17-12-2025 a las 12:10:43
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -21,15 +21,11 @@ SET time_zone = "+00:00";
 -- Base de datos: `metalisteria`
 --
 
-
-
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `carrito`
 --
-
-
 
 DROP TABLE IF EXISTS `carrito`;
 CREATE TABLE `carrito` (
@@ -37,15 +33,41 @@ CREATE TABLE `carrito` (
   `cliente_id` int(11) NOT NULL,
   `producto_id` int(11) NOT NULL,
   `cantidad` int(11) DEFAULT 1,
-  `fecha_agregado` timestamp NOT NULL DEFAULT current_timestamp()
+  `fecha_agregado` timestamp NOT NULL DEFAULT current_timestamp(),
+  `es_personalizado` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `carrito`
 --
 
-INSERT INTO `carrito` (`id`, `cliente_id`, `producto_id`, `cantidad`, `fecha_agregado`) VALUES
-(23, 2, 10, 1, '2025-12-16 20:47:09');
+INSERT INTO `carrito` (`id`, `cliente_id`, `producto_id`, `cantidad`, `fecha_agregado`, `es_personalizado`) VALUES
+(23, 2, 10, 1, '2025-12-16 20:47:09', 0),
+(33, 1, 29, 1, '2025-12-17 11:07:28', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `carrito_personalizados`
+--
+
+DROP TABLE IF EXISTS `carrito_personalizados`;
+CREATE TABLE `carrito_personalizados` (
+  `id` int(11) NOT NULL,
+  `carrito_id` int(11) NOT NULL,
+  `medidas` varchar(50) NOT NULL,
+  `color` varchar(50) NOT NULL,
+  `detalles` text DEFAULT NULL,
+  `estado` varchar(20) DEFAULT 'pendiente',
+  `precio_final` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `carrito_personalizados`
+--
+
+INSERT INTO `carrito_personalizados` (`id`, `carrito_id`, `medidas`, `color`, `detalles`, `estado`, `precio_final`) VALUES
+(9, 33, '50x100 cm', 'Plata', '', 'pendiente', NULL);
 
 -- --------------------------------------------------------
 
@@ -121,25 +143,29 @@ CREATE TABLE `detalle_ventas` (
   `id_producto` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL,
   `precio_unitario` decimal(10,2) NOT NULL,
-  `subtotal` decimal(10,2) GENERATED ALWAYS AS (`cantidad` * `precio_unitario`) STORED
+  `subtotal` decimal(10,2) GENERATED ALWAYS AS (`cantidad` * `precio_unitario`) STORED,
+  `medidas` varchar(50) DEFAULT NULL,
+  `color` varchar(50) DEFAULT NULL,
+  `detalles_extra` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `detalle_ventas`
 --
 
-INSERT INTO `detalle_ventas` (`id`, `id_venta`, `id_producto`, `cantidad`, `precio_unitario`) VALUES
-(1, 1, 1, 2, 120.00),
-(2, 1, 2, 1, 130.00),
-(3, 2, 163, 1, 450.00),
-(17, 12, 37, 1, 600.00),
-(18, 13, 37, 1, 600.00),
-(19, 14, 1, 7, 120.00),
-(20, 14, 172, 3, 460.00),
-(21, 15, 1, 1, 120.00),
-(22, 16, 1, 1, 120.00),
-(23, 17, 1, 1, 120.00),
-(24, 18, 1, 2, 120.00);
+INSERT INTO `detalle_ventas` (`id`, `id_venta`, `id_producto`, `cantidad`, `precio_unitario`, `medidas`, `color`, `detalles_extra`) VALUES
+(1, 1, 1, 2, 120.00, NULL, NULL, NULL),
+(2, 1, 2, 1, 130.00, NULL, NULL, NULL),
+(3, 2, 163, 1, 450.00, NULL, NULL, NULL),
+(17, 12, 37, 1, 600.00, NULL, NULL, NULL),
+(18, 13, 37, 1, 600.00, NULL, NULL, NULL),
+(19, 14, 1, 7, 120.00, NULL, NULL, NULL),
+(20, 14, 172, 3, 460.00, NULL, NULL, NULL),
+(21, 15, 1, 1, 120.00, NULL, NULL, NULL),
+(22, 16, 1, 1, 120.00, NULL, NULL, NULL),
+(23, 17, 1, 1, 120.00, NULL, NULL, NULL),
+(24, 18, 1, 2, 120.00, NULL, NULL, NULL),
+(26, 20, 1, 1, 3000.00, '50x100 cm', 'Blanco', '');
 
 -- --------------------------------------------------------
 
@@ -423,7 +449,8 @@ INSERT INTO `ventas` (`id`, `id_cliente`, `fecha`, `total`, `estado`, `nombre_co
 (15, 2, '2025-12-16 20:46:35', 120.00, 'Pendiente', 'María Rodríguez Pérez', 'maria.rod@email.com', '611222333', 'Av. Constitución', '20', '1º B', '18012', 'Granada', ''),
 (16, 2, '2025-12-16 21:10:54', 120.00, 'Pendiente', 'María Rodríguez Pérez', 'maria.rod@email.com', '611222333', 'Av. Constitución', '20', '1º B', '18012', 'Granada', ''),
 (17, 2, '2025-12-16 21:18:23', 120.00, 'Pendiente', 'María Rodríguez Pérez', 'maria.rod@email.com', '611222333', 'Av. Constitución', '20', '1º B', '18012', 'Granada', ''),
-(18, 2, '2025-12-16 21:46:31', 240.00, 'Pendiente', 'María Rodríguez Pérez', 'maria.rod@email.com', '611222333', 'Av. Constitución', '20', '1º B', '18012', 'Granada', '');
+(18, 2, '2025-12-16 21:46:31', 240.00, 'Pendiente', 'María Rodríguez Pérez', 'maria.rod@email.com', '611222333', 'Av. Constitución', '20', '1º B', '18012', 'Granada', ''),
+(20, 1, '2025-12-17 11:58:51', 3000.00, 'Pendiente', 'Juan García López', 'juan.garcia@email.com', '600111222', 'Calle Recogidas', '15', '2A', '18005', 'Granada', '');
 
 --
 -- Índices para tablas volcadas
@@ -436,6 +463,13 @@ ALTER TABLE `carrito`
   ADD PRIMARY KEY (`id`),
   ADD KEY `cliente_id` (`cliente_id`),
   ADD KEY `producto_id` (`producto_id`);
+
+--
+-- Indices de la tabla `carrito_personalizados`
+--
+ALTER TABLE `carrito_personalizados`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `carrito_id` (`carrito_id`);
 
 --
 -- Indices de la tabla `categorias`
@@ -488,7 +522,13 @@ ALTER TABLE `ventas`
 -- AUTO_INCREMENT de la tabla `carrito`
 --
 ALTER TABLE `carrito`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+
+--
+-- AUTO_INCREMENT de la tabla `carrito_personalizados`
+--
+ALTER TABLE `carrito_personalizados`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias`
@@ -506,7 +546,7 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de la tabla `detalle_ventas`
 --
 ALTER TABLE `detalle_ventas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `materiales`
@@ -524,7 +564,7 @@ ALTER TABLE `productos`
 -- AUTO_INCREMENT de la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Restricciones para tablas volcadas
@@ -536,6 +576,12 @@ ALTER TABLE `ventas`
 ALTER TABLE `carrito`
   ADD CONSTRAINT `carrito_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `carrito_ibfk_2` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `carrito_personalizados`
+--
+ALTER TABLE `carrito_personalizados`
+  ADD CONSTRAINT `carrito_personalizados_ibfk_1` FOREIGN KEY (`carrito_id`) REFERENCES `carrito` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `detalle_ventas`
