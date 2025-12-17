@@ -168,22 +168,26 @@ input[type="date"]::-webkit-calendar-picker-indicator { background: transparent;
 
 /* --- ESTRUCTURA CUERPO Y MENÚ --- */
 .productos-layout {
-    display: flex; gap: 40px; width: 90%; max-width: 1200px;
+    display: flex; gap: 20px; width: 90%; max-width: 1350px;
     margin: 40px auto 60px auto;
 }
 
-#menu-lateral { position: relative; display: flex; flex-direction: column; align-items: flex-start; }
+#menu-lateral { position: sticky; display: flex; flex-direction: column; align-items: flex-start; }
 #menu-lateral.oculto { display: none; }
 .boton-menu-lateral {
     background-color: #293661; border: none; padding: 14px 18px; border-radius: 12px; cursor: pointer;
     display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     width: 60px; height: 60px; transition: 0.3s; flex-shrink: 0;
+    position: sticky; top: 140px; align-self: flex-start; z-index: 90;
+    left: -20px;
+    margin-right: 15px;
 }
 .boton-menu-lateral:hover { background-color: #1f274d; transform: scale(1.05); }
 .crear-producto {
     width: 280px; min-height: 500px; background: #a0d2ac; border: 3px solid #7fb88e;
     border-radius: 20px; box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.25);
-    padding: 40px 20px; display: flex; flex-direction: column; gap: 30px; justify-content: center;
+    padding: 40px 20px; display: flex; flex-direction: column; gap: 20px; justify-content: center;
+    margin-left: -30px; position: sticky; top: 140px; align-self: flex-start; z-index: 80;
 }
 .menu-item {
     width: 100%; padding: 15px 10px; font-size: 20px; font-weight: 500; text-align: center;

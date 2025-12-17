@@ -260,7 +260,7 @@ foreach ($_SESSION['carrito'] as $item) {
 
                 // B. Actualizar precio total
                 const spanTotal = document.getElementById('precio-total-carrito');
-                if (spanTotal) spanTotal.innerText = parseFloat(data.nuevoTotal).toFixed(2) + '€';
+                if (spanTotal) spanTotal.innerText = parseFloat(data.nuevoTotal).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + '€';
 
                 // C. Actualizar badge del menú (Opcional, si tienes badge en CabeceraFooter)
                 const cartCount = document.getElementById('cart-count');

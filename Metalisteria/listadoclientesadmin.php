@@ -5,7 +5,7 @@ include 'conexion.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_eliminar'])) {
     $idBorrar = $_POST['id_eliminar'];
     try {
-        $stmtBorrar = $conn->prepare("DELETE FROM clientes WHERE id = ?");
+        $stmtBorrar = $conn->prepare("UPDATE clientes SET activo = 0 WHERE id = ?");
         $stmtBorrar->execute([$idBorrar]);
         // Redirección corregida
         header("Location: listadoclientesadmin.php");
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_eliminar'])) {
 }
 
 // --- 2. LÓGICA DE FILTRADO ---
-$where = "WHERE 1=1"; 
+$where = "WHERE activo=1"; 
 $params = [];
 
 // Variables para mantener los filtros en los inputs (PERSISTENCIA)

@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['ajax_verificar']) &&
         ]);
         
         // Recargar la página para ver cambios
-        header("Location: modificardatoscliente.php?actualizado=1"); 
+        header("Location: editarinformacionperfil.php?actualizado=1"); 
         exit;
         
     } catch(Exception $e) {

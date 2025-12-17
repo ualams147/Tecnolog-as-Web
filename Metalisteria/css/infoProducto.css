@@ -326,57 +326,58 @@ body {
 /* Selector de Cantidad (También más cuadrado) */
 
 .qty-selector {
-
     display: inline-flex;
-
     align-items: center;
-
     justify-content: space-between;
-
-    background: #e9ecef;
-
-    border: 1px solid #293661;
-
-    /* Borde menos redondeado */
-
-    padding: 5px 10px;
-
+    background: #ffffff;
+    border: 2px solid #e0e0e0; /* Borde gris suave */
+    border-radius: 50px;       /* Bordes totalmente redondos */
+    padding: 4px;              /* Espacio interno para los botones */
     width: 140px;
-
-    height: 45px;
-
+    height: 50px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Sombra sutil */
+    transition: all 0.3s ease;
 }
 
+/* Efecto al pasar el ratón por encima de toda la cápsula */
+.qty-selector:hover {
+    border-color: #293661;
+    box-shadow: 0 6px 15px rgba(41, 54, 97, 0.1);
+}
 
-
+/* Botones + y - */
 .qty-btn {
-
-    background: none;
-
+    background: #f4f4f4;
     border: none;
-
-    font-size: 20px;
-
-    font-weight: 700;
-
-    color: #2b2b2b;
-
+    border-radius: 50%; /* Botones redondos */
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #293661;
     cursor: pointer;
-
-    padding: 0 10px;
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
 }
 
+.qty-btn:hover {
+    background: #293661; /* Se vuelve azul */
+    color: white;        /* Texto blanco */
+}
 
-
-.qty-number {
-
+/* El número del centro */
+.qty-input {
+    width: 50px;
+    text-align: center;
+    border: none;
+    background: transparent;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
     font-size: 18px;
-
-    font-weight: 600;
-
-    color: #2b2b2b;
-
+    color: #333;
+    outline: none; /* Quita el borde azul al hacer clic */
 }
 
 
@@ -384,81 +385,64 @@ body {
 /* Selectores (Color y Tamaño) - ESTILO CUADRADO */
 
 .selectors-container {
-
     display: flex;
-
     flex-direction: column;
-
     gap: 20px;
-
     margin-top: 10px;
-
 }
-
-
 
 .custom-select-wrapper {
-
     position: relative;
-
     width: 100%;
-
 }
 
-
+/* Etiqueta encima del select */
+.custom-select-wrapper label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 8px;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
 
 .custom-select {
-
     width: 100%;
-
     appearance: none;
-
     -webkit-appearance: none;
-
-    background-color: #f0f0f0;
-
-    border: 1px solid #293661;
-
-   
-
-    /* CAMBIO: Borde cuadrado con esquina suave, NO redondo 50px */
-
-
-
-   
-
-    padding: 18px 25px;
-
-    line-height: 1.5;
-
+    
+    background-color: #ffffff;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px; /* Bordes redondeados modernos */
+    
+    padding: 15px 20px;
     font-family: 'Poppins', sans-serif;
-
     font-size: 16px;
-
+    font-weight: 500;
     color: #333;
-
     cursor: pointer;
-
-   
-
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-
+    transition: all 0.3s ease;
+    
+    /* Flecha personalizada más moderna (Chevron azul) */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23293661' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
-
-    background-position: right 20px center;
-
-    background-size: 24px;
-
+    background-position: right 15px center;
+    background-size: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
 }
 
+/* Efecto Hover */
+.custom-select:hover {
+    border-color: #293661;
+    background-color: #fcfcfc;
+}
 
-
+/* Efecto Focus (Cuando haces clic) */
 .custom-select:focus {
-
     outline: none;
-
-    box-shadow: 0 0 0 2px rgba(41, 54, 97, 0.2);
-
+    border-color: #293661;
+    box-shadow: 0 0 0 4px rgba(41, 54, 97, 0.1); /* Resplandor azul suave */
 }
 
 

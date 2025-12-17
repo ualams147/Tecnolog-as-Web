@@ -144,12 +144,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <main class="registro-section">
             <div class="registro-card">
                 <h1 class="registro-title"><?php echo $lang['registro_h1']; ?></h1>
-                
-                <?php if(!empty($error)): ?>
-                    <div style="background-color:#f8d7da; color:#721c24; padding:10px; border-radius:5px; margin-bottom:15px; text-align:center;">
-                        <?php echo $error; ?>
-                    </div>
-                <?php endif; ?>
 
                 <form class="registro-form" id="form-registro" method="POST" action="">
                     
@@ -176,7 +170,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg> <?php echo $lang['registro_lbl_email']; ?>
                         </label>
                         <input type="email" id="email" name="email" class="form-input <?php echo !empty($error_email) ? 'error' : ''; ?>" value="<?php echo htmlspecialchars($email); ?>" placeholder="<?php echo $lang['registro_ph_email']; ?>" required>
-                        <?php if(!empty($error_email)): ?> <span class="error-text"><?php echo $error_email; ?></span> <?php endif; ?>
                     </div>
 
                     <div class="form-row">
@@ -221,7 +214,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> <?php echo $lang['registro_lbl_dni']; ?>
                         </label>
                         <input type="text" id="dni" name="dni" class="form-input <?php echo !empty($error_dni) ? 'error' : ''; ?>" value="<?php echo htmlspecialchars($dni); ?>" placeholder="<?php echo $lang['registro_ph_dni']; ?>" required>
-                        <?php if(!empty($error_dni)): ?> <span class="error-text"><?php echo $error_dni; ?></span> <?php endif; ?>
                     </div>
 
                     <div class="form-row">
@@ -274,10 +266,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php sectionfooter(); ?>
     </div>
 
-    <script src="js/AlgoritmoDNIs.js"></script> <script src="js/validarpasswd.js"></script> <script>
+    <script src="js/AlgoritmoDNIs.js"></script> 
+    <script src="js/validarpasswd.js"></script> 
+    
+    <script>
         document.addEventListener("DOMContentLoaded", function() {
             
-            // 1. ACTIVAR VALIDACIÓN DE CONTRASEÑAS
+            // ======================================================
+            // 1. ALERTAS DEL SERVIDOR (PHP) -> SWEETALERT
+            // ======================================================
+            // Este bloque comprueba si PHP ha encontrado errores al intentar registrar
+            
+            <?php if (!empty($error_email)): ?>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Email no disponible',
+                    text: '<?php echo $error_email; ?>',
+                    confirmButtonColor: '#293661'
+                });
+                document.getElementById('email').style.borderColor = 'red';
+            
+            <?php elseif (!empty($error_dni)): ?>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'DNI ya registrado',
+                    text: '<?php echo $error_dni; ?>',
+                    confirmButtonColor: '#293661'
+                });
+                document.getElementById('dni').style.borderColor = 'red';
+
+            <?php elseif (!empty($error)): ?>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: '<?php echo $error; ?>',
+                    confirmButtonColor: '#293661'
+                });
+            <?php endif; ?>
+
+            // ======================================================
+            // 2. ACTIVAR VALIDACIÓN DE CONTRASEÑAS (VISUAL)
+            // ======================================================
             activarValidacionPassword(
                 'password',              
                 'password_confirm',      
@@ -285,27 +314,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'btn-registrarse'        
             );
 
-            // 2. ACTIVAR CONTROL DE DNI AL ENVIAR
+            // ======================================================
+            // 3. LÓGICA DEL FORMULARIO (VALIDACIONES CLIENTE)
+            // ======================================================
             const form = document.getElementById('form-registro');
             const inputDNI = document.getElementById('dni');
+            const inputEmail = document.getElementById('email');
+            const inputEmailConf = document.getElementById('email_confirm');
+
+            // --- Limpiar borde rojo de email al escribir ---
+            inputEmailConf.addEventListener('input', function() {
+                if(this.value === inputEmail.value) {
+                    this.style.borderColor = 'green';
+                } else {
+                    this.style.borderColor = ''; 
+                }
+            });
 
             form.addEventListener('submit', function(e) {
-                // Paso A: Verificar que todos los campos requeridos HTML estén llenos
+                // Paso A: Verificar validaciones HTML5 básicas
                 if (!form.checkValidity()) {
                     return; 
                 }
 
-                // Paso B: Verificar DNI con tu algoritmo JS
+                // Paso B: Verificar que los emails coinciden
+                const valEmail = inputEmail.value.trim();
+                const valEmailConf = inputEmailConf.value.trim();
+
+                if (valEmail !== valEmailConf) {
+                    e.preventDefault(); 
+                    
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Los correos no coinciden',
+                        text: 'Por favor, asegúrate de que el correo electrónico y su confirmación sean iguales.',
+                        confirmButtonColor: '#293661'
+                    });
+
+                    inputEmailConf.style.borderColor = 'red';
+                    inputEmailConf.focus();
+                    return; 
+                }
+
+                // Paso C: Verificar DNI con algoritmo JS
                 if (typeof validarDocumento === 'function') {
                     const esDniValido = validarDocumento(inputDNI);
                     
                     if (!esDniValido) {
-                        e.preventDefault(); // ¡STOP! No enviamos el formulario
+                        e.preventDefault(); 
                         
                         Swal.fire({
                             icon: 'error',
-                            title: '<?php echo $lang['registro_js_dni_titulo']; ?>',
-                            text: '<?php echo $lang['registro_js_dni_texto']; ?>',
+                            title: '<?php echo $lang['registro_js_dni_titulo'] ?? "DNI Inválido"; ?>',
+                            text: '<?php echo $lang['registro_js_dni_texto'] ?? "El formato del DNI no es correcto."; ?>',
                             confirmButtonColor: '#293661'
                         });
                         

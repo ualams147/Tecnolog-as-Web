@@ -11,10 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $medidas = $_POST['tamanos'];
     $id_categoria = $_POST['categoria']; 
     
-    // NUEVO: Recoger el stock (si está vacío ponemos 0)
-    $stock = isset($_POST['stock']) ? intval($_POST['stock']) : 0;
-    
-    $color = isset($_POST['colores']) ? $_POST['colores'] : '';
+    // Recoger el color (texto directo)
+    $color = $_POST['color'] ?? '';
 
     // Valores por defecto
     $referencia = 'REF-' . rand(1000, 9999); 
@@ -25,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (isset($_FILES['nueva_imagen']) && $_FILES['nueva_imagen']['error'] === UPLOAD_ERR_OK) {
         $nombre_archivo = basename($_FILES['nueva_imagen']['name']);
+        // Ruta relativa simple para guardar en la BD
         $ruta_destino = "imagenes/" . $nombre_archivo;
         
         if (move_uploaded_file($_FILES['nueva_imagen']['tmp_name'], $ruta_destino)) {
@@ -33,19 +32,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     try {
-        // Insertar en la Base de Datos
-        $sql = "INSERT INTO productos (referencia, nombre, descripcion, precio, color, medidas, imagen_url, id_material, id_categoria, stock) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        // --- CONSULTA CORREGIDA (SIN STOCK) ---
+        $sql = "INSERT INTO productos (referencia, nombre, descripcion, precio, color, medidas, imagen_url, id_material, id_categoria) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
         $stmt = $conn->prepare($sql);
-        // Fíjate que $stock es la última variable del array
-        $stmt->execute([$referencia, $nombre, $descripcion, $precio, $color, $medidas, $ruta_imagen, $id_material, $id_categoria, $stock]);
+        // Ejecutamos sin la variable $stock
+        $stmt->execute([$referencia, $nombre, $descripcion, $precio, $color, $medidas, $ruta_imagen, $id_material, $id_categoria]);
         
         // Redirigir al listado si todo sale bien
         header("Location: listadoproductosadmin.php");
         exit;
         
     } catch(PDOException $e) {
-        echo "<script>alert('Error al guardar: " . $e->getMessage() . "');</script>";
+        // En caso de error, mostramos una alerta con el detalle
+        $error_msg = $e->getMessage();
+        echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al guardar',
+                    text: 'Detalles: " . addslashes($error_msg) . "',
+                    confirmButtonColor: '#293661'
+                });
+            });
+        </script>";
     }
 }
 ?>
@@ -99,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="container main-container">
             
             <div id="mensaje-error-js" class="alerta-error" style="display: none;"></div>
-            <input type="hidden" name="accion" value="crear">
+            
             <form id="form-crear" method="POST" enctype="multipart/form-data" class="product-card">
                 
                 <div class="image-column">
@@ -124,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-group">
                         <label class="form-label" for="precio">Precio:</label>
                         <div class="price-wrapper">
-                            <input type="number" step="0.01" id="precio" name="precio" class="form-input">
+                            <input type="number" step="0.01" id="precio" name="precio" class="form-input" required>
                             <span class="currency-symbol">€</span>
                         </div>
                     </div>
@@ -135,49 +146,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Colores disponibles:</label>
-                        <div class="checkbox-group">
-                            <label class="checkbox-label"><input type="checkbox" name="colores" value="Blanco"> Blanco</label>
-                            <label class="checkbox-label"><input type="checkbox" name="colores" value="Plata"> Plata</label>
-                            <label class="checkbox-label"><input type="checkbox" name="colores" value="Marrón"> Marrón</label>
-                        </div>
+                        <label class="form-label" for="color">Color:</label>
+                        <input type="text" 
+                            id="color" 
+                            name="color" 
+                            class="form-input" 
+                            placeholder="Ej: Blanco, Plata, Madera, Ral 7016..." 
+                            required>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Tamaños disponibles:</label>
                         
-                        <div id="tamanos-container" class="tamanos-container">
-                            </div>
+                        <div id="tamanos-container" class="tamanos-container"></div>
                         
                         <div class="input-group-medidas">
-                            
                             <div class="medida-input-wrapper">
                                 <input type="number" id="input-ancho" class="form-input input-corto" placeholder="Ancho" min="30">
                                 <span class="medida-label">cm</span>
                             </div>
-
                             <span class="separador-x">✕</span>
-
                             <div class="medida-input-wrapper">
                                 <input type="number" id="input-alto" class="form-input input-corto" placeholder="Alto" min="30">
                                 <span class="medida-label">cm</span>
                             </div>
-                            
-                            <button type="button" id="btn-add-tamano" class="btn-add-medida">
-                                Añadir
-                            </button>
+                            <button type="button" id="btn-add-tamano" class="btn-add-medida">Añadir</button>
                         </div>
 
                         <p class="nota-medidas">* La medida mínima es de 30 cm.</p>
-                        
-                        <input type="hidden" id="tamanos-final" name="tamanos" value="<?php echo htmlspecialchars($producto['medidas'] ?? ''); ?>">
+                        <input type="hidden" id="tamanos-final" name="tamanos" value="">
                     </div>
 
                     <div class="form-group">
                         <label class="form-label" for="categoria">Categoría:</label>
                         <select id="categoria" name="categoria" class="form-input" style="cursor: pointer;" required>
                             <option value="" selected disabled hidden>Selecciona una categoría</option>
-                            
                             <option value="1">Ventanas</option>
                             <option value="2">Balcones</option>
                             <option value="3">Rejas</option>
@@ -188,16 +191,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="botones-finales">
-    
                         <div class="boton-salir">
                             <a href="javascript:void(0);" onclick="confirmarSalida()">Salir</a>
                         </div>
-                        
-                        <div class="boton-modificar"> <button type="button" name="crear" onclick="confirmarCreacion()" style="border: 2px solid rgba(41, 54, 97, 0.6); font-family: inherit;">
+                        <div class="boton-modificar"> 
+                            <button type="button" name="crear" onclick="confirmarCreacion()" style="border: 2px solid rgba(41, 54, 97, 0.6); font-family: inherit;">
                                 <p>Crear producto</p>
                             </button>
                         </div>
-
                     </div>
 
                 </div>
@@ -212,12 +213,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <img src="imagenes/footer.png" alt="Logo Metalful">
                         </div>
                         <div class="redes">
-                            <a href="#" class="instagram-link">
+                             <a href="#" class="instagram-link">
                                 <svg viewBox="0 0 24 24" fill="white"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/></svg>
                             </a>
                         </div>
                     </div>
-
                     <div class="footer-links">
                         <div class="contacto-footer">
                             <h3>Contacto</h3>
@@ -233,7 +233,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </div>
                 </div>
-
                 <div class="footer-bottom">
                     <div class="politica-legal">
                         <a href="#aviso-legal">Aviso Legal</a> • <a href="#privacidad">Privacidad</a> • <a href="#cookies">Cookies</a>
@@ -244,7 +243,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
-        // 1. Previsualización de imagen
+        // --- 1. PREVISUALIZACIÓN DE IMAGEN ---
         function verImagen(event) {
             const input = event.target;
             if (input.files && input.files[0]) {
@@ -259,19 +258,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            // --- 2. Lógica de Checkboxes (Colores) ---
-            const checkboxes = document.querySelectorAll('input[name="colores"]');
-            checkboxes.forEach(box => {
-                box.addEventListener('change', function() {
-                    if (this.checked) {
-                        checkboxes.forEach(otherBox => {
-                            if (otherBox !== this) otherBox.checked = false;
-                        });
-                    }
-                });
-            });
-
-            // --- 3. LÓGICA DE MEDIDAS (Corregida) ---
+            
+            // --- 2. LÓGICA DE ETIQUETAS DE MEDIDAS (TAGS) ---
             const tamanosContainer = document.getElementById('tamanos-container');
             const inputAncho = document.getElementById('input-ancho');
             const inputAlto = document.getElementById('input-alto');
@@ -279,12 +267,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const hiddenInput = document.getElementById('tamanos-final');
             const errorDiv = document.getElementById('mensaje-error-js');
 
-            // Función crear etiqueta
             function createTag(text) {
                 const tag = document.createElement('span');
                 tag.classList.add('tamano-chip');
                 tag.innerHTML = `${text} <span class="remove-tag">✕</span>`;
-                
                 tag.querySelector('.remove-tag').addEventListener('click', () => {
                     tag.remove();
                     updateHiddenInput();
@@ -292,14 +278,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 tamanosContainer.appendChild(tag);
             }
 
-            // Actualizar el input oculto
             function updateHiddenInput() {
                 const tags = Array.from(tamanosContainer.querySelectorAll('.tamano-chip'))
                                         .map(t => t.innerText.replace('✕', '').trim());
                 hiddenInput.value = tags.join(', ');
             }
 
-            // Funciones de Error
+            // Gestión de errores JS
             function mostrarError(mensaje) {
                 if(errorDiv) {
                     errorDiv.textContent = mensaje;
@@ -307,7 +292,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     setTimeout(() => { errorDiv.style.display = 'none'; }, 5000);
                 } else {
-                    alert(mensaje);
+                    alert(mensaje); // Fallback
                 }
             }
 
@@ -315,12 +300,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if(errorDiv) errorDiv.style.display = 'none';
             }
 
-            // Función Añadir Medida
+            // Añadir nueva medida
             function addMedida() {
                 const ancho = parseInt(inputAncho.value);
                 const alto = parseInt(inputAlto.value);
 
-                // Validaciones
                 if (isNaN(ancho) || isNaN(alto)) {
                     mostrarError("⚠️ Por favor, introduce números válidos en Ancho y Alto.");
                     return;
@@ -331,62 +315,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 const nuevaMedida = `${ancho}x${alto}`;
-
-                // Comprobar duplicados
                 const actuales = hiddenInput.value.split(', ').map(t => t.trim());
+                
                 if (actuales.includes(nuevaMedida)) {
                     mostrarError("⚠️ Esta medida ya existe en la lista.");
                     return;
                 }
 
-                // Todo OK
                 ocultarError();
                 createTag(nuevaMedida);
                 updateHiddenInput();
+                
+                // Limpiar inputs y poner foco
                 inputAncho.value = '';
                 inputAlto.value = '';
                 inputAncho.focus();
             }
 
-            // Eventos
             if(btnAdd) btnAdd.addEventListener('click', addMedida);
-            
             if(inputAlto) {
                 inputAlto.addEventListener('keyup', (e) => {
                     if (e.key === 'Enter') addMedida();
                 });
             }
-
-            // Cargar datos iniciales
-            if (hiddenInput && hiddenInput.value) {
-                const existentes = hiddenInput.value.split(',');
-                existentes.forEach(medida => {
-                    if (medida.trim()) createTag(medida.trim());
-                });
-            }
         });
 
-
-        // --- FUNCIONES DE ALERTA (SWEETALERT) ---
+        // --- 3. ALERTAS Y ENVÍO (SWEETALERT) ---
 
         function confirmarCreacion() {
-            // 1. Seleccionamos el formulario
             const formulario = document.getElementById('form-crear');
 
-            // 2. Validar campos requeridos
+            // Validación HTML5 (Required, tipos, etc)
             if (!formulario.checkValidity()) {
                 formulario.reportValidity();
                 return; 
             }
 
-            const medidas = document.getElementById('tamanos-final').value;
-            // Si quieres validar medidas descomenta esto:
-            // if (!medidas) {
-            //     Swal.fire('Faltan medidas', 'Por favor, añade al menos un tamaño.', 'warning');
-            //     return;
-            // }
-
-            // 4. Mostrar Alerta
             Swal.fire({
                 title: '¿Crear producto?',
                 text: "¿Estás seguro de que quieres añadir este nuevo producto al catálogo?",
@@ -421,8 +385,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             });
         }
-
     </script>
-
 </body>
 </html>

@@ -21,11 +21,15 @@ SET time_zone = "+00:00";
 -- Base de datos: `metalisteria`
 --
 
+
+
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `carrito`
 --
+
+
 
 DROP TABLE IF EXISTS `carrito`;
 CREATE TABLE `carrito` (

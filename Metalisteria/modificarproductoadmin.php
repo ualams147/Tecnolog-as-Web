@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $medidas = $_POST['tamanos'];
     
     // Recogemos el color (puede venir vacío si no marcan nada)
-    $color = isset($_POST['colores']) ? $_POST['colores'] : '';
+    $color = $_POST['color'] ?? '';
 
     // Lógica para la imagen
     $ruta_imagen = $_POST['imagen_actual']; // Por defecto, mantenemos la antigua
@@ -167,18 +167,13 @@ if (empty($ruta_foto)) {
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Color:</label>
-                        <div class="checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="colores" value="Blanco" <?php if($producto['color'] == 'Blanco') echo 'checked'; ?>> Blanco
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="colores" value="Plata" <?php if($producto['color'] == 'Plata') echo 'checked'; ?>> Plata
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="colores" value="Marrón" <?php if($producto['color'] == 'Marrón') echo 'checked'; ?>> Marrón
-                            </label>
-                        </div>
+                        <label class="form-label" for="color">Color:</label>
+                        <input type="text" 
+                            id="color" 
+                            name="color" 
+                            class="form-input" 
+                            value="<?php echo htmlspecialchars($producto['color']); ?>" 
+                            placeholder="Ej: Blanco, Rojo, Madera, Plata..." >
                     </div>
 
                     <div class="form-group">
@@ -268,17 +263,6 @@ if (empty($ruta_foto)) {
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- 1. Lógica de Checkboxes de Color (Igual que antes) ---
-            const checkboxes = document.querySelectorAll('input[name="colores"]');
-            checkboxes.forEach(box => {
-                box.addEventListener('change', function() {
-                    if (this.checked) {
-                        checkboxes.forEach(otherBox => {
-                            if (otherBox !== this) otherBox.checked = false;
-                        });
-                    }
-                });
-            });
 
             // --- LÓGICA DE MEDIDAS (Actualizada) ---
             const tamanosContainer = document.getElementById('tamanos-container');

@@ -51,7 +51,7 @@ if (isset($input['accion']) && $input['accion'] === 'actualizar') {
         echo json_encode([
             'ok' => true,
             'nuevaCantidad' => $cantidad,
-            'nuevoTotal' => number_format($total_precio, 2),
+            'nuevoTotal' => number_format($total_precio, 2, '.', ''),
             'totalItems' => $total_items
         ]);
         exit;

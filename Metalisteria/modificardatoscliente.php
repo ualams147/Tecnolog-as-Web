@@ -172,7 +172,7 @@ if (!$cliente) {
 
                     <div class="form-group">
                         <label class="label-icon"><i class="far fa-id-card"></i> DNI/NIF/NIE:</label>
-                        <input type="text" id="dni" class="input-display" name="dni" value="<?php echo isset($cliente['dni']) ? htmlspecialchars($cliente['dni']) : ''; ?>" placeholder="Ej: 12345678Z" />
+                        <input type="text" id="dni" class="input-display" name="dni" value="<?php echo isset($cliente['dni']) ? htmlspecialchars($cliente['dni']) : ''; ?>" placeholder="Ej: 12345678Z" required />
                     </div>
 
                     <div class="form-group">
@@ -271,21 +271,39 @@ if (!$cliente) {
 
     <script>
         function confirmarModificacion() {
-            // Seleccionamos el formulario por el ID que acabamos de poner
             const formulario = document.getElementById('form-modificar');
+            const inputDNI = document.getElementById('dni');
 
-            // Validar campos requeridos
+            // 1. Validar campos requeridos básicos (HTML5)
             if (!formulario.checkValidity()) {
                 formulario.reportValidity();
                 return; 
             }
 
-            // Validar DNI (si tu script externo tiene una función validarDNI, úsala aquí)
-            // if (typeof validarDNI === 'function' && !validarDNI()) return;
+            // 2. VALIDACIÓN ESTRICTA DEL DNI
+            // Usamos la función global que tienes en 'js/AlgoritmoDNIs.js'
+            if (typeof validarDocumento === 'function') {
+                const esDniValido = validarDocumento(inputDNI);
+                
+                if (!esDniValido) {
+                    // Si el DNI está mal, mostramos alerta y PARAMOS todo
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Documento no válido',
+                        text: 'El DNI, NIE o CIF introducido no es correcto. Por favor revísalo.',
+                        confirmButtonColor: '#293661'
+                    });
+                    
+                    // Ponemos el foco en el input para que lo corrija
+                    inputDNI.focus();
+                    return; // Importante: Esto evita que siga hacia abajo y guarde
+                }
+            }
 
+            // 3. Si todo está bien, pedimos confirmación
             Swal.fire({
                 title: '¿Guardar cambios?',
-                text: "¿Estás seguro de que quieres actualizar los datos de este cliente?", // Texto corregido para cliente
+                text: "¿Estás seguro de que quieres actualizar los datos de este cliente?",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#293661',
@@ -298,6 +316,26 @@ if (!$cliente) {
             }).then((result) => {
                 if (result.isConfirmed) {
                     formulario.submit();
+                }
+            });
+        }
+
+        function confirmarSalida() {
+            Swal.fire({
+                title: '¿Salir sin guardar?',
+                text: "Se perderán los cambios que no hayas guardado.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#293661',
+                confirmButtonText: 'Sí, salir',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    popup: 'swal2-popup'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'listadoclientesadmin.php';
                 }
             });
         }
