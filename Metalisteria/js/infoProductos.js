@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (productoEncontrado) {
                 if (productoEncontrado.id != idActual) {
-                    window.location.href = `infoProducto.php?id=${productoEncontrado.id}`;
+                    window.location.href = `infoproducto.php?id=${productoEncontrado.id}`;
                 }
             } else {
                 console.log("Combinación no disponible");
