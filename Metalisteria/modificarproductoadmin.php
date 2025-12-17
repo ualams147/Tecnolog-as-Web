@@ -1,5 +1,6 @@
 <?php
 include 'conexion.php';
+require 'seguridad_admin.php'; 
 
 // 1. VERIFICAR QUE RECIBIMOS UN ID
 if (!isset($_GET['id'])) {

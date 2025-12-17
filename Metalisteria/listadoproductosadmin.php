@@ -1,5 +1,6 @@
 <?php
 include 'conexion.php';
+require 'seguridad_admin.php'; 
 
 // --- LÓGICA PARA ELIMINAR PRODUCTO ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_eliminar'])) {

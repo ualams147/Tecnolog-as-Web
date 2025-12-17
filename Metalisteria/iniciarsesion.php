@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // 4. REDIRECCIÓN SEGÚN ROL Y ORIGEN
         if ($usuario['rol'] === 'admin') {
-            $destino = 'listadoventasadmin.php'; // Mejor ir directo al listado que al indexadmin vacío
+            $destino = 'indexadmin.php'; // Mejor ir directo al listado que al indexadmin vacío
         } else {
             if ($origen === 'compra') {
                 $destino = 'datosenvio.php';

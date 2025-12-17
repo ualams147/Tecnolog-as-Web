@@ -1,5 +1,6 @@
 <?php
 include 'conexion.php';
+require 'seguridad_admin.php'; 
 
 // --- CONTROL DE SESIÓN E IDIOMA ---
 if (session_status() === PHP_SESSION_NONE) {

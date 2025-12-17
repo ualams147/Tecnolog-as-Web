@@ -1,5 +1,6 @@
 <?php
 include 'conexion.php';
+require 'seguridad_admin.php';
 
 // 1. PROCESAR EL FORMULARIO
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

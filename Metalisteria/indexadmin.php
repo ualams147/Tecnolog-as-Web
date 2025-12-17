@@ -1,5 +1,6 @@
 <?php
-include 'conexion.php';  
+include 'conexion.php'; 
+require 'seguridad_admin.php'; 
 
 // 1. CAPTURA DE FILTROS
 $filtro_fecha = isset($_GET['fecha']) ? $_GET['fecha'] : '';

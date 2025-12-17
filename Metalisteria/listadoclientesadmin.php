@@ -1,5 +1,6 @@
 <?php
 include 'conexion.php';
+require 'seguridad_admin.php'; 
 
 // --- 1. LÓGICA PARA ELIMINAR CLIENTE ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_eliminar'])) {
