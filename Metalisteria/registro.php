@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// 0. CARGAR IDIOMA (Antes de validar, para mostrar errores traducidos)
+// 0. CARGAR IDIOMA
 if (!isset($_SESSION['idioma'])) {
     $_SESSION['idioma'] = 'es';
 }
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cp = $_POST['cp'] ?? '';
     $localidad = $_POST['localidad'] ?? '';
 
-    // Validaciones
+    // Validaciones básicas PHP
     if ($email !== $email_confirm) {
         $error = $lang['registro_err_emails'];
     } elseif ($password !== $password_confirm) {
@@ -130,15 +130,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/registro.css">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script src="js/auth.js"></script>
 </head>
 <body>
     <div class="visitante-registro">
-        
         <?php sectionheader(); ?>
 
         <main class="registro-section">
@@ -146,7 +143,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <h1 class="registro-title"><?php echo $lang['registro_h1']; ?></h1>
 
                 <form class="registro-form" id="form-registro" method="POST" action="">
-                    
                     <?php if(!empty($origen)): ?>
                         <input type="hidden" name="origen" value="<?php echo htmlspecialchars($origen); ?>">
                     <?php endif; ?>
@@ -266,45 +262,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php sectionfooter(); ?>
     </div>
 
-    <script src="js/AlgoritmoDNIs.js"></script> 
-    
     <script>
+        // =========================================================================
+        // 1. VALIDACIÓN DNI (INCRUSTADA)
+        // =========================================================================
+        document.addEventListener("DOMContentLoaded", function() {
+            const inputDNI = document.getElementById('dni');
+            if (inputDNI) {
+                inputDNI.addEventListener('blur', function() {
+                    validarDocumento(this);
+                });
+                inputDNI.addEventListener('input', function() {
+                    this.style.borderColor = ''; // Limpiar al escribir
+                });
+            }
+        });
+
+        function validarDocumento(input) {
+            if (!input) return false;
+            const valor = input.value.toUpperCase().trim();
+            input.style.borderColor = ''; // Limpiar
+
+            if (valor === '' && input.hasAttribute('required')) return false;
+            if (valor === '') return true;
+
+            // 1. DNI (8 números + Letra)
+            if (/^\d{8}[A-Z]$/.test(valor)) {
+                const letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+                if(letras[valor.substr(0, 8) % 23] === valor.substr(8, 1)) {
+                    input.style.borderColor = 'green';
+                    return true;
+                }
+                input.style.borderColor = 'red';
+                return false;
+            }
+            // 2. NIE (X/Y/Z + 7 números + Letra)
+            else if (/^[XYZ]\d{7}[A-Z]$/.test(valor)) {
+                let num = valor.substr(0, 8).replace('X','0').replace('Y','1').replace('Z','2');
+                const letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+                if(letras[num % 23] === valor.substr(8, 1)){
+                    input.style.borderColor = 'green';
+                    return true;
+                }
+                input.style.borderColor = 'red';
+                return false;
+            }
+            // 3. CIF
+            else if (/^[ABCDEFGHJKLMNPQRSUVW]\d{7}[0-9A-J]$/.test(valor)) {
+                input.style.borderColor = 'green';
+                return true;
+            }
+            // Formato incorrecto
+            input.style.borderColor = 'red';
+            return false;
+        }
+
+        // =========================================================================
+        // 2. LÓGICA PRINCIPAL (FORMULARIO Y ALERTAS)
+        // =========================================================================
         document.addEventListener("DOMContentLoaded", function() {
             
-            // ======================================================
-            // 1. ALERTAS DEL SERVIDOR (PHP) -> SWEETALERT
-            // ======================================================
-            
+            // ALERTAS PHP
             <?php if (!empty($error_email)): ?>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Email no disponible',
-                    text: '<?php echo $error_email; ?>',
-                    confirmButtonColor: '#293661'
-                });
+                Swal.fire({ icon: 'error', title: 'Email no disponible', text: '<?php echo $error_email; ?>', confirmButtonColor: '#293661' });
                 document.getElementById('email').style.borderColor = 'red';
-            
             <?php elseif (!empty($error_dni)): ?>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'DNI ya registrado',
-                    text: '<?php echo $error_dni; ?>',
-                    confirmButtonColor: '#293661'
-                });
+                Swal.fire({ icon: 'error', title: 'DNI ya registrado', text: '<?php echo $error_dni; ?>', confirmButtonColor: '#293661' });
                 document.getElementById('dni').style.borderColor = 'red';
-
             <?php elseif (!empty($error)): ?>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: '<?php echo $error; ?>',
-                    confirmButtonColor: '#293661'
-                });
+                Swal.fire({ icon: 'error', title: 'Error', text: '<?php echo $error; ?>', confirmButtonColor: '#293661' });
             <?php endif; ?>
 
-            // ======================================================
-            // 2. ACTIVAR VALIDACIÓN DE CONTRASEÑAS (VISUAL)
-            // ======================================================
+            // ACTIVAR VALIDACIÓN PASSWORD
             activarValidacionPassword(
                 'password',              
                 'password_confirm',      
@@ -312,64 +341,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'btn-registrarse'        
             );
 
-            // ======================================================
-            // 3. LÓGICA DEL FORMULARIO (VALIDACIONES CLIENTE)
-            // ======================================================
+            // LOGICA SUBMIT
             const form = document.getElementById('form-registro');
             const inputDNI = document.getElementById('dni');
             const inputEmail = document.getElementById('email');
             const inputEmailConf = document.getElementById('email_confirm');
 
-            // --- Limpiar borde rojo de email al escribir ---
             inputEmailConf.addEventListener('input', function() {
-                if(this.value === inputEmail.value) {
-                    this.style.borderColor = 'green';
-                } else {
-                    this.style.borderColor = ''; 
-                }
+                this.style.borderColor = (this.value === inputEmail.value) ? 'green' : '';
             });
 
             form.addEventListener('submit', function(e) {
-                // Paso A: Verificar validaciones HTML5 básicas
-                if (!form.checkValidity()) {
-                    return; 
-                }
+                if (!form.checkValidity()) return;
 
-                // Paso B: Verificar que los emails coinciden
-                const valEmail = inputEmail.value.trim();
-                const valEmailConf = inputEmailConf.value.trim();
-
-                if (valEmail !== valEmailConf) {
+                if (inputEmail.value.trim() !== inputEmailConf.value.trim()) {
                     e.preventDefault(); 
-                    
                     Swal.fire({
-                        icon: 'error',
-                        title: 'Los correos no coinciden',
-                        text: 'Por favor, asegúrate de que el correo electrónico y su confirmación sean iguales.',
-                        confirmButtonColor: '#293661'
+                        icon: 'error', title: 'Los correos no coinciden', 
+                        text: 'Asegúrate de que el correo y su confirmación sean iguales.', confirmButtonColor: '#293661'
                     });
-
                     inputEmailConf.style.borderColor = 'red';
                     inputEmailConf.focus();
                     return; 
                 }
 
-                // Paso C: Verificar DNI con algoritmo JS
-                if (typeof validarDocumento === 'function') {
-                    const esDniValido = validarDocumento(inputDNI);
-                    
-                    if (!esDniValido) {
-                        e.preventDefault(); 
-                        
-                        Swal.fire({
-                            icon: 'error',
-                            title: '<?php echo $lang['registro_js_dni_titulo'] ?? "DNI Inválido"; ?>',
-                            text: '<?php echo $lang['registro_js_dni_texto'] ?? "El formato del DNI no es correcto."; ?>',
-                            confirmButtonColor: '#293661'
-                        });
-                        
-                        inputDNI.focus(); 
-                    }
+                if (!validarDocumento(inputDNI)) {
+                    e.preventDefault(); 
+                    Swal.fire({
+                        icon: 'error', title: 'DNI Inválido', 
+                        text: 'El formato del documento no es correcto.', confirmButtonColor: '#293661'
+                    });
+                    inputDNI.focus(); 
                 }
             });
         });
@@ -377,40 +379,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function mostrarOcultar(idInput, idIcono) {
             const input = document.getElementById(idInput);
             const icono = document.getElementById(idIcono);
-
             if (input.type === "password") {
                 input.type = "text"; 
-                icono.classList.remove("fa-eye");
-                icono.classList.add("fa-eye-slash"); 
+                icono.classList.remove("fa-eye"); icono.classList.add("fa-eye-slash"); 
             } else {
                 input.type = "password"; 
-                icono.classList.remove("fa-eye-slash");
-                icono.classList.add("fa-eye"); 
+                icono.classList.remove("fa-eye-slash"); icono.classList.add("fa-eye"); 
             }
         }
 
-        // ==========================================
-        //  CÓDIGO DE VALIDACIÓN DE PASSWORD (EMBEBIDO)
-        // ==========================================
-        
-        /**
-         * Activa la validación en tiempo real de la contraseña
-         * @param {string} idInputPass - ID del input de la nueva contraseña.
-         * @param {string} idInputConfirm - ID del input de confirmar contraseña.
-         * @param {string} idListaRequisitos - ID del UL donde se mostrarán los requisitos.
-         * @param {string} idBotonSubmit - ID del botón de enviar (para bloquearlo si no es válido).
-         */
+        // =========================================================================
+        // 3. VALIDACIÓN PASSWORD (INCRUSTADA)
+        // =========================================================================
         function activarValidacionPassword(idInputPass, idInputConfirm, idListaRequisitos, idBotonSubmit) {
-            
             const inputPass = document.getElementById(idInputPass);
             const inputConfirm = document.getElementById(idInputConfirm);
             const listaReq = document.getElementById(idListaRequisitos);
             const btnSubmit = document.getElementById(idBotonSubmit);
 
-            // Si no existen los elementos, no hacemos nada
             if (!inputPass || !listaReq) return;
 
-            // Definimos las reglas
             const reglas = [
                 { id: 'req-longitud', regex: /.{8,}/, texto: 'Mínimo 8 caracteres' },
                 { id: 'req-mayus', regex: /[A-Z]/, texto: 'Al menos una mayúscula' },
@@ -418,27 +406,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 { id: 'req-num', regex: /[0-9]/, texto: 'Al menos un número' }
             ];
 
-            // Generamos el HTML de la lista dinámicamente la primera vez
             listaReq.innerHTML = reglas.map(regla => 
                 `<li id="${regla.id}" class="requisito-pendiente"><i class="fas fa-circle"></i> ${regla.texto}</li>`
             ).join('') + `<li id="req-coinciden" class="requisito-pendiente"><i class="fas fa-circle"></i> Las contraseñas coinciden</li>`;
 
-            // Función que comprueba todo
             function validar() {
                 const valor = inputPass.value;
                 const valorConfirm = inputConfirm ? inputConfirm.value : '';
                 let todoValido = true;
 
-                // 1. Comprobar reglas de complejidad
                 reglas.forEach(regla => {
                     const item = document.getElementById(regla.id);
                     const cumple = regla.regex.test(valor);
-                    
                     actualizarEstilo(item, cumple);
                     if (!cumple) todoValido = false;
                 });
 
-                // 2. Comprobar que coincidan
                 const itemCoinciden = document.getElementById('req-coinciden');
                 if (inputConfirm) {
                     const coinciden = (valor === valorConfirm) && valor.length > 0;
@@ -446,7 +429,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (!coinciden) todoValido = false;
                 }
 
-                // 3. Controlar el botón de envío
                 if (btnSubmit) {
                     if (valor.length === 0 && (!inputConfirm || inputConfirm.value.length === 0)) {
                         btnSubmit.disabled = false; 
@@ -458,24 +440,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
 
-            // Helper visual
             function actualizarEstilo(elemento, cumple) {
                 if (cumple) {
-                    elemento.classList.remove('requisito-pendiente', 'requisito-mal');
-                    elemento.classList.add('requisito-bien');
+                    elemento.className = 'requisito-bien';
                     elemento.querySelector('i').className = 'fas fa-check-circle';
                 } else {
-                    elemento.classList.remove('requisito-bien');
-                    elemento.classList.add('requisito-pendiente'); 
+                    elemento.className = 'requisito-pendiente';
                     elemento.querySelector('i').className = 'far fa-circle';
                 }
             }
 
-            // Listeners
             inputPass.addEventListener('input', validar);
             if (inputConfirm) inputConfirm.addEventListener('input', validar);
-            
-            // Iniciar oculto
             listaReq.style.display = 'none';
         }
     </script>

@@ -17,7 +17,13 @@ $lang = array(
     "contacto" => "Contacto",
     "aviso" => "Aviso Legal",
     "privacidad" => "Política de Privacidad",
-    "cookies" => "Política de Cookies"
+    "cookies" => "Política de Cookies",
+    // Textos Cookies
+    "cookie_titulo" => "Política de Cookies",
+    "cookie_desc" => "Utilizamos cookies propias y de terceros para mejorar nuestros servicios.",
+    "cookie_link" => "Más información",
+    "cookie_aceptar" => "Aceptar",
+    "cookie_rechazar" => "Rechazar"
 );
 
 // 3. CAMBIO DE IDIOMA
@@ -56,14 +62,12 @@ function sectionheader($active = 0) {
     }
     
     $usuario_logueado = isset($_SESSION['usuario']);
-    
-    // --- AQUÍ FALTABA CERRAR PHP ---
     ?>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
-        /* ================= ESTILOS BASE (ESCRITORIO) ================= */
+        /* ================= ESTILOS BASE HEADER ================= */
         .cabecera { position: relative; width: 100%; background: white; padding: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .cabecera .container { display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
         
@@ -100,7 +104,7 @@ function sectionheader($active = 0) {
         .lang-options a:hover { background: #f5f7fa; color: #293661; font-weight: 600; }
         .lang-options a.selected { background: #eef2ff; color: #293661; font-weight: bold; }
 
-        /* FOOTER BASE */
+        /* FOOTER BASE CSS */
         .footer { background: #293661; color: white; padding: 60px 0 30px; }
         .footer-content { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; margin-bottom: 40px; }
         .footer-logo-section { display: flex; align-items: center; justify-content: flex-start; gap: 20px; }
@@ -126,63 +130,29 @@ function sectionheader($active = 0) {
         .politica-legal a:hover { opacity: 0.8; }
         .politica-legal span { font-size: 14px; opacity: 0.5; }
 
-        /* ================= MEDIA QUERIES (RESPONSIVE) ================= */
-        
+        /* ================= MEDIA QUERIES ================= */
         @media (max-width: 1024px) {
             .nav-bar { gap: 40px; font-size: 16px; } 
             .cabecera .container { gap: 20px; }
         }
 
         @media (max-width: 768px) {
-            /* --- CABECERA MÓVIL --- */
             .cabecera { padding: 15px 0; }
             .cabecera .container { gap: 0; }
-
-            /* Orden elementos cabecera */
             .logo-main { order: 1; margin-right: auto; }
             .sign-in { order: 2; padding: 8px 16px; margin: 0; }
             .sign-in a { font-size: 14px; }
             .menu-toggle { display: block; order: 3; }
-            
             .nav-bar { display: none; width: 100%; flex-direction: column; order: 4; padding-top: 20px; gap: 20px; text-align: center; border-top: 1px solid #eee; margin-top: 15px; }
             .nav-bar.active { display: flex; }
             .lang-widget { bottom: 20px; left: 20px; }
 
-            /* --- FOOTER MÓVIL (Corrección Forzada) --- */
-            
-            /* 1. Quitamos la estructura Grid y ponemos Flex Vertical */
-            .footer-content { 
-                display: flex !important; 
-                flex-direction: column !important; 
-                gap: 40px !important; 
-            }
-
-            .footer-logo-section { 
-                flex-direction: column !important; 
-                align-items: center !important; 
-            }
+            .footer-content { display: flex !important; flex-direction: column !important; gap: 40px !important; }
+            .footer-logo-section { flex-direction: column !important; align-items: center !important; }
             .logo-footer img { width: 150px; height: 150px; }
-
-            /* 2. Contenedor de enlaces también vertical */
-            .footer-links { 
-                display: flex !important; 
-                flex-direction: column !important; 
-                gap: 50px !important; 
-                text-align: center !important;
-            }
-
-            /* 3. SUBIR SECCIÓN CONTACTO (Order -1 la sube arriba) */
-            .contacto-footer {
-                order: -1 !important; 
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-            }
-
-            /* 4. Centrar los iconos y el texto del teléfono */
-            .contacto-footer ul li {
-                justify-content: center !important;
-            }
+            .footer-links { display: flex !important; flex-direction: column !important; gap: 50px !important; text-align: center !important; }
+            .contacto-footer { order: -1 !important; display: flex !important; flex-direction: column !important; align-items: center !important; }
+            .contacto-footer ul li { justify-content: center !important; }
         }
     </style>
 
@@ -276,6 +246,9 @@ function sectionheader($active = 0) {
     <?php
 }
 
+/**
+ * Función para mostrar el Footer y el Banner de Cookies
+ */
 function sectionfooter() {
     global $lang;
     $usuario_logueado = isset($_SESSION['usuario']);
@@ -341,6 +314,75 @@ function sectionfooter() {
             </div>
         </div>
     </footer>
+
+    <style>
+        .cookie-banner {
+            position: fixed; bottom: -100%; left: 0; width: 100%;
+            background-color: #293661; color: white; padding: 20px;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.3); z-index: 99999; /* Z-index muy alto */
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+            transition: bottom 0.5s ease-in-out; font-family: 'Poppins', sans-serif;
+        }
+        .cookie-banner.mostrar { bottom: 0 !important; }
+        
+        .cookie-content { display: flex; align-items: center; gap: 20px; max-width: 1200px; width: 100%; flex-wrap: wrap; justify-content: center; }
+        .cookie-text { font-size: 14px; flex: 1; min-width: 250px; text-align: center; }
+        .cookie-text p { margin: 0; }
+        .cookie-text a { color: #a0d2ac; text-decoration: underline; }
+        
+        .cookie-icon svg { width: 40px; height: 40px; stroke: white; }
+
+        .cookie-buttons { display: flex; gap: 15px; }
+        .btn-cookie-accept { background: white; color: #293661; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-cookie-accept:hover { background-color: #f0f0f0; transform: scale(1.05); }
+        .btn-cookie-reject { background: transparent; color: white; border: 1px solid white; padding: 10px 20px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+        .btn-cookie-reject:hover { background-color: rgba(255, 255, 255, 0.1); border-color: white; }
+
+        @media (max-width: 768px) {
+            .cookie-content { flex-direction: column; text-align: center; }
+            .cookie-buttons { width: 100%; justify-content: center; flex-direction: column-reverse; gap: 10px; }
+            .btn-cookie-accept, .btn-cookie-reject { width: 100%; }
+        }
+    </style>
+
+    <div id="cookie-banner" class="cookie-banner">
+        <div class="cookie-content">
+            <div class="cookie-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <polyline points="9 12 11 14 15 10"></polyline>
+                </svg>
+            </div>
+            <div class="cookie-text">
+                <p><strong><?php echo $lang['cookie_titulo']; ?></strong></p>
+                <p><?php echo $lang['cookie_desc']; ?> <a href="cookies.php"><?php echo $lang['cookie_link']; ?></a>.</p>
+            </div>
+            <div class="cookie-buttons">
+                <button class="btn-cookie-reject" onclick="gestionarCookies(false)"><?php echo $lang['cookie_rechazar']; ?></button>
+                <button class="btn-cookie-accept" onclick="gestionarCookies(true)"><?php echo $lang['cookie_aceptar']; ?></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const decisionTomada = localStorage.getItem('metalfulsan_cookies_decision');
+            
+            // Si NO hay decisión tomada, mostramos el banner
+            if (!decisionTomada) {
+                setTimeout(function() {
+                    const banner = document.getElementById('cookie-banner');
+                    if(banner) banner.classList.add('mostrar');
+                }, 1000); // 1 segundo de retraso
+            }
+        });
+
+        function gestionarCookies(aceptadas) {
+            localStorage.setItem('metalfulsan_cookies_decision', 'tomada');
+            localStorage.setItem('metalfulsan_cookies_aceptadas', aceptadas);
+            document.getElementById('cookie-banner').classList.remove('mostrar');
+        }
+    </script>
     <?php
 }
 ?>
