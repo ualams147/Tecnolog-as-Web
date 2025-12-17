@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Recoger el color (texto directo)
     $color = $_POST['color'] ?? '';
-
+    
     // Valores por defecto
     $referencia = 'REF-' . rand(1000, 9999); 
     $id_material = 1; // 1 = Aluminio (Por defecto)
@@ -103,7 +103,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="titulo-section">
             <div class="degradado"></div>
             <div class="recuadro-fondo"></div> 
-            <a href="listadoproductosadmin.php" class="flecha-circular">&#8592;</a>
+            
+            <a href="listadoproductosadmin.php" class="flecha-circular" style="display: flex; align-items: center; justify-content: center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 18L9 12L15 6" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+            
             <h1 class="titulo-principal">Nuevo Producto</h1>
         </div>
 
@@ -280,7 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             function updateHiddenInput() {
                 const tags = Array.from(tamanosContainer.querySelectorAll('.tamano-chip'))
-                                        .map(t => t.innerText.replace('✕', '').trim());
+                                                .map(t => t.innerText.replace('✕', '').trim());
                 hiddenInput.value = tags.join(', ');
             }
 

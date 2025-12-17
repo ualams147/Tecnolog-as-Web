@@ -9,6 +9,7 @@ if (!isset($_GET['id'])) {
 
 $id_venta = $_GET['id'];
 
+
 // 2. OBTENER DATOS DE LA VENTA Y EL CLIENTE
 $sql_venta = "SELECT v.*, c.id as id_cliente, c.nombre as nombre_cli, c.apellidos as apellidos_cli, c.email 
               FROM ventas v 
@@ -76,7 +77,13 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
         <div class="titulo-section">
             <div class="degradado"></div>
             <div class="recuadro-fondo"></div> 
-            <a href="listadoventasadmin.php" class="flecha-circular">←</a>
+            
+            <a href="listadoventasadmin.php" class="flecha-circular" style="display: flex; align-items: center; justify-content: center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 18L9 12L15 6" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+
             <h1 class="titulo-principal">Venta #<?php echo str_pad($venta['id'], 4, '0', STR_PAD_LEFT); ?></h1>
         </div>
 
