@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title><?php echo $lang['login_titulo_pag']; ?></title>
     <link rel="icon" type="image/png" href="imagenes/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/IniciarSesion.css"> 
+    <link rel="stylesheet" href="css/iniciarsesion.css"> 
     <script src="js/auth.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -168,11 +168,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php echo $lang['login_lbl_pass']; ?>
                         </label>
                         
-                        <div style="position: relative; width: 100%;">
-                            <input type="password" id="password" name="password" class="form-input" required style="padding-right: 40px;">
-                            
-                            <i class="fas fa-eye" id="ojo_login" onclick="mostrarOcultar('password', 'ojo_login')" 
-                            style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #293661;"></i>
+                        <div style="width: 100%; display: flex; flex-direction: column; margin-top: 20px;">
+    
+                            <div style="position: relative; width: 100%;">
+                                <input type="password" id="password" name="password" class="form-input" required style="padding-right: 40px;">
+                                <i class="fas fa-eye" id="ojo_login" onclick="mostrarOcultar('password', 'ojo_login')" 
+                                style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #293661;"></i>
+                            </div>
+
+                            <div style="text-align: right; margin-top: 8px;">
+                                <a href="olvidepassword.php" style="color: #666; font-size: 13px; text-decoration: none; font-weight: 500; transition: color 0.3s;" onmouseover="this.style.color='#293661'" onmouseout="this.style.color='#666'">
+                                    ¿Has olvidado tu contraseña?
+                                </a>
+                            </div>
+
                         </div>
                     </div>
                     

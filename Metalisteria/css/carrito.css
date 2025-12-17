@@ -188,28 +188,64 @@ body {
     margin: 0;
 }
 
+/* Botón Tramitar Pedido (Diseño Premium - Sutil) */
 .btn-comprar {
-    background-color: #a0d2ac; /* Verde del diseño */
-    color: black;
+    /* Fondo original verde */
+    background: linear-gradient(135deg, #a0d2ac 0%, #8bcfa0 100%);
+    
+    color: #293661; 
     font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 28px;
+    font-weight: 700;
+    font-size: 20px; 
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    
     border: none;
-    border-radius: 12px;
-    padding: 15px;
+    border-radius: 50px; 
+    padding: 18px 40px;
+    
     width: 100%;
     max-width: 400px;
-    margin: 0 auto; /* Centrado */
+    margin: 0 auto;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    transition: transform 0.2s, background 0.3s;
+    text-decoration: none; 
+    
+    /* Sombra inicial */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); 
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
+/* Efecto Hover (Al pasar el ratón) - CORREGIDO */
 .btn-comprar:hover {
-    background-color: #8bcfa0;
-    transform: translateY(-2px);
+    transform: translateY(-3px); /* Se levanta un poco menos que antes */
+    
+    /* Sombra verde suave, no tan brillante */
+    box-shadow: 0 12px 25px rgba(160, 210, 172, 0.3); 
+    
+    /* CAMBIO: En vez de blanco, usamos un verde más claro y luminoso */
+    background: linear-gradient(135deg, #b8eac5 0%, #a3e6b8 100%); 
 }
 
+/* Efecto Click */
+.btn-comprar:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Estado Deshabilitado */
+.btn-comprar:disabled,
+.btn-comprar[disabled] {
+    background: #4a5578; 
+    color: #8892b0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
 
 /* ========================== RESPONSIVE (Carrito) ========================== */
 

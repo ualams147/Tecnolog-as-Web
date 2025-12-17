@@ -201,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <a href="javascript:void(0);" onclick="confirmarSalida()">Salir</a>
                         </div>
                         <div class="boton-modificar"> 
-                            <button type="button" name="crear" onclick="confirmarCreacion()" style="border: 2px solid rgba(41, 54, 97, 0.6); font-family: inherit;">
+                            <button type="button" name="crear" onclick="confirmarCreacion()">
                                 <p>Crear producto</p>
                             </button>
                         </div>
