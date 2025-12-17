@@ -3,7 +3,6 @@ include 'conexion.php';
 
 // 1. VERIFICAR QUE RECIBIMOS UN ID
 if (!isset($_GET['id'])) {
-    // Si no hay ID, redirigimos al listado para evitar errores
     header("Location: listadoproductosadmin.php"); 
     exit;
 }
@@ -11,24 +10,23 @@ if (!isset($_GET['id'])) {
 $id = $_GET['id'];
 $mensaje = "";
 
-
 // 2. PROCESAR EL FORMULARIO (CUANDO SE PULSA "MODIFICAR")
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre = $_POST['nombre'];
+    // --- CAMBIO 1: Recogemos la categoría del formulario ---
+    $id_categoria = $_POST['id_categoria'];
+    // -------------------------------------------------------
     $precio = $_POST['precio'];
     $descripcion = $_POST['detalles'];
     $medidas = $_POST['tamanos'];
     
-    // Recogemos el color (puede venir vacío si no marcan nada)
     $color = $_POST['color'] ?? '';
 
     // Lógica para la imagen
-    $ruta_imagen = $_POST['imagen_actual']; // Por defecto, mantenemos la antigua
+    $ruta_imagen = $_POST['imagen_actual']; 
 
-    // Si suben una nueva foto...
     if (isset($_FILES['nueva_imagen']) && $_FILES['nueva_imagen']['error'] === UPLOAD_ERR_OK) {
         $nombre_archivo = basename($_FILES['nueva_imagen']['name']);
-        // Ruta destino corregida (sin ../)
         $ruta_destino = "imagenes/" . $nombre_archivo; 
         
         if (move_uploaded_file($_FILES['nueva_imagen']['tmp_name'], $ruta_destino)) {
@@ -38,13 +36,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Actualizamos la base de datos
     try {
-        $sql = "UPDATE productos SET nombre=?, precio=?, descripcion=?, medidas=?, color=?, imagen_url=? WHERE id=?";
+        // --- CAMBIO 2: Añadimos id_categoria a la sentencia SQL ---
+        $sql = "UPDATE productos SET nombre=?, id_categoria=?, precio=?, descripcion=?, medidas=?, color=?, imagen_url=? WHERE id=?";
         $stmt = $conn->prepare($sql);
-        $stmt->execute([$nombre, $precio, $descripcion, $medidas, $color, $ruta_imagen, $id]);
+        // Importante: El orden de las variables debe coincidir con los ?
+        $stmt->execute([$nombre, $id_categoria, $precio, $descripcion, $medidas, $color, $ruta_imagen, $id]);
+        // ----------------------------------------------------------
         
         $mensaje = "¡Producto actualizado correctamente!";
         
-        // Redirigir tras guardar (Ruta corregida)
         header("Location: listadoproductosadmin.php"); 
         exit;
         
@@ -64,12 +64,16 @@ if (!$producto) {
     exit;
 }
 
+// --- CAMBIO 3: OBTENER TODAS LAS CATEGORÍAS PARA EL DESPLEGABLE ---
+// Esto nos sirve para rellenar el <select> más abajo
+$stmt_cat = $conn->query("SELECT * FROM categorias ORDER BY nombre ASC");
+$categorias = $stmt_cat->fetchAll(PDO::FETCH_ASSOC);
+// ------------------------------------------------------------------
+
 // --- LÓGICA DE VISUALIZACIÓN DE IMAGEN ---
-// Limpiamos la ruta que viene de la BD por si tiene ".." antiguos
 $ruta_bd = $producto['imagen_url'];
 $ruta_foto = str_replace('../', '', $ruta_bd); 
 
-// Si está vacía o no existe, usamos la de por defecto (sin ../)
 if (empty($ruta_foto)) {
     $ruta_foto = 'imagenes/producto-sin-imagen.png';
 }
@@ -133,8 +137,8 @@ if (empty($ruta_foto)) {
                 <div style="background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px; width: 100%; text-align: center;">
                     <?php echo $mensaje; ?>
                 </div>
-                
             <?php endif; ?>
+            
             <div id="mensaje-error-js" class="alerta-error" style="display: none;"></div>
 
             <form id="form-modificar" method="POST" enctype="multipart/form-data" class="product-card">
@@ -161,6 +165,18 @@ if (empty($ruta_foto)) {
                     </div>
 
                     <div class="form-group">
+                        <label class="form-label" for="categoria">Categoría:</label>
+                        <select name="id_categoria" id="categoria" class="form-input" style="height: 45px; background: white;" required>
+                            <option value="">-- Seleccione categoría --</option>
+                            <?php foreach ($categorias as $cat): ?>
+                                <option value="<?php echo $cat['id']; ?>" 
+                                    <?php echo ($cat['id'] == $producto['id_categoria']) ? 'selected' : ''; ?>>
+                                    <?php echo htmlspecialchars($cat['nombre']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label class="form-label" for="precio">Precio:</label>
                         <div class="price-wrapper">
                             <input type="number" step="0.01" id="precio" name="precio" class="form-input" value="<?php echo $producto['precio']; ?>">
@@ -186,11 +202,9 @@ if (empty($ruta_foto)) {
                     <div class="form-group">
                         <label class="form-label">Tamaños disponibles:</label>
                         
-                        <div id="tamanos-container" class="tamanos-container">
-                            </div>
+                        <div id="tamanos-container" class="tamanos-container"></div>
                         
                         <div class="input-group-medidas">
-                            
                             <div class="medida-input-wrapper">
                                 <input type="number" id="input-ancho" class="form-input input-corto" placeholder="Ancho" min="30">
                                 <span class="medida-label">cm</span>
@@ -271,14 +285,13 @@ if (empty($ruta_foto)) {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-            // --- LÓGICA DE MEDIDAS (Actualizada) ---
+            // --- LÓGICA DE MEDIDAS ---
             const tamanosContainer = document.getElementById('tamanos-container');
             const inputAncho = document.getElementById('input-ancho');
             const inputAlto = document.getElementById('input-alto');
             const btnAdd = document.getElementById('btn-add-tamano');
             const hiddenInput = document.getElementById('tamanos-final');
 
-            // Función crear etiqueta
             function createTag(text) {
                 const tag = document.createElement('span');
                 tag.classList.add('tamano-chip');
@@ -291,62 +304,47 @@ if (empty($ruta_foto)) {
                 tamanosContainer.appendChild(tag);
             }
 
-            // Actualizar el input oculto para la BD
             function updateHiddenInput() {
                 const tags = Array.from(tamanosContainer.querySelectorAll('.tamano-chip'))
                                                 .map(t => t.innerText.replace('✕', '').trim());
                 hiddenInput.value = tags.join(', ');
             }
 
-            // VALIDACIÓN Y AÑADIDO
-            // --- 3. Lógica VALIDACIÓN Y AÑADIDO (Modificada) ---
             function addMedida() {
                 const ancho = parseInt(inputAncho.value);
                 const alto = parseInt(inputAlto.value);
                 const errorDiv = document.getElementById('mensaje-error-js');
 
-                // Función auxiliar para mostrar el error
                 function mostrarError(mensaje) {
                     errorDiv.textContent = mensaje;
                     errorDiv.style.display = 'block';
-                    // Opcional: Hacer scroll hacia arriba para ver el mensaje si la pantalla es pequeña
                     errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    
-                    // Opcional: Ocultar automáticamente tras 5 segundos
-                    setTimeout(() => {
-                        errorDiv.style.display = 'none';
-                    }, 5000);
+                    setTimeout(() => { errorDiv.style.display = 'none'; }, 5000);
                 }
 
-                // Función para ocultar error (si todo sale bien)
                 function ocultarError() {
                     errorDiv.style.display = 'none';
                 }
 
-                // 1. Validar que sean números
                 if (isNaN(ancho) || isNaN(alto)) {
                     mostrarError("⚠️ Por favor, introduce números válidos en Ancho y Alto.");
                     return;
                 }
 
-                // 2. RESTRICCIÓN: Mínimo 30cm
                 if (ancho < 30 || alto < 30) {
                     mostrarError("⚠️ Las medidas no pueden ser menores de 30 cm.");
                     return;
                 }
 
-                // 3. Formato estandarizado
                 const nuevaMedida = `${ancho}x${alto}`;
-
-                // 4. Comprobar duplicados
                 const actuales = hiddenInput.value.split(', ').map(t => t.trim());
+                
                 if (actuales.includes(nuevaMedida)) {
                     mostrarError("⚠️ Esta medida ya existe en la lista.");
                     return;
                 }
 
-                // Si llegamos aquí, todo está BIEN:
-                ocultarError(); // Quitamos el error si lo había
+                ocultarError();
                 createTag(nuevaMedida);
                 updateHiddenInput();
                 inputAncho.value = '';
@@ -356,12 +354,10 @@ if (empty($ruta_foto)) {
 
             btnAdd.addEventListener('click', addMedida);
 
-            // Permitir añadir pulsando Enter en el campo de Alto
             inputAlto.addEventListener('keyup', (e) => {
                 if (e.key === 'Enter') addMedida();
             });
 
-            // Cargar datos iniciales (desde PHP)
             if (hiddenInput.value) {
                 const existentes = hiddenInput.value.split(',');
                 existentes.forEach(medida => {
@@ -370,7 +366,7 @@ if (empty($ruta_foto)) {
             }
         });
 
-        // --- 3. Previsualización de imagen ---
+        // --- Previsualización de imagen ---
         function mostrarPrevisualizacion(event) {
             const input = event.target;
             if (input.files && input.files[0]) {
@@ -383,49 +379,40 @@ if (empty($ruta_foto)) {
         }
 
         function confirmarModificacion() {
-            // 1. Seleccionamos el formulario
             const formulario = document.getElementById('form-modificar');
-
-            // 2. Comprobamos si los campos requeridos están llenos (HTML5 validation)
             if (!formulario.checkValidity()) {
-                // Si falta algo, dejamos que el navegador muestre los errores rojos
                 formulario.reportValidity();
                 return; 
             }
 
-            // 3. Si todo está relleno, lanzamos la alerta
             Swal.fire({
                 title: 'Guardar cambios',
                 text: "¿Estás seguro de que quieres actualizar los datos de este producto?",
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#293661', // Tu azul corporativo para SI
-                cancelButtonColor: '#6c757d', // Gris para NO (seguir editando)
+                confirmButtonColor: '#293661', 
+                cancelButtonColor: '#6c757d', 
                 confirmButtonText: 'Sí, guardar cambios',
                 cancelButtonText: 'No, seguir editando',
                 background: '#fff',
-                // Estilo opcional para que quede más integrado
                 customClass: {
                     popup: 'mi-alerta-redondeada'
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // 4. Si dice que SÍ, enviamos el formulario manualmente
                     formulario.submit();
                 }
-                // Si dice que NO, no hacemos nada y el cuadro se cierra solo.
             });
         }
 
-        // --- NUEVA FUNCIÓN PARA EL BOTÓN SALIR ---
         function confirmarSalida() {
             Swal.fire({
                 title: '¿Salir sin guardar?',
                 text: "Se perderán los cambios que no hayas guardado.",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#d33',     // Rojo para indicar "Salir/Peligro"
-                cancelButtonColor: '#293661',   // Azul para "Me quedo"
+                confirmButtonColor: '#d33',     
+                cancelButtonColor: '#293661',   
                 confirmButtonText: 'Sí, salir',
                 cancelButtonText: 'Cancelar',
                 customClass: {
@@ -433,13 +420,10 @@ if (empty($ruta_foto)) {
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Si confirma, entonces sí redirigimos manualmente
                     window.location.href = 'listadoproductosadmin.php';
                 }
             });
         }
-
     </script>
-
 </body>
 </html>
