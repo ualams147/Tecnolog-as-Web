@@ -253,6 +253,18 @@ $total_registros = count($ventas);
                                     <p><strong>ID Venta:</strong> #<?php echo str_pad($venta['id'], 4, '0', STR_PAD_LEFT); ?></p>
                                     <p><strong>Cliente:</strong> <?php echo $venta['nombre_cli'] . ' ' . $venta['apellidos_cli']; ?></p>
                                     <p><strong>Fecha:</strong> <?php echo date('d/m/Y', strtotime($venta['fecha'])); ?></p>
+                                    
+                                    <?php 
+                                        $estado = $venta['estado'];
+                                        // Definir color según el estado (verde si entregado, naranja si pendiente)
+                                        $colorEstado = (strtolower($estado) === 'entregado') ? '#28a745' : '#e67e22'; 
+                                    ?>
+                                    <p><strong>Estado:</strong> 
+                                        <span style="color: <?php echo $colorEstado; ?>; font-weight: 700;">
+                                            <?php echo ucfirst($estado); ?>
+                                        </span>
+                                    </p>
+
                                     <p><strong>Total:</strong> <?php echo number_format($venta['total'], 2); ?> €</p>
                                 </div>
                                 
