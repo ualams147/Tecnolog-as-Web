@@ -1,39 +1,66 @@
 <?php
-// 1. INICIAR SESIÓN PRIMERO (Siempre primera línea)
+// 1. INICIAR SESIÓN PRIMERO
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// 2. GUARDAR DATOS DEL FORMULARIO ANTERIOR
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre'])) {
-    $_SESSION['datos_envio'] = $_POST;
+include 'conexion.php';
+
+// --- SEGURIDAD: VERIFICAR CARRITO ---
+if (empty($_SESSION['carrito'])) {
+    header("Location: carrito.php");
+    exit;
 }
 
-// 3. AHORA SÍ, INCLUIR EL RESTO (Aquí se carga el idioma)
+// --- SEGURIDAD: PROCESAR DATOS DE ENVÍO (POST) ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    // 1. VERIFICAR CSRF (Si lo implementaste en datosenvio.php)
+    /* if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        die("Error de seguridad: Token inválido. Vuelve a intentar.");
+    }
+    */
+
+    // 2. LIMPIEZA Y GUARDADO DE DATOS
+    // Guardamos los datos limpios en la sesión para usarlos al finalizar el pedido
+    $_SESSION['datos_envio'] = [
+        'nombre'    => trim(strip_tags($_POST['nombre'] ?? '')),
+        'email'     => trim(filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL)),
+        'telefono'  => trim(strip_tags($_POST['telefono'] ?? '')),
+        'calle'     => trim(strip_tags($_POST['calle'] ?? '')),
+        'numero'    => trim(strip_tags($_POST['numero'] ?? '')),
+        'piso'      => trim(strip_tags($_POST['piso'] ?? '')),
+        'cp'        => trim(strip_tags($_POST['cp'] ?? '')),
+        'localidad' => trim(strip_tags($_POST['localidad'] ?? '')),
+        'notas'     => trim(strip_tags($_POST['notas'] ?? ''))
+    ];
+
+} else {
+    // Si no viene por POST, verificamos si ya hay datos en sesión
+    if (empty($_SESSION['datos_envio'])) {
+        // Si no hay datos de envío, vuelta atrás
+        header("Location: datosenvio.php");
+        exit;
+    }
+}
+
+// 3. INCLUIR CABECERA (Después de las redirecciones)
 include 'CabeceraFooter.php'; 
-include 'conexion.php';
 
 // =======================================================================
 // CALCULAR EL TOTAL REAL DEL CARRITO
 // =======================================================================
 $total_a_pagar = 0;
-
-if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])) {
-    foreach ($_SESSION['carrito'] as $item) {
-        $total_a_pagar += $item['precio'] * $item['cantidad'];
-    }
-} else {
-    header("Location: carrito.php");
-    exit;
+foreach ($_SESSION['carrito'] as $item) {
+    $total_a_pagar += $item['precio'] * $item['cantidad'];
 }
-
 $_SESSION['total_carrito'] = $total_a_pagar;
 
-// --- NUEVO: OBTENER TELÉFONO POR DEFECTO PARA BIZUM ---
-$telefono_defecto = "";
-if (isset($_SESSION['datos_envio']['telefono'])) {
-    $telefono_defecto = $_SESSION['datos_envio']['telefono'];
-} elseif (isset($_SESSION['usuario_id']) && $_SESSION['usuario_id'] > 0) {
+// --- OBTENER TELÉFONO POR DEFECTO PARA BIZUM ---
+$telefono_defecto = $_SESSION['datos_envio']['telefono'] ?? "";
+
+// Si no hay teléfono en el envío (raro), buscamos en el perfil
+if (empty($telefono_defecto) && isset($_SESSION['usuario_id'])) {
     try {
         $stmt = $conn->prepare("SELECT telefono FROM clientes WHERE id = ?");
         $stmt->execute([$_SESSION['usuario_id']]);
@@ -48,12 +75,10 @@ if (isset($_SESSION['datos_envio']['telefono'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $lang['pago_titulo_pag']; ?></title>
+    <title><?php echo isset($lang['pago_titulo_pag']) ? $lang['pago_titulo_pag'] : 'Método de Pago'; ?></title>
     
     <link rel="stylesheet" href="css/datosEnvio.css">
     <link rel="icon" type="image/png" href="imagenes/logo.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
     
     <style>
@@ -82,26 +107,26 @@ if (isset($_SESSION['datos_envio']['telefono'])) {
 <body>
     <div class="visitante-conocenos">
         
-        <?php sectionheader(); ?>
+        <?php if(function_exists('sectionheader')) sectionheader(); ?>
 
         <section class="steps-section">
             <div class="container">
                 <div class="steps-container">
-                    <div class="step"><span class="step-number"><?php echo $lang['envio_paso']; ?> 1</span><span class="step-label"><?php echo $lang['envio_step_1']; ?></span></div>
+                    <div class="step"><span class="step-number"><?php echo isset($lang['envio_paso']) ? $lang['envio_paso'] : 'Paso'; ?> 1</span><span class="step-label"><?php echo isset($lang['envio_step_1']) ? $lang['envio_step_1'] : 'Envío'; ?></span></div>
                     <div class="step-line"></div>
-                    <div class="step active"><span class="step-number"><?php echo $lang['envio_paso']; ?> 2</span><span class="step-label"><?php echo $lang['envio_step_2']; ?></span></div>
+                    <div class="step active"><span class="step-number"><?php echo isset($lang['envio_paso']) ? $lang['envio_paso'] : 'Paso'; ?> 2</span><span class="step-label"><?php echo isset($lang['envio_step_2']) ? $lang['envio_step_2'] : 'Pago'; ?></span></div>
                     <div class="step-line"></div>
-                    <div class="step"><span class="step-number"><?php echo $lang['envio_paso']; ?> 3</span><span class="step-label"><?php echo $lang['envio_step_3']; ?></span></div>
+                    <div class="step"><span class="step-number"><?php echo isset($lang['envio_paso']) ? $lang['envio_paso'] : 'Paso'; ?> 3</span><span class="step-label"><?php echo isset($lang['envio_step_3']) ? $lang['envio_step_3'] : 'Confirmación'; ?></span></div>
                 </div>
             </div>
         </section>
 
         <main class="envio-main container">
             <div class="envio-card">
-                <h1 class="page-title"><?php echo $lang['pago_h1']; ?></h1>
+                <h1 class="page-title"><?php echo isset($lang['pago_h1']) ? $lang['pago_h1'] : 'Método de Pago'; ?></h1>
                 
                 <p style="margin-bottom: 25px; text-align: center; font-size: 18px;">
-                    <?php echo $lang['pago_total_pagar']; ?> <strong><?php echo number_format($total_a_pagar, 2); ?> €</strong>
+                    <?php echo isset($lang['pago_total_pagar']) ? $lang['pago_total_pagar'] : 'Total a pagar:'; ?> <strong><?php echo number_format($total_a_pagar, 2); ?> €</strong>
                 </p>
 
                 <form method="POST" id="paymentForm">
@@ -112,8 +137,8 @@ if (isset($_SESSION['datos_envio']['telefono'])) {
                                 <input type="radio" name="metodo_pago" value="stripe" checked>
                                 <div class="option-content">
                                     <div>
-                                        <span class="option-title"><?php echo $lang['pago_tarjeta_tit']; ?></span>
-                                        <span class="option-desc"><?php echo $lang['pago_tarjeta_desc']; ?></span>
+                                        <span class="option-title"><?php echo isset($lang['pago_tarjeta_tit']) ? $lang['pago_tarjeta_tit'] : 'Tarjeta de Crédito'; ?></span>
+                                        <span class="option-desc"><?php echo isset($lang['pago_tarjeta_desc']) ? $lang['pago_tarjeta_desc'] : 'Pago seguro con Stripe'; ?></span>
                                     </div>
                                     <div class="card-icons">💳 🛡️</div>
                                 </div>
@@ -125,18 +150,18 @@ if (isset($_SESSION['datos_envio']['telefono'])) {
                                 <input type="radio" name="metodo_pago" value="bizum">
                                 <div class="option-content">
                                     <div>
-                                        <span class="option-title"><?php echo $lang['pago_bizum_tit']; ?></span>
-                                        <span class="option-desc"><?php echo $lang['pago_bizum_desc']; ?></span>
+                                        <span class="option-title"><?php echo isset($lang['pago_bizum_tit']) ? $lang['pago_bizum_tit'] : 'Bizum'; ?></span>
+                                        <span class="option-desc"><?php echo isset($lang['pago_bizum_desc']) ? $lang['pago_bizum_desc'] : 'Rápido y sencillo'; ?></span>
                                     </div>
                                     <div style="font-weight:800; color:#00bfd3;">bizum</div>
                                 </div>
                             </div>
 
                             <div id="bizum-input-container" class="hidden" style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; padding-left: 30px;">
-                                <label style="display:block; font-size: 14px; margin-bottom: 5px; font-weight:600;"><?php echo $lang['pago_bizum_lbl_movil']; ?></label>
+                                <label style="display:block; font-size: 14px; margin-bottom: 5px; font-weight:600;"><?php echo isset($lang['pago_bizum_lbl_movil']) ? $lang['pago_bizum_lbl_movil'] : 'Móvil Bizum'; ?></label>
                                 
                                 <input type="tel" id="telefono_bizum" name="telefono_bizum" 
-                                       placeholder="<?php echo $lang['pago_bizum_ph_movil']; ?>" 
+                                       placeholder="<?php echo isset($lang['pago_bizum_ph_movil']) ? $lang['pago_bizum_ph_movil'] : '600 000 000'; ?>" 
                                        value="<?php echo htmlspecialchars($telefono_defecto); ?>"
                                        style="width: 100%; max-width: 300px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;"
                                        onclick="event.stopPropagation();"> 
@@ -147,21 +172,21 @@ if (isset($_SESSION['datos_envio']['telefono'])) {
                     <div class="form-actions">
                         <a href="datosenvio.php" class="btn-action btn-back">
                             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-                            <?php echo $lang['pago_btn_volver']; ?>
+                            <?php echo isset($lang['pago_btn_volver']) ? $lang['pago_btn_volver'] : 'Volver'; ?>
                         </a>
-                        <button type="submit" class="btn-action btn-next"><?php echo $lang['pago_btn_pagar']; ?></button>
+                        <button type="submit" class="btn-action btn-next"><?php echo isset($lang['pago_btn_pagar']) ? $lang['pago_btn_pagar'] : 'Pagar Ahora'; ?></button>
                     </div>
                 </form>
             </div>
         </main>
         
-        <?php sectionfooter(); ?>
+        <?php if(function_exists('sectionfooter')) sectionfooter(); ?>
     </div>
     
     <div id="payment-overlay" class="hidden">
         <div class="spinner"></div>
-        <div class="processing-text"><?php echo $lang['pago_overlay_procesando']; ?></div>
-        <div class="processing-subtext"><?php echo $lang['pago_overlay_espere']; ?></div>
+        <div class="processing-text"><?php echo isset($lang['pago_overlay_procesando']) ? $lang['pago_overlay_procesando'] : 'Procesando Pago...'; ?></div>
+        <div class="processing-subtext"><?php echo isset($lang['pago_overlay_espere']) ? $lang['pago_overlay_espere'] : 'Por favor, no cierres esta ventana.'; ?></div>
     </div>
     
     <script src="js/auth.js"></script>
@@ -196,7 +221,7 @@ if (isset($_SESSION['datos_envio']['telefono'])) {
 
             if (metodo === 'stripe') {
                 form.action = "procesar_pago_stripe.php";
-                overlay.querySelector('.processing-text').innerText = "<?php echo $lang['pago_overlay_stripe']; ?>";
+                overlay.querySelector('.processing-text').innerText = "<?php echo isset($lang['pago_overlay_stripe']) ? $lang['pago_overlay_stripe'] : 'Conectando con Stripe...'; ?>";
                 overlay.classList.remove('hidden');
                 form.submit(); 
 
@@ -204,12 +229,12 @@ if (isset($_SESSION['datos_envio']['telefono'])) {
                 const movil = document.getElementById('telefono_bizum').value.trim();
 
                 if(movil.length < 9) {
-                    alert("<?php echo $lang['pago_alert_bizum_movil']; ?>");
+                    alert("<?php echo isset($lang['pago_alert_bizum_movil']) ? $lang['pago_alert_bizum_movil'] : 'Introduce un móvil válido'; ?>");
                     document.getElementById('bizum-input-container').classList.remove('hidden');
                     return; 
                 }
 
-                overlay.querySelector('.processing-text').innerText = "<?php echo $lang['pago_overlay_bizum']; ?>";
+                overlay.querySelector('.processing-text').innerText = "<?php echo isset($lang['pago_overlay_bizum']) ? $lang['pago_overlay_bizum'] : 'Redirigiendo a Bizum...'; ?>";
                 overlay.classList.remove('hidden');
                 
                 setTimeout(function(){

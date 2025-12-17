@@ -2,8 +2,18 @@
 // agregar_personalizado_carrito.php
 require_once 'conexion.php';
 
-session_start();
+// INICIO DE SESIÓN
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 header('Content-Type: application/json');
+
+// 0. SEGURIDAD: Solo permitir POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode(['success' => false, 'message' => 'Método no permitido.']);
+    exit;
+}
 
 // 1. Verificar sesión
 if (!isset($_SESSION['usuario_id'])) {
@@ -13,7 +23,7 @@ if (!isset($_SESSION['usuario_id'])) {
 
 $id_cliente = $_SESSION['usuario_id'];
 
-// 2. Recibir datos JSON desde el JS
+// 2. Recibir datos JSON
 $input = json_decode(file_get_contents('php://input'), true);
 
 if (!$input) {
@@ -21,18 +31,21 @@ if (!$input) {
     exit;
 }
 
-$categoria_nombre = $input['categoria']; 
-$material_nombre  = $input['material'];   
-$color            = $input['color'];                
-$medida           = $input['medida'];
-$detalles         = $input['detalles'] ?? '';
+// 3. LIMPIEZA DE DATOS (SANITIZACIÓN)
+// Usamos trim() para quitar espacios.
+// Usamos strip_tags() en 'detalles' para evitar que metan HTML o Scripts (XSS)
+$categoria_nombre = trim($input['categoria'] ?? ''); 
+$material_nombre  = trim($input['material'] ?? '');   
+$color            = trim($input['color'] ?? '');                
+$medida           = trim($input['medida'] ?? '');
+$detalles_raw     = $input['detalles'] ?? '';
+$detalles         = trim(strip_tags($detalles_raw)); // BLINDAJE ANTI-XSS
 
 try {
-    // INICIAR TRANSACCIÓN
+    // INICIAR TRANSACCIÓN (Esto es perfecto, mantenlo)
     $conn->beginTransaction();
 
-    // A. BUSCAR PRODUCTO BASE
-    // Necesitamos un ID de producto base para la tabla carrito (para la foto y nombre genérico)
+    // A. BUSCAR PRODUCTO BASE (Sentencia Preparada = SEGURO)
     $sql_buscar = "SELECT p.id 
                    FROM productos p
                    INNER JOIN categorias c ON p.id_categoria = c.id
@@ -44,7 +57,7 @@ try {
     $stmt->execute([':cat' => $categoria_nombre, ':mat' => $material_nombre, ':col' => $color]);
     $producto = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Fallback: Si no encuentra el color exacto, busca solo por categoría y material
+    // Fallback: búsqueda genérica si no hay color exacto
     if (!$producto) {
         $sql_fallback = "SELECT p.id 
                          FROM productos p
@@ -62,22 +75,19 @@ try {
 
     $id_producto_base = $producto['id'];
 
-    // B. INSERTAR EN TABLA 'CARRITO' (Principal)
-    // Marcamos es_personalizado = 1
+    // B. INSERTAR EN TABLA 'CARRITO' (Sentencia Preparada = SEGURO)
     $sql_cart = "INSERT INTO carrito (cliente_id, producto_id, cantidad, fecha_agregado, es_personalizado) 
                  VALUES (:cliente, :prod, 1, NOW(), 1)";
     
     $stmt_cart = $conn->prepare($sql_cart);
     $stmt_cart->execute([
         ':cliente' => $id_cliente,
-        ':prod'   => $id_producto_base
+        ':prod'    => $id_producto_base
     ]);
 
-    // Recuperamos el ID recién creado
     $id_carrito_generado = $conn->lastInsertId();
 
-    // C. INSERTAR EN TABLA 'CARRITO_PERSONALIZADOS' (Detalles)
-    // El estado por defecto es 'pendiente'
+    // C. INSERTAR EN TABLA 'CARRITO_PERSONALIZADOS' (Sentencia Preparada = SEGURO)
     $sql_custom = "INSERT INTO carrito_personalizados (carrito_id, medidas, color, detalles, estado) 
                    VALUES (:id_carr, :med, :col, :det, 'pendiente')";
     
@@ -86,7 +96,7 @@ try {
         ':id_carr' => $id_carrito_generado,
         ':med'     => $medida,
         ':col'     => $color, 
-        ':det'     => $detalles
+        ':det'     => $detalles // Aquí insertamos el texto limpio de virus/scripts
     ]);
 
     // CONFIRMAR TRANSACCIÓN
@@ -97,6 +107,7 @@ try {
 } catch (Exception $e) {
     // Si algo falla, deshacemos todo
     $conn->rollBack();
-    echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+    // En producción, podrías ocultar $e->getMessage() para no dar pistas al hacker
+    echo json_encode(['success' => false, 'message' => 'Error al procesar la solicitud.']);
 }
 ?>

@@ -36,25 +36,33 @@ $piso = '';
 $cp = '';
 $localidad = '';
 
-// --- CAPTURAR ORIGEN ---
+// --- CAPTURAR ORIGEN (CON SEGURIDAD EXTRA) ---
+// Validamos que 'origen' sea solo lo que esperamos para evitar Open Redirects
 $origen = '';
-if (isset($_GET['origen'])) $origen = $_GET['origen'];
-elseif (isset($_POST['origen'])) $origen = $_POST['origen'];
+$posibles_origenes = ['compra']; // Lista blanca de orígenes permitidos
+
+if (isset($_GET['origen']) && in_array($_GET['origen'], $posibles_origenes)) {
+    $origen = $_GET['origen'];
+} elseif (isset($_POST['origen']) && in_array($_POST['origen'], $posibles_origenes)) {
+    $origen = $_POST['origen'];
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombre = $_POST['nombre'] ?? '';
-    $apellidos = $_POST['apellidos'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $email_confirm = $_POST['email_confirm'] ?? '';
-    $password = $_POST['password'] ?? '';
+    // --- LIMPIEZA DE DATOS (TRIM) ---
+    // Usamos trim() para quitar espacios en blanco al inicio y final
+    $nombre = trim($_POST['nombre'] ?? '');
+    $apellidos = trim($_POST['apellidos'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $email_confirm = trim($_POST['email_confirm'] ?? '');
+    $password = $_POST['password'] ?? ''; // Passwords no se trimmean a veces, pero ok
     $password_confirm = $_POST['password_confirm'] ?? '';
-    $dni = $_POST['dni'] ?? '';
-    $telefono = $_POST['telefono'] ?? '';
-    $calle = $_POST['calle'] ?? '';
-    $numero = $_POST['numero'] ?? '';
-    $piso = $_POST['piso'] ?? '';
-    $cp = $_POST['cp'] ?? '';
-    $localidad = $_POST['localidad'] ?? '';
+    $dni = trim($_POST['dni'] ?? '');
+    $telefono = trim($_POST['telefono'] ?? '');
+    $calle = trim($_POST['calle'] ?? '');
+    $numero = trim($_POST['numero'] ?? '');
+    $piso = trim($_POST['piso'] ?? '');
+    $cp = trim($_POST['cp'] ?? '');
+    $localidad = trim($_POST['localidad'] ?? '');
 
     // Validaciones básicas PHP
     if ($email !== $email_confirm) {
@@ -62,12 +70,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($password !== $password_confirm) {
         $error = $lang['registro_err_pass'];
     } else {
-        // Comprobar Email
+        // 1. Comprobar Email (Sentencia Preparada - SEGURO)
         $stmt = $conn->prepare("SELECT id FROM clientes WHERE email = :email LIMIT 1");
         $stmt->execute([':email' => $email]);
         if ($stmt->fetch()) $error_email = $lang['registro_err_email_existe'];
 
-        // Comprobar DNI
+        // 2. Comprobar DNI (Sentencia Preparada - SEGURO)
         if (!empty($dni)) {
             $stmt = $conn->prepare("SELECT id FROM clientes WHERE dni = :dni LIMIT 1");
             $stmt->execute([':dni' => $dni]);
@@ -77,16 +85,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($error) && empty($error_email) && empty($error_dni)) {
             try {
                 $password_hash = password_hash($password, PASSWORD_DEFAULT);
+                
+                // 3. Insertar Usuario (Sentencia Preparada - SEGURO)
                 $sql = "INSERT INTO clientes (nombre, apellidos, email, password, dni, telefono, direccion, numero, piso, ciudad, codigo_postal, rol) 
                         VALUES (:nombre, :apellidos, :email, :password, :dni, :telefono, :direccion, :numero, :piso, :ciudad, :codigo_postal, 'cliente')";
                 
                 $stmt = $conn->prepare($sql);
                 $stmt->execute([
-                    ':nombre' => $nombre, ':apellidos' => $apellidos, ':email' => $email,
+                    ':nombre' => $nombre, 
+                    ':apellidos' => $apellidos, 
+                    ':email' => $email,
                     ':password' => $password_hash,
-                    ':dni' => $dni, ':telefono' => $telefono,
-                    ':direccion' => $calle, ':numero' => $numero, ':piso' => $piso,
-                    ':ciudad' => $localidad, ':codigo_postal' => $cp
+                    ':dni' => $dni, 
+                    ':telefono' => $telefono,
+                    ':direccion' => $calle, 
+                    ':numero' => $numero, 
+                    ':piso' => $piso,
+                    ':ciudad' => $localidad, 
+                    ':codigo_postal' => $cp
                 ]);
 
                 // Login automático
@@ -95,11 +111,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmtUser->execute([$nuevo_id]);
                 $nuevo_usuario = $stmtUser->fetch(PDO::FETCH_ASSOC);
 
+                // --- SEGURIDAD: NO GUARDAR PASSWORD EN SESIÓN ---
+                unset($nuevo_usuario['password']); // Quitamos el hash antes de guardar en sesión
+
                 $_SESSION['usuario'] = $nuevo_usuario; 
                 $_SESSION['usuario_id'] = $nuevo_usuario['id'];
                 $_SESSION['usuario_nombre'] = $nuevo_usuario['nombre'];
                 $_SESSION['usuario_rol'] = 'cliente';
 
+                // Mover carrito de invitado a usuario registrado
                 if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])) {
                     foreach ($_SESSION['carrito'] as $item_sess) {
                         $stmtIns = $conn->prepare("INSERT INTO carrito (cliente_id, producto_id, cantidad) VALUES (?, ?, ?)");
@@ -107,12 +127,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
 
+                // Redirección segura
                 $destino = ($origen === 'compra') ? 'datosenvio.php' : 'index.php';
-                echo "<script>localStorage.setItem('usuarioLogueado', 'true'); window.location.href = '$destino';</script>";
+                
+                // Usamos JS para redirigir y localStorage
+                echo "<script>
+                        localStorage.setItem('usuarioLogueado', 'true'); 
+                        window.location.href = '$destino';
+                      </script>";
                 exit;
 
             } catch (PDOException $e) {
-                $error = $lang['registro_err_tecnico'] . $e->getMessage();
+                // En producción, no muestres $e->getMessage() al usuario, loguéalo en un archivo
+                $error = $lang['registro_err_tecnico']; 
+                // error_log($e->getMessage()); // Descomenta esto en producción
             }
         }
     }
@@ -250,7 +278,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <p class="register-text">
                         <?php echo $lang['registro_txt_login']; ?> 
-                        <a href="iniciarsesion.php<?php echo (!empty($origen)) ? '?origen='.$origen : ''; ?>">
+                        <a href="iniciarsesion.php<?php echo (!empty($origen)) ? '?origen='.htmlspecialchars($origen) : ''; ?>">
                             <em><?php echo $lang['registro_link_login']; ?></em>
                         </a>
                     </p>

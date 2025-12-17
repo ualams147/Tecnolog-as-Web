@@ -5,25 +5,28 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // 2. INCLUIR ARCHIVOS
-include 'CabeceraFooter.php'; // Aquí se carga el idioma automáticamente
+include 'CabeceraFooter.php'; 
 include 'conexion.php'; 
 
 $error = '';
 
-// 3. RECUPERAR EL ORIGEN (La clave para saber a dónde ir)
+// 3. RECUPERAR EL ORIGEN (Con lista blanca de seguridad)
 $origen = '';
-if (isset($_GET['origen'])) {
+$origenes_permitidos = ['compra']; // Solo permitimos esto
+
+if (isset($_GET['origen']) && in_array($_GET['origen'], $origenes_permitidos)) {
     $origen = $_GET['origen'];
-} elseif (isset($_POST['origen'])) {
+} elseif (isset($_POST['origen']) && in_array($_POST['origen'], $origenes_permitidos)) {
     $origen = $_POST['origen'];
 }
 
 // 4. PROCESAR LOGIN
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    // LIMPIEZA DE DATOS
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
 
-    // Buscar usuario
+    // Buscar usuario (SEGURO: Sentencia Preparada)
     $sql = "SELECT * FROM clientes WHERE email = :email";
     $stmt = $conn->prepare($sql);
     $stmt->execute([':email' => $email]);
@@ -33,10 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $login_valido = false;
     
     if ($usuario) {
-        // Usamos 'password' (tu columna correcta en la BD)
         if (password_verify($password, $usuario['password'])) { 
             $login_valido = true;
-        } elseif ($password === $usuario['password']) { // Fallback texto plano
+        } elseif ($password === $usuario['password']) { 
+            // Fallback texto plano (Recomendación: En producción, eliminar este elseif y forzar hash)
             $login_valido = true;
         }
     }
@@ -44,8 +47,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($login_valido) {
         // --- LOGIN CORRECTO ---
         
-        // 1. Guardar variables de sesión
-        $_SESSION['usuario'] = $usuario; // Activa la cabecera
+        // 1. Guardar variables de sesión (SIN LA CONTRASEÑA)
+        unset($usuario['password']); // ¡IMPORTANTE! Borramos el hash antes de guardar
+        
+        $_SESSION['usuario'] = $usuario; 
         $_SESSION['usuario_id'] = $usuario['id'];
         $_SESSION['usuario_nombre'] = $usuario['nombre'];
         $_SESSION['usuario_rol'] = $usuario['rol'];
@@ -71,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // 3. RECARGAR CARRITO DESDE BD (Para tenerlo actualizado en sesión)
+        // 3. RECARGAR CARRITO DESDE BD
         $_SESSION['carrito'] = []; 
         $sqlRec = "SELECT c.producto_id, c.cantidad, p.nombre, p.precio, p.imagen_url, p.referencia, p.color, p.medidas 
                    FROM carrito c JOIN productos p ON c.producto_id = p.id WHERE c.cliente_id = ?";
@@ -92,15 +97,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
         }
 
-        // 4. REDIRECCIÓN SEGÚN ORIGEN
+        // 4. REDIRECCIÓN SEGÚN ROL Y ORIGEN
         if ($usuario['rol'] === 'admin') {
-            $destino = 'indexadmin.php'; 
+            $destino = 'listadoventasadmin.php'; // Mejor ir directo al listado que al indexadmin vacío
         } else {
-            // AQUI ESTÁ LA MAGIA:
             if ($origen === 'compra') {
-                $destino = 'datosenvio.php'; // Continúa la compra
+                $destino = 'datosenvio.php';
             } else {
-                $destino = 'index.php'; // Login normal
+                $destino = 'index.php';
             }
         }
         
@@ -160,7 +164,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                             <?php echo $lang['login_lbl_email']; ?>
                         </label>
-                        <input type="email" id="email" name="email" class="form-input" placeholder="<?php echo $lang['login_ph_email']; ?>" required>
+                        <input type="email" id="email" name="email" class="form-input" 
+                               value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>"
+                               placeholder="<?php echo $lang['login_ph_email']; ?>" required>
                     </div>
                     <div class="form-row">
                         <label for="password" class="label-icon">
@@ -189,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     <p class="register-text">
                         <?php echo $lang['login_txt_no_account']; ?> 
-                        <a href="registro.php<?php echo (!empty($origen)) ? '?origen='.$origen : ''; ?>">
+                        <a href="registro.php<?php echo (!empty($origen)) ? '?origen='.htmlspecialchars($origen) : ''; ?>">
                             <em><?php echo $lang['login_link_register']; ?></em>
                         </a>
                     </p>
