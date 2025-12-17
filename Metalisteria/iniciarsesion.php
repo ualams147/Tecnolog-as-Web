@@ -168,11 +168,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php echo $lang['login_lbl_pass']; ?>
                         </label>
                         
-                        <div style="position: relative; width: 100%;">
-                            <input type="password" id="password" name="password" class="form-input" required style="padding-right: 40px;">
+                        <div style="width: 100%; display: flex; flex-direction: column;">
                             
-                            <i class="fas fa-eye" id="ojo_login" onclick="mostrarOcultar('password', 'ojo_login')" 
-                            style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #293661;"></i>
+                            <div style="position: relative; width: 100%;">
+                                <input type="password" id="password" name="password" class="form-input" required style="padding-right: 40px;">
+                                <i class="fas fa-eye" id="ojo_login" onclick="mostrarOcultar('password', 'ojo_login')" 
+                                style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #293661;"></i>
+                            </div>
+
+                            <div style="text-align: right; margin-top: 8px;">
+                                <a href="olvidepassword.php" style="color: #666; font-size: 13px; text-decoration: none; font-weight: 500; transition: color 0.3s;" onmouseover="this.style.color='#293661'" onmouseout="this.style.color='#666'">
+                                    ¿Has olvidado tu contraseña?
+                                </a>
+                            </div>
+
                         </div>
                     </div>
                     
