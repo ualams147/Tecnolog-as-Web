@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id
         ]);
         
-        // --- CAMBIO CLAVE AQUÍ: REDIRECCIÓN DIRECTA COMO EN PRODUCTOS ---
+        // Redirección tras guardar
         header("Location: listadoclientesadmin.php"); 
         exit;
         
@@ -68,12 +68,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// 3. OBTENER LOS DATOS ACTUALES DEL CLIENTE (¡Esto faltaba en tu código pegado!)
-// Es vital para rellenar el formulario al cargar la página
+// 3. OBTENER LOS DATOS ACTUALES DEL CLIENTE
 $sql = "SELECT * FROM clientes WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->execute([$id]);
-$cliente = $stmt->fetch(PDO::FETCH_ASSOC); // Guardamos en $cliente para usarlo abajo
+$cliente = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$cliente) {
     echo "Cliente no encontrado.";
@@ -136,7 +135,12 @@ if (!$cliente) {
         <div class="titulo-section">
             <div class="degradado"></div>
             <div class="recuadro-fondo"></div> 
-            <a href="listadoclientesadmin.php" class="flecha-circular">&#8592;</a>
+            
+            <a href="listadoclientesadmin.php" class="flecha-circular" style="display: flex; align-items: center; justify-content: center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 18L9 12L15 6" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
             
             <h1 class="titulo-principal"><?php echo htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']); ?></h1>
         </div>
@@ -316,26 +320,6 @@ if (!$cliente) {
             }).then((result) => {
                 if (result.isConfirmed) {
                     formulario.submit();
-                }
-            });
-        }
-
-        function confirmarSalida() {
-            Swal.fire({
-                title: '¿Salir sin guardar?',
-                text: "Se perderán los cambios que no hayas guardado.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#293661',
-                confirmButtonText: 'Sí, salir',
-                cancelButtonText: 'Cancelar',
-                customClass: {
-                    popup: 'swal2-popup'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'listadoclientesadmin.php';
                 }
             });
         }
