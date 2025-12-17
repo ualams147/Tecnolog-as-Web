@@ -226,44 +226,125 @@ if (!$pedido_ya_guardado) {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* ESTILOS DE LA FACTURA (Idénticos a los que ya te gustaban) */
         :root { --primary: #293661; --bg-light: #f4f7f6; --text-dark: #2c3e50; }
-        body { background-color: var(--bg-light); font-size: 14px; }
+        
+        body { background-color: var(--bg-light); font-size: 14px; margin: 0; padding: 0; box-sizing: border-box; }
+        *, *::before, *::after { box-sizing: inherit; }
+
         .factura-wrapper { max-width: 800px; margin: 0 auto; background: #fff; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid rgba(0,0,0,0.05); }
         .invoice-header { background: linear-gradient(135deg, var(--primary) 0%, #1a2442 100%); color: white; padding: 25px 30px; display: flex; justify-content: space-between; align-items: center; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        .brand-section h1 { margin: 0; font-size: 24px; font-weight: 800; letter-spacing: 1px; font-family: 'Poppins', sans-serif; }
-        .brand-section p { opacity: 0.8; margin: 2px 0 0; font-size: 13px; }
-        .status-badge { background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); padding: 8px 15px; border-radius: 8px; text-align: right; border: 1px solid rgba(255,255,255,0.2); }
+        .brand-section h1 { margin: 0; font-size: 24px; font-weight: 800; letter-spacing: 1px; font-family: 'Poppins', sans-serif; line-height: 1.2; }
+        .brand-section p { opacity: 0.8; margin: 5px 0 0; font-size: 13px; }
+        
+        .status-badge { background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); padding: 8px 15px; border-radius: 8px; text-align: right; border: 1px solid rgba(255,255,255,0.2); white-space: nowrap; }
         .status-badge .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; display: block; opacity: 0.8; }
         .status-badge .value { font-size: 16px; font-weight: 700; color: #4ade80; display: block; margin-top: 2px; }
+        
         .invoice-body { padding: 25px 30px; }
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
         .info-card h3 { color: var(--primary); font-size: 13px; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px; border-bottom: 2px solid #eee; padding-bottom: 5px; }
-        .client-data p { margin: 3px 0; color: #555; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+        
+        .client-data p { margin: 5px 0; color: #555; font-size: 13px; display: flex; flex-wrap: wrap; gap: 5px; }
         .client-data strong { color: var(--text-dark); min-width: 65px; }
+        
+        /* Tabla Base */
         .table-container { border-radius: 8px; border: 1px solid #eee; overflow: hidden; margin-bottom: 20px; }
         table { width: 100%; border-collapse: collapse; }
         thead { background: #f8f9fa; }
-        th { padding: 10px 15px; text-align: left; font-size: 12px; color: #777; font-weight: 600; text-transform: uppercase; }
-        td { padding: 10px 15px; border-bottom: 1px solid #eee; color: #333; font-weight: 500; font-size: 13px; }
+        th { padding: 12px 15px; text-align: left; font-size: 12px; color: #777; font-weight: 600; text-transform: uppercase; }
+        td { padding: 12px 15px; border-bottom: 1px solid #eee; color: #333; font-weight: 500; font-size: 13px; vertical-align: middle; }
         tr:last-child td { border-bottom: none; }
-        .total-section { background: var(--primary); color: white; padding: 15px 30px; border-radius: 10px; display: flex; flex-direction: column; align-items: flex-end; justify-content: center; margin-top: 15px; -webkit-print-color-adjust: exact; print-color-adjust: exact; page-break-inside: avoid; }
-        .botones-container { display: flex; justify-content: center; gap: 20px; margin-top: 30px; padding-top: 10px; }
-        .btn-base { display: inline-flex; align-items: center; justify-content: center; height: 45px; padding: 0 25px; border-radius: 50px; text-decoration: none; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        
+        .total-section { background: var(--primary); color: white; padding: 20px 30px; border-radius: 10px; display: flex; flex-direction: column; align-items: flex-end; justify-content: center; margin-top: 15px; -webkit-print-color-adjust: exact; print-color-adjust: exact; page-break-inside: avoid; }
+        
+        .botones-container { display: flex; justify-content: center; gap: 20px; margin-top: 30px; padding-top: 10px; flex-wrap: wrap; }
+        .btn-base { display: inline-flex; align-items: center; justify-content: center; height: 45px; padding: 0 25px; border-radius: 50px; text-decoration: none; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: auto; min-width: 200px; }
         .btn-imprimir { background-color: var(--primary); color: white; gap: 10px; }
         .btn-imprimir:hover { background-color: #1a2442; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(41, 54, 97, 0.3); }
         .btn-inicio { background-color: white; color: var(--text-dark); border: 2px solid #eee; }
         .btn-inicio:hover { border-color: var(--primary); color: var(--primary); }
-        
+
+        /* =========================================
+           RESPONSIVE DESIGN (MÓVIL)
+           ========================================= */
+        @media screen and (max-width: 768px) {
+            .factura-wrapper { width: 100%; border-radius: 0; box-shadow: none; border: none; margin: 0; }
+            .envio-main { margin-top: 20px !important; margin-bottom: 40px !important; padding: 0 10px !important; }
+            
+            /* Header Stack */
+            .invoice-header { flex-direction: column; text-align: center; padding: 20px; gap: 15px; }
+            .status-badge { width: 100%; text-align: center; margin-top: 10px; }
+            
+            /* Grid Stack */
+            .invoice-body { padding: 15px; }
+            .info-grid { grid-template-columns: 1fr; gap: 25px; }
+            
+            /* TABLA EN TARJETAS (Card View) para móviles */
+            .table-container { border: none; background: transparent; }
+            table, thead, tbody, th, td, tr { display: block; }
+            thead { display: none; } /* Ocultar cabeceras */
+            
+            tr { 
+                background: #fff; 
+                border: 1px solid #ddd; 
+                border-radius: 8px; 
+                margin-bottom: 15px; 
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+                padding: 10px;
+            }
+            
+            td { 
+                display: flex; 
+                justify-content: space-between; 
+                align-items: center; 
+                text-align: right; 
+                padding: 10px 5px;
+                border-bottom: 1px solid #f0f0f0;
+                font-size: 14px;
+            }
+            
+            td:last-child { border-bottom: none; }
+            
+            /* Pseudo-elemento para simular la cabecera a la izquierda */
+            td::before { 
+                content: attr(data-label); 
+                font-weight: 700; 
+                text-transform: uppercase; 
+                font-size: 11px; 
+                color: #888; 
+                margin-right: 15px;
+                text-align: left;
+            }
+
+            /* Ajuste del total */
+            .total-section { align-items: center; text-align: center; width: 100%; padding: 20px; }
+            .total-section > div { justify-content: space-between; max-width: 100%; }
+
+            /* Ajuste botones */
+            .botones-container { flex-direction: column; gap: 10px; }
+            .btn-base { width: 100%; }
+            
+            /* Pasos más pequeños */
+            .steps-container .step-label { font-size: 10px; }
+            .step-number { width: 25px; height: 25px; line-height: 25px; font-size: 12px; }
+        }
+
         @media print {
             @page { size: auto; margin: 0mm; }
             body { background-color: white; margin: 10mm; -webkit-print-color-adjust: exact; }
             header, footer, .steps-section, .botones-container, .no-print { display: none !important; }
             .visitante-conocenos, .envio-main, .container { visibility: visible !important; display: block !important; margin: 0 !important; padding: 0 !important; width: 100% !important; height: auto !important; overflow: visible !important; box-shadow: none !important; }
-            .factura-wrapper { visibility: visible !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; border: none !important; transform: scale(0.95); transform-origin: top left; }
-            .invoice-header, .invoice-body, .total-section, .info-grid { page-break-inside: avoid; }
+            .factura-wrapper { visibility: visible !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; border: none !important; }
+            
+            /* Restaurar tabla normal para impresión */
+            table, thead, tbody, th, td, tr { display: table-row; }
+            thead { display: table-header-group; }
+            td { display: table-cell; text-align: left; border-bottom: 1px solid #eee; }
+            td:nth-child(3), td:nth-child(4) { text-align: right; } /* Precios a la derecha */
+            td::before { content: none !important; }
+            .table-container { border: 1px solid #eee; }
+            tr { border: none; margin: 0; box-shadow: none; }
         }
-        @media (max-width: 768px) { .info-grid { grid-template-columns: 1fr; gap: 15px; } .invoice-header { flex-direction: column; text-align: center; gap: 15px; } .botones-container { flex-direction: column; } }
     </style>
 </head>
 <body>
