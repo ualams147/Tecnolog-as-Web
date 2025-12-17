@@ -69,10 +69,10 @@ function sectionheader($active = 0) {
     <style>
         /* ================= ESTILOS BASE HEADER ================= */
         .cabecera { position: relative; width: 100%; background: white; padding: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        .cabecera .container { display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+        .cabecera .container { display: flex; align-items: center; justify-content: space-between; gap: 40px; padding: 0 40px; }
         
         .logo-main { flex-shrink: 0; position: relative; display: flex; align-items: center; z-index: 1001; }
-        .logo-main img { height: 60px; width: auto; }
+        .logo-main img { height: 60px; width: auto; transition: height 0.3s; }
         .logo-text { display: flex; flex-direction: column; margin-left: 12px; margin-top: 4px; line-height: 1.1; }
         .logo-text span { font-size: 14px; font-weight: 400; color: #2b2b2b; font-family: 'Poppins', sans-serif; }
         .logo-text strong { font-size: 18px; font-weight: 700; color: #000000; text-align: center; width: 100%; font-family: 'Poppins', sans-serif; }
@@ -104,7 +104,7 @@ function sectionheader($active = 0) {
         .lang-options a:hover { background: #f5f7fa; color: #293661; font-weight: 600; }
         .lang-options a.selected { background: #eef2ff; color: #293661; font-weight: bold; }
 
-        /* FOOTER BASE CSS */
+        /* FOOTER BASE CSS (TU ESTILO ORIGINAL) */
         .footer { background: #293661; color: white; padding: 60px 0 30px; }
         .footer-content { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; margin-bottom: 40px; }
         .footer-logo-section { display: flex; align-items: center; justify-content: flex-start; gap: 20px; }
@@ -130,29 +130,93 @@ function sectionheader($active = 0) {
         .politica-legal a:hover { opacity: 0.8; }
         .politica-legal span { font-size: 14px; opacity: 0.5; }
 
-        /* ================= MEDIA QUERIES ================= */
+        /* ================= MEDIA QUERIES (RESPONSIVE) ================= */
+        
+        /* TABLETS */
         @media (max-width: 1024px) {
             .nav-bar { gap: 40px; font-size: 16px; } 
             .cabecera .container { gap: 20px; }
         }
 
+        /* MÓVILES (< 768px) - DISEÑO CABECERA UNA LÍNEA */
         @media (max-width: 768px) {
-            .cabecera { padding: 15px 0; }
-            .cabecera .container { gap: 0; }
-            .logo-main { order: 1; margin-right: auto; }
-            .sign-in { order: 2; padding: 8px 16px; margin: 0; }
-            .sign-in a { font-size: 14px; }
-            .menu-toggle { display: block; order: 3; }
-            .nav-bar { display: none; width: 100%; flex-direction: column; order: 4; padding-top: 20px; gap: 20px; text-align: center; border-top: 1px solid #eee; margin-top: 15px; }
+            /* === CABECERA MÓVIL === */
+            .cabecera { padding: 12px 0; }
+            .cabecera .container { 
+                gap: 10px; 
+                padding: 0 15px; 
+                flex-wrap: nowrap; /* CLAVE: Fuerza que no bajen de línea */
+                justify-content: space-between;
+            }
+
+            /* 1. LOGO (Izquierda) */
+            .logo-main { 
+                order: 1; 
+                flex-grow: 1; 
+                margin-right: auto;
+                min-width: 0; /* Permite encoger si no hay sitio */
+            }
+            .logo-main img { height: 40px; }
+            .logo-text { margin-left: 8px; margin-top: 2px; }
+            .logo-text span { font-size: 11px; display: block; line-height: 1.1; }
+            .logo-text strong { font-size: 15px; display: block; line-height: 1.1; }
+
+            /* 2. BOTÓN (Centro-Derecha) */
+            .sign-in { 
+                order: 2; 
+                padding: 7px 14px; 
+                margin: 0;
+                flex-shrink: 0; 
+            }
+            .sign-in a { font-size: 13px; }
+
+            /* 3. HAMBURGUESA (Derecha) */
+            .menu-toggle { 
+                display: block; 
+                order: 3; 
+                margin-left: 5px; 
+                padding: 5px;
+                flex-shrink: 0;
+            }
+            
+            /* NAV OCULTO */
+            .nav-bar { 
+                display: none; 
+                width: 100%; 
+                flex-direction: column; 
+                order: 4; 
+                padding-top: 20px; 
+                gap: 20px; 
+                text-align: center; 
+                border-top: 1px solid #eee; 
+                margin-top: 15px; 
+                position: absolute; /* Desplegable flotante */
+                top: 100%;
+                left: 0;
+                background: white;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                padding-bottom: 20px;
+            }
             .nav-bar.active { display: flex; }
             .lang-widget { bottom: 20px; left: 20px; }
 
+            /* === FOOTER MÓVIL (TU ORIGINAL) === */
             .footer-content { display: flex !important; flex-direction: column !important; gap: 40px !important; }
             .footer-logo-section { flex-direction: column !important; align-items: center !important; }
             .logo-footer img { width: 150px; height: 150px; }
             .footer-links { display: flex !important; flex-direction: column !important; gap: 50px !important; text-align: center !important; }
             .contacto-footer { order: -1 !important; display: flex !important; flex-direction: column !important; align-items: center !important; }
             .contacto-footer ul li { justify-content: center !important; }
+        }
+
+        /* MÓVILES PEQUEÑOS (iPhone 12, SE...) */
+        @media (max-width: 400px) {
+            .cabecera .container { padding: 0 10px; gap: 5px; }
+            .logo-main img { height: 35px; }
+            .logo-text span { font-size: 10px; }
+            .logo-text strong { font-size: 14px; }
+            .sign-in { padding: 6px 12px; }
+            .sign-in a { font-size: 12px; }
         }
     </style>
 
