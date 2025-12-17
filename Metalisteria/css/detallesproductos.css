@@ -1,9 +1,3 @@
-/* =========================================
-   ESTILOS DETALLES PRODUCTO (CLIENTE)
-   Archivo: css/detallesProducto.css
-   ========================================= */
-
-/* ===== RESET OBLIGATORIO (Adiós filo blanco) ===== */
 * {
     margin: 0;
     padding: 0;
@@ -262,16 +256,56 @@ html, body {
     border-top: 2px solid #293661;
 }
 
-/* Responsive */
+/* ========================== RESPONSIVE (Detalle Producto) ========================== */
+
+/* Móviles (max-width: 768px) */
 @media (max-width: 768px) {
-    .product-title-main { font-size: 32px; }
-    .product-hero { padding-bottom: 120px; }
-    .details-container-card { padding: 20px; }
     
-    .item-producto { flex-direction: column; text-align: center; gap: 15px; }
-    .thumb-prod { margin-right: 0; }
-    .meta-info { justify-content: center; }
-    .precio-column { text-align: center; }
+    /* Título principal más pequeño */
+    .product-title-main { 
+        font-size: 32px; 
+    }
     
-    .fila-resumen { width: 100%; }
+    /* Espacio inferior del hero */
+    .product-hero { 
+        padding-bottom: 120px; 
+    }
+    
+    /* Contenedor principal con menos padding */
+    .details-container-card { 
+        padding: 20px; 
+    }
+    
+    /* Elemento de producto: apilar verticalmente */
+    .item-producto { 
+        display: flex;          /* Aseguramos flex por si acaso */
+        flex-direction: column; /* Uno debajo del otro */
+        text-align: center;     /* Texto centrado */
+        gap: 20px;              /* Un poco más de aire */
+        align-items: center;    /* Centrar elementos hijos */
+    }
+    
+    /* Imagen miniatura o principal */
+    .thumb-prod { 
+        margin-right: 0;        /* Quitamos margen lateral */
+        margin-bottom: 15px;
+    }
+    
+    /* Información meta (categoría, ref, etc.) */
+    .meta-info { 
+        justify-content: center; 
+        display: flex;
+        gap: 10px;
+    }
+    
+    /* Columna de precio y acciones */
+    .precio-column { 
+        text-align: center; 
+        width: 100%;            /* Ocupar todo el ancho */
+    }
+    
+    /* Fila de resumen (si existe) */
+    .fila-resumen { 
+        width: 100%; 
+    }
 }

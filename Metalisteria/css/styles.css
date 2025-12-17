@@ -651,3 +651,124 @@ body {
             font-size: 28px;
         }
 }
+/* =========================================
+   ESTILOS RESPONSIVE (Añadir al final de styles.css)
+   ========================================= */
+
+/* --- TABLETS Y PANTALLAS MEDIANAS (Hasta 1024px) --- */
+@media (max-width: 1024px) {
+    
+    /* Ajuste de márgenes laterales */
+    .container {
+        padding: 0 30px;
+    }
+
+    /* Portada: Texto un poco más pequeño */
+    .portada-title {
+        font-size: 42px;
+        padding: 0 20px;
+    }
+
+    /* Ubicación: Poner en una sola columna (Texto arriba, mapa abajo) */
+    .ubicacion-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 40px;
+        text-align: center;
+    }
+
+    /* Centrar el enlace de la dirección */
+    .direccion-box a {
+        justify-content: center;
+    }
+
+    /* Arreglar el botón de teléfono que tenía mucho margen izquierdo */
+    .telefono-btn {
+        margin-left: 0;
+        margin-top: 20px;
+        display: inline-block;
+    }
+
+    /* Forzar al mapa a ajustarse al ancho de la pantalla */
+    .mapa-container iframe {
+        width: 100% !important; /* Sobreescribe el width="600" del HTML */
+        height: 350px !important;
+    }
+
+    /* FAQ: Simplificar diseño */
+    .preguntas-frecuentes h2 {
+        text-align: center;
+        grid-column: auto;
+        margin-bottom: 30px;
+    }
+
+    .faq-content {
+        grid-template-columns: 1fr; /* Una columna */
+        padding: 40px;
+        gap: 0;
+    }
+
+    .faq-questions {
+        grid-column: auto;
+    }
+
+    /* Ocultar las imágenes decorativas del FAQ en tablets para limpiar el diseño */
+    .faq-images {
+        display: none; 
+    }
+}
+
+/* =========================================
+   ESTILOS RESPONSIVE (Actualizado)
+   Pegar al final de styles.css
+   ========================================= */
+
+/* --- TABLETS Y PANTALLAS MEDIANAS (Hasta 1024px) --- */
+@media (max-width: 1024px) {
+    
+    .container { padding: 0 30px; }
+
+    /* === CAMBIO APLICADO AQUÍ === */
+    /* Hacemos que la caja verde ocupe solo el 90% del ancho para que sea más estrecha */
+    .productos-container {
+        width: 90%;         /* Reduce el ancho de la caja */
+        margin: 0 auto;     /* La mantiene centrada */
+        border-radius: 20px; /* Opcional: bordes un poco más redondeados */
+    }
+
+    .portada-title { font-size: 42px; padding: 0 20px; }
+
+    /* Ajuste Ubicación */
+    .ubicacion-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 40px;
+        text-align: center;
+    }
+    .direccion-box a { justify-content: center; }
+    .telefono-btn { margin-left: 0; margin-top: 20px; display: inline-block; }
+    .mapa-container iframe { width: 100% !important; height: 350px !important; }
+
+    /* Ajuste FAQ */
+    .preguntas-frecuentes h2 { text-align: center; margin-bottom: 30px; }
+    .faq-content { grid-template-columns: 1fr; padding: 40px; gap: 0; }
+    .faq-images { display: none; }
+}
+
+/* --- MÓVILES (Hasta 768px) --- */
+@media (max-width: 768px) {
+
+    .portada { aspect-ratio: auto; height: 50vh; min-height: 300px; }
+    .portada-title { font-size: 28px; }
+
+    .productos-container h2, 
+    .texto-ubicacion h2, 
+    .preguntas-frecuentes h2 { font-size: 32px; }
+
+    .productos-grid { grid-template-columns: 1fr; }
+
+    .ubicacion-content, 
+    .faq-content { padding: 25px; }
+    
+    .mapa-container iframe { height: 250px !important; }
+}

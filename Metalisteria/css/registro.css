@@ -24,8 +24,6 @@ body {
     padding: 0 40px;
 }
 
-
-
 /* ========================== SECCIÓN REGISTRO ========================== */
 
 .registro-section {
@@ -142,19 +140,19 @@ body {
 
 /* Clase para marcar el borde en rojo */
 .form-input.error {
-        border: 2px solid #dc3545 !important; /* Rojo intenso */
-        background-color: #fff8f8; /* Un fondo rojizo muy suave */
-        animation: shake 0.3s; /* Efecto de vibración opcional */
-    }
+    border: 2px solid #dc3545 !important; /* Rojo intenso */
+    background-color: #fff8f8; /* Un fondo rojizo muy suave */
+    animation: shake 0.3s; /* Efecto de vibración opcional */
+}
 
-    /* Pequeña animación para que vibre si falla */
-    @keyframes shake {
-        0% { transform: translateX(0); }
-        25% { transform: translateX(-5px); }
-        50% { transform: translateX(5px); }
-        75% { transform: translateX(-5px); }
-        100% { transform: translateX(0); }
-    }
+/* Pequeña animación para que vibre si falla */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
 
 /* === TEXTO "YA TIENES CUENTA" === */
 .register-text {
@@ -217,8 +215,7 @@ body {
 }
 
 /* =========================================
-   CLASES AUXILIARES DE DISEÑO (NUEVO)
-   (Para que la lista se vea bien debajo del input)
+   CLASES AUXILIARES DE DISEÑO
    ========================================= */
 
 /* 1. Contenedor que agrupa Input + Lista en columna */
@@ -233,38 +230,29 @@ body {
     width: 100%;
 }
 
-/* 3. Alinea el icono/label arriba (para que no se centre raro cuando sale la lista) */
+/* 3. Alinea el icono/label arriba */
 .form-row.alinear-arriba {
     align-items: flex-start;
 }
 
 .form-row.alinear-arriba .label-icon {
-    margin-top: 12px; /* Ajuste para centrar visualmente con el input */
+    margin-top: 12px;
 }
 
-/* ========================== RESPONSIVE ========================== */
+/* ========================== RESPONSIVE (Limpio) ========================== */
 
 /* Tablets (max-width: 1024px) */
 @media (max-width: 1024px) {
-    .nav-bar { gap: 30px; font-size: 16px; }
-    
     .registro-card { padding: 40px 30px; }
     
     .form-row { grid-template-columns: 280px 1fr; }
+    
     .label-icon { font-size: 16px; }
-
-    .footer-content { grid-template-columns: 1fr; gap: 40px; text-align: center; }
-    .footer-logo-section, .footer-links { justify-content: center; }
-    .footer-links { display: flex; flex-direction: column; align-items: center; gap: 40px; }
-    .contacto-footer ul li { justify-content: center; }
 }
 
 /* Móviles (max-width: 768px) */
 @media (max-width: 768px) {
-    .cabecera .container { flex-direction: column; gap: 20px; }
-    .nav-bar { display: flex; flex-direction: column; width: 100%; gap: 15px; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
-    .sign-in { width: 100%; text-align: center; }
-
+    
     /* FORMULARIO RESPONSIVE */
     .registro-card { padding: 30px 20px; }
     
@@ -286,11 +274,4 @@ body {
     }
     
     .btn-register-submit { width: 100%; max-width: 100%; }
-
-    /* Footer Responsive */
-    .footer-content { display: flex; flex-direction: column; gap: 40px; }
-    .logo-footer img { margin: 0 auto; display: block; }
-    .redes { justify-content: center; margin-top: 20px; }
-    .politica-legal { flex-direction: column; gap: 10px; }
-    .politica-legal span { display: none; }
 }

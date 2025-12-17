@@ -126,6 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/IniciarSesion.css"> 
     <script src="js/auth.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="visitante-login">
@@ -166,7 +167,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
                             <?php echo $lang['login_lbl_pass']; ?>
                         </label>
-                        <input type="password" id="password" name="password" class="form-input" required>
+                        
+                        <div style="position: relative; width: 100%;">
+                            <input type="password" id="password" name="password" class="form-input" required style="padding-right: 40px;">
+                            
+                            <i class="fas fa-eye" id="ojo_login" onclick="mostrarOcultar('password', 'ojo_login')" 
+                            style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #293661;"></i>
+                        </div>
                     </div>
                     
                     <button type="submit" class="btn-login-submit"><?php echo $lang['login_btn_submit']; ?></button>
@@ -183,5 +190,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <?php sectionfooter(); ?>
     </div>
+
+    <script>
+        function mostrarOcultar(idInput, idIcono) {
+            var input = document.getElementById(idInput);
+            var icono = document.getElementById(idIcono);
+
+            if (input.type === "password") {
+                input.type = "text";
+                icono.classList.remove("fa-eye");
+                icono.classList.add("fa-eye-slash"); // Cambia al icono de ojo tachado
+            } else {
+                input.type = "password";
+                icono.classList.remove("fa-eye-slash");
+                icono.classList.add("fa-eye"); // Vuelve al icono de ojo normal
+            }
+        }
+    </script>
+
 </body>
 </html>

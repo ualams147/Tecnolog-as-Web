@@ -32,8 +32,7 @@ if (file_exists($archivo_lang)) {
     include $archivo_lang;
 }
 
-// 5. MAPA DE BANDERAS (Usamos imágenes externas para que no tengas que descargar nada)
-// Nota: Para inglés usamos 'gb' (Gran Bretaña) para la bandera
+// 5. MAPA DE BANDERAS
 $flag_urls = [
     'es' => 'https://flagcdn.com/w80/es.png',
     'en' => 'https://flagcdn.com/w80/gb.png',
@@ -57,14 +56,18 @@ function sectionheader($active = 0) {
     }
     
     $usuario_logueado = isset($_SESSION['usuario']);
+    
+    // --- AQUÍ FALTABA CERRAR PHP ---
     ?>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
-        /* ================= ESTILOS BASE ================= */
-        .cabecera { position: relative; width: 100%; background: white; padding: 30px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        .cabecera .container { display: flex; align-items: center; justify-content: space-between; gap: 40px; }
+        /* ================= ESTILOS BASE (ESCRITORIO) ================= */
+        .cabecera { position: relative; width: 100%; background: white; padding: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .cabecera .container { display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
         
-        .logo-main { flex-shrink: 0; position: relative; display: flex; align-items: center; }
+        .logo-main { flex-shrink: 0; position: relative; display: flex; align-items: center; z-index: 1001; }
         .logo-main img { height: 60px; width: auto; }
         .logo-text { display: flex; flex-direction: column; margin-left: 12px; margin-top: 4px; line-height: 1.1; }
         .logo-text span { font-size: 14px; font-weight: 400; color: #2b2b2b; font-family: 'Poppins', sans-serif; }
@@ -81,95 +84,23 @@ function sectionheader($active = 0) {
         .sign-in:active { transform: translateY(0); }
         .sign-in a { font-family: 'Source Sans Pro', sans-serif; font-weight: 700; font-size: 18px; color: white; text-decoration: none; white-space: nowrap; }
 
-        /* ================= BOTÓN FLOTANTE BANDERAS ================= */
-        .lang-widget {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            z-index: 9999;
-            font-family: 'Poppins', sans-serif;
-        }
+        /* Botón Hamburguesa */
+        .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 5px; z-index: 1002; margin-left: 10px; }
+        .menu-toggle span { display: block; width: 28px; height: 3px; background-color: #293661; margin: 6px 0; transition: 0.3s; border-radius: 3px; }
 
-        /* El botón redondo principal con la bandera */
-        .lang-toggle-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 3px solid white; /* Borde blanco para resaltar */
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            cursor: pointer;
-            overflow: hidden; /* Para que la imagen cuadrada se recorte redonda */
-            background: white;
-            transition: transform 0.3s ease;
-            padding: 0;
-            display: flex;
-        }
+        /* Widget de Idiomas */
+        .lang-widget { position: fixed; bottom: 30px; left: 30px; z-index: 9999; font-family: 'Poppins', sans-serif; }
+        .lang-toggle-btn { width: 50px; height: 50px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; overflow: hidden; background: white; transition: transform 0.3s ease; padding: 0; display: flex; }
+        .lang-toggle-btn img { width: 100%; height: 100%; object-fit: cover; }
+        .lang-toggle-btn:hover { transform: scale(1.1); }
+        .lang-options { position: absolute; bottom: 65px; left: 0; background: white; border-radius: 12px; padding: 8px 0; box-shadow: 0 5px 20px rgba(0,0,0,0.2); width: 160px; flex-direction: column; border: 1px solid #eee; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .lang-options.active { opacity: 1; visibility: visible; transform: translateY(0); }
+        .lang-options a { display: flex; align-items: center; gap: 12px; padding: 10px 15px; color: #333; text-decoration: none; font-size: 14px; transition: background 0.2s; }
+        .lang-options a img { width: 24px; height: 18px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        .lang-options a:hover { background: #f5f7fa; color: #293661; font-weight: 600; }
+        .lang-options a.selected { background: #eef2ff; color: #293661; font-weight: bold; }
 
-        .lang-toggle-btn img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* La bandera cubre todo el botón */
-        }
-
-        .lang-toggle-btn:hover {
-            transform: scale(1.1);
-        }
-
-        /* Menú Desplegable */
-        .lang-options {
-            position: absolute;
-            bottom: 65px; 
-            left: 0;
-            background: white;
-            border-radius: 12px;
-            padding: 8px 0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            width: 160px;
-            flex-direction: column;
-            border: 1px solid #eee;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .lang-options.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .lang-options a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 15px;
-            color: #333;
-            text-decoration: none;
-            font-size: 14px;
-            transition: background 0.2s;
-        }
-
-        .lang-options a img {
-            width: 24px;
-            height: 18px;
-            border-radius: 2px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-        }
-
-        .lang-options a:hover {
-            background: #f5f7fa;
-            color: #293661;
-            font-weight: 600;
-        }
-        
-        .lang-options a.selected {
-            background: #eef2ff;
-            color: #293661;
-            font-weight: bold;
-        }
-        
-        /* FOOTER (Compacto) */
+        /* FOOTER BASE */
         .footer { background: #293661; color: white; padding: 60px 0 30px; }
         .footer-content { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; margin-bottom: 40px; }
         .footer-logo-section { display: flex; align-items: center; justify-content: flex-start; gap: 20px; }
@@ -194,10 +125,68 @@ function sectionheader($active = 0) {
         .politica-legal a { font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 14px; color: white; text-decoration: none; transition: opacity 0.3s ease; }
         .politica-legal a:hover { opacity: 0.8; }
         .politica-legal span { font-size: 14px; opacity: 0.5; }
+
+        /* ================= MEDIA QUERIES (RESPONSIVE) ================= */
+        
+        @media (max-width: 1024px) {
+            .nav-bar { gap: 40px; font-size: 16px; } 
+            .cabecera .container { gap: 20px; }
+        }
+
+        @media (max-width: 768px) {
+            /* --- CABECERA MÓVIL --- */
+            .cabecera { padding: 15px 0; }
+            .cabecera .container { gap: 0; }
+
+            /* Orden elementos cabecera */
+            .logo-main { order: 1; margin-right: auto; }
+            .sign-in { order: 2; padding: 8px 16px; margin: 0; }
+            .sign-in a { font-size: 14px; }
+            .menu-toggle { display: block; order: 3; }
+            
+            .nav-bar { display: none; width: 100%; flex-direction: column; order: 4; padding-top: 20px; gap: 20px; text-align: center; border-top: 1px solid #eee; margin-top: 15px; }
+            .nav-bar.active { display: flex; }
+            .lang-widget { bottom: 20px; left: 20px; }
+
+            /* --- FOOTER MÓVIL (Corrección Forzada) --- */
+            
+            /* 1. Quitamos la estructura Grid y ponemos Flex Vertical */
+            .footer-content { 
+                display: flex !important; 
+                flex-direction: column !important; 
+                gap: 40px !important; 
+            }
+
+            .footer-logo-section { 
+                flex-direction: column !important; 
+                align-items: center !important; 
+            }
+            .logo-footer img { width: 150px; height: 150px; }
+
+            /* 2. Contenedor de enlaces también vertical */
+            .footer-links { 
+                display: flex !important; 
+                flex-direction: column !important; 
+                gap: 50px !important; 
+                text-align: center !important;
+            }
+
+            /* 3. SUBIR SECCIÓN CONTACTO (Order -1 la sube arriba) */
+            .contacto-footer {
+                order: -1 !important; 
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+            }
+
+            /* 4. Centrar los iconos y el texto del teléfono */
+            .contacto-footer ul li {
+                justify-content: center !important;
+            }
+        }
     </style>
 
     <div class="lang-widget" id="langWidget">
-        
         <div class="lang-options" id="langOptions">
             <a href="?lang=es" class="<?php echo ($idioma_actual == 'es') ? 'selected' : ''; ?>">
                 <img src="<?php echo $flag_urls['es']; ?>" alt="ES"> Español
@@ -222,11 +211,16 @@ function sectionheader($active = 0) {
             menu.classList.toggle('active');
         }
 
+        function toggleMobileMenu() {
+            var navbar = document.querySelector('.nav-bar');
+            navbar.classList.toggle('active');
+        }
+
         document.addEventListener('click', function(event) {
-            var menu = document.getElementById('langOptions');
-            var widget = document.getElementById('langWidget');
-            if (menu.classList.contains('active') && !widget.contains(event.target)) {
-                menu.classList.remove('active');
+            var menuLang = document.getElementById('langOptions');
+            var widgetLang = document.getElementById('langWidget');
+            if (menuLang.classList.contains('active') && !widgetLang.contains(event.target)) {
+                menuLang.classList.remove('active');
             }
         });
     </script>
@@ -243,11 +237,17 @@ function sectionheader($active = 0) {
                 </a>
             </div>
 
+            <button class="menu-toggle" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
             <nav class="nav-bar">
                 <a href="conocenos.php" class="<?php echo ($active == 2) ? 'activo' : ''; ?>"><?php echo $lang['conocenos']; ?></a>
                 <a href="productos.php" class="<?php echo ($active == 3) ? 'activo' : ''; ?>"><?php echo $lang['productos']; ?></a>
                 
-                <a href="carrito.php" class="<?php echo ($active == 4) ? 'activo' : ''; ?>" style="display:flex; align-items:center; gap:5px;">
+                <a href="carrito.php" class="<?php echo ($active == 4) ? 'activo' : ''; ?>" style="display:flex; align-items:center; gap:5px; justify-content:center;">
                     <?php echo $lang['carrito']; ?>
                     <?php if ($cantidad_carrito > 0): ?>
                         <span id="cart-count" style="background:#a0d2ac; color:#293661; padding:2px 6px; border-radius:10px; font-size:12px; font-weight:bold;">
@@ -273,7 +273,6 @@ function sectionheader($active = 0) {
 
         </div>
     </header>
-    
     <?php
 }
 

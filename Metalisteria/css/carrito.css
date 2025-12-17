@@ -211,50 +211,50 @@ body {
 }
 
 
-/* ========================== RESPONSIVE ========================== */
-
-/* Tablets (max-width: 1024px) */
-@media (max-width: 1024px) {
-    .nav-bar { gap: 30px; font-size: 16px; }
-    .footer-content { grid-template-columns: 1fr; gap: 40px; text-align: center; }
-    .footer-logo-section, .footer-links { justify-content: center; }
-    .footer-links { display: flex; flex-direction: column; align-items: center; gap: 40px; }
-    .contacto-footer ul li { justify-content: center; }
-}
+/* ========================== RESPONSIVE (Carrito) ========================== */
 
 /* Móviles (max-width: 768px) */
 @media (max-width: 768px) {
-    .cabecera .container { flex-direction: column; gap: 20px; }
-    .nav-bar { display: flex; flex-direction: column; width: 100%; gap: 15px; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
-    .sign-in { width: 100%; text-align: center; }
 
-    /* Carrito Responsive */
-    .carrito-container { padding: 30px 20px; }
+    /* Ajustes del contenedor principal */
+    .carrito-container { 
+        padding: 30px 20px; 
+    }
     
+    .carrito-title { 
+        font-size: 36px; 
+        margin-bottom: 30px; 
+        text-align: center; /* Recomendado: centrar título en móvil */
+    }
+
+    /* Tarjeta de cada producto */
     .item-card {
         flex-direction: column; /* Foto arriba, info abajo */
         gap: 20px;
         padding: 20px;
+        align-items: center;    /* Centrar contenido */
     }
 
-    .item-image-placeholder {
-        width: 100%; /* Foto ancho completo */
+    /* Imagen del producto */
+    .item-image-placeholder, 
+    .item-card img {            /* Añado img por si usas etiqueta directa */
+        width: 100%; 
         height: 200px;
+        object-fit: contain;    /* Para que no se recorte la foto */
     }
 
+    /* Acciones (Cantidad y Eliminar) */
     .item-actions {
-        justify-content: space-between; /* Separar cantidad y papelera */
+        justify-content: space-between; 
         width: 100%;
+        margin-top: 10px;
     }
 
-    .carrito-title { font-size: 36px; margin-bottom: 30px; }
-    
-    .btn-comprar { font-size: 22px; width: 100%; }
-
-    /* Footer Responsive */
-    .footer-content { display: flex; flex-direction: column; gap: 40px; }
-    .logo-footer img { margin: 0 auto; display: block; }
-    .redes { justify-content: center; margin-top: 20px; }
-    .politica-legal { flex-direction: column; gap: 10px; }
-    .politica-legal span { display: none; }
+    /* Botón de comprar grande y fácil de pulsar */
+    .btn-comprar { 
+        font-size: 20px; 
+        width: 100%; 
+        padding: 15px;
+        margin-top: 20px;
+    }
 }

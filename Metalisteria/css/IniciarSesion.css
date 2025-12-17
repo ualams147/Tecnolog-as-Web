@@ -24,7 +24,6 @@ body {
     padding: 0 40px;
 }
 
-
 /* ============================================================
    ======================= LOGIN SECTION ======================
    ============================================================ */
@@ -33,13 +32,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    
-    /* CAMBIO IMPORTANTE: flex-start para que empiece arriba, no en el centro */
-    justify-content: flex-start; 
-    
-    /* CAMBIO: Mismo padding que en registro (60px arriba) */
+    justify-content: flex-start; /* Empieza arriba */
     padding: 60px 20px; 
-    
     flex: 1; 
 }
 
@@ -53,8 +47,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    
-    /* CAMBIO: Quitamos margin-top extra para que se pegue al padding de 60px */
     margin-top: 0; 
     margin-bottom: 60px;
 }
@@ -79,7 +71,7 @@ body {
 /* === GRID DEL FORMULARIO === */
 .form-row {
     display: grid;
-    grid-template-columns: 160px 1fr; 
+    grid-template-columns: 160px 1fr; /* Etiqueta izq, Input der */
     align-items: center;
     gap: 15px; 
 }
@@ -163,51 +155,60 @@ body {
     text-decoration: underline;
 }
 
-
-
-/* ========================== RESPONSIVE ========================== */
+/* ========================== RESPONSIVE (Limpio) ========================== */
 
 /* Tablets (max-width: 1024px) */
 @media (max-width: 1024px) {
-    .nav-bar { gap: 30px; font-size: 16px; }
+    .login-card { 
+        padding: 40px 30px; 
+    }
     
-    .login-card { padding: 40px 30px; }
+    .form-row { 
+        grid-template-columns: 200px 1fr; /* Ajuste para tablets */
+    }
     
-    .form-row { grid-template-columns: 200px 1fr; }
-    .label-icon { font-size: 16px; }
-
-    .footer-content { grid-template-columns: 1fr; gap: 40px; text-align: center; }
-    .footer-logo-section, .footer-links { justify-content: center; }
-    .footer-links { display: flex; flex-direction: column; align-items: center; gap: 40px; }
-    .contacto-footer ul li { justify-content: center; }
+    .label-icon { 
+        font-size: 16px; 
+    }
 }
 
 /* Móviles (max-width: 768px) */
 @media (max-width: 768px) {
-    .cabecera .container { flex-direction: column; gap: 20px; }
-    .nav-bar { display: flex; flex-direction: column; width: 100%; gap: 15px; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
-    .sign-in { width: 100%; text-align: center; }
+    
+    .container {
+        padding: 0 20px;
+    }
+
+    .login-title {
+        font-size: 32px;
+        margin-bottom: 30px;
+    }
 
     /* FORMULARIO RESPONSIVE */
-    .login-card { padding: 30px 20px; }
+    .login-card { 
+        padding: 30px 20px; 
+    }
     
+    /* Importante: Cambiamos de Grid horizontal a bloque vertical */
     .form-row { 
-        grid-template-columns: 1fr; 
-        gap: 8px; 
+        grid-template-columns: 1fr; /* Una sola columna */
+        gap: 10px; 
     }
 
     .label-icon {
         justify-content: flex-start;
         padding-left: 0; 
         font-size: 16px;
+        margin-bottom: 5px; /* Un poco de espacio antes del input */
     }
     
-    .btn-login-submit { width: 100%; max-width: 100%; }
-
-    /* Footer Responsive */
-    .footer-content { display: flex; flex-direction: column; gap: 40px; }
-    .logo-footer img { margin: 0 auto; display: block; }
-    .redes { justify-content: center; margin-top: 20px; }
-    .politica-legal { flex-direction: column; gap: 10px; }
-    .politica-legal span { display: none; }
+    .btn-login-submit { 
+        width: 100%; 
+        max-width: 100%; /* Botón ancho completo en móvil */
+        font-size: 18px;
+    }
+    
+    .register-text {
+        font-size: 16px;
+    }
 }

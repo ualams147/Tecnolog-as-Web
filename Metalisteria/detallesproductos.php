@@ -1,9 +1,7 @@
 <?php
-// detallesproducto.php
-
 // --- 1. CONFIGURACIÓN Y SEGURIDAD ---
 require_once 'conexion.php';
-require_once 'CabeceraFooter.php'; // Aquí se carga $lang
+require_once 'CabeceraFooter.php';
 
 // Verificar sesión
 if (session_status() === PHP_SESSION_NONE) {
@@ -26,20 +24,18 @@ if (!isset($_GET['id'])) {
 $id_venta = $_GET['id'];
 
 try {
-    // --- 2. CONSULTA SEGURA (Pedido + Cliente) ---
-    // Buscamos el pedido, pero SOLO si coincide con el id_cliente logueado.
+    // --- 2. CONSULTA SEGURA ---
     $sql_venta = "SELECT * FROM ventas WHERE id = ? AND id_cliente = ?";
     $stmt = $conn->prepare($sql_venta);
     $stmt->execute([$id_venta, $id_cliente]);
     $venta = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$venta) {
-        // Si no existe o no es suyo, lo mandamos fuera
         header("Location: pedidosactivos.php");
         exit;
     }
 
-    // --- 3. CONSULTA DE DETALLES (Productos) ---
+    // --- 3. CONSULTA DE DETALLES ---
     $sql_detalles = "SELECT d.*, p.nombre as nombre_prod, p.imagen_url 
                       FROM detalle_ventas d 
                       JOIN productos p ON d.id_producto = p.id 
@@ -52,29 +48,44 @@ try {
     die("Error en base de datos: " . $e->getMessage());
 }
 
-// Lógica de colores y traducción para el estado
+// --- 4. CORRECCIÓN DE IDIOMAS (IMPORTANTE) ---
+// Si estos textos no están en tu CabeceraFooter.php, los definimos aquí para que no falle
+$lang['detalle_titulo_pagina'] = $lang['detalle_titulo_pagina'] ?? 'Detalle del Pedido';
+$lang['detalle_titulo_hero'] = $lang['detalle_titulo_hero'] ?? 'Pedido #';
+$lang['detalle_fecha'] = $lang['detalle_fecha'] ?? 'Fecha';
+$lang['detalle_estado'] = $lang['detalle_estado'] ?? 'Estado';
+$lang['detalle_referencia'] = $lang['detalle_referencia'] ?? 'Referencia';
+$lang['detalle_seccion_productos'] = $lang['detalle_seccion_productos'] ?? 'Productos';
+$lang['detalle_cant'] = $lang['detalle_cant'] ?? 'Cant:';
+$lang['detalle_color'] = $lang['detalle_color'] ?? 'Color:';
+$lang['detalle_medidas'] = $lang['detalle_medidas'] ?? 'Medidas:';
+$lang['detalle_precio_ud'] = $lang['detalle_precio_ud'] ?? 'ud';
+$lang['detalle_base_imponible'] = $lang['detalle_base_imponible'] ?? 'Base Imponible';
+$lang['detalle_iva'] = $lang['detalle_iva'] ?? 'IVA';
+$lang['detalle_total'] = $lang['detalle_total'] ?? 'Total';
+
+// Lógica de estados
 $estado_db = $venta['estado'] ?? 'Pendiente';
 $clase_estado = 'estado-default';
-$texto_estado = $estado_db; // Fallback
+$texto_estado = $estado_db;
 
-// Mapeo de estados (Igual que en pedidosactivos.php)
+// Usamos el operador ?? para evitar errores si falta la traducción del estado
 if(stripos($estado_db, 'Entregado') !== false) {
     $clase_estado = 'estado-entregado';
-    $texto_estado = isset($lang['estado_entregado']) ? $lang['estado_entregado'] : $estado_db;
+    $texto_estado = $lang['estado_entregado'] ?? $estado_db;
 } elseif(stripos($estado_db, 'Pendiente') !== false) {
     $clase_estado = 'estado-pendiente';
-    $texto_estado = isset($lang['estado_pendiente']) ? $lang['estado_pendiente'] : $estado_db;
+    $texto_estado = $lang['estado_pendiente'] ?? $estado_db;
 } elseif(stripos($estado_db, 'Cancelado') !== false) {
     $clase_estado = 'estado-cancelado';
-    $texto_estado = isset($lang['estado_cancelado']) ? $lang['estado_cancelado'] : $estado_db;
+    $texto_estado = $lang['estado_cancelado'] ?? $estado_db;
 } elseif(stripos($estado_db, 'Proceso') !== false) {
     $clase_estado = 'estado-proceso';
-    $texto_estado = isset($lang['estado_proceso']) ? $lang['estado_proceso'] : $estado_db;
+    $texto_estado = $lang['estado_proceso'] ?? $estado_db;
 } elseif(stripos($estado_db, 'Enviado') !== false) {
     $clase_estado = 'estado-proceso';
-    $texto_estado = isset($lang['estado_enviado']) ? $lang['estado_enviado'] : $estado_db;
+    $texto_estado = $lang['estado_enviado'] ?? $estado_db;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -100,10 +111,8 @@ if(stripos($estado_db, 'Entregado') !== false) {
     <div class="visitante-producto-detalle">
         
         <?php 
-        // Cabecera del sitio
-        if(function_exists('sectionheader')) {
-            sectionheader(1); 
-        } 
+        // Llamada a la cabecera (incluye sus propios estilos)
+        sectionheader(3); 
         ?>
 
         <section class="product-hero">
@@ -172,7 +181,6 @@ if(stripos($estado_db, 'Entregado') !== false) {
                 </div>
 
                 <?php 
-                    // Cálculos
                     $total = $venta['total'];
                     $base = $total / 1.21;
                     $iva = $total - $base;
@@ -195,12 +203,7 @@ if(stripos($estado_db, 'Entregado') !== false) {
             </div>
         </main>
 
-        <?php 
-        // Footer del sitio
-        if(function_exists('sectionfooter')) {
-            sectionfooter(); 
-        }
-        ?>
+        <?php sectionfooter(); ?>
     </div>
 
 </body>

@@ -204,16 +204,7 @@ body {
 
 
 /* Responsive */
-@media (max-width: 768px) {
-    .cabecera .container { flex-direction: column; gap: 20px; }
-    .nav-bar { gap: 20px; font-size: 16px; flex-direction: column; }
-    .titulo-hero { font-size: 36px; }
-    .medida-card { padding: 30px 20px; }
-    .footer-content { grid-template-columns: 1fr; text-align: center; }
-    .footer-links { grid-template-columns: 1fr; }
-    .contacto-footer ul li { justify-content: center; }
-    .footer-logo-section { justify-content: center; }
-}
+
 
 .custom-input.input-error {
     border: 2px solid #e74c3c !important;
@@ -275,6 +266,86 @@ body {
 
 .select-options.open {
     display: block;
+}
+
+/* Contenedor principal flex */
+.input-group-medidas {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centrado horizontal */
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+/* Envoltorio de cada input */
+.medida-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.medida-titulo {
+    font-size: 14px;
+    font-weight: 600;
+    color: #293661;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+/* Caja del input + cm */
+.input-con-unidad {
+    position: relative;
+    width: 100px;
+}
+
+.input-cuadrado {
+    width: 100px;
+    height: 100px; /* Cuadrado perfecto */
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    padding: 0;
+    padding-bottom: 20px; /* Espacio para el 'cm' */
+    color: #293661;
+}
+
+.input-cuadrado:focus {
+    border-color: #293661;
+    outline: none;
+    box-shadow: 0 4px 10px rgba(41, 54, 97, 0.1);
+}
+
+/* Texto 'cm' dentro del cuadro */
+.unidad {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    color: #888;
+    pointer-events: none;
+}
+
+/* La X del medio */
+.separador-x {
+    font-size: 24px;
+    color: #ccc;
+    margin-top: 15px; /* Para alinear visualmente con el centro de los cuadrados */
+}
+
+.nota-medidas {
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+    margin-top: 10px;
+}
+
+/* Error visual si es menor de 30 */
+.input-error {
+    border-color: #dc3545 !important;
+    background-color: #fff8f8;
 }
 
 .option-item {

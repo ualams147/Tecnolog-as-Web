@@ -192,53 +192,13 @@ body {
     background-color: #1f2849;
 }
 
-/* ========================== BOTÓN CERRAR SESIÓN ========================== */
-.logout-container {
-    margin-top: 40px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.btn-logout {
-    background-color: transparent;
-    color: #dc3545; 
-    border: 2px solid #dc3545;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 18px;
-    padding: 12px 40px;
-    border-radius: 50px; 
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.3s ease;
-}
-
-.btn-logout svg { width: 20px; height: 20px; }
-
-.btn-logout:hover {
-    background-color: #dc3545;
-    color: white;
-    transform: translateY(-2px);
-}
 
 
 /* ========================== RESPONSIVE ========================== */
-@media (max-width: 1024px) {
-    .nav-bar { gap: 30px; font-size: 16px; }
-    .footer-content { grid-template-columns: 1fr; gap: 40px; text-align: center; }
-    .footer-logo-section, .footer-links { justify-content: center; }
-    .footer-links { display: flex; flex-direction: column; align-items: center; gap: 40px; }
-    .contacto-footer ul li { justify-content: center; }
-}
+
 
 @media (max-width: 768px) {
-    .cabecera .container { flex-direction: column; gap: 20px; }
-    .nav-bar { display: flex; flex-direction: column; width: 100%; gap: 15px; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
-    .sign-in { width: 100%; text-align: center; }
-
+    
     .hero-content { justify-content: center; } 
     .btn-pedidos { width: 100%; justify-content: center; max-width: 300px; }
 
@@ -252,9 +212,5 @@ body {
     
     .edit-buttons-container { flex-direction: column; }
 
-    .footer-content { display: flex; flex-direction: column; gap: 40px; }
-    .logo-footer img { margin: 0 auto; display: block; }
-    .redes { justify-content: center; margin-top: 20px; }
-    .politica-legal { flex-direction: column; gap: 10px; }
-    .politica-legal span { display: none; }
+    
 }

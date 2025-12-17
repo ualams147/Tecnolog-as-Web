@@ -152,7 +152,6 @@ function val($dato) {
 
         <section class="address-hero">
             <div class="container hero-content">
-                <a href="perfil.php" class="flecha-circular">&#8592;</a>
                 <h1 class="address-title-main"><?php echo $lang['profile_my_data']; ?></h1>
             </div>
         </section>
