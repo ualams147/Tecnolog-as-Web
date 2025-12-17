@@ -148,6 +148,8 @@ $total_clientes = count($clientes);
                 <a href="crearproductoadmin.php" class="menu-item">Crear Producto</a>
                 <a href="listadoclientesadmin.php" class="menu-item">Listado de clientes</a>
                 <a href="listadoventasadmin.php" class="menu-item">Listado de ventas</a>
+                
+                <a href="admin_propuestas.php" class="menu-item">Propuestas</a>
             </div>
 
             <div class="cuadro-fondo">
@@ -259,6 +261,7 @@ $total_clientes = count($clientes);
             </div>
         </footer>
     </div> 
+    
     <script>
         // ==========================================
         // VARIABLES GLOBALES

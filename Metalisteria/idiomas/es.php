@@ -471,5 +471,22 @@ $lang = array(
     'detalle_base_imponible' => 'Base Imponible',
     'detalle_iva' => 'IVA',
     'detalle_total' => 'Total',
+
+
+    // CARRITO PERSONALIZADO
+    'carrito_etiqueta_personalizado' => 'Personalizado',
+    'carrito_pendiente_revision' => 'Pendiente de Revisión',
+    'carrito_precio_pendiente' => 'A presupuestar',
+    'carrito_medidas' => 'Medidas',
+    'carrito_detalles' => 'Detalles',
+    'carrito_msg_bloqueo' => 'Tienes productos pendientes de revisión. No puedes tramitar el pedido hasta que sean aprobados.',
+    'carrito_estado_rechazado' => 'Propuesta Rechazada',
+
+
+    // ADMIN VENTAS
+    'admin_ventas_titulo_lista' => 'Ventas Realizadas',
+    'admin_ventas_btn_propuestas' => 'Propuestas',
+    'admin_ventas_sin_ventas' => 'No hay ventas registradas',
+    'admin_ventas_filtro_limpiar' => 'Limpiar Filtros',
 );
 ?>
