@@ -6,10 +6,9 @@ include 'CabeceraFooter.php';
 include 'conexion.php'; 
 
 // =================================================================================
-// 3. CARGA DE DATOS DINÁMICA (SOLUCIÓN POR IDs PARA IDIOMAS)
+// 3. CARGA DE DATOS DINÁMICA
 // =================================================================================
 try {
-    // Consulta SQL: Añadimos m.id para usar identificadores numéricos
     $sql = "SELECT 
                 c.id AS cat_id,
                 c.nombre AS categoria, 
@@ -25,35 +24,28 @@ try {
     $stmt = $conn->query($sql);
     $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Arrays para JavaScript
     $datos_dinamicos = [];
-    $lista_categorias = []; // Para el desplegable inicial
+    $lista_categorias = []; 
 
     foreach ($resultados as $row) {
-        // Datos crudos de la BD
         $cat_id   = $row['cat_id'];
         $cat_nombre = trim($row['categoria']);
-        
         $mat_id   = $row['mat_id'];
         $mat_nombre = trim($row['material']);
-        
         $color = trim($row['color']);
 
-        // 1. Lista simple para el primer Select (Guardamos ID y Nombre)
-        // Usamos el ID como clave para evitar duplicados
         if (!isset($lista_categorias[$cat_id])) {
             $lista_categorias[$cat_id] = $cat_nombre;
         }
 
-        // 2. Árbol de datos basado en IDs (NO en nombres)
         if (!isset($datos_dinamicos[$cat_id])) {
             $datos_dinamicos[$cat_id] = [];
         }
 
         if (!isset($datos_dinamicos[$cat_id][$mat_id])) {
             $datos_dinamicos[$cat_id][$mat_id] = [
-                'nombre_mostrar' => $mat_nombre, // El nombre bonito
-                'nombre_archivo' => strtolower($mat_nombre), // Para la imagen (ej: aluminio)
+                'nombre_mostrar' => $mat_nombre, 
+                'nombre_archivo' => strtolower($mat_nombre), 
                 'colores' => []
             ];
         }
@@ -78,7 +70,6 @@ try {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/productos.css">
     <link rel="stylesheet" href="css/productomedida.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -129,7 +120,7 @@ try {
                             <option value="" disabled selected><?php echo $lang['medida_ph_sel_mat']; ?></option>
                         </select>
     
-                        <img id="img-material" src="" style="width: 60px; height: 60px; object-fit: contain; border: 1px solid #ddd; border-radius: 5px; display: none;">
+                        <img id="img-material" class="preview-img" src="" style="display: none;">
                     </div>
                 </div>
 
@@ -144,7 +135,7 @@ try {
                             <option value="" disabled selected><?php echo $lang['medida_ph_sel_col']; ?></option>
                         </select>
                 
-                        <img id="img-color" src="" onerror="this.style.display='none'" style="width: 60px; height: 60px; object-fit: contain; border: 1px solid #ddd; border-radius: 5px; display: none;">
+                        <img id="img-color" class="preview-img" src="" onerror="this.style.display='none'" style="display: none;">
                     </div>
                 </div> 
          
@@ -154,23 +145,34 @@ try {
                         <svg class="step-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                     </div>
                     <div class="step-content">
-                        <input id="input-medida" 
-                               class="custom-input" 
-                               type="text" 
-                               placeholder="<?php echo $lang['medida_ph_input_medida']; ?>" 
-                               oninput="validarInputMedida(this)" 
-                               onblur="validarYFormatearMedida()">
-                        <p class="error-message" id="medida-error"></p>
+                        
+                        <div class="medida-dual-container">
+                            <div class="medida-wrapper">
+                                <input type="number" id="input-ancho" class="medida-box" placeholder="Ancho" min="30" oninput="validarDimensiones()">
+                                <span class="medida-unit">cm</span>
+                            </div>
+                            
+                            <span class="medida-separator">✕</span>
+                            
+                            <div class="medida-wrapper">
+                                <input type="number" id="input-alto" class="medida-box" placeholder="Alto" min="30" oninput="validarDimensiones()">
+                                <span class="medida-unit">cm</span>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="input-medida-final">
+
+                        <p class="error-message" id="medida-error" style="text-align: center; margin-top: 15px;"></p>
                     </div>
                 </div>
 
                 <div class="step-item disabled" id="step-5">
                     <div class="step-header" onclick="toggleStep(5)">
-                        <h3 class="step-title"><?php echo $lang['medida_paso_5']; ?></h3>
+                        <h3 class="step-title"><?php echo $lang['medida_paso_5']; ?> <span style="font-size: 13px; font-weight: 400; color: #888;">(Opcional)</span></h3>
                         <svg class="step-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                     </div>
                     <div class="step-content">
-                        <textarea id="input-detalles" class="custom-textarea" placeholder="<?php echo $lang['medida_ph_input_detalles']; ?>" oninput="verificarFinal()"></textarea>
+                        <textarea id="input-detalles" class="custom-textarea" placeholder="<?php echo $lang['medida_ph_input_detalles']; ?> (Opcional)"></textarea>
                     </div>
                 </div>
 
@@ -189,15 +191,8 @@ try {
     <script src="js/auth.js"></script>
 
     <script>
-        // ======================================================
-        // 1. RECEPCIÓN DE DATOS DESDE PHP
-        // ======================================================
         const datosDB = <?php echo json_encode($datos_dinamicos); ?>;
         const mapaCategorias = <?php echo json_encode($lista_categorias); ?>;
-
-        // ======================================================
-        // 2. LÓGICA DE LOS DESPLEGABLES (SIN AUTO-APERTURA)
-        // ======================================================
 
         function productoSeleccionado() {
             const prodSelect = document.getElementById('select-producto');
@@ -205,23 +200,19 @@ try {
             const colorSelect = document.getElementById('select-color');
             const prodId = prodSelect.value;
 
-            // Reset visual
             const imgMat = document.getElementById('img-material');
             const imgColor = document.getElementById('img-color');
             if (imgMat) imgMat.style.display = 'none';
             if (imgColor) imgColor.style.display = 'none';
 
-            // 1. Limpiar siguientes pasos
             matSelect.innerHTML = '<option value="" disabled selected><?php echo $lang['medida_js_sel_mat_ok']; ?></option>';
             colorSelect.innerHTML = '<option value="" disabled selected><?php echo $lang['medida_ph_sel_col']; ?></option>';
 
-            // Bloquear pasos siguientes por seguridad
             document.getElementById('step-3').classList.add('disabled');
             document.getElementById('step-3').classList.remove('active');
             
             verificarFinal(); 
 
-            // 2. Comprobar si hay datos
             if (prodId && datosDB[prodId]) {
                 const materialesObj = datosDB[prodId];
                 const materialesIds = Object.keys(materialesObj);
@@ -238,10 +229,7 @@ try {
                     matSelect.innerHTML = '<option><?php echo $lang['medida_js_no_mat']; ?></option>';
                 }
                 
-                // CAMBIO AQUI: Solo desbloqueamos, NO abrimos el paso automáticamente
                 document.getElementById('step-2').classList.remove('disabled');
-                
-                // Actualizamos el título del paso actual para reflejar la selección
                 tituloPaso(1, 'Producto: ' + prodSelect.options[prodSelect.selectedIndex].text);
             }
         }
@@ -266,7 +254,6 @@ try {
                     }
                 }
 
-                // Cargar colores
                 colorSelect.innerHTML = '<option value="" disabled selected><?php echo $lang['medida_js_sel_col_ok']; ?></option>';
                 const colores = matData.colores;
                 colores.forEach(col => {
@@ -276,9 +263,7 @@ try {
                     colorSelect.appendChild(option);
                 });
 
-                // CAMBIO AQUI: Desbloqueamos el 3, pero NO lo abrimos
                 document.getElementById('step-3').classList.remove('disabled');
-                
                 tituloPaso(2, 'Material: ' + matSelect.options[matSelect.selectedIndex].text);
                 verificarFinal(); 
             }
@@ -296,7 +281,6 @@ try {
 
                 const paso4 = document.getElementById('step-4');
                 if (paso4) {
-                    // CAMBIO AQUI: Desbloqueamos el 4, pero NO lo abrimos
                     paso4.classList.remove('disabled'); 
                 }
 
@@ -308,29 +292,17 @@ try {
             verificarFinal();
         }
 
-        // ======================================================
-        // 3. FUNCIONES VISUALES (ACORDEÓN MANUAL)
-        // ======================================================
-        
-        // Esta función cierra todos y abre el que digas
         function abrirPaso(numPaso) {
-            // 1. Cierra todos visualmente (quita la clase active)
             document.querySelectorAll('.step-item').forEach(el => el.classList.remove('active'));
-            // 2. Abre solo el que has pedido
             document.getElementById('step-' + numPaso).classList.add('active');
         }
 
-        // Esta función se ejecuta al hacer CLIC en la cabecera
         function toggleStep(stepNum) {
             const step = document.getElementById('step-' + stepNum);
-            
-            // Solo si el paso no está bloqueado (disabled)
             if (!step.classList.contains('disabled')) {
-                // Si no está abierto ya, lo abrimos (y la función abrirPaso cerrará los otros)
                 if (!step.classList.contains('active')) {
                      abrirPaso(stepNum);
                 }
-                // Si ya estaba abierto y haces clic, no hacemos nada (o podrías querer cerrarlo, pero en acordeón suele quedarse abierto uno)
             }
         }
 
@@ -340,62 +312,82 @@ try {
             headerTitle.innerHTML = baseTitle + ' <span style="font-weight:400; color:#666; font-size:0.9em;">' + texto.split(':')[1] + '</span>';
         }
 
-        // ======================================================
-        // 4. VALIDACIONES
-        // ======================================================
-        function validarInputMedida(input) {
-            let valor = input.value.replace(/[^0-9xX]/g, ''); 
-            input.value = valor;
-            verificarFinal();
-        }
-
-        function validarYFormatearMedida() {
-            const input = document.getElementById('input-medida');
+        // --- VALIDACIÓN DE MEDIDAS ---
+        function validarDimensiones() {
+            const anchoInput = document.getElementById('input-ancho');
+            const altoInput = document.getElementById('input-alto');
             const errorMsg = document.getElementById('medida-error');
-            let valor = input.value.toLowerCase();
+            const hiddenFinal = document.getElementById('input-medida-final');
 
-            input.classList.remove('input-error');
+            const ancho = parseInt(anchoInput.value);
+            const alto = parseInt(altoInput.value);
+
+            // Limpiar estados previos
+            anchoInput.classList.remove('input-error');
+            altoInput.classList.remove('input-error');
             errorMsg.style.display = 'none';
+            hiddenFinal.value = ''; 
 
-            if (valor.length === 0) { verificarFinal(); return; }
-            if (!valor.includes('x')) { verificarFinal(); return; }
-
-            const partes = valor.split('x');
-            const ancho = parseInt(partes[0]);
-            const alto = parseInt(partes[1]);
-
-            if (ancho < 30 || alto < 30) {
-                input.classList.add('input-error');
-                errorMsg.textContent = "<?php echo $lang['medida_js_min_30']; ?>";
-                errorMsg.style.display = 'block';
-                input.value = "";
+            // 1. Si está vacío alguno, esperamos
+            if (!anchoInput.value || !altoInput.value) {
                 verificarFinal();
                 return;
             }
 
-            if (!valor.includes('cm')) {
-                input.value = ancho + "x" + alto + " cm";
+            // 2. Validación de mínimo 30cm
+            let hayError = false;
+
+            if (ancho < 30) {
+                anchoInput.classList.add('input-error');
+                hayError = true;
             }
+            if (alto < 30) {
+                altoInput.classList.add('input-error');
+                hayError = true;
+            }
+
+            if (hayError) {
+                errorMsg.textContent = "<?php echo isset($lang['medida_js_min_30']) ? $lang['medida_js_min_30'] : 'La medida mínima es de 30 cm.'; ?>";
+                errorMsg.style.display = 'block';
+            } else {
+                // TODO CORRECTO: Guardamos el string combinado en el hidden
+                hiddenFinal.value = ancho + "x" + alto + " cm";
+            }
+            
             verificarFinal();
         }
 
+        // Variable global para controlar la animación
+        let timerOcultar = null;
+
         function verificarFinal() {
-            const inputMedida = document.getElementById('input-medida');
+            const hiddenFinal = document.getElementById('input-medida-final');
             const actionDiv = document.getElementById('final-action');
             
-            const medidaValida = inputMedida.value.toLowerCase().includes('x') && inputMedida.value.toLowerCase().includes('cm');
-            
-            if (medidaValida) {
-                // Desbloqueamos el paso 5 visualmente pero NO lo abrimos
+            // Siempre limpiamos el timer pendiente para evitar parpadeos
+            if (timerOcultar) {
+                clearTimeout(timerOcultar);
+                timerOcultar = null;
+            }
+
+            // Verificamos si las MEDIDAS son correctas
+            if (hiddenFinal.value !== "") {
                 document.getElementById('step-5').classList.remove('disabled');
                 
-                // Mostramos el botón de enviar
                 actionDiv.style.display = 'block';
-                setTimeout(() => actionDiv.style.opacity = '1', 10);
+                // Forzamos al navegador a "pintar" el bloque antes de cambiar la opacidad
+                void actionDiv.offsetWidth; 
+                actionDiv.style.opacity = '1';
+                
             } else {
                 document.getElementById('step-5').classList.add('disabled');
                 actionDiv.style.opacity = '0';
-                setTimeout(() => actionDiv.style.display = 'none', 300);
+                
+                // Esperamos a que termine la animación CSS para ocultarlo
+                timerOcultar = setTimeout(() => {
+                    actionDiv.style.display = 'none';
+                    timerOcultar = null;
+                }, 500);
             }
         }
 
@@ -407,7 +399,8 @@ try {
             const materialTexto = matSelect.options[matSelect.selectedIndex].text;
 
             const color = document.getElementById('select-color').value;
-            const medida = document.getElementById('input-medida').value;
+            const medida = document.getElementById('input-medida-final').value;
+            
             const detalles = document.getElementById('input-detalles').value;
 
             if(!productoTexto || !materialTexto || !color || !medida) {
@@ -423,7 +416,7 @@ try {
                     material: materialTexto,
                     color: color,
                     medida: medida,
-                    detalles: detalles
+                    detalles: detalles 
                 })
             })
             .then(response => response.json())
@@ -463,9 +456,6 @@ try {
                 select.value = idCat;
                 if (select.value === idCat) {
                     productoSeleccionado();
-                    // Opcional: Si quieres que al venir desde la home SÍ se abra el paso 2 (solo la primera vez),
-                    // descomenta la siguiente línea. Si no, déjalo comentado.
-                    // abrirPaso(2);
                 }
             }
         });
