@@ -225,11 +225,6 @@ body {
 
 /* ========================== RESPONSIVE ========================== */
 @media (max-width: 1024px) {
-    .nav-bar { gap: 30px; font-size: 16px; }
-    .footer-content { grid-template-columns: 1fr; gap: 40px; text-align: center; }
-    .footer-logo-section, .footer-links { justify-content: center; }
-    .footer-links { display: flex; flex-direction: column; align-items: center; gap: 40px; }
-    .contacto-footer ul li { justify-content: center; }
     
     .envio-card { padding: 50px 40px; }
     /* En tablet reducimos un poco la columna de etiquetas */
@@ -237,9 +232,7 @@ body {
 }
 
 @media (max-width: 768px) {
-    .cabecera .container { flex-direction: column; gap: 20px; }
-    .nav-bar { display: flex; flex-direction: column; width: 100%; gap: 15px; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
-    .sign-in { width: 100%; text-align: center; }
+    
 
     /* Pasos Responsive */
     .steps-container { gap: 10px; }
@@ -266,10 +259,5 @@ body {
     }
     .btn-action { width: 100%; }
 
-    /* Footer Responsive */
-    .footer-content { display: flex; flex-direction: column; gap: 40px; }
-    .logo-footer img { margin: 0 auto; display: block; }
-    .redes { justify-content: center; margin-top: 20px; }
-    .politica-legal { flex-direction: column; gap: 10px; }
-    .politica-legal span { display: none; }
+    
 }

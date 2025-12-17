@@ -191,134 +191,71 @@ body {
     color: white;
 }
 
-
-
-/* Responsive Design */
-
-/* Tablets */
-@media (max-width: 1024px) {
-    .cabecera .container {
-        flex-wrap: wrap;
-    }
-
-    .nav-bar {
-        order: 3;
-        width: 100%;
-        justify-content: space-around;
-        margin-top: 15px;
-        gap: 20px;
-    }
-
-    .content-wrapper,
-    .content-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
-    }
-
-    .materiales-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 30px;
-    }
-
-    .footer-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 40px;
-    }
-
-    .contacto {
-        grid-column: 1 / -1;
-    }
-}
-
 /* ============================================================
    ==================== RESPONSIVE DESIGN =====================
    ============================================================ */
 
-/* --- TABLETS Y LAPTOS PEQUEÑAS (max-width: 1024px) --- */
+/* --- TABLETS Y PANTALLAS MEDIANAS (max-width: 1024px) --- */
 @media (max-width: 1024px) {
     
-    /* Ajuste Cabecera */
-    .nav-bar {
-        gap: 30px; /* Reducimos el hueco gigante de 140px */
-        font-size: 16px;
-    }
-
-    /* Secciones Principales a 1 columna */
+    /* 1. ESTRUCTURA: Poner todo en una sola columna */
     .content-wrapper,
     .content-grid {
-        grid-template-columns: 1fr; /* Pone imagen arriba y texto abajo (o viceversa) */
+        grid-template-columns: 1fr; 
         gap: 40px;
         text-align: center;
     }
 
+    /* Justificar textos para que se vea ordenado en bloque */
     .text-content p, 
     .text-container .intro, 
     .text-container .description {
-        text-align: justify; /* Mantiene justificado el texto pero en bloque completo */
+        text-align: justify; 
     }
 
-    /* Ajuste Materiales */
+    /* Materiales: 2 columnas en vez de 4 */
     .materiales-grid {
-        grid-template-columns: repeat(2, 1fr); /* 2 columnas en lugar de 4 */
+        grid-template-columns: repeat(2, 1fr);
         gap: 30px;
     }
 
-    /* Footer */
-    .footer-content {
-        grid-template-columns: 1fr; /* Footer en una sola columna */
-        gap: 40px;
-        text-align: center;
+    /* 2. MEJORAS VISUALES (SOLO PARA RESPONSIVE) */
+    
+    /* Aplicar estilo "Tarjeta" a los contenedores principales */
+    .nuestra-empresa,
+    .nosotros,
+    .materiales {
+        border-radius: 20px; /* Bordes más redondeados */
+        /* Sombra para dar relieve y que no se vea plano en pantallas pequeñas */
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15); 
     }
 
-    .footer-logo-section,
-    .footer-links {
-        justify-content: center;
+    /* Corrección específica para MATERIALES (Quitar el borde negro feo) */
+    .materiales {
+        border: none; /* Quitamos el borde negro */
+        background: #293661; /* Aseguramos el fondo azul */
     }
-    
-    .footer-links {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 40px;
+
+    /* Corrección específica para NOSOTROS (Fondo blanco para resaltar) */
+    .nosotros {
+        background: white;
+        border: 1px solid #eee; /* Borde muy sutil */
     }
-    
-    .contacto-footer ul li {
-        justify-content: center; /* Centra los iconos y texto del footer */
+
+    /* Imágenes con bordes redondeados acorde a las cajas */
+    .foto-taller, 
+    .image-container, 
+    .material-image {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* Sombra también en las fotos */
     }
 }
 
 /* --- MÓVILES (max-width: 768px) --- */
 @media (max-width: 768px) {
     
-    /* Cabecera en Columna */
-    .cabecera .container {
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .logo-main {
-        width: 100%;
-        justify-content: center;
-    }
-
-    /* Hacemos visible el menú pero en columna */
-    .nav-bar {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        gap: 15px;
-        padding: 10px 0;
-        margin-top: 0;
-        border-top: 1px solid #eee;
-        border-bottom: 1px solid #eee;
-    }
-
-    .sign-in {
-        width: 100%;
-        text-align: center;
-    }
-
-    /* Ajustes generales de espaciado */
+    /* Ajustes de espaciado para pantallas estrechas */
     .container {
         padding: 0 20px;
     }
@@ -326,73 +263,62 @@ body {
     .nuestra-empresa,
     .nosotros,
     .materiales {
-        padding: 40px 20px; /* Menos relleno interno */
-        margin: 40px auto; /* Menos margen externo */
+        padding: 40px 25px; 
+        margin: 30px auto; 
     }
 
-    /* Tipografía más pequeña para títulos */
+    /* Títulos más pequeños */
     .nuestra-empresa .title,
     .text-container .heading {
-        font-size: 32px;
+        font-size: 30px;
         text-align: center;
+        margin-bottom: 20px;
     }
 
-    /* Imágenes */
+    /* Imágenes controladas */
     .foto-taller img, 
     .image-container img {
         width: 100%;
         height: auto;
-        max-height: 300px; /* Evita que la imagen sea demasiado alta en móvil */
+        max-height: 250px; /* No ocupar toda la pantalla vertical */
+        object-fit: cover;
     }
     
-    /* Footer */
+    /* Footer Vertical */
     .footer-content {
         display: flex;
         flex-direction: column;
         gap: 40px;
-    }
-    
-    .logo-footer img {
-        margin: 0 auto;
-        display: block;
-    }
-    
-    .redes {
-        justify-content: center;
-        margin-top: 20px;
-    }
-    
-    .politica-legal {
-        flex-direction: column;
-        gap: 10px;
         text-align: center;
     }
+
+    .footer-links {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
     
-    .politica-legal span {
-        display: none; /* Oculta los puntos separadores en móvil */
+    .contacto-footer ul li {
+        justify-content: center;
     }
 }
 
 /* --- MÓVILES PEQUEÑOS (max-width: 480px) --- */
 @media (max-width: 480px) {
     
-    /* Materiales a 1 columna o 2 pequeñas */
+    /* Materiales uno debajo de otro */
     .materiales-grid {
-        grid-template-columns: 1fr; /* Una sola columna para que se vea bien la foto */
-        gap: 20px;
+        grid-template-columns: 1fr; 
+        gap: 25px;
     }
 
     .nuestra-empresa .title,
     .text-container .heading {
-        font-size: 26px; /* Títulos más pequeños */
+        font-size: 26px; 
     }
 
     .text-content p,
     .text-container p {
-        font-size: 16px; /* Texto base legible pero no gigante */
+        font-size: 16px; 
     }
-
-    /* Ajuste fino del logo */
-    .logo-text span { font-size: 12px; }
-    .logo-text strong { font-size: 16px; }
 }

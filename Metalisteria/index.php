@@ -74,7 +74,7 @@ include 'CabeceraFooter.php';
                         </div>
                     </div>
 
-                    <button class="ver-mas-btn"><?php echo $lang['ver_mas']; ?></button>
+                    <a href="productos.php" class="ver-mas-btn" style="text-decoration:none; display:inline-block;"><?php echo $lang['ver_mas']; ?></a>
                 </div>
             </section>
 
