@@ -168,8 +168,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php echo $lang['login_lbl_pass']; ?>
                         </label>
                         
-                        <div style="width: 100%; display: flex; flex-direction: column;">
-                            
+                        <div style="width: 100%; display: flex; flex-direction: column; margin-top: 20px;">
+    
                             <div style="position: relative; width: 100%;">
                                 <input type="password" id="password" name="password" class="form-input" required style="padding-right: 40px;">
                                 <i class="fas fa-eye" id="ojo_login" onclick="mostrarOcultar('password', 'ojo_login')" 
