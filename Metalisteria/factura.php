@@ -484,7 +484,5 @@ if (!$pedido_ya_guardado) {
         
         <?php sectionfooter(); ?>
     </div>
-    
-    <script src="js/auth.js"></script>
 </body>
 </html>

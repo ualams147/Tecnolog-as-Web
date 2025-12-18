@@ -112,8 +112,6 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
         <?php sectionfooter(); ?>
     </div>
-
-    <script src="js/auth.js"></script>
     
     <script>
         document.addEventListener("DOMContentLoaded", function() {

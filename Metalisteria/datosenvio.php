@@ -201,6 +201,5 @@ function e($string) {
 
         <?php if(function_exists('sectionfooter')) sectionfooter(); ?>
     </div>
-    <script src="js/auth.js"></script>
 </body>
 </html>

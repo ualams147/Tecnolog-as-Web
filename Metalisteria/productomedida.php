@@ -188,7 +188,6 @@ try {
         <?php sectionfooter(); ?>
     </div>
 
-    <script src="js/auth.js"></script>
 
     <script>
         const datosDB = <?php echo json_encode($datos_dinamicos); ?>;

@@ -370,9 +370,24 @@ body {
     }
 
     /* Ajuste de las tarjetas de categorías */
-    .cat-card { 
-        width: 200px; 
+    .cat-card {
+        cursor: pointer; /* Fuerza al móvil a reconocer que es clickable */
+        -webkit-tap-highlight-color: transparent; /* Quita el parpadeo azul estándar */
+        width: 200px;
     }
+
+    /* IMPORTANTE: Anulamos el movimiento al tocar para que el clic entre directo */
+    .cat-frame:hover {
+        transform: none !important; 
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3) !important; /* Mantiene sombra original */
+    }
+
+    /* Mantenemos el estilo de "Activo" pero sin moverlo tanto o nada */
+    .cat-card.active .cat-frame {
+        transform: none !important;
+        border-color: #a0d2ac;
+    }
+
     .cat-frame { 
         height: 280px; 
     }
@@ -416,7 +431,7 @@ body {
         height: auto !important; 
         min-height: 100% !important; 
         padding: 10px !important;
-        display: flex !important;
+        display: flex;
         flex-direction: column !important;
     }
 

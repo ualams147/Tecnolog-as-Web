@@ -188,8 +188,6 @@ if (empty($telefono_defecto) && isset($_SESSION['usuario_id'])) {
         <div class="processing-text"><?php echo isset($lang['pago_overlay_procesando']) ? $lang['pago_overlay_procesando'] : 'Procesando Pago...'; ?></div>
         <div class="processing-subtext"><?php echo isset($lang['pago_overlay_espere']) ? $lang['pago_overlay_espere'] : 'Por favor, no cierres esta ventana.'; ?></div>
     </div>
-    
-    <script src="js/auth.js"></script>
 
     <script>
         function selectOption(label) {

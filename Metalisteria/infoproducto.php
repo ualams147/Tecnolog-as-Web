@@ -190,7 +190,6 @@ try {
         <?php sectionfooter(); ?>
     </div>
 
-    <script src="js/auth.js"></script>
     <script src="js/infoProductos.js"></script>
 
     <script>

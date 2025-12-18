@@ -133,8 +133,6 @@ try {
 
         <?php sectionfooter(); ?>
     </div>
-    
-    <script src="js/auth.js"></script>
 
     <script>
         let filtrosActivos = [];

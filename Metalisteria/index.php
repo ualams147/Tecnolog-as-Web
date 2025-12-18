@@ -137,6 +137,5 @@ include 'CabeceraFooter.php';
     <?php sectionfooter(); ?>
 
     <script src="js/faq.js"></script>
-    <script src="js/auth.js"></script>
 </body>
 </html>
