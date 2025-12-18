@@ -141,7 +141,7 @@ try {
                 
                 <nav class="nav-bar">
                     <a href="listadoventasadmin.php">Ventas</a>
-                    <a href="listadoproductosadmin.php" class="activo" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
+                    <a href="listadoproductosadmin.php">Productos</a> 
                     <a href="listadoclientesadmin.php">Clientes</a>
                 </nav>
 

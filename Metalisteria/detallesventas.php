@@ -157,8 +157,8 @@ $productos_venta = $stmt_det->fetchAll(PDO::FETCH_ASSOC);
                 </button>
                 
                 <nav class="nav-bar">
-                    <a href="listadoventasadmin.php">Ventas</a>
-                    <a href="listadoproductosadmin.php" class="activo" style="font-weight:bold; border-bottom: 2px solid currentColor;">Productos</a> 
+                    <a href="listadoventasadmin.php"class="activo" style="font-weight:bold; border-bottom: 2px solid currentColor;">Ventas</a>
+                    <a href="listadoproductosadmin.php">Productos</a> 
                     <a href="listadoclientesadmin.php">Clientes</a>
                 </nav>
 
