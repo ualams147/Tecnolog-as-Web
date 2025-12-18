@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // $_SESSION['usuario']['nombre'] = $nombre; etc...
         
         // Recargar la página
-        header("Location: editarinformacionperfil.php?actualizado=1"); 
+        header("Location: perfil.php?actualizado=1"); 
         exit;
         
     } catch(Exception $e) {
