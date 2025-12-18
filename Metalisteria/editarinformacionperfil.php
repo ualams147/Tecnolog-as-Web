@@ -30,6 +30,7 @@ if (!isset($_SESSION['usuario_id'])) {
     exit;
 }
 
+
 $id_user = $_SESSION['usuario_id'];
 $mensaje = "";
 
@@ -166,6 +167,41 @@ function val($dato) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/auth.js"></script>
+
+    <style>
+        .hero-content {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .btn-back {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            opacity: 0.8;
+            transition: opacity 0.3s, transform 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-back:hover {
+            opacity: 1;
+            transform: translateY(-50%) translateX(-5px);
+        }
+
+        .btn-back svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+    </style>
 </head>
 <body>
     <div class="visitante-domicilio-edit">
@@ -174,7 +210,12 @@ function val($dato) {
 
         <section class="address-hero">
             <div class="container hero-content">
-                <a href="perfil.php" class="flecha-circular">&#8592;</a>
+                <a href="perfil.php" class="btn-back">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                    </svg>
+                </a>
+                
                 <h1 class="address-title-main"><?php echo isset($lang['profile_my_data']) ? $lang['profile_my_data'] : 'Mis Datos'; ?></h1>
             </div>
         </section>
@@ -352,10 +393,6 @@ function val($dato) {
     </div>
 
     <script>
-        // ... (Tu bloque de scripts original) ...
-        // No he modificado los scripts porque estaban perfectos, pero asegúrate 
-        // de que se mantienen al final del archivo HTML tal como en tu código original.
-        
         document.addEventListener("DOMContentLoaded", function() {
             const inputDNI = document.getElementById('dni');
             if (inputDNI) {
@@ -374,7 +411,6 @@ function val($dato) {
         });
 
         function validarDocumento(input) {
-            // (Tu lógica de DNI está bien, mantenla aquí)
             if (!input) return false;
             const valor = input.value.toUpperCase().trim();
             input.style.borderColor = ''; 

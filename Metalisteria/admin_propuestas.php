@@ -224,15 +224,28 @@ $total_propuestas = count($propuestas);
                 <div class="logo-main">
                     <a href="indexadmin.php" class="logo-main">
                         <img src="imagenes/logo.png" alt="Logo Metalful">
-                        <div class="logo-text"><span>Metalisteria</span><strong>Fulsan</strong></div>
+                        <div class="logo-text">
+                            <span> Metalisteria</span>
+                            <strong>Fulsan</strong>
+                        </div>
                     </a>
                 </div>
+                
+                <button class="menu-toggle" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
                 <nav class="nav-bar">
-                    <a href="listadoventasadmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Ventas</a> 
-                    <a href="listadoproductosadmin.php">Productos</a>
+                    <a href="listadoventasadmin.php" class="activo" style="font-weight:bold; border-bottom: 2px solid currentColor;">Ventas</a>
+                    <a href="listadoproductosadmin.php">Productos</a> 
                     <a href="listadoclientesadmin.php">Clientes</a>
                 </nav>
-                <div class="log-out"><a href="index.php">Cerrar Sesión</a></div>
+
+                <div class="log-out">
+                    <a href="index.php">Cerrar Sesión</a>
+                </div>
             </div>
         </header>
 
@@ -240,6 +253,11 @@ $total_propuestas = count($propuestas);
             <div class="degradado"></div>
             <div class="recuadro-fondo"></div>
             <h1 class="titulo-principal"><?php echo isset($lang['propuestas_titulo']) ? $lang['propuestas_titulo'] : 'Gestión de Propuestas'; ?></h1>
+            <a href="listadoventasadmin.php" class="flecha-circular" style="display: flex; align-items: center; justify-content: center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 18L9 12L15 6" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
         </div>
 
         <div class="main-container-propuestas">
@@ -370,6 +388,13 @@ $total_propuestas = count($propuestas);
     </div> 
 
     <script>
+        function toggleMobileMenu() {
+            const navbar = document.querySelector('.nav-bar');
+            if (navbar) {
+                navbar.classList.toggle('active');
+            }
+        }
+
         function valorarPropuesta(id) {
             Swal.fire({
                 title: '<?php echo isset($lang['propuestas_swal_titulo']) ? $lang['propuestas_swal_titulo'] : 'Valorar Propuesta'; ?>',

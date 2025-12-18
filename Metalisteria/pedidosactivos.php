@@ -27,7 +27,9 @@ $where = "WHERE v.id_cliente = :id_cliente";
 $params = [':id_cliente' => $id_cliente];
 
 $filtro_fecha = $_GET['fecha'] ?? '';
-$filtro_estado = $_GET['estado'] ?? 'activos'; 
+
+// CAMBIO AQUÍ: Valor por defecto 'todos' en vez de 'activos'
+$filtro_estado = $_GET['estado'] ?? 'todos'; 
 $filtro_categoria = $_GET['categoria'] ?? '';
 
 // Filtro Fecha
@@ -44,6 +46,7 @@ if ($filtro_estado === 'activos') {
     // Añadimos 'Realizado' a los permitidos en el historial
     $where .= " AND v.estado IN ('Entregado', 'Cancelado', 'Realizado')";
 }
+// Si es 'todos', no añadimos nada al WHERE, así salen todos.
 
 // --- FILTRO CATEGORÍA ---
 if (!empty($filtro_categoria)) {
@@ -297,7 +300,8 @@ try {
     function borrarTodo() {
         const url = new URL(window.location.href);
         url.search = '';
-        url.searchParams.set('estado', 'activos');
+        // CAMBIO AQUÍ: Ahora se resetea a 'todos'
+        url.searchParams.set('estado', 'todos');
         window.location.href = url.toString();
     }
 

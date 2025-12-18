@@ -101,8 +101,11 @@ $total_registros = count($ventas);
         
         .badge-notif {
             position: absolute;
-            top: 28px; 
+            /* CAMBIO: Centrado vertical automático (funciona con cualquier altura de botón) */
+            top: 50%; 
+            margin-top: -14px; /* La mitad exacta de la altura (28px / 2) para centrarlo */
             right: 30px;
+            
             background-color: #e74c3c;
             color: white;
             font-size: 14px;
@@ -116,12 +119,25 @@ $total_registros = count($ventas);
             border: 2px solid white;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             animation: pulse 2s infinite;
+            z-index: 10;
         }
 
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
+        }
+
+        /* --- NUEVO: AJUSTE RESPONSIVE PARA EL NÚMERO --- */
+        @media (max-width: 768px) {
+            .badge-notif {
+                width: 24px;       /* Un poco más pequeño en móvil */
+                height: 24px;
+                font-size: 11px;   /* Texto más pequeño */
+                margin-top: -12px; /* Reajustamos el centro (mitad de 24px) */
+                right: 15px;       /* Más pegado a la derecha */
+                top: 50%;
+            }
         }
     </style>
 </head>
@@ -140,9 +156,15 @@ $total_registros = count($ventas);
                     </a>
                 </div>
                 
+                <button class="menu-toggle" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
                 <nav class="nav-bar">
-                    <a href="listadoventasadmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Ventas</a> 
-                    <a href="listadoproductosadmin.php">Productos</a>
+                    <a href="listadoventasadmin.php"class="activo" style="font-weight:bold; border-bottom: 2px solid currentColor;">Ventas</a>
+                    <a href="listadoproductosadmin.php">Productos</a> 
                     <a href="listadoclientesadmin.php">Clientes</a>
                 </nav>
 
@@ -346,7 +368,12 @@ $total_registros = count($ventas);
         let btnCargarElement = null;
         let visibleCount = 5;
         const loadStep = 5;
-
+        function toggleMobileMenu() {
+            const navbar = document.querySelector('.nav-bar');
+            if (navbar) {
+                navbar.classList.toggle('active');
+            }
+        }
         function checkInput(tipo) {
             let input = document.getElementById('filtro-' + tipo);
             let wrapper = document.getElementById('wrapper-' + tipo);

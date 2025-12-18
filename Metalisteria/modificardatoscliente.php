@@ -120,18 +120,23 @@ if (!$cliente) {
                     </a>
                 </div>
                 
+                <button class="menu-toggle" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
                 <nav class="nav-bar">
                     <a href="listadoventasadmin.php">Ventas</a>
-                    <a href="listadoproductosadmin.php">Productos</a>
-                    <a href="listadoclientesadmin.php" style="font-weight:bold; border-bottom: 2px solid currentColor;">Clientes</a> 
+                    <a href="listadoproductosadmin.php">Productos</a> 
+                    <a href="listadoclientesadmin.php" class="activo" style="font-weight:bold; border-bottom: 2px solid currentColor;">Clientes</a>
                 </nav>
 
                 <div class="log-out">
                     <a href="index.php">Cerrar Sesión</a>
                 </div>
-
             </div>
-    </header>
+        </header>
 
         <div class="titulo-section">
             <div class="degradado"></div>
@@ -275,6 +280,13 @@ if (!$cliente) {
     <script src="js/AlgoritmoDNIs.js"></script>
 
     <script>
+        function toggleMobileMenu() {
+            const navbar = document.querySelector('.nav-bar');
+            if (navbar) {
+                navbar.classList.toggle('active');
+            }
+        }
+        
         function confirmarModificacion() {
             const formulario = document.getElementById('form-modificar');
             const inputDNI = document.getElementById('dni');

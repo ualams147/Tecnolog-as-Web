@@ -621,27 +621,51 @@ input[type=number]::-webkit-inner-spin-button {
     }
 
 /* =========================================================
-   MEDIA QUERIES (RESPONSIVE DEFINITIVO - AJUSTE INICIO)
+   1. ESTILOS BASE HAMBURGUESA (GLOBAL)
+   IMPORTANTE: Esto define cómo es el botón. Sin esto no se ve.
+   ========================================================= */
+.menu-toggle {
+    display: none;              /* Oculto por defecto en PC */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1002;
+    margin-left: auto;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 28px;
+    height: 3px;
+    background-color: #293661;  /* Color azul oscuro */
+    margin: 5px 0;
+    transition: 0.3s;
+    border-radius: 3px;
+}
+
+/* =========================================================
+   2. MEDIA QUERIES (ORDENADOS Y CORREGIDOS)
    ========================================================= */
 
-/* --- TABLETS / PANTALLAS MEDIANAS (< 1200px) --- */
+/* --- PANTALLAS GRANDES (< 1200px) --- */
 @media (max-width: 1200px) {
     .container { padding: 0 30px; }
     .recuadro-fondo, .recuadro-fondo-titulo { width: 95%; }
 }
 
-/* --- TABLETS / PORTÁTILES PEQUEÑOS (< 992px) --- */
+/* --- TABLETS / PORTÁTILES (< 992px) --- */
 @media (max-width: 992px) {
     
-    /* 1. REESTRUCTURACIÓN DEL ENCABEZADO */
+    /* REESTRUCTURACIÓN DEL ENCABEZADO */
     .titulo-section {
         display: flex;
         flex-direction: column; 
         align-items: center;
         height: auto;           
-        min-height: 300px;      
+        min-height: 350px;
         margin-bottom: 60px;    
-        padding-bottom: 20px;   
+        padding-bottom: 40px;   
     }
 
     .recuadro-fondo, .recuadro-fondo-titulo {
@@ -662,33 +686,30 @@ input[type=number]::-webkit-inner-spin-button {
         z-index: 3;
     }
     
-    .inicio-administrador .titulo-principal { margin-bottom: 80px; }
-
-    /* Filtros Inputs (Ventass) */
-    .filtros-en-titulo {
-        position: relative;
-        bottom: auto; left: auto; transform: none;
+    /* SOLUCIÓN AL SOLAPAMIENTO DE FILTROS */
+    .filtros-en-titulo,
+    .inicio-administrador .filtros-en-titulo {
+        position: relative !important;
+        bottom: auto !important; 
+        left: auto !important; 
+        transform: none !important;
+        
         display: flex;
         flex-direction: column; 
         align-items: center;
         gap: 20px;
         width: 100%;
-        margin-bottom: 50px; 
+        
+        /* Empujamos los filtros hacia abajo */
+        margin-top: 40px !important; 
+        margin-bottom: 50px !important; 
         z-index: 3;
     }
     
-    /* CAMBIO CLAVE: Ancho relativo en lugar de fijo */
-    .filtro-item { 
-        width: 90%; /* Ocupa el 90% del ancho disponible */
-        max-width: 300px; /* Pero nunca más de 300px */
-        align-items: center; 
-    }
-    
-    .filtro-wrapper { 
-        width: 100% !important; /* Se adapta al padre (.filtro-item) */
-    }
+    .filtro-item { width: 90%; max-width: 300px; align-items: center; }
+    .filtro-wrapper { width: 100% !important; }
 
-    /* --- FIX FILTRO PRODUCTOS (BOTONES AZULES) --- */
+    /* Filtro de productos (botones azules) */
     .filtro-productos {
         margin-top: 20px !important; 
         margin-bottom: 50px;         
@@ -698,30 +719,17 @@ input[type=number]::-webkit-inner-spin-button {
         z-index: 3;                  
     }
 
-    /* CAMBIO CLAVE: Botones con el mismo ancho relativo */
     .filtro-text {
-        width: 90%;         /* Ocupa el 90% */
-        max-width: 300px;   /* Límite de 300px */
-        padding: 12px 0;    
-        font-size: 18px;    
-        display: flex;
-        justify-content: center;
+        width: 90%; max-width: 300px; padding: 12px 0; font-size: 18px;    
+        display: flex; justify-content: center;
     }
 
-    /* --- RESTO DEL RESPONSIVE --- */
-    
-    /* Menú integrado (Subido) */
+    /* RESTO DE AJUSTES TABLET */
     .productos-layout { flex-direction: column; margin-top: 40px; position: relative; }
-    .boton-menu-lateral { 
-        position: absolute; top: 10px; left: 30px; margin: 0; z-index: 20; 
-        width: 50px; height: 50px; padding: 10px; box-shadow: none; 
-    }
+    .boton-menu-lateral { position: absolute; top: 10px; left: 30px; margin: 0; z-index: 20; width: 50px; height: 50px; padding: 10px; box-shadow: none; }
     .header-tabla { padding-left: 70px; text-align: left; padding-top: 0; margin-top: 5px; }
     
-    #menu-lateral { 
-        display: none; position: absolute; top: 70px; left: 30px; transform: none; 
-        width: 250px; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 3px solid #293661; 
-    }
+    #menu-lateral { display: none; position: absolute; top: 70px; left: 30px; transform: none; width: 250px; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 3px solid #293661; }
     #menu-lateral.oculto { display: flex !important; flex-direction: column; animation: fadeInMenu 0.3s ease; }
 
     .cabecera .container { flex-direction: column; gap: 20px; }
@@ -731,6 +739,11 @@ input[type=number]::-webkit-inner-spin-button {
     .crear-producto { width: 100%; max-width: 400px; margin: 0 auto; }
     .product-card, .details-card { flex-direction: column; gap: 40px; padding: 30px; }
     .main-container { margin-top: 0; }
+    
+    .diagrama-section { padding: 0 20px; }
+    .dashboard-grid { grid-template-columns: 1fr; height: auto; }
+    .grafica-container { height: 350px; }
+    .titulo-estadisticas { font-size: 24px; }
 }
 
 @keyframes fadeInMenu {
@@ -740,142 +753,115 @@ input[type=number]::-webkit-inner-spin-button {
 
 /* --- MÓVILES (< 768px) --- */
 @media (max-width: 768px) {
+    
     .container { padding: 0 20px; }
-    
-    /* Título más pequeño */
     .titulo-principal { font-size: 32px; margin-top: 90px; }
-    
-    /* Degradado más corto */
     .degradado { height: 250px; }
 
-    /* Header y Navegación */
-    .nav-bar { flex-direction: column; gap: 15px; }
-    .log-out { width: 100%; text-align: center; }
+    /* CABECERA Y NAVEGACIÓN (HAMBURGUESA) */
+    .cabecera { padding: 12px 0; position: sticky; top: 0; }
+    
+    /* Importante: Volvemos a poner la cabecera en horizontal */
+    .cabecera .container {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        gap: 10px !important;
+        padding: 0 15px !important;
+    }
+
+    .logo-main { margin-right: auto; flex-shrink: 1; min-width: 0; }
+    .logo-main img { height: 40px !important; width: auto !important; }
+    .logo-text span { font-size: 11px; }
+    .logo-text strong { font-size: 15px; }
+
+    .log-out {
+        order: 2;
+        display: flex !important;
+        align-items: center; justify-content: center;
+        padding: 6px 14px !important;
+        width: auto !important; margin: 0 !important;
+        flex-shrink: 0; border-radius: 40px; text-align: center;
+    }
+    .log-out a { font-size: 13px !important; white-space: nowrap; }
+
+    /* ¡AQUÍ HACEMOS VISIBLE LA HAMBURGUESA! */
+    .menu-toggle { order: 3; display: block !important; }
+
+    /* MENÚ DESPLEGABLE */
+    .nav-bar {
+        display: none; position: absolute; top: 100%; left: 0; width: 100%;
+        background: white; flex-direction: column !important;
+        gap: 0 !important; padding: 0;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        border-top: 1px solid #eee; z-index: 999; margin-top: 0 !important;
+    }
+    .nav-bar.active { display: flex !important; }
+
+    .nav-bar a {
+        padding: 15px 20px; width: 100%; text-align: center;
+        border-bottom: 1px solid #f0f0f0; font-size: 16px !important; color: #2b2b2b;
+    }
+
+    /* Resto de estilos móvil */
     .flecha-circular { top: 10px; left: 10px; width: 40px; height: 40px; font-size: 20px; }
 
-    /* FIX BOTÓN AÑADIR (PEQUEÑO Y CENTRADO) */
     .boton-anadir-nuevo {
-        width: auto !important;         
-        min-width: 220px;               
-        max-width: 80%;                 
-        height: auto !important;       
-        padding: 10px 20px !important;  
-        margin: 15px auto !important;   
-        
-        background: white !important;  
-        border: 2px solid #293661 !important; 
-        border-radius: 40px !important; 
-        box-shadow: none !important;    
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        width: auto !important; min-width: 220px; max-width: 80%;
+        height: auto !important; padding: 10px 20px !important;
+        margin: 15px auto !important; background: white !important;
+        border: 2px solid #293661 !important; border-radius: 40px !important;
+        box-shadow: none !important; display: flex; align-items: center; justify-content: center;
     }
-    .boton-anadir-nuevo p {
-        font-size: 16px !important;    
-        color: #293661 !important;     
-        margin: 0;
-        font-weight: 600 !important;
-    }
+    .boton-anadir-nuevo p { font-size: 16px !important; color: #293661 !important; margin: 0; font-weight: 600 !important; }
     .boton-anadir-nuevo:hover { background: #293661 !important; }
     .boton-anadir-nuevo:hover p { color: white !important; }
 
-    /* Grid Inicio: 2 columnas para formar el cuadrado */
     .cards-grid { 
-        grid-template-columns: repeat(2, 1fr) !important; /* FORZAMOS 2 COLUMNAS */
-        gap: 15px;       /* Reducimos el hueco para que quepan bien */
-        padding: 0 10px; /* Un poco de margen a los lados */
-        justify-items: center; /* Que se estiren para ocupar el hueco */
+        grid-template-columns: repeat(2, 1fr) !important; 
+        gap: 15px; padding: 0 10px; justify-items: center; 
     }
-
-    /* AJUSTE TARJETAS MÓVIL (Para que quepan en 2 columnas) */
-    .card {
-        height: 115px;   /* Un poco más bajitas que en PC */
-        width: 100%;     /* Que ocupen todo el ancho de su columna */
-        padding: 10px;
-    }
+    .card { height: 115px; width: 100%; padding: 10px; }
+    .card-icon { height: 50px; margin-bottom: 5px; }
+    .card h3 { font-size: 16px; }
     
-    .card-icon {
-        height: 50px;    /* Icono un poco más pequeño */
-        margin-bottom: 5px;
-    }
-
-    .card h3 {
-        font-size: 16px; /* Texto ajustado para que no se salga */
-    }
-    
-    /* Listados */
     .cuadro-fondo { padding: 20px; }
     .header-tabla { font-size: 20px; text-align: center; }
     
-    /* Tarjetas Listados */
     .venta, .cliente, .producto { 
-        position: relative; 
-        flex-direction: column; 
-        align-items: center; 
-        gap: 15px; 
-        text-align: center;
-        padding: 70px 20px 30px 20px !important; 
+        position: relative; flex-direction: column; align-items: center; 
+        gap: 15px; text-align: center; padding: 70px 20px 30px 20px !important; 
     }
-    
     .venta-info, .cliente-info, .producto-info { 
-        grid-template-columns: 1fr; 
-        margin-left: 0; 
-        width: 100%; 
-        gap: 8px;
+        grid-template-columns: 1fr; margin-left: 0; width: 100%; gap: 8px;
     }
-    
-    /* Fix Cruz Roja */
-    .boton-eliminar, .venta form { 
-        top: 15px !important; 
-        left: 15px !important; 
-        right: auto !important; 
-    }
-    
-    .flecha-circular {
-        top: 65px !important;  /* En móvil la bajamos a 65px (el azul empieza antes) */
-        left: 20px !important; /* Un poco más pegada al borde izquierdo */
-        width: 40px; 
-        height: 40px; 
-        font-size: 24px;
-        color: white !important; /* Aseguramos blanco */
-    }
+    .boton-eliminar, .venta form { top: 15px !important; left: 15px !important; right: auto !important; }
+    .flecha-circular { top: 65px !important; left: 20px !important; color: white !important; }
 
-    /* --- CAMBIO CLAVE: BOTONES EDITAR/DETALLES IGUALADOS --- */
-    /* Copiamos las dimensiones del botón Añadir Nuevo */
     .boton-detalles, .boton-editar-pequeno { 
-        width: auto !important;         /* Se adapta al texto */
-        min-width: 220px;               /* Mismo tamaño mínimo que el de Añadir */
-        max-width: 80%;                 /* Mismo límite */
-        height: auto !important;        /* Altura flexible */
-        padding: 5px 15px !important;  /* Mismo relleno */
-        
-        margin: 10px auto !important;   /* Centrado automático */
-        margin-left: auto !important;   /* Quitamos el margin-left: 0 antiguo */
-        
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        width: auto !important; min-width: 220px; max-width: 80%; height: auto !important;
+        padding: 5px 15px !important; margin: 10px auto !important; margin-left: auto !important;
+        display: flex; justify-content: center; align-items: center;
     }
     
-    /* Formularios */
-    /* 1. Definimos una sola columna para todo el formulario */
-    .formulario-cliente { 
-        display: grid;
-        grid-template-columns: 1fr !important; 
-    }
+    .formulario-cliente { display: grid; grid-template-columns: 1fr !important; }
+    .full-width, .form-group.full-width { grid-column: 1 / -1 !important; width: 100%; }
 
-    /* 2. CORRECCIÓN: Le decimos a los campos anchos que NO ocupen 2, sino todo el ancho disponible (1 / -1) */
-    .full-width, 
-    .form-group.full-width { 
-        grid-column: 1 / -1 !important; /* Ocupar de principio a fin */
-        width: 100%;
-    }
-
-    /* Resto de tu código (esto estaba bien) */
     .boton-cambiar-imagen { width: 100%; }
     .products-section, .client-row { flex-direction: column; align-items: flex-start; }
     .botones-finales { flex-direction: column; align-items: center; gap: 20px; }
     .boton-salir, .boton-crear, .boton-modificar, .boton-usuario { width: 100%; max-width: 298px; }
+
+    /* Footer móvil */
+    .footer { padding: 40px 0 20px; }
+    .footer-content { display: flex !important; flex-direction: column !important; gap: 40px !important; align-items: center !important; text-align: center !important; }
+    .footer-logo-section { flex-direction: column !important; justify-content: center !important; gap: 20px !important; }
+    .footer-links { display: flex !important; flex-direction: column !important; gap: 40px !important; width: 100%; }
+    .contacto-footer ul li { justify-content: center !important; }
+    .politica-legal { flex-direction: column; gap: 10px; }
+    .politica-legal span { display: none; }
 }
 
 /* --- MÓVILES PEQUEÑOS (< 480px) --- */
@@ -884,24 +870,4 @@ input[type=number]::-webkit-inner-spin-button {
     .boton-anadir-nuevo { width: 100%; height: auto; padding: 15px; }
     .boton-anadir-nuevo p { font-size: 18px; }
     .filtro-text { width: 100%; font-size: 16px; padding: 10px; }
-}
-
-/* --- RESPONSIVE GRAFICAS --- */
-@media (max-width: 992px) {
-    .diagrama-section { 
-        padding: 0 20px; 
-    }
-    
-    .dashboard-grid { 
-        grid-template-columns: 1fr; /* Una debajo de otra */
-        height: auto; 
-    }
-
-    .grafica-container { 
-        height: 350px; /* Un poco más bajitas en móvil */
-    }
-    
-    .titulo-estadisticas {
-        font-size: 24px; /* Título un poco más pequeño en móvil */
-    }
 }
